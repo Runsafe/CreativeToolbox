@@ -1,0 +1,15 @@
+name: CreativeToolbox
+main: no.runsafe.creativetoolbox.Plugin
+version: 1.0
+authors: [mortenn]
+depend: [RunsafeWorldGuardBridge,RunsafeServices]
+description: A collection of tools for administering creative plots
+commands:
+  creativetoolbox:
+    description: Creative administration
+    aliases: [ct]
+
+permissions:
+  runsafe.creativetoolbox.:
+    description:
+    default: false

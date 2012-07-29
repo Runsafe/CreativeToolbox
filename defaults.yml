@@ -1,0 +1,5 @@
+old_after: 1209600
+max_listed: 20
+world: Creative
+ignored:
+  - creative_world

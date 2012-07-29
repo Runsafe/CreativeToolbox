@@ -1,0 +1,121 @@
+package no.runsafe.creativetoolbox.database;
+
+import no.runsafe.framework.configuration.IConfiguration;
+import no.runsafe.framework.database.IDatabase;
+import no.runsafe.framework.database.IRepository;
+import no.runsafe.framework.database.ISchemaUpdater;
+import no.runsafe.framework.database.SchemaRevisionRepository;
+import no.runsafe.framework.output.IOutput;
+import no.runsafe.framework.server.RunsafeLocation;
+import no.runsafe.framework.server.RunsafeServer;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+
+public class PlotEntranceRepository implements ISchemaUpdater, IRepository<PlotEntrance, String> {
+	public PlotEntranceRepository(SchemaRevisionRepository revisionRepository, IOutput output, IDatabase database, IConfiguration config) {
+		this.database = database;
+		this.console = output;
+		this.repository = revisionRepository;
+		this.config = config;
+	}
+
+	@Override
+	public PlotEntrance get(String regionName) {
+		if(cache.containsKey(regionName))
+			return cache.get(regionName);
+
+		PreparedStatement select = database.prepare(
+				"SELECT * FROM creativetoolbox_plot_entrance WHERE name=?"
+		);
+
+		try {
+			select.setString(1, regionName);
+			ResultSet result = select.executeQuery();
+			if(result.first()) {
+				RunsafeLocation location = new RunsafeLocation(
+						RunsafeServer.Instance.getWorld(config.getConfigValueAsString("world")),
+						result.getDouble("x"),
+						result.getDouble("y"),
+						result.getDouble("z"),
+						result.getFloat("yaw"),
+						result.getFloat("pitch")
+				);
+				PlotEntrance entrance = new PlotEntrance();
+				entrance.setName(regionName);
+				entrance.setLocation(location);
+				cache.put(regionName, entrance);
+			} else
+				cache.put(regionName, null);
+
+			return cache.get(regionName);
+		} catch(SQLException e) {
+			console.write(e.getMessage());
+		}
+		return null;
+	}
+
+	@Override
+	public void persist(PlotEntrance entrance) {
+		PreparedStatement insert = database.prepare(
+			"INSERT INTO creativetoolbox_plot_entrance (name, x, y, z, yaw, pitch) VALUES (?, ?, ?, ?, ?, ?)" +
+					"ON DUPLICATE KEY UPDATE x=VALUES(x), y=VALUES(y), z=VALUES(z), yaw=VALUES(yaw), pitch=VALUES(pitch)"
+		);
+		try {
+			insert.setString(1, entrance.getName());
+			insert.setDouble(2, entrance.getLocation().getX());
+			insert.setDouble(3, entrance.getLocation().getY());
+			insert.setDouble(4, entrance.getLocation().getZ());
+			insert.setFloat(5, entrance.getLocation().getYaw());
+			insert.setFloat(6, entrance.getLocation().getPitch());
+			insert.execute();
+		} catch(SQLException e) {
+			console.write(e.getMessage());
+		}
+	}
+
+	@Override
+	public void delete(PlotEntrance entrance) {
+		PreparedStatement delete = database.prepare("DELETE FROM creativetoolbox_plot_entrance WHERE name=?");
+		try {
+			delete.setString(1, entrance.getName());
+			delete.execute();
+		} catch(SQLException e) {
+			console.write(e.getMessage());
+		}
+	}
+
+	@Override
+	public void Run(SchemaRevisionRepository repository, IDatabase database) {
+		int revision = repository.getRevision("creativetoolbox_plot_entrance");
+		if(revision < 1) {
+			console.write("Creating table creativetoolbox_plot_entrance");
+			PreparedStatement create = database.prepare(
+					"CREATE TABLE creativetoolbox_plot_entrance (" +
+							"`name` varchar(255) NOT NULL," +
+							"`x` double NOT NULL," +
+							"`y` double NOT NULL," +
+							"`z` double NOT NULL," +
+							"`pitch` float NOT NULL," +
+							"`yaw` float NOT NULL," +
+							"PRIMARY KEY(`name`)" +
+							")"
+			);
+			try {
+				create.execute();
+				revision = 1;
+			} catch(SQLException e) {
+				console.write(e.getMessage());
+			}
+		}
+		repository.setRevision("creativetoolbox_plot_entrance", revision);
+	}
+
+	private IDatabase database;
+	private HashMap<String, PlotEntrance> cache = new HashMap<String, PlotEntrance>();
+	private SchemaRevisionRepository repository;
+	private IOutput console;
+	private IConfiguration config;
+}
