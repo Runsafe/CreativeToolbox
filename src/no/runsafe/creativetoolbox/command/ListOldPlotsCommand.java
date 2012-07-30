@@ -95,6 +95,7 @@ public class ListOldPlotsCommand extends RunsafeCommand {
 					break;
 				}
 				result.append(String.format("%s (%s)\n", region, info));
+				count++;
 			}
 		}
 		if(result.length() == 0)
