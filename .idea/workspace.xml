@@ -2,7 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="504aee77-2063-4753-a218-dfdbb8e38c31" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/no/runsafe/creativetoolbox/command/CleanCommand.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/no/runsafe/creativetoolbox/command/ListCommand.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/no/runsafe/creativetoolbox/command/ScanCommand.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/defaults.yml" afterPath="$PROJECT_DIR$/defaults.yml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugin.yml" afterPath="$PROJECT_DIR$/plugin.yml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/no/runsafe/creativetoolbox/Plugin.java" afterPath="$PROJECT_DIR$/src/no/runsafe/creativetoolbox/Plugin.java" />
+      <change type="MOVED" beforePath="D:\test\github\CreativeToolbox\src\no\runsafe\creativetoolbox\command\ListOldPlotsCommand.java" afterPath="$PROJECT_DIR$/src/no/runsafe/creativetoolbox/command/OldPlotsCommand.java" />
     </list>
     <ignored path="CreativeToolbox.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -63,17 +70,23 @@
       <file leaf-file-name="Plugin.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/no/runsafe/creativetoolbox/Plugin.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="15" column="45" selection-start="609" selection-end="609" vertical-scroll-proportion="0.0">
-              <folding />
+            <state line="34" column="0" selection-start="1304" selection-end="1304" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="method#PluginSetup#0;class#Plugin#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ListOldPlotsCommand.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/no/runsafe/creativetoolbox/command/ListOldPlotsCommand.java">
+      <file leaf-file-name="ListCommand.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/no/runsafe/creativetoolbox/command/ListCommand.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="38" column="47" selection-start="1303" selection-end="1343" vertical-scroll-proportion="0.0">
-              <folding />
+            <state line="33" column="68" selection-start="1312" selection-end="1312" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="method#ListCommand#0;class#ListCommand#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -81,52 +94,62 @@
       <file leaf-file-name="TeleportCommand.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/no/runsafe/creativetoolbox/command/TeleportCommand.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="49" column="5" selection-start="1843" selection-end="1843" vertical-scroll-proportion="0.0">
+            <state line="30" column="97" selection-start="1087" selection-end="1180" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SetEntranceCommand.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/no/runsafe/creativetoolbox/command/SetEntranceCommand.java">
+      <file leaf-file-name="CleanCommand.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/no/runsafe/creativetoolbox/command/CleanCommand.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="29" column="94" selection-start="1257" selection-end="1257" vertical-scroll-proportion="0.0">
+            <state line="65" column="38" selection-start="1662" selection-end="1662" vertical-scroll-proportion="0.80496055">
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="method#CleanCommand#0;class#CleanCommand#0" expanded="true" />
+                <element signature="e#692#709#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="defaults.yml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/defaults.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="6" column="0" selection-start="92" selection-end="92" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="plugin.yml" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="ScanCommand.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/no/runsafe/creativetoolbox/command/ScanCommand.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="33" column="38" selection-start="1029" selection-end="1029" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="method#ScanCommand#0;class#ScanCommand#0" expanded="true" />
+                <element signature="e#612#629#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="OldPlotsCommand.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/no/runsafe/creativetoolbox/command/OldPlotsCommand.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="17" column="11" selection-start="718" selection-end="718" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="method#OnExecute#0;class#OldPlotsCommand#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="plugin.yml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/plugin.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="2" column="12" selection-start="74" selection-end="74" vertical-scroll-proportion="0.050974514">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PlotEntranceRepository.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/no/runsafe/creativetoolbox/database/PlotEntranceRepository.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="90" column="73" selection-start="3028" selection-end="3028" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PlotApproval.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/no/runsafe/creativetoolbox/database/PlotApproval.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="27" column="14" selection-start="642" selection-end="642" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PlotEntrance.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/no/runsafe/creativetoolbox/database/PlotEntrance.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="23" column="22" selection-start="511" selection-end="511" vertical-scroll-proportion="0.0">
+            <state line="11" column="12" selection-start="313" selection-end="313" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -163,29 +186,30 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/no/runsafe/creativetoolbox/command/CheckApprovalCommand.java" />
-        <option value="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
-        <option value="$PROJECT_DIR$/plugin.yml" />
-        <option value="$PROJECT_DIR$/src/no/runsafe/creativetoolbox/database/PlotApproval.java" />
         <option value="$PROJECT_DIR$/src/no/runsafe/creativetoolbox/command/ApprovePlotCommand.java" />
         <option value="$PROJECT_DIR$/src/no/runsafe/creativetoolbox/command/SetLocationCommand.java" />
         <option value="$PROJECT_DIR$/src/no/runsafe/creativetoolbox/database/PlotLocationRepository.java" />
         <option value="$PROJECT_DIR$/src/no/runsafe/creativetoolbox/database/PlotEntrance.java" />
-        <option value="$PROJECT_DIR$/defaults.yml" />
-        <option value="$PROJECT_DIR$/src/no/runsafe/creativetoolbox/Plugin.java" />
         <option value="$PROJECT_DIR$/src/no/runsafe/creativetoolbox/command/SetEntranceCommand.java" />
         <option value="$PROJECT_DIR$/src/no/runsafe/creativetoolbox/command/TeleportCommand.java" />
         <option value="$PROJECT_DIR$/src/no/runsafe/creativetoolbox/database/PlotEntranceRepository.java" />
         <option value="$PROJECT_DIR$/src/no/runsafe/creativetoolbox/database/ApprovedPlotRepository.java" />
         <option value="$PROJECT_DIR$/src/no/runsafe/creativetoolbox/command/ListOldPlotsCommand.java" />
+        <option value="$PROJECT_DIR$/src/no/runsafe/creativetoolbox/Plugin.java" />
+        <option value="$PROJECT_DIR$/defaults.yml" />
+        <option value="$PROJECT_DIR$/src/no/runsafe/creativetoolbox/command/OldPlotsCommand.java" />
+        <option value="$PROJECT_DIR$/plugin.yml" />
+        <option value="$PROJECT_DIR$/src/no/runsafe/creativetoolbox/command/ListCommand.java" />
+        <option value="$PROJECT_DIR$/src/no/runsafe/creativetoolbox/command/ScanCommand.java" />
+        <option value="$PROJECT_DIR$/src/no/runsafe/creativetoolbox/command/CleanCommand.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
-    <option name="width" value="1456" />
-    <option name="height" value="876" />
+    <option name="width" value="1936" />
+    <option name="height" value="1096" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -337,7 +361,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.last.edited" value="Libraries" />
     <property name="OverrideImplement.combined" value="true" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="options.splitter.main.proportions" value="0.3" />
@@ -348,8 +372,8 @@
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
@@ -384,6 +408,24 @@
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
+    </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <module name="" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -409,24 +451,6 @@
       <envs />
       <properties />
       <listeners />
-      <method>
-        <option name="AntTarget" enabled="false" />
-        <option name="BuildArtifacts" enabled="false" />
-        <option name="Make" enabled="true" />
-        <option name="Maven.BeforeRunTask" enabled="false" />
-      </method>
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
       <method>
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
@@ -513,8 +537,8 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1456" height="876" extended-state="0" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -523,13 +547,13 @@
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32905984" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32905984" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24946082" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24906467" sideWeight="0.67094016" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -597,21 +621,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$PROJECT_DIR$/../out/framework.jar!/no/runsafe/framework/server/RunsafeServer.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="71" column="58" selection-start="3228" selection-end="3228" vertical-scroll-proportion="0.34658188" />
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.7.0_05/src.zip!/java/sql/Statement.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="108" column="12" selection-start="4273" selection-end="4273" vertical-scroll-proportion="0.3568216" />
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.7.0_05/src.zip!/java/sql/PreparedStatement.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="60" column="47" selection-start="1528" selection-end="1528" vertical-scroll-proportion="0.10794602" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/META-INF/MANIFEST.MF">
       <provider selected="true" editor-type-id="text-editor">
         <state line="2" column="0" selection-start="56" selection-end="56" vertical-scroll-proportion="0.0" />
@@ -620,21 +629,6 @@
     <entry file="file://$PROJECT_DIR$/src/no/runsafe/creativetoolbox/command/ApprovePlotCommand.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="29" column="17" selection-start="926" selection-end="926" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/defaults.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="2" selection-start="61" selection-end="61" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/no/runsafe/creativetoolbox/Plugin.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="45" selection-start="609" selection-end="609" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/no/runsafe/creativetoolbox/command/TeleportCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="49" column="5" selection-start="1843" selection-end="1843" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/no/runsafe/creativetoolbox/command/SetEntranceCommand.java">
@@ -664,22 +658,78 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/no/runsafe/creativetoolbox/database/ApprovedPlotRepository.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="8" selection-start="1206" selection-end="1206" vertical-scroll-proportion="0.0">
+        <state line="33" column="8" selection-start="1206" selection-end="1206" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/defaults.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="0" selection-start="92" selection-end="92" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/no/runsafe/creativetoolbox/command/ListOldPlotsCommand.java">
+    <entry file="file://$PROJECT_DIR$/src/no/runsafe/creativetoolbox/Plugin.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="38" column="47" selection-start="1303" selection-end="1343" vertical-scroll-proportion="0.0">
-          <folding />
+        <state line="34" column="0" selection-start="1304" selection-end="1304" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#PluginSetup#0;class#Plugin#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/no/runsafe/creativetoolbox/command/OldPlotsCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="11" selection-start="718" selection-end="718" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="method#OnExecute#0;class#OldPlotsCommand#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/plugin.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="12" selection-start="74" selection-end="74" vertical-scroll-proportion="0.050974514">
+        <state line="11" column="12" selection-start="313" selection-end="313" vertical-scroll-proportion="0.0">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/no/runsafe/creativetoolbox/command/TeleportCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="30" column="97" selection-start="1087" selection-end="1180" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/no/runsafe/creativetoolbox/command/ListCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="33" column="68" selection-start="1312" selection-end="1312" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#ListCommand#0;class#ListCommand#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/no/runsafe/creativetoolbox/command/ScanCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="33" column="38" selection-start="1029" selection-end="1029" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#ScanCommand#0;class#ScanCommand#0" expanded="true" />
+            <element signature="e#612#629#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/no/runsafe/creativetoolbox/command/CleanCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="65" column="38" selection-start="1662" selection-end="1662" vertical-scroll-proportion="0.80496055">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#CleanCommand#0;class#CleanCommand#0" expanded="true" />
+            <element signature="e#692#709#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -742,6 +792,7 @@
             <option name="proportions">
               <list>
                 <option value="0.2" />
+                <option value="0.5" />
               </list>
             </option>
           </splitter-proportions>
