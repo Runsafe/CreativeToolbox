@@ -20,9 +20,12 @@ public class Plugin extends RunsafePlugin implements IConfigurationFile {
 
 		toolbox.addSubCommand(getInstance(ApprovePlotCommand.class));
 		toolbox.addSubCommand(getInstance(CheckApprovalCommand.class));
-		toolbox.addSubCommand(getInstance(ListOldPlotsCommand.class));
+		toolbox.addSubCommand(getInstance(OldPlotsCommand.class));
 		toolbox.addSubCommand(getInstance(SetEntranceCommand.class));
 		toolbox.addSubCommand(getInstance(TeleportCommand.class));
+		toolbox.addSubCommand(getInstance(ScanCommand.class));
+		toolbox.addSubCommand(getInstance(CleanCommand.class));
+		toolbox.addSubCommand(getInstance(ListCommand.class));
 	}
 
 	@Override

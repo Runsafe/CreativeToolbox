@@ -13,9 +13,9 @@ import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.util.*;
 
-public class ListOldPlotsCommand extends RunsafeCommand {
-	public ListOldPlotsCommand(ApprovedPlotRepository approvalRepository, IConfiguration config) {
-		super("listoldplots", null);
+public class OldPlotsCommand extends RunsafeCommand {
+	public OldPlotsCommand(ApprovedPlotRepository approvalRepository, IConfiguration config) {
+		super("oldplots", null);
 		repository = approvalRepository;
 		this.config = config;
 	}
@@ -95,6 +95,7 @@ public class ListOldPlotsCommand extends RunsafeCommand {
 					break;
 				}
 				result.append(String.format("%s (%s)\n", region, info));
+				count++;
 			}
 		}
 		if(result.length() == 0)
