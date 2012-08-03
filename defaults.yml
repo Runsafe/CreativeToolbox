@@ -1,6 +1,7 @@
 old_after: 1209600
 max_listed: 20
 world: Creative
+list_item: 280
 ignored:
   - creative_world
 clean.ignore:

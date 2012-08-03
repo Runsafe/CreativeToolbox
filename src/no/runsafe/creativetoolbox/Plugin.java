@@ -3,6 +3,7 @@ package no.runsafe.creativetoolbox;
 import no.runsafe.creativetoolbox.command.*;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotEntranceRepository;
+import no.runsafe.creativetoolbox.events.InteractEvents;
 import no.runsafe.framework.RunsafePlugin;
 import no.runsafe.framework.command.RunsafeCommand;
 import no.runsafe.framework.configuration.IConfigurationFile;
@@ -14,6 +15,7 @@ public class Plugin extends RunsafePlugin implements IConfigurationFile {
 	protected void PluginSetup() {
 		addComponent(ApprovedPlotRepository.class);
 		addComponent(PlotEntranceRepository.class);
+        addComponent(InteractEvents.class);
 
 		RunsafeCommand toolbox = new RunsafeCommand("creativetoolbox", null);
 		addComponent(toolbox);
