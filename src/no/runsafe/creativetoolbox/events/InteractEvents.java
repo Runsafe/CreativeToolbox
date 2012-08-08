@@ -1,7 +1,10 @@
 package no.runsafe.creativetoolbox.events;
 
-import no.runsafe.framework.RunsafePlugin;
+import no.runsafe.creativetoolbox.PlotFilter;
+import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
+import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.framework.configuration.IConfiguration;
+import no.runsafe.framework.event.IConfigurationChanged;
 import no.runsafe.framework.event.player.IPlayerInteractEntityEvent;
 import no.runsafe.framework.event.player.IPlayerInteractEvent;
 import no.runsafe.framework.server.RunsafeLocation;
@@ -14,12 +17,19 @@ import org.bukkit.event.block.Action;
 import java.util.List;
 import java.util.Set;
 
-public class InteractEvents implements IPlayerInteractEvent, IPlayerInteractEntityEvent
+public class InteractEvents implements IPlayerInteractEvent, IPlayerInteractEntityEvent, IConfigurationChanged
 {
-	public InteractEvents(IConfiguration configuration)
+	public InteractEvents(
+		IConfiguration configuration,
+		PlotFilter plotFilter,
+		WorldGuardInterface worldGuard,
+		ApprovedPlotRepository plotRepository
+	)
 	{
 		this.configuration = configuration;
-		this.worldGuardInterface = RunsafePlugin.Instances.get("RunsafeWorldGuardBridge").getComponent(WorldGuardInterface.class);
+		this.worldGuardInterface = worldGuard;
+		this.plotFilter = plotFilter;
+		this.plotRepository = plotRepository;
 	}
 
 	@Override
@@ -27,7 +37,7 @@ public class InteractEvents implements IPlayerInteractEvent, IPlayerInteractEnti
 	{
 		if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
 		{
-			if (event.getItemStack() != null && event.getItemStack().getTypeId() == this.configuration.getConfigValueAsInt("list_item"))
+			if (event.getItemStack() != null && event.getItemStack().getTypeId() == listItem)
 			{
 				this.listPlotsByLocation(new RunsafeLocation(event.getBlock().getLocation()), event.getPlayer());
 				event.setCancelled(true);
@@ -40,12 +50,18 @@ public class InteractEvents implements IPlayerInteractEvent, IPlayerInteractEnti
 	{
 		if (event.getRightClicked() instanceof RunsafePlayer)
 		{
-			if (event.getPlayer().getItemInHand().getItemId() == this.configuration.getConfigValueAsInt("list_item"))
+			if (event.getPlayer().getItemInHand().getItemId() == listItem)
 			{
 				this.listPlotsByPlayer((RunsafePlayer) event.getRightClicked(), event.getPlayer());
 				event.setCancelled(true);
 			}
 		}
+	}
+
+	@Override
+	public void OnConfigurationChanged()
+	{
+		listItem = this.configuration.getConfigValueAsInt("list_item");
 	}
 
 	private void listPlotsByPlayer(RunsafePlayer checkPlayer, RunsafePlayer triggerPlayer)
@@ -56,7 +72,7 @@ public class InteractEvents implements IPlayerInteractEvent, IPlayerInteractEnti
 			return;
 		}
 
-		List<String> regions = worldGuardInterface.getOwnedRegions(checkPlayer, checkPlayer.getWorld());
+		List<String> regions = plotFilter.apply(worldGuardInterface.getOwnedRegions(checkPlayer, checkPlayer.getWorld()));
 
 		if (!regions.isEmpty())
 			for (String regionName : regions)
@@ -73,7 +89,7 @@ public class InteractEvents implements IPlayerInteractEvent, IPlayerInteractEnti
 			return;
 		}
 
-		List<String> regions = worldGuardInterface.getRegionsAtLocation(location);
+		List<String> regions = plotFilter.apply(worldGuardInterface.getRegionsAtLocation(location));
 
 		if (!regions.isEmpty())
 			for (String regionName : regions)
@@ -84,7 +100,16 @@ public class InteractEvents implements IPlayerInteractEvent, IPlayerInteractEnti
 
 	private void listRegion(String regionName, RunsafePlayer player, Boolean simple)
 	{
-		player.sendMessage("Region: " + regionName);
+		if (player.hasPermission("runsafe.creative.approval.read"))
+		{
+			PlotApproval approval = plotRepository.get(regionName);
+			if (approval == null || approval.getApproved() == null)
+				player.sendMessage("Region: " + regionName);
+			else
+				player.sendMessage(String.format("Region: %s [Approved %s]", regionName, approval.getApproved()));
+		}
+		else
+			player.sendMessage("Region: " + regionName);
 
 		if (!simple)
 		{
@@ -101,4 +126,7 @@ public class InteractEvents implements IPlayerInteractEvent, IPlayerInteractEnti
 
 	private IConfiguration configuration;
 	private WorldGuardInterface worldGuardInterface;
+	private int listItem;
+	private PlotFilter plotFilter;
+	private ApprovedPlotRepository plotRepository;
 }

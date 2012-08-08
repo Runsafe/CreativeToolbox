@@ -2,10 +2,12 @@ package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.PlayerData;
 import no.runsafe.PlayerDatabase;
+import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.framework.RunsafePlugin;
 import no.runsafe.framework.command.RunsafeCommand;
 import no.runsafe.framework.configuration.IConfiguration;
+import no.runsafe.framework.event.IConfigurationChanged;
 import no.runsafe.framework.server.RunsafeServer;
 import no.runsafe.framework.server.RunsafeWorld;
 import no.runsafe.framework.server.player.RunsafePlayer;
@@ -13,20 +15,31 @@ import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.util.*;
 
-public class OldPlotsCommand extends RunsafeCommand {
-	public OldPlotsCommand(ApprovedPlotRepository approvalRepository, IConfiguration config) {
+public class OldPlotsCommand extends RunsafeCommand implements IConfigurationChanged
+{
+	public OldPlotsCommand(
+		ApprovedPlotRepository approvalRepository,
+		IConfiguration config,
+		PlotFilter filter,
+		WorldGuardInterface worldGuardInterface
+	)
+	{
 		super("oldplots", null);
 		repository = approvalRepository;
 		this.config = config;
+		plotFilter = filter;
+		worldGuard = worldGuardInterface;
 	}
 
 	@Override
-	public String requiredPermission() {
+	public String requiredPermission()
+	{
 		return "runsafe.creative.scan.old-plots";
 	}
 
 	@Override
-	public String OnExecute(RunsafePlayer executor, String[] args) {
+	public String OnExecute(RunsafePlayer executor, String[] args)
+	{
 		StringBuilder result = new StringBuilder();
 		Date now = new Date();
 		int count = 0;
@@ -36,61 +49,68 @@ public class OldPlotsCommand extends RunsafeCommand {
 
 		HashMap<String, Long> seen = new HashMap<String, Long>();
 
-		WorldGuardInterface bridge = RunsafePlugin.Instances.get("RunsafeWorldGuardBridge").getComponent(WorldGuardInterface.class);
-
-		if(!bridge.serverHasWorldGuard())
+		if (!worldGuard.serverHasWorldGuard())
 			return "WorldGuard isn't active on the server.";
 
-		RunsafeWorld world = RunsafeServer.Instance.getWorld(config.getConfigValueAsString("world"));
-
 		PlayerDatabase players = RunsafePlugin.Instances.get("RunsafeServices").getComponent(PlayerDatabase.class);
-		Map<String, Set<String>> checkList = bridge.getAllRegionsWithOwnersInWorld(world);
+		Map<String, Set<String>> checkList = worldGuard.getAllRegionsWithOwnersInWorld(getWorld());
 		long oldAfter = config.getConfigValueAsInt("old_after") * 1000;
 		int limit = config.getConfigValueAsInt("max_listed");
 
-		for(String region : checkList.keySet()) {
+		for (String region : plotFilter.apply(new ArrayList<String>(checkList.keySet())))
+		{
 			String info = null;
-			if(approved.contains(region))
+			if (approved.contains(region))
 				continue;
 
 			boolean ok = false;
-			for(String owner : checkList.get(region)) {
+			for (String owner : checkList.get(region))
+			{
 				owner = owner.toLowerCase();
-				if(!seen.containsKey(owner)) {
+				if (!seen.containsKey(owner))
+				{
 					RunsafePlayer player = RunsafeServer.Instance.getPlayer(owner);
-					if(player.isOnline()) {
+					if (player.isOnline())
+					{
 						ok = true;
-						seen.put(owner, new Long(0));
+						seen.put(owner, (long) 0);
 						break;
-					} else {
+					}
+					else
+					{
 						PlayerData data = players.get(owner);
-						if(data != null && data.getBanned() != null)
+						if (data != null && data.getBanned() != null)
 							banned.add(owner);
-						if(data == null || (data.getLogin() == null && data.getLogout() == null))
+						if (data == null || (data.getLogin() == null && data.getLogout() == null))
 							seen.put(owner, null);
-						else if(data.getLogout() != null)
+						else if (data.getLogout() != null)
 							seen.put(owner, now.getTime() - data.getLogout().getTime());
-						else if(data.getLogin() != null)
+						else if (data.getLogin() != null)
 							seen.put(owner, now.getTime() - data.getLogin().getTime());
 					}
 				}
 
-				if(banned.contains(owner)) {
+				if (banned.contains(owner))
+				{
 					ok = false;
 					info = "banned";
 					break;
 				}
 
-				if(seen.get(owner) == null)
+				if (seen.get(owner) == null)
 					continue;
 
-				if(seen.get(owner) < oldAfter) {
+				if (seen.get(owner) < oldAfter)
+				{
 					ok = true;
-				} else
+				}
+				else
 					info = String.format("%.2f days", seen.get(owner) / 86400000.0);
 			}
-			if(!ok) {
-				if(executor != null && count++ > limit) {
+			if (!ok)
+			{
+				if (executor != null && count++ > limit)
+				{
 					result.append(String.format("== configured limit reached =="));
 					break;
 				}
@@ -98,13 +118,29 @@ public class OldPlotsCommand extends RunsafeCommand {
 				count++;
 			}
 		}
-		if(result.length() == 0)
+		if (result.length() == 0)
 			return "No old plots found.";
-		else if(executor == null || count <= limit)
+		else if (executor == null || count <= limit)
 			result.append(String.format("%d plots found", count));
 		return result.toString();
 	}
 
+	@Override
+	public void OnConfigurationChanged()
+	{
+		world = RunsafeServer.Instance.getWorld(config.getConfigValueAsString("world"));
+	}
+
+	public RunsafeWorld getWorld()
+	{
+		if (world == null)
+			world = RunsafeServer.Instance.getWorld(config.getConfigValueAsString("world"));
+		return world;
+	}
+
 	private ApprovedPlotRepository repository;
 	private IConfiguration config;
+	private PlotFilter plotFilter;
+	private RunsafeWorld world;
+	private WorldGuardInterface worldGuard;
 }
