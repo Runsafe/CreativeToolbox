@@ -43,6 +43,8 @@ public class TeleportCommand extends RunsafePlayerCommand implements IConfigurat
 
 		RunsafeLocation target = null;
 		String plot = plotFilter.apply(getArg("plotname"));
+		if(plot == null)
+			return "Negative on that, Houston.";
 		PlotEntrance entrance = repository.get(plot);
 		if (entrance != null)
 			target = entrance.getLocation();
