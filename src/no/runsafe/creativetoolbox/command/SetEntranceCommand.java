@@ -16,17 +16,17 @@ public class SetEntranceCommand extends RunsafeAsyncPlayerCommand
 {
 	public SetEntranceCommand(
 		PlotEntranceRepository repository,
-		IConfiguration config,
 		IOutput output,
 		PlotFilter filter,
-		IScheduler scheduler
+		IScheduler scheduler,
+		WorldGuardInterface worldGuard
 	)
 	{
 		super("setentrance", scheduler);
 		this.repository = repository;
-		this.config = config;
 		this.console = output;
 		this.plotFilter = filter;
+		this.worldGuard = worldGuard;
 	}
 
 	@Override
@@ -62,9 +62,8 @@ public class SetEntranceCommand extends RunsafeAsyncPlayerCommand
 		return regions.get(0);
 	}
 
-	PlotEntranceRepository repository;
-	IConfiguration config;
-	IOutput console;
-	PlotFilter plotFilter;
-	WorldGuardInterface worldGuard;
+	private final PlotEntranceRepository repository;
+	private final IOutput console;
+	private final PlotFilter plotFilter;
+	private final WorldGuardInterface worldGuard;
 }
