@@ -15,10 +15,9 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 public class PlotEntranceRepository implements ISchemaUpdater, IRepository<PlotEntrance, String> {
-	public PlotEntranceRepository(SchemaRevisionRepository revisionRepository, IOutput output, IDatabase database, IConfiguration config) {
+	public PlotEntranceRepository(IOutput output, IDatabase database, IConfiguration config) {
 		this.database = database;
 		this.console = output;
-		this.repository = revisionRepository;
 		this.config = config;
 	}
 
@@ -113,9 +112,8 @@ public class PlotEntranceRepository implements ISchemaUpdater, IRepository<PlotE
 		repository.setRevision("creativetoolbox_plot_entrance", revision);
 	}
 
-	private IDatabase database;
-	private HashMap<String, PlotEntrance> cache = new HashMap<String, PlotEntrance>();
-	private SchemaRevisionRepository repository;
-	private IOutput console;
-	private IConfiguration config;
+	private final IDatabase database;
+	private final HashMap<String, PlotEntrance> cache = new HashMap<String, PlotEntrance>();
+	private final IOutput console;
+	private final IConfiguration config;
 }

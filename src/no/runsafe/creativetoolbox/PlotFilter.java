@@ -64,9 +64,9 @@ public class PlotFilter implements IConfigurationChanged
 		return world;
 	}
 
-	private IConfiguration config;
+	private final IConfiguration config;
 	private List<String> filter;
-	private WorldGuardInterface worldGuard;
+	private final WorldGuardInterface worldGuard;
 	private List<String> filtered;
 	private Date filterCache;
 	private RunsafeWorld world;

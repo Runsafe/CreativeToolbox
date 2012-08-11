@@ -106,6 +106,6 @@ public class ApprovedPlotRepository implements IRepository<PlotApproval, String>
 		return null;
 	}
 
-	IOutput console;
-	IDatabase database;
+	private final IOutput console;
+	private final IDatabase database;
 }

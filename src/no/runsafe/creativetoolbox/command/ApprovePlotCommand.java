@@ -4,7 +4,6 @@ import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.framework.command.RunsafeAsyncPlayerCommand;
-import no.runsafe.framework.command.RunsafePlayerCommand;
 import no.runsafe.framework.server.player.RunsafePlayer;
 import no.runsafe.framework.timer.IScheduler;
 
@@ -29,7 +28,7 @@ public class ApprovePlotCommand extends RunsafeAsyncPlayerCommand
 	public String OnExecute(RunsafePlayer executor, String[] args)
 	{
 		String plot = plotFilter.apply(getArg("plotname"));
-		if(plot == null)
+		if (plot == null)
 			return "You cannot approve that plot.";
 
 		PlotApproval approval = new PlotApproval();
@@ -43,6 +42,6 @@ public class ApprovePlotCommand extends RunsafeAsyncPlayerCommand
 		return String.format("Plot %s has been approved.", plot);
 	}
 
-	ApprovedPlotRepository repository;
-	PlotFilter plotFilter;
+	private final ApprovedPlotRepository repository;
+	private final PlotFilter plotFilter;
 }

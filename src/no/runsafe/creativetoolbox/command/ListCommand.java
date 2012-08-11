@@ -50,8 +50,8 @@ public class ListCommand extends RunsafeAsyncCommand implements IConfigurationCh
 		return world;
 	}
 
-	private RunsafeServer server;
-	private IConfiguration config;
-	private WorldGuardInterface worldGuard;
+	private final RunsafeServer server;
+	private final IConfiguration config;
+	private final WorldGuardInterface worldGuard;
 	private RunsafeWorld world;
 }

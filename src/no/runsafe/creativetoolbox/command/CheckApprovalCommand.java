@@ -50,7 +50,7 @@ public class CheckApprovalCommand extends RunsafeAsyncCommand
 		return String.format("Plot %s was approved by %s at %s", plot, approval.getApprovedBy(), approval.getApproved());
 	}
 
-	private ApprovedPlotRepository repository;
-	private PlotFilter plotFilter;
-	private WorldGuardInterface worldGuardInterface;
+	private final ApprovedPlotRepository repository;
+	private final PlotFilter plotFilter;
+	private final WorldGuardInterface worldGuardInterface;
 }

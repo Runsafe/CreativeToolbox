@@ -23,7 +23,7 @@ public class CleanCommand extends RunsafePlayerCommand
 	public String OnExecute(RunsafePlayer executor, String[] args)
 	{
 		HashMap<String, Integer> counts = new HashMap<String, Integer>();
-		List<String> noclean = config.getConfigValueAsList("clean.ignore");
+		List<String> noClean = config.getConfigValueAsList("clean.ignore");
 		int count = 0;
 		for (RunsafeEntity entity : executor.getWorld().getEntities())
 		{
@@ -45,7 +45,7 @@ public class CleanCommand extends RunsafePlayerCommand
 			}
 			else
 			{
-				for (String filter : noclean)
+				for (String filter : noClean)
 				{
 					if (name.contains(filter))
 					{
@@ -69,5 +69,5 @@ public class CleanCommand extends RunsafePlayerCommand
 		return results.toString();
 	}
 
-	private IConfiguration config;
+	private final IConfiguration config;
 }

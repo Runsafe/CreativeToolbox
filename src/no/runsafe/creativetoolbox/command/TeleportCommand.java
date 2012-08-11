@@ -14,8 +14,6 @@ public class TeleportCommand extends RunsafeAsyncPlayerCommand
 {
 
 	public TeleportCommand(
-		PlotEntranceRepository entranceRepository,
-		PlotFilter filter,
 		IScheduler scheduler,
 		PlotManager manager
 	)
@@ -52,6 +50,6 @@ public class TeleportCommand extends RunsafeAsyncPlayerCommand
 		return String.format("Teleported to '%s'", plot);
 	}
 
-	PlotManager manager;
-	HashMap<String, RunsafeLocation> warpTo = new HashMap<String, RunsafeLocation>();
+	private final PlotManager manager;
+	private final HashMap<String, RunsafeLocation> warpTo = new HashMap<String, RunsafeLocation>();
 }

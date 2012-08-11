@@ -4,7 +4,6 @@ import no.runsafe.creativetoolbox.database.PlotEntrance;
 import no.runsafe.creativetoolbox.database.PlotEntranceRepository;
 import no.runsafe.framework.configuration.IConfiguration;
 import no.runsafe.framework.event.IConfigurationChanged;
-import no.runsafe.framework.output.IOutput;
 import no.runsafe.framework.server.RunsafeLocation;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
@@ -19,15 +18,13 @@ public class PlotManager implements IConfigurationChanged
 		PlotFilter filter,
 		WorldGuardInterface worldGuard,
 		IConfiguration config,
-		PlotEntranceRepository plotEntranceRepository,
-		IOutput console
+		PlotEntranceRepository plotEntranceRepository
 	)
 	{
 		this.filter = filter;
 		this.worldGuard = worldGuard;
 		this.config = config;
 		this.plotEntrance = plotEntranceRepository;
-		this.console = console;
 	}
 
 	@Override
@@ -154,12 +151,11 @@ public class PlotManager implements IConfigurationChanged
 		return target;
 	}
 
-	private PlotFilter filter;
-	private WorldGuardInterface worldGuard;
+	private final PlotFilter filter;
+	private final WorldGuardInterface worldGuard;
 	private Rectangle2D fence;
-	private IConfiguration config;
+	private final IConfiguration config;
 	private Rectangle2D origin;
 	private int spacing;
-	private PlotEntranceRepository plotEntrance;
-	private IOutput console;
+	private final PlotEntranceRepository plotEntrance;
 }

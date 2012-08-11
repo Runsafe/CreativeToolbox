@@ -124,9 +124,9 @@ public class InteractEvents implements IPlayerInteractEvent, IPlayerInteractEnti
 		}
 	}
 
-	private IConfiguration configuration;
-	private WorldGuardInterface worldGuardInterface;
+	private final IConfiguration configuration;
+	private final WorldGuardInterface worldGuardInterface;
 	private int listItem;
-	private PlotFilter plotFilter;
-	private ApprovedPlotRepository plotRepository;
+	private final PlotFilter plotFilter;
+	private final ApprovedPlotRepository plotRepository;
 }

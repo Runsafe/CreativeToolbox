@@ -13,7 +13,6 @@ import java.util.Random;
 public class RandomPlotCommand extends RunsafeAsyncPlayerCommand
 {
 	public RandomPlotCommand(
-		WorldGuardInterface worldGuardInterface,
 		PlotFilter filter,
 		CreativeToolboxCommand ctCommand,
 		IScheduler scheduler
@@ -51,8 +50,8 @@ public class RandomPlotCommand extends RunsafeAsyncPlayerCommand
 		super.OnCommandCompletion(player, message);
 	}
 
-	private PlotFilter plotFilter;
-	private Random rng;
-	private CreativeToolboxCommand command;
-	private HashMap<String, String> warpTo = new HashMap<String, String>();
+	private final PlotFilter plotFilter;
+	private final Random rng;
+	private final CreativeToolboxCommand command;
+	private final HashMap<String, String> warpTo = new HashMap<String, String>();
 }

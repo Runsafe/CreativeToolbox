@@ -46,7 +46,7 @@ public class FindFreePlotCommand extends RunsafeAsyncPlayerCommand
 		super.OnCommandCompletion(player, message);
 	}
 
-	private PlotManager manager;
-	private HashMap<String, RunsafeLocation> warpTo = new HashMap<String, RunsafeLocation>();
-	private Random rng = new Random();
+	private final PlotManager manager;
+	private final HashMap<String, RunsafeLocation> warpTo = new HashMap<String, RunsafeLocation>();
+	private final Random rng = new Random();
 }

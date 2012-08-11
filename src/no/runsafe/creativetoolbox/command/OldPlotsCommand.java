@@ -144,9 +144,9 @@ public class OldPlotsCommand extends RunsafeAsyncCommand implements IConfigurati
 		return world;
 	}
 
-	private ApprovedPlotRepository repository;
-	private IConfiguration config;
-	private PlotFilter plotFilter;
+	private final ApprovedPlotRepository repository;
+	private final IConfiguration config;
+	private final PlotFilter plotFilter;
 	private RunsafeWorld world;
-	private WorldGuardInterface worldGuard;
+	private final WorldGuardInterface worldGuard;
 }

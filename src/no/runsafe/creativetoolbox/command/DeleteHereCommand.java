@@ -31,6 +31,6 @@ public class DeleteHereCommand extends RunsafePlayerCommand
 		return results.toString();
 	}
 
-	private PlotFilter filter;
-	private WorldGuardInterface worldGuard;
+	private final PlotFilter filter;
+	private final WorldGuardInterface worldGuard;
 }
