@@ -95,19 +95,12 @@ public class PlotManager implements IConfigurationChanged
 		if (!fence.contains(x, y))
 			return null;
 
-		console.fine(String.format("x:%.2f", x));
 		x -= origin.getX();
-		console.fine(String.format("x:%.2f", x));
 		x /= origin.getWidth() + spacing;
-		console.fine(String.format("x:%.2f", x));
 		x = Math.ceil(x);
-		console.fine(String.format("x:%.2f", x));
 		x *= origin.getWidth() + spacing;
-		console.fine(String.format("x:%.2f", x));
 		x -= spacing;
-		console.fine(String.format("x:%.2f", x));
 		x += origin.getX();
-		console.fine(String.format("x:%.2f", x));
 
 		y -= origin.getY();
 		y /= origin.getHeight() + spacing;
