@@ -3,17 +3,24 @@ package no.runsafe.creativetoolbox.command;
 import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotApproval;
+import no.runsafe.framework.command.RunsafeAsyncCommand;
 import no.runsafe.framework.command.RunsafeCommand;
 import no.runsafe.framework.server.player.RunsafePlayer;
+import no.runsafe.framework.timer.IScheduler;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.util.List;
 
-public class CheckApprovalCommand extends RunsafeCommand
+public class CheckApprovalCommand extends RunsafeAsyncCommand
 {
-	public CheckApprovalCommand(ApprovedPlotRepository approvalRepository, PlotFilter filter, WorldGuardInterface worldGuard)
+	public CheckApprovalCommand(
+		ApprovedPlotRepository approvalRepository,
+		PlotFilter filter,
+		WorldGuardInterface worldGuard,
+		IScheduler scheduler
+	)
 	{
-		super("checkapproval", null, "plotname");
+		super("checkapproval", scheduler, "plotname");
 		repository = approvalRepository;
 		plotFilter = filter;
 		worldGuardInterface = worldGuard;

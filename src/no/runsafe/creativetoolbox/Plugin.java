@@ -19,6 +19,7 @@ public class Plugin extends RunsafePlugin implements IConfigurationFile
 	{
 		addComponent(Instances.get("RunsafeWorldGuardBridge").getComponent(WorldGuardInterface.class));
 		addComponent(PlotFilter.class);
+		addComponent(PlotManager.class);
 		addComponent(ApprovedPlotRepository.class);
 		addComponent(PlotEntranceRepository.class);
 		addComponent(InteractEvents.class);
@@ -35,6 +36,8 @@ public class Plugin extends RunsafePlugin implements IConfigurationFile
 		toolbox.addSubCommand(getInstance(CleanCommand.class));
 		toolbox.addSubCommand(getInstance(ListCommand.class));
 		toolbox.addSubCommand(getInstance(RandomPlotCommand.class));
+		toolbox.addSubCommand(getInstance(DeleteHereCommand.class));
+		toolbox.addSubCommand(getInstance(FindFreePlotCommand.class));
 	}
 
 	@Override

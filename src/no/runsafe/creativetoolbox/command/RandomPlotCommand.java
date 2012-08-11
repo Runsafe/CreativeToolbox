@@ -1,29 +1,25 @@
 package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.creativetoolbox.PlotFilter;
-import no.runsafe.framework.command.RunsafePlayerCommand;
-import no.runsafe.framework.configuration.IConfiguration;
-import no.runsafe.framework.event.IConfigurationChanged;
-import no.runsafe.framework.server.RunsafeServer;
-import no.runsafe.framework.server.RunsafeWorld;
+import no.runsafe.framework.command.RunsafeAsyncPlayerCommand;
 import no.runsafe.framework.server.player.RunsafePlayer;
+import no.runsafe.framework.timer.IScheduler;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-public class RandomPlotCommand extends RunsafePlayerCommand implements IConfigurationChanged
+public class RandomPlotCommand extends RunsafeAsyncPlayerCommand
 {
 	public RandomPlotCommand(
-		IConfiguration configuration,
 		WorldGuardInterface worldGuardInterface,
 		PlotFilter filter,
-		CreativeToolboxCommand ctCommand)
+		CreativeToolboxCommand ctCommand,
+		IScheduler scheduler
+	)
 	{
-		super("randomplot", null);
-		config = configuration;
-		worldGuard = worldGuardInterface;
+		super("randomplot", scheduler);
 		plotFilter = filter;
 		rng = new Random();
 		this.command = ctCommand;
@@ -38,33 +34,25 @@ public class RandomPlotCommand extends RunsafePlayerCommand implements IConfigur
 	@Override
 	public String OnExecute(RunsafePlayer executor, String[] args)
 	{
-		if (!worldGuard.serverHasWorldGuard())
-			return "Could not find WorldGuard!";
-		if (getWorld() == null)
+		warpTo.remove(executor.getName());
+		if (plotFilter.getWorld() == null)
 			return "No world..";
-		List<String> plots = plotFilter.apply(new ArrayList<String>(worldGuard.getAllRegionsWithOwnersInWorld(getWorld()).keySet()));
+		List<String> plots = plotFilter.getFiltered();
 		int r = rng.nextInt(plots.size());
-		command.Execute(executor, new String[]{"teleport", plots.get(r)});
+		warpTo.put(executor.getName(), plots.get(r));
 		return null;
 	}
 
 	@Override
-	public void OnConfigurationChanged()
+	public void OnCommandCompletion(RunsafePlayer player, String message)
 	{
-		world = RunsafeServer.Instance.getWorld(config.getConfigValueAsString("world"));
+		if (warpTo.get(player.getName()) != null)
+			command.Execute(player, new String[]{"teleport", warpTo.get(player.getName())});
+		super.OnCommandCompletion(player, message);
 	}
 
-	public RunsafeWorld getWorld()
-	{
-		if (world == null)
-			world = RunsafeServer.Instance.getWorld(config.getConfigValueAsString("world"));
-		return world;
-	}
-
-	private RunsafeWorld world;
-	private IConfiguration config;
-	private WorldGuardInterface worldGuard;
 	private PlotFilter plotFilter;
 	private Random rng;
 	private CreativeToolboxCommand command;
+	private HashMap<String, String> warpTo = new HashMap<String, String>();
 }

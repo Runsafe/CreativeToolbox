@@ -3,20 +3,26 @@ package no.runsafe.creativetoolbox.command;
 import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.database.PlotEntrance;
 import no.runsafe.creativetoolbox.database.PlotEntranceRepository;
-import no.runsafe.framework.RunsafePlugin;
-import no.runsafe.framework.command.RunsafePlayerCommand;
+import no.runsafe.framework.command.RunsafeAsyncPlayerCommand;
 import no.runsafe.framework.configuration.IConfiguration;
 import no.runsafe.framework.output.IOutput;
 import no.runsafe.framework.server.player.RunsafePlayer;
+import no.runsafe.framework.timer.IScheduler;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.util.List;
 
-public class SetEntranceCommand extends RunsafePlayerCommand
+public class SetEntranceCommand extends RunsafeAsyncPlayerCommand
 {
-	public SetEntranceCommand(PlotEntranceRepository repository, IConfiguration config, IOutput output, PlotFilter filter)
+	public SetEntranceCommand(
+		PlotEntranceRepository repository,
+		IConfiguration config,
+		IOutput output,
+		PlotFilter filter,
+		IScheduler scheduler
+	)
 	{
-		super("setentrance", null);
+		super("setentrance", scheduler);
 		this.repository = repository;
 		this.config = config;
 		this.console = output;
@@ -26,9 +32,6 @@ public class SetEntranceCommand extends RunsafePlayerCommand
 	@Override
 	public boolean CanExecute(RunsafePlayer player, String[] args)
 	{
-		if (!worldGuard.serverHasWorldGuard())
-			return true;
-
 		String region = getCurrentRegion(player);
 		console.fine(String.format("Player is in region %s", region));
 		if (worldGuard.getOwners(player.getWorld(), region).contains(player.getName().toLowerCase()))
@@ -42,7 +45,7 @@ public class SetEntranceCommand extends RunsafePlayerCommand
 	{
 		String currentRegion = getCurrentRegion(executor);
 		if (currentRegion == null)
-			return "Unable to set entrance here.";
+			return "No plot at your current location.";
 
 		PlotEntrance entrance = new PlotEntrance();
 		entrance.setName(currentRegion);
@@ -53,11 +56,8 @@ public class SetEntranceCommand extends RunsafePlayerCommand
 
 	private String getCurrentRegion(RunsafePlayer player)
 	{
-		if (!worldGuard.serverHasWorldGuard())
-			return null;
-
-		List<String> regions = plotFilter.apply(worldGuard.getApplicableRegions(player));
-		if(regions == null || regions.size() == 0)
+		List<String> regions = plotFilter.apply(worldGuard.getRegionsAtLocation(player.getLocation()));
+		if (regions == null || regions.size() == 0)
 			return null;
 		return regions.get(0);
 	}

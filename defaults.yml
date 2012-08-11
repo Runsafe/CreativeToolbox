@@ -3,6 +3,21 @@ max_listed: 20
 world: Creative
 list_item: 280
 ignored:
-  - creative_world
+- creative_world
 clean.ignore:
-  - Painting
+- Painting
+free.ignore:
+- creative_world
+fence:
+  x: -1670
+  y: -1622
+  w: 2879
+  h: 2975
+plot:
+  groundLevel: 67
+  w: 45
+  h: 45
+  spacing: 3
+  origin:
+    x: -1669.5
+    y: -1621.5

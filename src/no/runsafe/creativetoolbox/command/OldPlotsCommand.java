@@ -5,26 +5,29 @@ import no.runsafe.PlayerDatabase;
 import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.framework.RunsafePlugin;
+import no.runsafe.framework.command.RunsafeAsyncCommand;
 import no.runsafe.framework.command.RunsafeCommand;
 import no.runsafe.framework.configuration.IConfiguration;
 import no.runsafe.framework.event.IConfigurationChanged;
 import no.runsafe.framework.server.RunsafeServer;
 import no.runsafe.framework.server.RunsafeWorld;
 import no.runsafe.framework.server.player.RunsafePlayer;
+import no.runsafe.framework.timer.IScheduler;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.util.*;
 
-public class OldPlotsCommand extends RunsafeCommand implements IConfigurationChanged
+public class OldPlotsCommand extends RunsafeAsyncCommand implements IConfigurationChanged
 {
 	public OldPlotsCommand(
 		ApprovedPlotRepository approvalRepository,
 		IConfiguration config,
 		PlotFilter filter,
-		WorldGuardInterface worldGuardInterface
+		WorldGuardInterface worldGuardInterface,
+		IScheduler scheduler
 	)
 	{
-		super("oldplots", null);
+		super("oldplots", scheduler);
 		repository = approvalRepository;
 		this.config = config;
 		plotFilter = filter;
@@ -40,6 +43,9 @@ public class OldPlotsCommand extends RunsafeCommand implements IConfigurationCha
 	@Override
 	public String OnExecute(RunsafePlayer executor, String[] args)
 	{
+		if (!worldGuard.serverHasWorldGuard())
+			return "Unable to find WorldGuard!";
+
 		StringBuilder result = new StringBuilder();
 		Date now = new Date();
 		int count = 0;

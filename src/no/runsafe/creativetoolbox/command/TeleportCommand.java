@@ -1,32 +1,27 @@
 package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.creativetoolbox.PlotFilter;
-import no.runsafe.creativetoolbox.database.PlotEntrance;
+import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.creativetoolbox.database.PlotEntranceRepository;
-import no.runsafe.framework.command.RunsafePlayerCommand;
-import no.runsafe.framework.configuration.IConfiguration;
-import no.runsafe.framework.event.IConfigurationChanged;
+import no.runsafe.framework.command.RunsafeAsyncPlayerCommand;
 import no.runsafe.framework.server.RunsafeLocation;
-import no.runsafe.framework.server.RunsafeServer;
-import no.runsafe.framework.server.RunsafeWorld;
 import no.runsafe.framework.server.player.RunsafePlayer;
-import no.runsafe.worldguardbridge.WorldGuardInterface;
+import no.runsafe.framework.timer.IScheduler;
 
-public class TeleportCommand extends RunsafePlayerCommand implements IConfigurationChanged
+import java.util.HashMap;
+
+public class TeleportCommand extends RunsafeAsyncPlayerCommand
 {
 
 	public TeleportCommand(
 		PlotEntranceRepository entranceRepository,
-		IConfiguration config,
-		WorldGuardInterface worldGuard,
-		PlotFilter filter
+		PlotFilter filter,
+		IScheduler scheduler,
+		PlotManager manager
 	)
 	{
-		super("teleport", null, "plotname");
-		repository = entranceRepository;
-		this.config = config;
-		worldGuardInterface = worldGuard;
-		plotFilter = filter;
+		super("teleport", scheduler, "plotname");
+		this.manager = manager;
 	}
 
 	@Override
@@ -36,58 +31,27 @@ public class TeleportCommand extends RunsafePlayerCommand implements IConfigurat
 	}
 
 	@Override
-	public String OnExecute(RunsafePlayer executor, String[] args)
+	public void OnCommandCompletion(RunsafePlayer player, String message)
 	{
-		if (!worldGuardInterface.serverHasWorldGuard())
-			return "Unable to find WorldGuard!";
-
-		RunsafeLocation target = null;
-		String plot = plotFilter.apply(getArg("plotname"));
-		if(plot == null)
-			return "Negative on that, Houston.";
-		PlotEntrance entrance = repository.get(plot);
-		if (entrance != null)
-			target = entrance.getLocation();
-
-		if (target == null)
-		{
-			target = worldGuardInterface.getRegionLocation(getWorld(), plot);
-
-			if (target != null)
-			{
-				target.setX(target.getX() + 0.5);
-				target.setZ(target.getZ() + 0.5);
-				target.setPitch(-1.65f);
-				target.setYaw(137.55f);
-				while (getWorld().getBlockAt(target).canPassThrough() && target.getY() > 60)
-					target.setY(target.getY() - 1);
-				target.setY(target.getY() + 2);
-			}
-		}
-
-		if (target == null)
-			return "Plot not found";
-
-		executor.teleport(target);
-		return String.format("Teleported to '%s'", plot);
+		if (warpTo.containsKey(player.getName()))
+			player.teleport(warpTo.get(player.getName()));
+		super.OnCommandCompletion(player, message);
 	}
 
 	@Override
-	public void OnConfigurationChanged()
+	public String OnExecute(RunsafePlayer executor, String[] args)
 	{
-		world = RunsafeServer.Instance.getWorld(config.getConfigValueAsString("world"));
+		warpTo.remove(executor.getName());
+		String plot = getArg("plotname");
+		RunsafeLocation target = manager.getPlotEntrance(plot);
+		if (target == null)
+			return String.format("Plot '%s' not found.", plot);
+
+		warpTo.put(executor.getName(), target);
+
+		return String.format("Teleported to '%s'", plot);
 	}
 
-	public RunsafeWorld getWorld()
-	{
-		if(world == null)
-			world = RunsafeServer.Instance.getWorld(config.getConfigValueAsString("world"));
-		return world;
-	}
-
-	PlotEntranceRepository repository;
-	IConfiguration config;
-	WorldGuardInterface worldGuardInterface;
-	RunsafeWorld world;
-	PlotFilter plotFilter;
+	PlotManager manager;
+	HashMap<String, RunsafeLocation> warpTo = new HashMap<String, RunsafeLocation>();
 }
