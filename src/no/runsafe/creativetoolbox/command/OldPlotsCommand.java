@@ -114,7 +114,7 @@ public class OldPlotsCommand extends RunsafeAsyncCommand implements IConfigurati
 			}
 			if (!ok)
 			{
-				if (executor != null && count++ > limit)
+				if (count++ > limit && executor != null)
 				{
 					result.append(String.format("== configured limit reached =="));
 					break;
@@ -124,7 +124,7 @@ public class OldPlotsCommand extends RunsafeAsyncCommand implements IConfigurati
 		}
 		if (result.length() == 0)
 			return "No old plots found.";
-		else if (executor == null || count <= limit)
+		else if (count <= limit || executor == null)
 			result.append(String.format("%d plots found", count));
 		return result.toString();
 	}
