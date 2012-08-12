@@ -1,6 +1,6 @@
 name: CreativeToolbox
 main: no.runsafe.creativetoolbox.Plugin
-version: 1.1
+version: 1.2
 authors: [mortenn]
 depend: [RunsafeWorldGuardBridge,RunsafeServices]
 description: A collection of tools for administering creative plots
