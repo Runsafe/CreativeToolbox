@@ -6,7 +6,6 @@ import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.framework.RunsafePlugin;
 import no.runsafe.framework.command.RunsafeAsyncCommand;
-import no.runsafe.framework.command.RunsafeCommand;
 import no.runsafe.framework.configuration.IConfiguration;
 import no.runsafe.framework.event.IConfigurationChanged;
 import no.runsafe.framework.server.RunsafeServer;
@@ -121,7 +120,6 @@ public class OldPlotsCommand extends RunsafeAsyncCommand implements IConfigurati
 					break;
 				}
 				result.append(String.format("%s (%s)\n", region, info));
-				count++;
 			}
 		}
 		if (result.length() == 0)
