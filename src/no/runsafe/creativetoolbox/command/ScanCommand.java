@@ -16,6 +16,12 @@ public class ScanCommand extends RunsafePlayerCommand
 	}
 
 	@Override
+	public String requiredPermission()
+	{
+		return "runsafe.creative.scan.items";
+	}
+
+	@Override
 	public String OnExecute(RunsafePlayer executor, String[] args)
 	{
 		HashMap<String, Integer> counts = new HashMap<String, Integer>();

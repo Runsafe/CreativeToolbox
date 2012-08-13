@@ -38,6 +38,12 @@ public class ListCommand extends RunsafeAsyncCommand implements IConfigurationCh
 	}
 
 	@Override
+	public String requiredPermission()
+	{
+		return "runsafe.creative.list";
+	}
+
+	@Override
 	public void OnConfigurationChanged()
 	{
 		world = RunsafeServer.Instance.getWorld(config.getConfigValueAsString("world"));

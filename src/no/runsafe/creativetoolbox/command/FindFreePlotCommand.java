@@ -22,6 +22,12 @@ public class FindFreePlotCommand extends RunsafeAsyncPlayerCommand
 	}
 
 	@Override
+	public String requiredPermission()
+	{
+		return "runsafe.creative.teleport.free";
+	}
+
+	@Override
 	public String OnExecute(RunsafePlayer executor, String[] args)
 	{
 		warpTo.remove(executor.getName());

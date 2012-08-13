@@ -27,7 +27,7 @@ public class RandomPlotCommand extends RunsafeAsyncPlayerCommand
 	@Override
 	public String requiredPermission()
 	{
-		return "runsafe.creative.teleport";
+		return "runsafe.creative.teleport.random";
 	}
 
 	@Override

@@ -25,7 +25,7 @@ public class TeleportCommand extends RunsafeAsyncPlayerCommand
 	@Override
 	public String requiredPermission()
 	{
-		return "runsafe.creative.teleport";
+		return "runsafe.creative.teleport.plot";
 	}
 
 	@Override

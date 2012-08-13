@@ -17,6 +17,12 @@ public class DeleteHereCommand extends RunsafePlayerCommand
 	}
 
 	@Override
+	public String requiredPermission()
+	{
+		return "runsafe.creative.delete";
+	}
+
+	@Override
 	public String OnExecute(RunsafePlayer executor, String[] args)
 	{
 		List<String> delete = filter.apply(worldGuard.getRegionsAtLocation(executor.getLocation()));

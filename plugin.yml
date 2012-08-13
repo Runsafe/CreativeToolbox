@@ -10,6 +10,36 @@ commands:
     aliases: [ct]
 
 permissions:
-  runsafe.creativetoolbox.:
-    description:
+  runsafe.creative.approval.set:
+    description: Approve plots
+    default: false
+  runsafe.creative.approval.read:
+    description: Check who approved a plot
+    default: false
+  runsafe.creative.clean:
+    description: Clean items
+    default: false
+  runsafe.creative.approval.delete:
+    description: Delete regions
+    default: false
+  runsafe.creative.teleport.free:
+    description: Teleport to a random free plot
+    default: false
+  runsafe.creative.list:
+    description: List plots owned by a player
+    default: false
+  runsafe.creative.scan.old-plots:
+    description: Locate old plots
+    default: false
+  runsafe.creative.teleport.random:
+    description: Teleport to a random plot
+    default: false
+  runsafe.creative.scan.items:
+    description: Scan for items in the world
+    default: false
+  runsafe.creative.entrance.set:
+    description: Set the entrance for any plot
+    default: false
+  runsafe.creative.teleport.plot:
+    description: Teleport to named plots
     default: false

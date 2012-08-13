@@ -20,6 +20,12 @@ public class CleanCommand extends RunsafePlayerCommand
 	}
 
 	@Override
+	public String requiredPermission()
+	{
+		return "runsafe.creative.clean";
+	}
+
+	@Override
 	public String OnExecute(RunsafePlayer executor, String[] args)
 	{
 		HashMap<String, Integer> counts = new HashMap<String, Integer>();
@@ -50,7 +56,7 @@ public class CleanCommand extends RunsafePlayerCommand
 					if (name.contains(filter))
 					{
 						clean = false;
-						break;
+						break;/**/
 					}
 				}
 			}
