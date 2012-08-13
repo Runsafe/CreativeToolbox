@@ -4,6 +4,7 @@ import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.framework.configuration.IConfiguration;
+import no.runsafe.framework.event.IAsyncEvent;
 import no.runsafe.framework.event.IConfigurationChanged;
 import no.runsafe.framework.event.player.IPlayerInteractEntityEvent;
 import no.runsafe.framework.event.player.IPlayerRightClickBlockEvent;
@@ -16,7 +17,7 @@ import no.runsafe.worldguardbridge.WorldGuardInterface;
 import java.util.List;
 import java.util.Set;
 
-public class InteractEvents implements IPlayerRightClickBlockEvent, IPlayerInteractEntityEvent, IConfigurationChanged
+public class InteractEvents implements IPlayerRightClickBlockEvent, IPlayerInteractEntityEvent, IConfigurationChanged, IAsyncEvent
 {
 	public InteractEvents(
 		IConfiguration configuration,
@@ -34,7 +35,7 @@ public class InteractEvents implements IPlayerRightClickBlockEvent, IPlayerInter
 	@Override
 	public void OnPlayerRightClick(RunsafePlayerClickEvent event)
 	{
-		if (event.getItemStack().getItemId() == listItem)
+		if (event.getItemStack() != null && event.getItemStack().getItemId() == listItem)
 		{
 			this.listPlotsByLocation(event.getBlock().getLocation(), event.getPlayer());
 			event.setCancelled(true);
@@ -46,7 +47,7 @@ public class InteractEvents implements IPlayerRightClickBlockEvent, IPlayerInter
 	{
 		if (event.getRightClicked() instanceof RunsafePlayer)
 		{
-			if (event.getPlayer().getItemInHand().getItemId() == listItem)
+			if (event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getItemId() == listItem)
 			{
 				this.listPlotsByPlayer((RunsafePlayer) event.getRightClicked(), event.getPlayer());
 				event.setCancelled(true);
