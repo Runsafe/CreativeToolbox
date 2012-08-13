@@ -6,18 +6,17 @@ import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.framework.configuration.IConfiguration;
 import no.runsafe.framework.event.IConfigurationChanged;
 import no.runsafe.framework.event.player.IPlayerInteractEntityEvent;
-import no.runsafe.framework.event.player.IPlayerInteractEvent;
+import no.runsafe.framework.event.player.IPlayerRightClickBlockEvent;
 import no.runsafe.framework.server.RunsafeLocation;
+import no.runsafe.framework.server.event.player.RunsafePlayerClickEvent;
 import no.runsafe.framework.server.event.player.RunsafePlayerInteractEntityEvent;
-import no.runsafe.framework.server.event.player.RunsafePlayerInteractEvent;
 import no.runsafe.framework.server.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
-import org.bukkit.event.block.Action;
 
 import java.util.List;
 import java.util.Set;
 
-public class InteractEvents implements IPlayerInteractEvent, IPlayerInteractEntityEvent, IConfigurationChanged
+public class InteractEvents implements IPlayerRightClickBlockEvent, IPlayerInteractEntityEvent, IConfigurationChanged
 {
 	public InteractEvents(
 		IConfiguration configuration,
@@ -33,15 +32,12 @@ public class InteractEvents implements IPlayerInteractEvent, IPlayerInteractEnti
 	}
 
 	@Override
-	public void OnPlayerInteractEvent(RunsafePlayerInteractEvent event)
+	public void OnPlayerRightClick(RunsafePlayerClickEvent event)
 	{
-		if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
+		if (event.getItemStack().getItemId() == listItem)
 		{
-			if (event.getItemStack() != null && event.getItemStack().getTypeId() == listItem)
-			{
-				this.listPlotsByLocation(new RunsafeLocation(event.getBlock().getLocation()), event.getPlayer());
-				event.setCancelled(true);
-			}
+			this.listPlotsByLocation(event.getBlock().getLocation(), event.getPlayer());
+			event.setCancelled(true);
 		}
 	}
 
@@ -91,7 +87,7 @@ public class InteractEvents implements IPlayerInteractEvent, IPlayerInteractEnti
 
 		List<String> regions = plotFilter.apply(worldGuardInterface.getRegionsAtLocation(location));
 
-		if (!regions.isEmpty())
+		if (regions != null && !regions.isEmpty())
 			for (String regionName : regions)
 				this.listRegion(regionName, player, false);
 		else
