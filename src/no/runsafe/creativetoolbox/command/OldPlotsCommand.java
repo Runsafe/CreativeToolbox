@@ -13,6 +13,7 @@ import no.runsafe.framework.server.RunsafeWorld;
 import no.runsafe.framework.server.player.RunsafePlayer;
 import no.runsafe.framework.timer.IScheduler;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
+import org.bukkit.ChatColor;
 
 import java.util.*;
 
@@ -34,6 +35,12 @@ public class OldPlotsCommand extends RunsafeAsyncCommand implements IConfigurati
 	}
 
 	@Override
+	public String getDescription()
+	{
+		return "list old plots that may be removed.";
+	}
+
+	@Override
 	public String requiredPermission()
 	{
 		return "runsafe.creative.scan.old-plots";
@@ -45,9 +52,7 @@ public class OldPlotsCommand extends RunsafeAsyncCommand implements IConfigurati
 		if (!worldGuard.serverHasWorldGuard())
 			return "Unable to find WorldGuard!";
 
-		StringBuilder result = new StringBuilder();
 		Date now = new Date();
-		int count = 0;
 		ArrayList<String> banned = new ArrayList<String>();
 		List<String> approved;
 		approved = repository.getApprovedPlots();
@@ -62,6 +67,7 @@ public class OldPlotsCommand extends RunsafeAsyncCommand implements IConfigurati
 		long oldAfter = config.getConfigValueAsInt("old_after") * 1000;
 		int limit = config.getConfigValueAsInt("max_listed");
 
+		HashMap<String, Long> hits = new HashMap<String, Long>();
 		for (String region : plotFilter.apply(new ArrayList<String>(checkList.keySet())))
 		{
 			String info = null;
@@ -69,6 +75,7 @@ public class OldPlotsCommand extends RunsafeAsyncCommand implements IConfigurati
 				continue;
 
 			boolean ok = false;
+			long time = 0;
 			for (String owner : checkList.get(region))
 			{
 				owner = owner.toLowerCase();
@@ -99,6 +106,7 @@ public class OldPlotsCommand extends RunsafeAsyncCommand implements IConfigurati
 				{
 					ok = false;
 					info = "banned";
+					time = Long.MAX_VALUE;
 					break;
 				}
 
@@ -110,22 +118,40 @@ public class OldPlotsCommand extends RunsafeAsyncCommand implements IConfigurati
 					ok = true;
 				}
 				else
+				{
 					info = String.format("%.2f days", seen.get(owner) / 86400000.0);
+					time = seen.get(owner);
+				}
 			}
 			if (!ok)
+				hits.put(String.format("  %s (%s%s%s)\n", region, info == "banned" ? ChatColor.RED : ChatColor.YELLOW, info, ChatColor.RESET), time);
+		}
+		StringBuilder result = new StringBuilder();
+		ArrayList<Map.Entry<String, Long>> as = new ArrayList<Map.Entry<String, Long>>(hits.entrySet());
+		Collections.sort(as, new Comparator<Map.Entry<String, Long>>()
+		{
+			public int compare(Map.Entry<String, Long> o1, Map.Entry<String, Long> o2)
 			{
-				if (count++ > limit && executor != null)
-				{
-					result.append(String.format("== configured limit reached =="));
-					break;
-				}
-				result.append(String.format("%s (%s)\n", region, info));
+				return o1.getValue().compareTo(o2.getValue());
+			}
+		});
+
+		int n = 0;
+		for (Map.Entry<String, Long> item : as)
+		{
+			if (executor == null || n < limit)
+			{
+				result.append(item.getKey());
+				n++;
 			}
 		}
 		if (result.length() == 0)
 			return "No old plots found.";
-		else if (count <= limit || executor == null)
-			result.append(String.format("%d plots found", count));
+		else if (executor == null || n == hits.size())
+			result.append(String.format("%d plots found", hits.size()));
+		else
+			result.append(String.format("Showing %d of %d plots found", n, hits.size()));
+
 		return result.toString();
 	}
 
