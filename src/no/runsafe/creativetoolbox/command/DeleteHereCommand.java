@@ -11,9 +11,15 @@ public class DeleteHereCommand extends RunsafePlayerCommand
 {
 	public DeleteHereCommand(PlotFilter filter, WorldGuardInterface worldGuard)
 	{
-		super("deletehere", null);
+		super("deletehere");
 		this.filter = filter;
 		this.worldGuard = worldGuard;
+	}
+
+	@Override
+	public String getDescription()
+	{
+		return "delete the region you are in.";
 	}
 
 	@Override

@@ -4,7 +4,6 @@ import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.framework.command.RunsafeAsyncCommand;
-import no.runsafe.framework.command.RunsafeCommand;
 import no.runsafe.framework.server.player.RunsafePlayer;
 import no.runsafe.framework.timer.IScheduler;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
@@ -30,6 +29,12 @@ public class CheckApprovalCommand extends RunsafeAsyncCommand
 	public String requiredPermission()
 	{
 		return "runsafe.creative.approval.read";
+	}
+
+	@Override
+	public String getDescription()
+	{
+		return "find out who approved a plot.";
 	}
 
 	@Override

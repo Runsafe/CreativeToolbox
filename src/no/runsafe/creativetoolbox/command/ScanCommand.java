@@ -12,7 +12,13 @@ public class ScanCommand extends RunsafePlayerCommand
 {
 	public ScanCommand()
 	{
-		super("scan", null);
+		super("scan");
+	}
+
+	@Override
+	public String getDescription()
+	{
+		return "list number of items and mobs in world.";
 	}
 
 	@Override

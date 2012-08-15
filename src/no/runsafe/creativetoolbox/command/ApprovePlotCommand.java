@@ -25,6 +25,12 @@ public class ApprovePlotCommand extends RunsafeAsyncPlayerCommand
 	}
 
 	@Override
+	public String getDescription()
+	{
+		return "exempts a plot from the old plots command.";
+	}
+
+	@Override
 	public String OnExecute(RunsafePlayer executor, String[] args)
 	{
 		String plot = plotFilter.apply(getArg("plotname"));

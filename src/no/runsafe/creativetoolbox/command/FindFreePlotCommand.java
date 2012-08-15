@@ -22,6 +22,12 @@ public class FindFreePlotCommand extends RunsafeAsyncPlayerCommand
 	}
 
 	@Override
+	public String getDescription()
+	{
+		return "teleport to a random empty plot.";
+	}
+
+	@Override
 	public String requiredPermission()
 	{
 		return "runsafe.creative.teleport.free";

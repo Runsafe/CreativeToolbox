@@ -41,6 +41,12 @@ public class SetEntranceCommand extends RunsafeAsyncPlayerCommand
 	}
 
 	@Override
+	public String getDescription()
+	{
+		return "define where users teleport to in a plot.";
+	}
+
+	@Override
 	public String OnExecute(RunsafePlayer executor, String[] args)
 	{
 		String currentRegion = getCurrentRegion(executor);

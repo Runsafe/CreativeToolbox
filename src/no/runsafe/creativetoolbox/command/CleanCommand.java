@@ -15,8 +15,14 @@ public class CleanCommand extends RunsafePlayerCommand
 {
 	public CleanCommand(IConfiguration configuration)
 	{
-		super("clean", null);
+		super("clean");
 		config = configuration;
+	}
+
+	@Override
+	public String getDescription()
+	{
+		return "remove items and mobs.";
 	}
 
 	@Override

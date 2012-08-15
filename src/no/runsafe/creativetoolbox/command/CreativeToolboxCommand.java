@@ -9,6 +9,12 @@ public class CreativeToolboxCommand extends RunsafeCommand
 {
 	public CreativeToolboxCommand()
 	{
-		super("creativetoolbox", null);
+		super("creativetoolbox");
+	}
+
+	@Override
+	public String getDescription()
+	{
+		return "A collection of tools for use in a minecraft creative world.";
 	}
 }

@@ -38,6 +38,12 @@ public class ListCommand extends RunsafeAsyncCommand implements IConfigurationCh
 	}
 
 	@Override
+	public String getDescription()
+	{
+		return "lists plots owned by a player.";
+	}
+
+	@Override
 	public String requiredPermission()
 	{
 		return "runsafe.creative.list";
