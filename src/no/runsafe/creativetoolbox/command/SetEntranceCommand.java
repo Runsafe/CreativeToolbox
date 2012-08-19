@@ -4,7 +4,6 @@ import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.database.PlotEntrance;
 import no.runsafe.creativetoolbox.database.PlotEntranceRepository;
 import no.runsafe.framework.command.RunsafeAsyncPlayerCommand;
-import no.runsafe.framework.configuration.IConfiguration;
 import no.runsafe.framework.output.IOutput;
 import no.runsafe.framework.server.player.RunsafePlayer;
 import no.runsafe.framework.timer.IScheduler;
@@ -33,6 +32,23 @@ public class SetEntranceCommand extends RunsafeAsyncPlayerCommand
 	public boolean CanExecute(RunsafePlayer player, String[] args)
 	{
 		String region = getCurrentRegion(player);
+		if (region == null)
+			return true;
+
+		console.fine(String.format("Player is in region %s", region));
+		if (worldGuard.getOwners(player.getWorld(), region).contains(player.getName().toLowerCase()))
+			return true;
+
+		return player.hasPermission("runsafe.creative.entrance.set");
+	}
+
+	@Override
+	public boolean CouldExecute(RunsafePlayer player)
+	{
+		String region = getCurrentRegion(player);
+		if (region == null)
+			return false;
+
 		console.fine(String.format("Player is in region %s", region));
 		if (worldGuard.getOwners(player.getWorld(), region).contains(player.getName().toLowerCase()))
 			return true;
