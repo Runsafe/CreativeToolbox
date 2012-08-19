@@ -14,55 +14,65 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-public class PlotEntranceRepository implements ISchemaUpdater, IRepository<PlotEntrance, String> {
-	public PlotEntranceRepository(IOutput output, IDatabase database, IConfiguration config) {
+public class PlotEntranceRepository implements ISchemaUpdater, IRepository<PlotEntrance, String>
+{
+	public PlotEntranceRepository(IOutput output, IDatabase database, IConfiguration config)
+	{
 		this.database = database;
 		this.console = output;
 		this.config = config;
 	}
 
 	@Override
-	public PlotEntrance get(String regionName) {
-		if(cache.containsKey(regionName))
-			return cache.get(regionName);
+	public PlotEntrance get(String regionName)
+	{
+		if (cache.containsKey(regionName.toLowerCase()))
+			return cache.get(regionName.toLowerCase());
 
 		PreparedStatement select = database.prepare(
-				"SELECT * FROM creativetoolbox_plot_entrance WHERE name=?"
+			"SELECT * FROM creativetoolbox_plot_entrance WHERE name=?"
 		);
 
-		try {
+		try
+		{
 			select.setString(1, regionName);
 			ResultSet result = select.executeQuery();
-			if(result.first()) {
+			if (result.first())
+			{
 				RunsafeLocation location = new RunsafeLocation(
-						RunsafeServer.Instance.getWorld(config.getConfigValueAsString("world")),
-						result.getDouble("x"),
-						result.getDouble("y"),
-						result.getDouble("z"),
-						result.getFloat("yaw"),
-						result.getFloat("pitch")
+					RunsafeServer.Instance.getWorld(config.getConfigValueAsString("world")),
+					result.getDouble("x"),
+					result.getDouble("y"),
+					result.getDouble("z"),
+					result.getFloat("yaw"),
+					result.getFloat("pitch")
 				);
 				PlotEntrance entrance = new PlotEntrance();
 				entrance.setName(regionName);
 				entrance.setLocation(location);
-				cache.put(regionName, entrance);
-			} else
-				cache.put(regionName, null);
+				cache.put(regionName.toLowerCase(), entrance);
+			}
+			else
+				cache.put(regionName.toLowerCase(), null);
 
-			return cache.get(regionName);
-		} catch(SQLException e) {
+			return cache.get(regionName.toLowerCase());
+		}
+		catch (SQLException e)
+		{
 			console.write(e.getMessage());
 		}
 		return null;
 	}
 
 	@Override
-	public void persist(PlotEntrance entrance) {
+	public void persist(PlotEntrance entrance)
+	{
 		PreparedStatement insert = database.prepare(
 			"INSERT INTO creativetoolbox_plot_entrance (name, x, y, z, yaw, pitch) VALUES (?, ?, ?, ?, ?, ?)" +
-					"ON DUPLICATE KEY UPDATE x=VALUES(x), y=VALUES(y), z=VALUES(z), yaw=VALUES(yaw), pitch=VALUES(pitch)"
+				"ON DUPLICATE KEY UPDATE x=VALUES(x), y=VALUES(y), z=VALUES(z), yaw=VALUES(yaw), pitch=VALUES(pitch)"
 		);
-		try {
+		try
+		{
 			insert.setString(1, entrance.getName());
 			insert.setDouble(2, entrance.getLocation().getX());
 			insert.setDouble(3, entrance.getLocation().getY());
@@ -70,42 +80,54 @@ public class PlotEntranceRepository implements ISchemaUpdater, IRepository<PlotE
 			insert.setFloat(5, entrance.getLocation().getYaw());
 			insert.setFloat(6, entrance.getLocation().getPitch());
 			insert.execute();
-		} catch(SQLException e) {
+			cache.put(entrance.getName().toLowerCase(), entrance);
+		}
+		catch (SQLException e)
+		{
 			console.write(e.getMessage());
 		}
 	}
 
 	@Override
-	public void delete(PlotEntrance entrance) {
+	public void delete(PlotEntrance entrance)
+	{
 		PreparedStatement delete = database.prepare("DELETE FROM creativetoolbox_plot_entrance WHERE name=?");
-		try {
+		try
+		{
 			delete.setString(1, entrance.getName());
 			delete.execute();
-		} catch(SQLException e) {
+		}
+		catch (SQLException e)
+		{
 			console.write(e.getMessage());
 		}
 	}
 
 	@Override
-	public void Run(SchemaRevisionRepository repository, IDatabase database) {
+	public void Run(SchemaRevisionRepository repository, IDatabase database)
+	{
 		int revision = repository.getRevision("creativetoolbox_plot_entrance");
-		if(revision < 1) {
+		if (revision < 1)
+		{
 			console.write("Creating table creativetoolbox_plot_entrance");
 			PreparedStatement create = database.prepare(
-					"CREATE TABLE creativetoolbox_plot_entrance (" +
-							"`name` varchar(255) NOT NULL," +
-							"`x` double NOT NULL," +
-							"`y` double NOT NULL," +
-							"`z` double NOT NULL," +
-							"`pitch` float NOT NULL," +
-							"`yaw` float NOT NULL," +
-							"PRIMARY KEY(`name`)" +
-							")"
+				"CREATE TABLE creativetoolbox_plot_entrance (" +
+					"`name` varchar(255) NOT NULL," +
+					"`x` double NOT NULL," +
+					"`y` double NOT NULL," +
+					"`z` double NOT NULL," +
+					"`pitch` float NOT NULL," +
+					"`yaw` float NOT NULL," +
+					"PRIMARY KEY(`name`)" +
+					")"
 			);
-			try {
+			try
+			{
 				create.execute();
 				revision = 1;
-			} catch(SQLException e) {
+			}
+			catch (SQLException e)
+			{
 				console.write(e.getMessage());
 			}
 		}
