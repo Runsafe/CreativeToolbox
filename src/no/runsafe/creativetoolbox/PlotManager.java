@@ -1,16 +1,22 @@
 package no.runsafe.creativetoolbox;
 
+import no.runsafe.PlayerData;
+import no.runsafe.PlayerDatabase;
+import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotEntrance;
 import no.runsafe.creativetoolbox.database.PlotEntranceRepository;
+import no.runsafe.framework.RunsafePlugin;
 import no.runsafe.framework.configuration.IConfiguration;
 import no.runsafe.framework.event.IConfigurationChanged;
 import no.runsafe.framework.server.RunsafeLocation;
+import no.runsafe.framework.server.RunsafeServer;
+import no.runsafe.framework.server.RunsafeWorld;
+import no.runsafe.framework.server.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
+import org.bukkit.ChatColor;
 
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class PlotManager implements IConfigurationChanged
 {
@@ -18,13 +24,15 @@ public class PlotManager implements IConfigurationChanged
 		PlotFilter filter,
 		WorldGuardInterface worldGuard,
 		IConfiguration config,
-		PlotEntranceRepository plotEntranceRepository
+		PlotEntranceRepository plotEntranceRepository,
+		ApprovedPlotRepository approvedPlotRepository
 	)
 	{
 		this.filter = filter;
 		this.worldGuard = worldGuard;
 		this.config = config;
 		this.plotEntrance = plotEntranceRepository;
+		this.plotApproval = approvedPlotRepository;
 	}
 
 	@Override
@@ -45,6 +53,7 @@ public class PlotManager implements IConfigurationChanged
 			config.getConfigValueAsDouble("plot.h")
 		);
 		spacing = config.getConfigValueAsInt("plot.spacing");
+		world = RunsafeServer.Instance.getWorld(config.getConfigValueAsString("world"));
 	}
 
 	public java.util.List<RunsafeLocation> getPlotEntrances()
@@ -151,6 +160,113 @@ public class PlotManager implements IConfigurationChanged
 		return target;
 	}
 
+	public Map<String, String> getOldPlots()
+	{
+		if (!worldGuard.serverHasWorldGuard())
+			return null;
+
+		Date now = new Date();
+		ArrayList<String> banned = new ArrayList<String>();
+		List<String> approved;
+		approved = plotApproval.getApprovedPlots();
+
+		HashMap<String, Long> seen = new HashMap<String, Long>();
+
+		PlayerDatabase players = RunsafePlugin.Instances.get("RunsafeServices").getComponent(PlayerDatabase.class);
+		Map<String, Set<String>> checkList = worldGuard.getAllRegionsWithOwnersInWorld(getWorld());
+		long oldAfter = config.getConfigValueAsInt("old_after") * 1000;
+
+		HashMap<String, String> hits = new HashMap<String, String>();
+		for (String region : filter.apply(new ArrayList<String>(checkList.keySet())))
+		{
+			String info = null;
+			if (approved.contains(region))
+				continue;
+
+			boolean ok = false;
+			for (String owner : checkList.get(region))
+			{
+				owner = owner.toLowerCase();
+				if (!seen.containsKey(owner))
+				{
+					RunsafePlayer player = RunsafeServer.Instance.getPlayer(owner);
+					if (player.isOnline())
+					{
+						ok = true;
+						seen.put(owner, (long) 0);
+						break;
+					}
+					else
+					{
+						PlayerData data = players.get(owner);
+						if (data != null && data.getBanned() != null)
+							banned.add(owner);
+						if (data == null || (data.getLogin() == null && data.getLogout() == null))
+							seen.put(owner, null);
+						else if (data.getLogout() != null)
+							seen.put(owner, now.getTime() - data.getLogout().getTime());
+						else if (data.getLogin() != null)
+							seen.put(owner, now.getTime() - data.getLogin().getTime());
+					}
+				}
+
+				if (banned.contains(owner))
+				{
+					ok = false;
+					info = "banned";
+					break;
+				}
+
+				if (seen.get(owner) == null)
+					continue;
+
+				if (seen.get(owner) < oldAfter)
+				{
+					ok = true;
+				}
+				else
+				{
+					info = String.format("%.2f days", seen.get(owner) / 86400000.0);
+				}
+			}
+			if (!ok)
+				hits.put(region, String.format("%s%s%s", info == "banned" ? ChatColor.RED : ChatColor.YELLOW, info, ChatColor.RESET));
+		}
+		return hits;
+	}
+
+	public String getOldPlotPointer(RunsafePlayer player)
+	{
+		if (oldPlotPointers.containsKey(player.getName()))
+			return oldPlotPointers.get(player.getName());
+		return null;
+	}
+
+	public void setOldPlotPointer(RunsafePlayer player, String value)
+	{
+		oldPlotPointers.put(player.getName(), value);
+	}
+
+	public Map<String, String> getOldPlotWorklist(RunsafePlayer player)
+	{
+		if (!oldPlotList.containsKey(player.getName()))
+			oldPlotList.put(player.getName(), getOldPlots());
+		return oldPlotList.get(player.getName());
+	}
+
+	public void clearOldPlotWorklist(RunsafePlayer player)
+	{
+		if (oldPlotList.containsKey(player.getName()))
+			oldPlotList.remove(player.getName());
+	}
+
+	public RunsafeWorld getWorld()
+	{
+		if (world == null)
+			world = RunsafeServer.Instance.getWorld(config.getConfigValueAsString("world"));
+		return world;
+	}
+
 	private final PlotFilter filter;
 	private final WorldGuardInterface worldGuard;
 	private Rectangle2D fence;
@@ -158,4 +274,8 @@ public class PlotManager implements IConfigurationChanged
 	private Rectangle2D origin;
 	private int spacing;
 	private final PlotEntranceRepository plotEntrance;
+	private final ApprovedPlotRepository plotApproval;
+	private RunsafeWorld world;
+	private final Map<String, String> oldPlotPointers = new HashMap<String, String>();
+	private final Map<String, Map<String, String>> oldPlotList = new HashMap<String, Map<String, String>>();
 }

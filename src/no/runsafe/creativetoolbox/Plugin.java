@@ -1,6 +1,8 @@
 package no.runsafe.creativetoolbox;
 
 import no.runsafe.creativetoolbox.command.*;
+import no.runsafe.creativetoolbox.command.OldPlots.NextCommand;
+import no.runsafe.creativetoolbox.command.OldPlots.PreviousCommand;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotEntranceRepository;
 import no.runsafe.creativetoolbox.events.InteractEvents;
@@ -27,9 +29,14 @@ public class Plugin extends RunsafePlugin implements IConfigurationFile
 		RunsafeCommand toolbox = new CreativeToolboxCommand();
 		addComponent(toolbox);
 
+		RunsafeCommand oldPlots = new OldPlotsCommand();
+		oldPlots.addSubCommand(getInstance(no.runsafe.creativetoolbox.command.OldPlots.ListCommand.class));
+		oldPlots.addSubCommand(getInstance(NextCommand.class));
+		oldPlots.addSubCommand(getInstance(PreviousCommand.class));
+		toolbox.addSubCommand(oldPlots);
+
 		toolbox.addSubCommand(getInstance(ApprovePlotCommand.class));
 		toolbox.addSubCommand(getInstance(CheckApprovalCommand.class));
-		toolbox.addSubCommand(getInstance(OldPlotsCommand.class));
 		toolbox.addSubCommand(getInstance(SetEntranceCommand.class));
 		toolbox.addSubCommand(getInstance(TeleportCommand.class));
 		toolbox.addSubCommand(getInstance(ScanCommand.class));
