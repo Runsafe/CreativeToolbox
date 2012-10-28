@@ -62,7 +62,7 @@ public class CleanCommand extends RunsafePlayerCommand
 					if (name.contains(filter))
 					{
 						clean = false;
-						break;/**/
+						break;
 					}
 				}
 			}
