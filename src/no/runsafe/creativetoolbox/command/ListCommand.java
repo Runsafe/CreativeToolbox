@@ -10,6 +10,7 @@ import no.runsafe.framework.server.RunsafeWorld;
 import no.runsafe.framework.server.player.RunsafePlayer;
 import no.runsafe.framework.timer.IScheduler;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class ListCommand extends RunsafeAsyncCommand implements IConfigurationCh
 			return "Unable to find WorldGuard!";
 
 		List<String> property = worldGuard.getOwnedRegions(server.getPlayer(getArg("playerName")), getWorld());
-		return String.format("%d regions owned:\n  %s", property.size(), Strings.join(property, "\n  "));
+		return String.format("%d regions owned:\n  %s", property.size(), StringUtils.join(property, "\n  "));
 	}
 
 	@Override
