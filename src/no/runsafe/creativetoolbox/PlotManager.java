@@ -23,20 +23,18 @@ public class PlotManager implements IConfigurationChanged
 	public PlotManager(
 		PlotFilter filter,
 		WorldGuardInterface worldGuard,
-		IConfiguration config,
 		PlotEntranceRepository plotEntranceRepository,
 		ApprovedPlotRepository approvedPlotRepository
 	)
 	{
 		this.filter = filter;
 		this.worldGuard = worldGuard;
-		this.config = config;
 		this.plotEntrance = plotEntranceRepository;
 		this.plotApproval = approvedPlotRepository;
 	}
 
 	@Override
-	public void OnConfigurationChanged()
+	public void OnConfigurationChanged(IConfiguration config)
 	{
 		fence = new Rectangle2D.Double();
 		fence.setRect(
@@ -54,6 +52,9 @@ public class PlotManager implements IConfigurationChanged
 		);
 		spacing = config.getConfigValueAsInt("plot.spacing");
 		world = RunsafeServer.Instance.getWorld(config.getConfigValueAsString("world"));
+		ignoredRegions = config.getConfigValueAsList("free.ignore");
+		groundLevel = config.getConfigValueAsInt("plot.groundLevel");
+		oldAfter = config.getConfigValueAsInt("old_after") * 1000;
 	}
 
 	public java.util.List<RunsafeLocation> getPlotEntrances()
@@ -67,15 +68,13 @@ public class PlotManager implements IConfigurationChanged
 	public java.util.List<RunsafeLocation> getFreePlotEntrances()
 	{
 		Map<String, Rectangle2D> taken = worldGuard.getRegionRectanglesInWorld(filter.getWorld());
-		List<String> ignored = config.getConfigValueAsList("free.ignore");
 		ArrayList<Rectangle2D> takenPlots = new ArrayList<Rectangle2D>();
 		for (String region : taken.keySet())
 		{
-			if (!ignored.contains(region))
+			if (!ignoredRegions.contains(region))
 				takenPlots.add(taken.get(region));
 		}
 		ArrayList<RunsafeLocation> freePlots = new ArrayList<RunsafeLocation>();
-		int ground = config.getConfigValueAsInt("plot.groundLevel");
 		for (double x = origin.getX(); x < fence.getMaxX(); x += origin.getWidth() + spacing)
 		{
 			for (double y = origin.getY(); y < fence.getMaxY(); y += origin.getHeight() + spacing)
@@ -90,7 +89,7 @@ public class PlotManager implements IConfigurationChanged
 					}
 				}
 				if (free)
-					freePlots.add(getLocation(x + origin.getWidth(), y + origin.getHeight(), ground));
+					freePlots.add(getLocation(x + origin.getWidth(), y + origin.getHeight(), groundLevel));
 			}
 		}
 		return freePlots;
@@ -115,7 +114,7 @@ public class PlotManager implements IConfigurationChanged
 		y -= spacing;
 		y += origin.getY();
 
-		return getLocation(x, y, config.getConfigValueAsDouble("plot.groundLevel"));
+		return getLocation(x, y, groundLevel);
 	}
 
 	public RunsafeLocation getLocation(double x, double y, double altitude)
@@ -174,7 +173,6 @@ public class PlotManager implements IConfigurationChanged
 
 		PlayerDatabase players = RunsafePlugin.Instances.get("RunsafeServices").getComponent(PlayerDatabase.class);
 		Map<String, Set<String>> checkList = worldGuard.getAllRegionsWithOwnersInWorld(getWorld());
-		long oldAfter = config.getConfigValueAsInt("old_after") * 1000;
 
 		HashMap<String, String> hits = new HashMap<String, String>();
 		for (String region : filter.apply(new ArrayList<String>(checkList.keySet())))
@@ -262,20 +260,20 @@ public class PlotManager implements IConfigurationChanged
 
 	public RunsafeWorld getWorld()
 	{
-		if (world == null)
-			world = RunsafeServer.Instance.getWorld(config.getConfigValueAsString("world"));
 		return world;
 	}
 
-	private final PlotFilter filter;
-	private final WorldGuardInterface worldGuard;
-	private Rectangle2D fence;
-	private final IConfiguration config;
-	private Rectangle2D origin;
-	private int spacing;
-	private final PlotEntranceRepository plotEntrance;
-	private final ApprovedPlotRepository plotApproval;
-	private RunsafeWorld world;
-	private final Map<String, String> oldPlotPointers = new HashMap<String, String>();
-	private final Map<String, Map<String, String>> oldPlotList = new HashMap<String, Map<String, String>>();
+	final PlotFilter filter;
+	final WorldGuardInterface worldGuard;
+	Rectangle2D fence;
+	Rectangle2D origin;
+	int spacing;
+	final PlotEntranceRepository plotEntrance;
+	final ApprovedPlotRepository plotApproval;
+	RunsafeWorld world;
+	final Map<String, String> oldPlotPointers = new HashMap<String, String>();
+	final Map<String, Map<String, String>> oldPlotList = new HashMap<String, Map<String, String>>();
+	List<String> ignoredRegions;
+	int groundLevel;
+	long oldAfter;
 }

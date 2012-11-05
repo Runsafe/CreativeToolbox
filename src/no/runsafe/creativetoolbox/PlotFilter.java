@@ -12,20 +12,20 @@ import java.util.List;
 
 public class PlotFilter implements IConfigurationChanged
 {
-	public PlotFilter(IConfiguration configuration, WorldGuardInterface worldGuard)
+	public PlotFilter(WorldGuardInterface worldGuard)
 	{
-		this.config = configuration;
 		this.worldGuard = worldGuard;
 	}
 
 	@Override
-	public void OnConfigurationChanged()
+	public void OnConfigurationChanged(IConfiguration configuration)
 	{
-		filter = config.getConfigValueAsList("ignored");
+		filter = configuration.getConfigValueAsList("ignored");
 		if (filter == null)
 			filter = new ArrayList<String>();
-		world = RunsafeServer.Instance.getWorld(config.getConfigValueAsString("world"));
+		world = RunsafeServer.Instance.getWorld(configuration.getConfigValueAsString("world"));
 		filterCache = null;
+		worldName = configuration.getConfigValueAsString("world");
 	}
 
 	public List<String> apply(List<String> unfiltered)
@@ -60,14 +60,14 @@ public class PlotFilter implements IConfigurationChanged
 	public RunsafeWorld getWorld()
 	{
 		if (world == null)
-			world = RunsafeServer.Instance.getWorld(config.getConfigValueAsString("world"));
+			world = RunsafeServer.Instance.getWorld(worldName);
 		return world;
 	}
 
-	private final IConfiguration config;
 	private List<String> filter;
 	private final WorldGuardInterface worldGuard;
 	private List<String> filtered;
 	private Date filterCache;
 	private RunsafeWorld world;
+	private String worldName;
 }

@@ -1,6 +1,5 @@
 package no.runsafe.creativetoolbox.command;
 
-import joptsimple.internal.Strings;
 import no.runsafe.framework.command.RunsafeAsyncCommand;
 import no.runsafe.framework.command.RunsafeCommand;
 import no.runsafe.framework.configuration.IConfiguration;
@@ -18,13 +17,11 @@ public class ListCommand extends RunsafeAsyncCommand implements IConfigurationCh
 {
 	public ListCommand(
 		RunsafeServer server,
-		IConfiguration configuration,
 		WorldGuardInterface worldGuard,
 		IScheduler scheduler)
 	{
 		super("list", scheduler, "playerName");
 		this.server = server;
-		config = configuration;
 		this.worldGuard = worldGuard;
 	}
 
@@ -51,20 +48,17 @@ public class ListCommand extends RunsafeAsyncCommand implements IConfigurationCh
 	}
 
 	@Override
-	public void OnConfigurationChanged()
+	public void OnConfigurationChanged(IConfiguration configuration)
 	{
-		world = RunsafeServer.Instance.getWorld(config.getConfigValueAsString("world"));
+		world = RunsafeServer.Instance.getWorld(configuration.getConfigValueAsString("world"));
 	}
 
 	public RunsafeWorld getWorld()
 	{
-		if (world == null)
-			world = RunsafeServer.Instance.getWorld(config.getConfigValueAsString("world"));
 		return world;
 	}
 
 	private final RunsafeServer server;
-	private final IConfiguration config;
 	private final WorldGuardInterface worldGuard;
 	private RunsafeWorld world;
 }

@@ -20,13 +20,11 @@ import java.util.Set;
 public class InteractEvents implements IPlayerRightClickBlockEvent, IPlayerInteractEntityEvent, IConfigurationChanged, IAsyncEvent
 {
 	public InteractEvents(
-		IConfiguration configuration,
 		PlotFilter plotFilter,
 		WorldGuardInterface worldGuard,
 		ApprovedPlotRepository plotRepository
 	)
 	{
-		this.configuration = configuration;
 		this.worldGuardInterface = worldGuard;
 		this.plotFilter = plotFilter;
 		this.plotRepository = plotRepository;
@@ -56,9 +54,9 @@ public class InteractEvents implements IPlayerRightClickBlockEvent, IPlayerInter
 	}
 
 	@Override
-	public void OnConfigurationChanged()
+	public void OnConfigurationChanged(IConfiguration configuration)
 	{
-		listItem = this.configuration.getConfigValueAsInt("list_item");
+		listItem = configuration.getConfigValueAsInt("list_item");
 	}
 
 	private void listPlotsByPlayer(RunsafePlayer checkPlayer, RunsafePlayer triggerPlayer)
@@ -121,7 +119,6 @@ public class InteractEvents implements IPlayerRightClickBlockEvent, IPlayerInter
 		}
 	}
 
-	private final IConfiguration configuration;
 	private final WorldGuardInterface worldGuardInterface;
 	private int listItem;
 	private final PlotFilter plotFilter;
