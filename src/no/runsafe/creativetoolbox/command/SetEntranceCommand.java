@@ -36,10 +36,8 @@ public class SetEntranceCommand extends RunsafeAsyncPlayerCommand
 			return true;
 
 		console.fine(String.format("Player is in region %s", region));
-		if (worldGuard.getOwners(player.getWorld(), region).contains(player.getName().toLowerCase()))
-			return true;
-
-		return player.hasPermission("runsafe.creative.entrance.set");
+		return player.hasPermission("runsafe.creative.entrance.set")
+			|| worldGuard.getOwners(player.getWorld(), region).contains(player.getName().toLowerCase());
 	}
 
 	@Override
@@ -50,10 +48,8 @@ public class SetEntranceCommand extends RunsafeAsyncPlayerCommand
 			return false;
 
 		console.fine(String.format("Player is in region %s", region));
-		if (worldGuard.getOwners(player.getWorld(), region).contains(player.getName().toLowerCase()))
-			return true;
-
-		return player.hasPermission("runsafe.creative.entrance.set");
+		return player.hasPermission("runsafe.creative.entrance.set")
+			|| worldGuard.getOwners(player.getWorld(), region).contains(player.getName().toLowerCase());
 	}
 
 	@Override

@@ -13,16 +13,18 @@ import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
 
-public class ListCommand extends RunsafeAsyncCommand implements IConfigurationChanged
+public class ListCommand extends RunsafeAsyncCommand
 {
 	public ListCommand(
 		RunsafeServer server,
 		WorldGuardInterface worldGuard,
+		IConfiguration configuration,
 		IScheduler scheduler)
 	{
 		super("list", scheduler, "playerName");
 		this.server = server;
 		this.worldGuard = worldGuard;
+		this.configuration = configuration;
 	}
 
 	@Override
@@ -47,18 +49,12 @@ public class ListCommand extends RunsafeAsyncCommand implements IConfigurationCh
 		return "runsafe.creative.list";
 	}
 
-	@Override
-	public void OnConfigurationChanged(IConfiguration configuration)
-	{
-		world = RunsafeServer.Instance.getWorld(configuration.getConfigValueAsString("world"));
-	}
-
 	public RunsafeWorld getWorld()
 	{
-		return world;
+		return RunsafeServer.Instance.getWorld(configuration.getConfigValueAsString("world"));
 	}
 
 	private final RunsafeServer server;
 	private final WorldGuardInterface worldGuard;
-	private RunsafeWorld world;
+	private final IConfiguration configuration;
 }

@@ -228,7 +228,15 @@ public class PlotManager implements IConfigurationChanged
 				}
 			}
 			if (!ok)
-				hits.put(region, String.format("%s%s%s", info == "banned" ? ChatColor.RED : ChatColor.YELLOW, info, ChatColor.RESET));
+				hits.put(
+					region,
+					String.format(
+						"%s%s%s",
+						info == null || info.equals("banned") ? ChatColor.RED : ChatColor.YELLOW,
+						info,
+						ChatColor.RESET
+					)
+				);
 		}
 		return hits;
 	}
@@ -245,14 +253,14 @@ public class PlotManager implements IConfigurationChanged
 		oldPlotPointers.put(player.getName(), value);
 	}
 
-	public Map<String, String> getOldPlotWorklist(RunsafePlayer player)
+	public Map<String, String> getOldPlotWorkList(RunsafePlayer player)
 	{
 		if (!oldPlotList.containsKey(player.getName()))
 			oldPlotList.put(player.getName(), getOldPlots());
 		return oldPlotList.get(player.getName());
 	}
 
-	public void clearOldPlotWorklist(RunsafePlayer player)
+	public void clearOldPlotWorkList(RunsafePlayer player)
 	{
 		if (oldPlotList.containsKey(player.getName()))
 			oldPlotList.remove(player.getName());

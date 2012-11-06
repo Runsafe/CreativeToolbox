@@ -36,7 +36,7 @@ public class ListCommand extends RunsafeAsyncCommand
 		int max_listed = config.getConfigValueAsInt("max_listed");
 		if(executor != null)
 		{
-			manager.clearOldPlotWorklist(executor);
+			manager.clearOldPlotWorkList(executor);
 			manager.setOldPlotPointer(executor, null);
 		}
 		Map<String, String> hits = manager.getOldPlots();

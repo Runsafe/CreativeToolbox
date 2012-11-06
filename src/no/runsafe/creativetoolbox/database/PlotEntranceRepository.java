@@ -5,22 +5,23 @@ import no.runsafe.framework.database.IDatabase;
 import no.runsafe.framework.database.IRepository;
 import no.runsafe.framework.database.ISchemaUpdater;
 import no.runsafe.framework.database.SchemaRevisionRepository;
+import no.runsafe.framework.event.IConfigurationChanged;
 import no.runsafe.framework.output.IOutput;
 import no.runsafe.framework.server.RunsafeLocation;
 import no.runsafe.framework.server.RunsafeServer;
+import no.runsafe.framework.server.RunsafeWorld;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-public class PlotEntranceRepository implements ISchemaUpdater, IRepository<PlotEntrance, String>
+public class PlotEntranceRepository implements ISchemaUpdater, IRepository<PlotEntrance, String>, IConfigurationChanged
 {
-	public PlotEntranceRepository(IOutput output, IDatabase database, IConfiguration config)
+	public PlotEntranceRepository(IOutput output, IDatabase database)
 	{
 		this.database = database;
 		this.console = output;
-		this.config = config;
 	}
 
 	@Override
@@ -40,7 +41,7 @@ public class PlotEntranceRepository implements ISchemaUpdater, IRepository<PlotE
 			if (result.first())
 			{
 				RunsafeLocation location = new RunsafeLocation(
-					RunsafeServer.Instance.getWorld(config.getConfigValueAsString("world")),
+					world,
 					result.getDouble("x"),
 					result.getDouble("y"),
 					result.getDouble("z"),
@@ -137,5 +138,12 @@ public class PlotEntranceRepository implements ISchemaUpdater, IRepository<PlotE
 	private final IDatabase database;
 	private final HashMap<String, PlotEntrance> cache = new HashMap<String, PlotEntrance>();
 	private final IOutput console;
-	private final IConfiguration config;
+
+	@Override
+	public void OnConfigurationChanged(IConfiguration configuration)
+	{
+		world = RunsafeServer.Instance.getWorld(configuration.getConfigValueAsString("world"));
+	}
+
+	private RunsafeWorld world;
 }

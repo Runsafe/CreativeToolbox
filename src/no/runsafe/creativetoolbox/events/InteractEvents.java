@@ -7,17 +7,19 @@ import no.runsafe.framework.configuration.IConfiguration;
 import no.runsafe.framework.event.IAsyncEvent;
 import no.runsafe.framework.event.IConfigurationChanged;
 import no.runsafe.framework.event.player.IPlayerInteractEntityEvent;
-import no.runsafe.framework.event.player.IPlayerRightClickBlockEvent;
+import no.runsafe.framework.event.player.IPlayerRightClickBlock;
 import no.runsafe.framework.server.RunsafeLocation;
+import no.runsafe.framework.server.block.RunsafeBlock;
 import no.runsafe.framework.server.event.player.RunsafePlayerClickEvent;
 import no.runsafe.framework.server.event.player.RunsafePlayerInteractEntityEvent;
+import no.runsafe.framework.server.item.RunsafeItemStack;
 import no.runsafe.framework.server.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.util.List;
 import java.util.Set;
 
-public class InteractEvents implements IPlayerRightClickBlockEvent, IPlayerInteractEntityEvent, IConfigurationChanged, IAsyncEvent
+public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEntityEvent, IConfigurationChanged, IAsyncEvent
 {
 	public InteractEvents(
 		PlotFilter plotFilter,
@@ -31,13 +33,14 @@ public class InteractEvents implements IPlayerRightClickBlockEvent, IPlayerInter
 	}
 
 	@Override
-	public void OnPlayerRightClick(RunsafePlayerClickEvent event)
+	public boolean OnPlayerRightClick(RunsafePlayer player, RunsafeItemStack itemInHand, RunsafeBlock block)
 	{
-		if (event.getItemStack() != null && event.getItemStack().getItemId() == listItem)
+		if (itemInHand != null && itemInHand.getItemId() == listItem)
 		{
-			this.listPlotsByLocation(event.getBlock().getLocation(), event.getPlayer());
-			event.setCancelled(true);
+			this.listPlotsByLocation(block.getLocation(), player);
+			return false;
 		}
+		return true;
 	}
 
 	@Override
