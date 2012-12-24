@@ -253,7 +253,8 @@ public class PlotManager implements IConfigurationChanged
 		oldPlotPointers.put(player.getName(), value);
 	}
 
-	public Map<String, String> getOldPlotWorkList(RunsafePlayer player)
+
+	public Map<String,String> getOldPlotWorkList(RunsafePlayer player)
 	{
 		if (!oldPlotList.containsKey(player.getName()))
 			oldPlotList.put(player.getName(), getOldPlots());

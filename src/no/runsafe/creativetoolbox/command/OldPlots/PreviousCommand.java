@@ -33,7 +33,7 @@ public class PreviousCommand extends RunsafeAsyncPlayerCommand
 	public String OnExecute(RunsafePlayer player, String[] strings)
 	{
 		warpTo.remove(player.getName());
-		Map<String, String> plots = manager.getOldPlotWorklist(player);
+		Map<String, String> plots = manager.getOldPlotWorkList(player);
 		String current = manager.getOldPlotPointer(player);
 		if (current == null)
 			return "There was no previous plot.";
