@@ -1,6 +1,8 @@
 package no.runsafe.creativetoolbox;
 
 import no.runsafe.creativetoolbox.command.*;
+import no.runsafe.creativetoolbox.command.Member.AddCommand;
+import no.runsafe.creativetoolbox.command.Member.RemoveCommand;
 import no.runsafe.creativetoolbox.command.OldPlots.NextCommand;
 import no.runsafe.creativetoolbox.command.OldPlots.PreviousCommand;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
@@ -34,6 +36,11 @@ public class Plugin extends RunsafePlugin implements IConfigurationFile
 		oldPlots.addSubCommand(getInstance(NextCommand.class));
 		oldPlots.addSubCommand(getInstance(PreviousCommand.class));
 		toolbox.addSubCommand(oldPlots);
+
+		RunsafeCommand member = new RunsafeCommand("member");
+		member.addSubCommand(getInstance(AddCommand.class));
+		member.addSubCommand(getInstance(RemoveCommand.class));
+		toolbox.addSubCommand(member);
 
 		toolbox.addSubCommand(getInstance(ApprovePlotCommand.class));
 		toolbox.addSubCommand(getInstance(CheckApprovalCommand.class));
