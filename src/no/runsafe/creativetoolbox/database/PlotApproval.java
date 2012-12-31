@@ -1,43 +1,42 @@
 package no.runsafe.creativetoolbox.database;
 
-import no.runsafe.framework.database.IDatabase;
-import no.runsafe.framework.database.ISchemaUpdater;
 import no.runsafe.framework.database.RunsafeEntity;
-import no.runsafe.framework.database.SchemaRevisionRepository;
-import no.runsafe.framework.output.IOutput;
+import org.joda.time.DateTime;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.Date;
+public class PlotApproval extends RunsafeEntity
+{
 
-public class PlotApproval extends RunsafeEntity {
-
-	public String getName() {
+	public String getName()
+	{
 		return name;
 	}
 
-	public void setName(String value) {
+	public void setName(String value)
+	{
 		name = value;
 	}
 
-	public Date getApproved() {
+	public DateTime getApproved()
+	{
 		return approved;
 	}
 
-	public void setApproved(Date value) {
+	public void setApproved(DateTime value)
+	{
 		approved = value;
 	}
 
-	public String getApprovedBy() {
+	public String getApprovedBy()
+	{
 		return approvedBy;
 	}
 
-	public void setApprovedBy(String value) {
+	public void setApprovedBy(String value)
+	{
 		approvedBy = value;
 	}
 
 	private String name;
-	private Date approved;
+	private DateTime approved;
 	private String approvedBy;
 }

@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="RunsafeServices">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../out/RunsafeServices.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

@@ -1,6 +1,8 @@
 package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.creativetoolbox.PlotFilter;
+import no.runsafe.creativetoolbox.database.PlotEntrance;
+import no.runsafe.creativetoolbox.database.PlotEntranceRepository;
 import no.runsafe.framework.command.RunsafePlayerCommand;
 import no.runsafe.framework.server.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
@@ -9,11 +11,12 @@ import java.util.List;
 
 public class DeleteHereCommand extends RunsafePlayerCommand
 {
-	public DeleteHereCommand(PlotFilter filter, WorldGuardInterface worldGuard)
+	public DeleteHereCommand(PlotFilter filter, WorldGuardInterface worldGuard, PlotEntranceRepository entranceRepository)
 	{
 		super("deletehere");
 		this.filter = filter;
 		this.worldGuard = worldGuard;
+		this.entrances = entranceRepository;
 	}
 
 	@Override
@@ -38,6 +41,7 @@ public class DeleteHereCommand extends RunsafePlayerCommand
 		for (String region : delete)
 		{
 			worldGuard.deleteRegion(filter.getWorld(), region);
+			entrances.delete(region);
 			results.append(String.format("Deleted region '%s'.", region));
 		}
 		return results.toString();
@@ -45,4 +49,5 @@ public class DeleteHereCommand extends RunsafePlayerCommand
 
 	private final PlotFilter filter;
 	private final WorldGuardInterface worldGuard;
+	private final PlotEntranceRepository entrances;
 }

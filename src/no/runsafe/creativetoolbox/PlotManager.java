@@ -1,11 +1,8 @@
 package no.runsafe.creativetoolbox;
 
-import no.runsafe.PlayerData;
-import no.runsafe.PlayerDatabase;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotEntrance;
 import no.runsafe.creativetoolbox.database.PlotEntranceRepository;
-import no.runsafe.framework.RunsafePlugin;
 import no.runsafe.framework.configuration.IConfiguration;
 import no.runsafe.framework.event.IConfigurationChanged;
 import no.runsafe.framework.server.RunsafeLocation;
@@ -14,6 +11,11 @@ import no.runsafe.framework.server.RunsafeWorld;
 import no.runsafe.framework.server.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.bukkit.ChatColor;
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
+import org.joda.time.Period;
+import org.joda.time.PeriodType;
+import org.joda.time.format.PeriodFormat;
 
 import java.awt.geom.Rectangle2D;
 import java.util.*;
@@ -54,7 +56,7 @@ public class PlotManager implements IConfigurationChanged
 		world = RunsafeServer.Instance.getWorld(config.getConfigValueAsString("world"));
 		ignoredRegions = config.getConfigValueAsList("free.ignore");
 		groundLevel = config.getConfigValueAsInt("plot.groundLevel");
-		oldAfter = config.getConfigValueAsInt("old_after") * 1000;
+		limit = new Period(0, 0, 0, config.getConfigValueAsInt("old_after"), 0, 0, 0, 0).toDurationTo(DateTime.now());
 	}
 
 	public java.util.List<RunsafeLocation> getPlotEntrances()
@@ -164,81 +166,74 @@ public class PlotManager implements IConfigurationChanged
 		if (!worldGuard.serverHasWorldGuard())
 			return null;
 
-		Date now = new Date();
-		ArrayList<String> banned = new ArrayList<String>();
-		List<String> approved;
-		approved = plotApproval.getApprovedPlots();
-
-		HashMap<String, Long> seen = new HashMap<String, Long>();
-
-		PlayerDatabase players = RunsafePlugin.Instances.get("RunsafeServices").getComponent(PlayerDatabase.class);
+		List<String> approvedPlots = plotApproval.getApprovedPlots();
 		Map<String, Set<String>> checkList = worldGuard.getAllRegionsWithOwnersInWorld(getWorld());
-
-		HashMap<String, String> hits = new HashMap<String, String>();
+		Map<String, String> hits = new HashMap<String, String>();
 		for (String region : filter.apply(new ArrayList<String>(checkList.keySet())))
 		{
-			String info = null;
-			if (approved.contains(region))
+			if (approvedPlots.contains(region))
 				continue;
 
-			boolean ok = false;
-			for (String owner : checkList.get(region))
-			{
-				owner = owner.toLowerCase();
-				if (!seen.containsKey(owner))
-				{
-					RunsafePlayer player = RunsafeServer.Instance.getPlayer(owner);
-					if (player.isOnline())
-					{
-						ok = true;
-						seen.put(owner, (long) 0);
-						break;
-					}
-					else
-					{
-						PlayerData data = players.get(owner);
-						if (data != null && data.getBanned() != null)
-							banned.add(owner);
-						if (data == null || (data.getLogin() == null && data.getLogout() == null))
-							seen.put(owner, null);
-						else if (data.getLogout() != null)
-							seen.put(owner, now.getTime() - data.getLogout().getTime());
-						else if (data.getLogin() != null)
-							seen.put(owner, now.getTime() - data.getLogin().getTime());
-					}
-				}
-
-				if (banned.contains(owner))
-				{
-					ok = false;
-					info = "banned";
-					break;
-				}
-
-				if (seen.get(owner) == null)
-					continue;
-
-				if (seen.get(owner) < oldAfter)
-				{
-					ok = true;
-				}
-				else
-				{
-					info = String.format("%.2f days", seen.get(owner) / 86400000.0);
-				}
-			}
-			if (!ok)
-				hits.put(
-					region,
-					String.format(
-						"%s%s%s",
-						info == null || info.equals("banned") ? ChatColor.RED : ChatColor.YELLOW,
-						info,
-						ChatColor.RESET
-					)
-				);
+			Duration status = getPlotStatus(checkList.get(region));
+			if (status != null && (status.equals(Duration.ZERO) || status.isShorterThan(limit)))
+				continue;
+			hits.put(region, formatReason(status));
 		}
 		return hits;
+	}
+
+	private String formatReason(Duration status)
+	{
+		String info = null;
+		if (status != null && status.equals(ban))
+			info = "banned";
+		else if (status != null)
+			info = PeriodFormat.getDefault().print(new Period(status, DateTime.now(), PeriodType.yearMonthDay()));
+
+		return String.format(
+			"%s%s%s",
+			info == null || info.equals("banned") ? ChatColor.RED : ChatColor.YELLOW,
+			info,
+			ChatColor.RESET
+		);
+	}
+
+	private Duration getPlotStatus(Set<String> owners)
+	{
+		Duration result = null;
+		for (String owner : owners)
+		{
+			Duration ownerSeen = getSeen(owner);
+			if (ownerSeen == null)
+				return null;
+			if (ownerSeen.isEqual(Duration.ZERO))
+				return Duration.ZERO;
+			if (result == null || !result.isEqual(ban))
+				result = ownerSeen;
+		}
+		return result;
+	}
+
+	private Duration getSeen(String playerName)
+	{
+		playerName = playerName.toLowerCase();
+		if (lastSeen.containsKey(playerName))
+			return lastSeen.get(playerName);
+
+		RunsafePlayer player = RunsafeServer.Instance.getPlayer(playerName);
+		if (player.isOnline())
+			lastSeen.put(playerName, Duration.ZERO);
+		else if (player.isBanned())
+			lastSeen.put(playerName, ban);
+		else
+		{
+			DateTime logout = player.lastLogout();
+			if (logout == null)
+				lastSeen.put(playerName, null);
+			else
+				lastSeen.put(playerName, new Duration(player.lastLogout(), DateTime.now()));
+		}
+		return lastSeen.get(playerName);
 	}
 
 	public String getOldPlotPointer(RunsafePlayer player)
@@ -254,7 +249,7 @@ public class PlotManager implements IConfigurationChanged
 	}
 
 
-	public Map<String,String> getOldPlotWorkList(RunsafePlayer player)
+	public Map<String, String> getOldPlotWorkList(RunsafePlayer player)
 	{
 		if (!oldPlotList.containsKey(player.getName()))
 			oldPlotList.put(player.getName(), getOldPlots());
@@ -284,5 +279,7 @@ public class PlotManager implements IConfigurationChanged
 	final Map<String, Map<String, String>> oldPlotList = new HashMap<String, Map<String, String>>();
 	List<String> ignoredRegions;
 	int groundLevel;
-	long oldAfter;
+	Duration limit;
+	Duration ban = new Duration(Long.MAX_VALUE);
+	final HashMap<String, Duration> lastSeen = new HashMap<String, Duration>();
 }

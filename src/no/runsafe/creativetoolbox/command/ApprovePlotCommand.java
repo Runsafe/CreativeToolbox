@@ -6,8 +6,7 @@ import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.framework.command.RunsafeAsyncPlayerCommand;
 import no.runsafe.framework.server.player.RunsafePlayer;
 import no.runsafe.framework.timer.IScheduler;
-
-import java.util.Date;
+import org.joda.time.DateTime;
 
 public class ApprovePlotCommand extends RunsafeAsyncPlayerCommand
 {
@@ -38,7 +37,7 @@ public class ApprovePlotCommand extends RunsafeAsyncPlayerCommand
 			return "You cannot approve that plot.";
 
 		PlotApproval approval = new PlotApproval();
-		approval.setApproved(new Date());
+		approval.setApproved(DateTime.now());
 		approval.setApprovedBy(executor.getName());
 		approval.setName(plot);
 		repository.persist(approval);

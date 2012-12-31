@@ -8,15 +8,13 @@ import no.runsafe.creativetoolbox.command.OldPlots.PreviousCommand;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotEntranceRepository;
 import no.runsafe.creativetoolbox.events.InteractEvents;
-import no.runsafe.framework.RunsafePlugin;
+import no.runsafe.framework.RunsafeConfigurablePlugin;
 import no.runsafe.framework.command.RunsafeCommand;
-import no.runsafe.framework.configuration.IConfigurationFile;
-import no.runsafe.framework.event.IPluginEnabled;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.io.InputStream;
 
-public class Plugin extends RunsafePlugin implements IConfigurationFile
+public class Plugin extends RunsafeConfigurablePlugin
 {
 	@Override
 	protected void PluginSetup()
@@ -52,17 +50,5 @@ public class Plugin extends RunsafePlugin implements IConfigurationFile
 		toolbox.addSubCommand(getInstance(RandomPlotCommand.class));
 		toolbox.addSubCommand(getInstance(DeleteHereCommand.class));
 		toolbox.addSubCommand(getInstance(FindFreePlotCommand.class));
-	}
-
-	@Override
-	public String getConfigurationPath()
-	{
-		return "plugins/CreativeToolbox/config.yml";
-	}
-
-	@Override
-	public InputStream getDefaultConfiguration()
-	{
-		return getResource("defaults.yml");
 	}
 }

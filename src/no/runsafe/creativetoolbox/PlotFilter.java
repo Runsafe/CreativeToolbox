@@ -5,9 +5,9 @@ import no.runsafe.framework.event.IConfigurationChanged;
 import no.runsafe.framework.server.RunsafeServer;
 import no.runsafe.framework.server.RunsafeWorld;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class PlotFilter implements IConfigurationChanged
@@ -30,7 +30,7 @@ public class PlotFilter implements IConfigurationChanged
 
 	public List<String> apply(List<String> unfiltered)
 	{
-		if(unfiltered == null)
+		if (unfiltered == null)
 			return null;
 		ArrayList<String> result = new ArrayList<String>();
 		for (String value : unfiltered)
@@ -48,8 +48,8 @@ public class PlotFilter implements IConfigurationChanged
 
 	public List<String> getFiltered()
 	{
-		Date now = new Date();
-		if (filterCache == null || now.getTime() - filterCache.getTime() > 30000)
+		DateTime now = DateTime.now();
+		if (filterCache == null || filterCache.isBefore(now.minusSeconds(30)))
 		{
 			filtered = apply(worldGuard.getRegionsInWorld(getWorld()));
 			filterCache = now;
@@ -67,7 +67,7 @@ public class PlotFilter implements IConfigurationChanged
 	private List<String> filter;
 	private final WorldGuardInterface worldGuard;
 	private List<String> filtered;
-	private Date filterCache;
+	private DateTime filterCache;
 	private RunsafeWorld world;
 	private String worldName;
 }

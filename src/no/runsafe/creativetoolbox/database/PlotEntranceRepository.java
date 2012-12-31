@@ -92,11 +92,18 @@ public class PlotEntranceRepository implements ISchemaUpdater, IRepository<PlotE
 	@Override
 	public void delete(PlotEntrance entrance)
 	{
+		delete(entrance.getName());
+	}
+
+	public void delete(String region)
+	{
 		PreparedStatement delete = database.prepare("DELETE FROM creativetoolbox_plot_entrance WHERE name=?");
 		try
 		{
-			delete.setString(1, entrance.getName());
+			delete.setString(1, region);
 			delete.execute();
+			if (cache.containsKey(region))
+				cache.remove(region);
 		}
 		catch (SQLException e)
 		{

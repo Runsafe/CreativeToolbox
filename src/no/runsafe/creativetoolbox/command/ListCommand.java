@@ -1,11 +1,8 @@
 package no.runsafe.creativetoolbox.command;
 
+import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.framework.command.RunsafeAsyncCommand;
-import no.runsafe.framework.command.RunsafeCommand;
-import no.runsafe.framework.configuration.IConfiguration;
-import no.runsafe.framework.event.IConfigurationChanged;
 import no.runsafe.framework.server.RunsafeServer;
-import no.runsafe.framework.server.RunsafeWorld;
 import no.runsafe.framework.server.player.RunsafePlayer;
 import no.runsafe.framework.timer.IScheduler;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
@@ -18,13 +15,13 @@ public class ListCommand extends RunsafeAsyncCommand
 	public ListCommand(
 		RunsafeServer server,
 		WorldGuardInterface worldGuard,
-		IConfiguration configuration,
+		PlotFilter filter,
 		IScheduler scheduler)
 	{
 		super("list", scheduler, "playerName");
 		this.server = server;
 		this.worldGuard = worldGuard;
-		this.configuration = configuration;
+		this.filter = filter;
 	}
 
 	@Override
@@ -33,8 +30,18 @@ public class ListCommand extends RunsafeAsyncCommand
 		if (!worldGuard.serverHasWorldGuard())
 			return "Unable to find WorldGuard!";
 
-		List<String> property = worldGuard.getOwnedRegions(server.getPlayer(getArg("playerName")), getWorld());
-		return String.format("%d regions owned:\n  %s", property.size(), StringUtils.join(property, "\n  "));
+		if (filter.getWorld() == null)
+			return "No world defined!";
+
+		RunsafePlayer player = server.getPlayer(getArg("playerName"));
+
+		List<String> property = filter.apply(worldGuard.getOwnedRegions(player, filter.getWorld()));
+		return String.format(
+			"%d regions owned by %s:\n  %s",
+			property.size(),
+			player.getPrettyName(),
+			StringUtils.join(property, "\n  ")
+		);
 	}
 
 	@Override
@@ -49,12 +56,7 @@ public class ListCommand extends RunsafeAsyncCommand
 		return "runsafe.creative.list";
 	}
 
-	public RunsafeWorld getWorld()
-	{
-		return RunsafeServer.Instance.getWorld(configuration.getConfigValueAsString("world"));
-	}
-
 	private final RunsafeServer server;
 	private final WorldGuardInterface worldGuard;
-	private final IConfiguration configuration;
+	private final PlotFilter filter;
 }

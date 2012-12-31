@@ -9,6 +9,7 @@ import no.runsafe.framework.event.IConfigurationChanged;
 import no.runsafe.framework.event.player.IPlayerInteractEntityEvent;
 import no.runsafe.framework.event.player.IPlayerRightClickBlock;
 import no.runsafe.framework.server.RunsafeLocation;
+import no.runsafe.framework.server.RunsafeServer;
 import no.runsafe.framework.server.block.RunsafeBlock;
 import no.runsafe.framework.server.event.player.RunsafePlayerClickEvent;
 import no.runsafe.framework.server.event.player.RunsafePlayerInteractEntityEvent;
@@ -115,10 +116,10 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 			Set<String> members = worldGuardInterface.getMembers(player.getWorld(), regionName);
 
 			for (String owner : owners)
-				player.sendMessage("     Owner: " + owner);
+				player.sendMessage("     Owner: " + RunsafeServer.Instance.getPlayer(owner).getPrettyName());
 
 			for (String member : members)
-				player.sendMessage("     Member: " + member);
+				player.sendMessage("     Member: " + RunsafeServer.Instance.getPlayer(member).getPrettyName());
 		}
 	}
 
