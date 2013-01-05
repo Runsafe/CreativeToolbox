@@ -1,6 +1,7 @@
 package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.creativetoolbox.PlotFilter;
+import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.framework.command.RunsafeAsyncPlayerCommand;
@@ -10,11 +11,16 @@ import org.joda.time.DateTime;
 
 public class ApprovePlotCommand extends RunsafeAsyncPlayerCommand
 {
-	public ApprovePlotCommand(ApprovedPlotRepository approvalRepository, PlotFilter filter, IScheduler scheduler)
+	public ApprovePlotCommand(
+		ApprovedPlotRepository approvalRepository,
+		PlotFilter filter,
+		PlotManager plotManager,
+		IScheduler scheduler)
 	{
 		super("approve", scheduler, "plotname");
 		repository = approvalRepository;
 		plotFilter = filter;
+		manager = plotManager;
 	}
 
 	@Override
@@ -32,7 +38,11 @@ public class ApprovePlotCommand extends RunsafeAsyncPlayerCommand
 	@Override
 	public String OnExecute(RunsafePlayer executor, String[] args)
 	{
-		String plot = plotFilter.apply(getArg("plotname"));
+		String plot;
+		if(getArg("plotname").equals("."))
+			plot = manager.getCurrentRegionFiltered(executor);
+		else
+			plot = plotFilter.apply(getArg("plotname"));
 		if (plot == null)
 			return "You cannot approve that plot.";
 
@@ -49,4 +59,5 @@ public class ApprovePlotCommand extends RunsafeAsyncPlayerCommand
 
 	private final ApprovedPlotRepository repository;
 	private final PlotFilter plotFilter;
+	private final PlotManager manager;
 }
