@@ -5,6 +5,7 @@ import no.runsafe.creativetoolbox.database.PlotEntrance;
 import no.runsafe.creativetoolbox.database.PlotEntranceRepository;
 import no.runsafe.framework.configuration.IConfiguration;
 import no.runsafe.framework.event.IConfigurationChanged;
+import no.runsafe.framework.event.IPluginEnabled;
 import no.runsafe.framework.server.RunsafeLocation;
 import no.runsafe.framework.server.RunsafeServer;
 import no.runsafe.framework.server.RunsafeWorld;
@@ -20,43 +21,29 @@ import org.joda.time.format.PeriodFormat;
 import java.awt.geom.Rectangle2D;
 import java.util.*;
 
-public class PlotManager implements IConfigurationChanged
+public class PlotManager implements IConfigurationChanged, IPluginEnabled
 {
 	public PlotManager(
-		PlotFilter filter,
-		WorldGuardInterface worldGuard,
+		PlotFilter plotFilter,
+		WorldGuardInterface worldGuardInterface,
 		PlotEntranceRepository plotEntranceRepository,
-		ApprovedPlotRepository approvedPlotRepository
+		ApprovedPlotRepository approvedPlotRepository,
+		PlotCalculator plotCalculator
 	)
 	{
-		this.filter = filter;
-		this.worldGuard = worldGuard;
-		this.plotEntrance = plotEntranceRepository;
-		this.plotApproval = approvedPlotRepository;
+		filter = plotFilter;
+		worldGuard = worldGuardInterface;
+		plotEntrance = plotEntranceRepository;
+		plotApproval = approvedPlotRepository;
+		calculator = plotCalculator;
 	}
 
-	@Override
-	public void OnConfigurationChanged(IConfiguration config)
+	public String getCurrentRegionFiltered(RunsafePlayer player)
 	{
-		fence = new Rectangle2D.Double();
-		fence.setRect(
-			config.getConfigValueAsDouble("fence.x"),
-			config.getConfigValueAsDouble("fence.y"),
-			config.getConfigValueAsDouble("fence.w"),
-			config.getConfigValueAsDouble("fence.h")
-		);
-		origin = new Rectangle2D.Double();
-		origin.setRect(
-			config.getConfigValueAsDouble("plot.origin.x"),
-			config.getConfigValueAsDouble("plot.origin.y"),
-			config.getConfigValueAsDouble("plot.w"),
-			config.getConfigValueAsDouble("plot.h")
-		);
-		spacing = config.getConfigValueAsInt("plot.spacing");
-		world = RunsafeServer.Instance.getWorld(config.getConfigValueAsString("world"));
-		ignoredRegions = config.getConfigValueAsList("free.ignore");
-		groundLevel = config.getConfigValueAsInt("plot.groundLevel");
-		limit = new Period(0, 0, 0, config.getConfigValueAsInt("old_after"), 0, 0, 0, 0).toDurationTo(DateTime.now());
+		List<String> regions = filter.apply(worldGuard.getRegionsAtLocation(player.getLocation()));
+		if (regions == null || regions.size() == 0)
+			return null;
+		return regions.get(0);
 	}
 
 	public java.util.List<RunsafeLocation> getPlotEntrances()
@@ -69,60 +56,24 @@ public class PlotManager implements IConfigurationChanged
 
 	public java.util.List<RunsafeLocation> getFreePlotEntrances()
 	{
-		Map<String, Rectangle2D> taken = worldGuard.getRegionRectanglesInWorld(filter.getWorld());
-		ArrayList<Rectangle2D> takenPlots = new ArrayList<Rectangle2D>();
-		for (String region : taken.keySet())
-		{
-			if (!ignoredRegions.contains(region))
-				takenPlots.add(taken.get(region));
-		}
-		ArrayList<RunsafeLocation> freePlots = new ArrayList<RunsafeLocation>();
-		for (double x = origin.getX(); x < fence.getMaxX(); x += origin.getWidth() + spacing)
-		{
-			for (double y = origin.getY(); y < fence.getMaxY(); y += origin.getHeight() + spacing)
-			{
-				boolean free = true;
-				for (Rectangle2D region : takenPlots)
-				{
-					if (region.contains(x + 1, y + 1))
-					{
-						free = false;
-						break;
-					}
-				}
-				if (free)
-					freePlots.add(getLocation(x + origin.getWidth(), y + origin.getHeight(), groundLevel));
-			}
-		}
 		return freePlots;
 	}
 
-	public RunsafeLocation getDefaultPlotEntrance(double x, double y)
+	public boolean verifyFreePlot(RunsafeLocation location)
 	{
-		if (!fence.contains(x, y))
-			return null;
-
-		x -= origin.getX();
-		x /= origin.getWidth() + spacing;
-		x = Math.ceil(x);
-		x *= origin.getWidth() + spacing;
-		x -= spacing;
-		x += origin.getX();
-
-		y -= origin.getY();
-		y /= origin.getHeight() + spacing;
-		y = Math.ceil(y);
-		y *= origin.getHeight() + spacing;
-		y -= spacing;
-		y += origin.getY();
-
-		return getLocation(x, y, groundLevel);
-	}
-
-	public RunsafeLocation getLocation(double x, double y, double altitude)
-	{
-		// This pitch and yaw faces into the region if x and y are the maximums.
-		return new RunsafeLocation(filter.getWorld(), x, altitude, y, 137.55f, -1.65f);
+		List<String> regions = worldGuard.getRegionsAtLocation(location);
+		if (regions == null || regions.isEmpty())
+			return true;
+		boolean ok = true;
+		for (String region : regions)
+			if (!ignoredRegions.contains(region))
+				ok = false;
+		if (!ok)
+		{
+			setTaken(calculator.getColumn(location.getBlockX()), calculator.getRow(location.getBlockZ()));
+			freePlots.remove(location);
+		}
+		return ok;
 	}
 
 	/* TODO Requires WorldEditBridge in order to be completed
@@ -145,20 +96,9 @@ public class PlotManager implements IConfigurationChanged
 		PlotEntrance entrance = plotEntrance.get(plot);
 		RunsafeLocation target = null;
 		if (entrance != null)
-			target = entrance.getLocation();
+			return entrance.getLocation();
 
-		if (target == null)
-		{
-			target = worldGuard.getRegionLocation(filter.getWorld(), plot);
-			if (target == null)
-				return null;
-
-			target = getDefaultPlotEntrance(target.getX() - 1, target.getZ() - 1);
-			while (filter.getWorld().getBlockAt(target).canPassThrough() && target.getY() > 60)
-				target.setY(target.getY() - 1);
-			target.setY(target.getY() + 2);
-		}
-		return target;
+		return calculator.getDefaultEntrance(worldGuard.getRegionLocation(filter.getWorld(), plot));
 	}
 
 	public Map<String, String> getOldPlots()
@@ -248,7 +188,6 @@ public class PlotManager implements IConfigurationChanged
 		oldPlotPointers.put(player.getName(), value);
 	}
 
-
 	public Map<String, String> getOldPlotWorkList(RunsafePlayer player)
 	{
 		if (!oldPlotList.containsKey(player.getName()))
@@ -267,19 +206,63 @@ public class PlotManager implements IConfigurationChanged
 		return world;
 	}
 
-	final PlotFilter filter;
-	final WorldGuardInterface worldGuard;
-	Rectangle2D fence;
-	Rectangle2D origin;
-	int spacing;
-	final PlotEntranceRepository plotEntrance;
-	final ApprovedPlotRepository plotApproval;
-	RunsafeWorld world;
-	final Map<String, String> oldPlotPointers = new HashMap<String, String>();
-	final Map<String, Map<String, String>> oldPlotList = new HashMap<String, Map<String, String>>();
-	List<String> ignoredRegions;
-	int groundLevel;
-	Duration limit;
-	Duration ban = new Duration(Long.MAX_VALUE);
-	final HashMap<String, Duration> lastSeen = new HashMap<String, Duration>();
+	@Override
+	public void OnConfigurationChanged(IConfiguration config)
+	{
+		world = RunsafeServer.Instance.getWorld(config.getConfigValueAsString("world"));
+		ignoredRegions = config.getConfigValueAsList("free.ignore");
+		limit = new Period(0, 0, 0, config.getConfigValueAsInt("old_after"), 0, 0, 0, 0).toDurationTo(DateTime.now());
+	}
+
+	@Override
+	public void OnPluginEnabled()
+	{
+		ScanTakenPlots();
+		ScanFreePlots();
+	}
+
+	private void ScanTakenPlots()
+	{
+		Map<String, Rectangle2D> taken = worldGuard.getRegionRectanglesInWorld(filter.getWorld());
+		for (String region : taken.keySet())
+		{
+			if (!ignoredRegions.contains(region))
+			{
+				long col = calculator.getColumn((int) taken.get(region).getCenterX());
+				long row = calculator.getRow((int) taken.get(region).getCenterY());
+				setTaken(col, row);
+			}
+		}
+	}
+
+	private void setTaken(long col, long row)
+	{
+		if (!takenPlots.containsKey(col))
+			takenPlots.put(col, new ArrayList<Long>());
+		if (!takenPlots.get(col).contains(row))
+			takenPlots.get(col).add(row);
+	}
+
+	private void ScanFreePlots()
+	{
+		for (long column : calculator.getColumns())
+			for (long row : calculator.getRows())
+				if (!takenPlots.containsKey(column) && !takenPlots.get(column).contains(row))
+					freePlots.add(calculator.getDefaultEntrance(column, row));
+	}
+
+	private final PlotFilter filter;
+	private final WorldGuardInterface worldGuard;
+	private final PlotEntranceRepository plotEntrance;
+	private final ApprovedPlotRepository plotApproval;
+	private final PlotCalculator calculator;
+	private final Map<String, String> oldPlotPointers = new HashMap<String, String>();
+	private final Map<String, Map<String, String>> oldPlotList = new HashMap<String, Map<String, String>>();
+	private final HashMap<String, Duration> lastSeen = new HashMap<String, Duration>();
+	private final HashMap<Long, ArrayList<Long>> takenPlots = new HashMap<Long, ArrayList<Long>>();
+	private final ArrayList<RunsafeLocation> freePlots = new ArrayList<RunsafeLocation>();
+	private RunsafeWorld world;
+	private List<String> ignoredRegions;
+	private Duration limit;
+	private Duration ban = new Duration(Long.MAX_VALUE);
 }

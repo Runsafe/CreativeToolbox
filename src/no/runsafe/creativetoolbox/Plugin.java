@@ -12,8 +12,6 @@ import no.runsafe.framework.RunsafeConfigurablePlugin;
 import no.runsafe.framework.command.RunsafeCommand;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
-import java.io.InputStream;
-
 public class Plugin extends RunsafeConfigurablePlugin
 {
 	@Override
@@ -25,6 +23,7 @@ public class Plugin extends RunsafeConfigurablePlugin
 		addComponent(ApprovedPlotRepository.class);
 		addComponent(PlotEntranceRepository.class);
 		addComponent(InteractEvents.class);
+		addComponent(PlotCalculator.class);
 
 		RunsafeCommand toolbox = new CreativeToolboxCommand();
 		addComponent(toolbox);

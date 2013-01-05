@@ -37,16 +37,16 @@ public class FindFreePlotCommand extends RunsafeAsyncPlayerCommand
 	public String OnExecute(RunsafePlayer executor, String[] args)
 	{
 		warpTo.remove(executor.getName());
-		List<RunsafeLocation> options = manager.getFreePlotEntrances();
-		Console.fine(String.format("Found %d plots to choose from", options == null ? 0 : options.size()));
-		if (options == null || options.size() < 1)
+		RunsafeLocation target;
+		do
+		{
+			target = getCandidate();
+		}
+		while (!manager.verifyFreePlot(target));
+
+		if (target == null)
 			return "Sorry, no free plots could be located.";
-		for (RunsafeLocation loc : options)
-			Console.finer(String.format("[%.1f,%.1f,%.1f]", loc.getX(), loc.getY(), loc.getZ()));
-		if (options.size() == 1)
-			warpTo.put(executor.getName(), options.get(0));
-		else
-			warpTo.put(executor.getName(), options.get(rng.nextInt(options.size() - 1)));
+		warpTo.put(executor.getName(), target);
 		return null;
 	}
 
@@ -56,6 +56,17 @@ public class FindFreePlotCommand extends RunsafeAsyncPlayerCommand
 		if (warpTo.get(player.getName()) != null)
 			player.teleport(warpTo.get(player.getName()));
 		super.OnCommandCompletion(player, message);
+	}
+
+	private RunsafeLocation getCandidate()
+	{
+		List<RunsafeLocation> options = manager.getFreePlotEntrances();
+		if (options == null || options.size() < 1)
+			return null;
+		if (options.size() == 1)
+			return options.get(0);
+		else
+			return options.get(rng.nextInt(options.size() - 1));
 	}
 
 	private final PlotManager manager;
