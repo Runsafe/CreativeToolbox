@@ -38,7 +38,20 @@ public class TeleportCommand extends RunsafeAsyncPlayerCommand
 	public void OnCommandCompletion(RunsafePlayer player, String message)
 	{
 		if (warpTo.containsKey(player.getName()))
-			player.teleport(warpTo.get(player.getName()));
+		{
+			RunsafeLocation target = warpTo.get(player.getName());
+			int air = 0;
+			int y = target.getBlockY();
+			for(; y < 256; ++y)
+			{
+				if(target.getWorld().getBlockAt(target.getBlockX(), y, target.getBlockZ()).isAir())
+					air++;
+				if(air > 1)
+					break;
+			}
+			target.setY(y);
+			player.teleport(target);
+		}
 		super.OnCommandCompletion(player, message);
 	}
 
