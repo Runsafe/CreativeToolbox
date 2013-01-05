@@ -34,7 +34,7 @@ public class Plugin extends RunsafeConfigurablePlugin
 		oldPlots.addSubCommand(getInstance(PreviousCommand.class));
 		toolbox.addSubCommand(oldPlots);
 
-		RunsafeCommand member = new RunsafeCommand("member");
+		RunsafeCommand member = new MemberCommand();
 		member.addSubCommand(getInstance(AddCommand.class));
 		member.addSubCommand(getInstance(RemoveCommand.class));
 		toolbox.addSubCommand(member);
