@@ -48,14 +48,17 @@ public class PlotCalculator implements IConfigurationChanged
 	{
 		if (location == null)
 			return null;
-		return getDefaultEntrance(getColumn(location.getBlockX()), getRow(location.getBlockZ()));
+		return getDefaultEntrance(
+			getColumn(location.getBlockX()),
+			getRow(location.getBlockZ())
+		);
 	}
 
 	public RunsafeLocation getDefaultEntrance(long column, long row)
 	{
-		double x = getOriginX(column) + prototype.getWidth();
-		double y = getOriginY(row) + prototype.getHeight();
-		return new RunsafeLocation(world, x, groundLevel, y, 137.55f, -1.65f);
+		long x = (long) (getOriginX(column) + prototype.getWidth());
+		long y = (long) (getOriginY(row) + prototype.getHeight());
+		return new RunsafeLocation(world, x - 0.5, groundLevel, y - 0.5, FACING_MIDDLE, LOOKING_FORWARD);
 	}
 
 	@Override
@@ -88,7 +91,7 @@ public class PlotCalculator implements IConfigurationChanged
 	public long getRow(long blockZ)
 	{
 		// Find the offset from the center of the origin plot along the Y axis
-		double relativeY = blockZ - prototype.getHeight();
+		double relativeY = blockZ - prototype.getCenterY();
 		return Math.round(relativeY / (prototype.getHeight() + roadWidth));
 	}
 
@@ -136,5 +139,7 @@ public class PlotCalculator implements IConfigurationChanged
 	private int roadWidth;
 	private int groundLevel;
 	private RunsafeWorld world;
+	private static final float FACING_MIDDLE = 137.55f;
+	private static final float LOOKING_FORWARD = -1.65f;
 	private IOutput console;
 }

@@ -76,29 +76,16 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 		return ok;
 	}
 
-	/* TODO Requires WorldEditBridge in order to be completed
-	public void Regenerate(String plotName)
-	{
-		RunsafeLocation location = worldGuard.getRegionLocation(filter.getWorld(), plotName);
-		if(location == null)
-			return;
-		Rectangle2D target = new Rectangle2D.Double(
-			location.getX() - origin.getWidth(),
-			location.getY() - origin.getHeight(),
-			origin.getWidth(),
-			origin.getHeight()
-		);
-	}
-	*/
-
 	public RunsafeLocation getPlotEntrance(String plot)
 	{
 		PlotEntrance entrance = plotEntrance.get(plot);
-		RunsafeLocation target = null;
 		if (entrance != null)
 			return entrance.getLocation();
 
-		return calculator.getDefaultEntrance(worldGuard.getRegionLocation(filter.getWorld(), plot));
+		Rectangle2D rect = worldGuard.getRectangle(world, plot);
+		if (rect == null)
+			return null;
+		return calculator.getDefaultEntrance(worldGuard.getRegionLocation(world, plot));
 	}
 
 	public Map<String, String> getOldPlots()
@@ -125,7 +112,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 	private String formatReason(Duration status)
 	{
 		String info = null;
-		if (status != null && status.equals(ban))
+		if (status != null && status.equals(BANNED))
 			info = "banned";
 		else if (status != null)
 			info = PeriodFormat.getDefault().print(new Period(status, DateTime.now(), PeriodType.yearMonthDay()));
@@ -148,7 +135,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 				return null;
 			if (ownerSeen.isEqual(Duration.ZERO))
 				return Duration.ZERO;
-			if (result == null || !result.isEqual(ban))
+			if (result == null || !result.isEqual(BANNED))
 				result = ownerSeen;
 		}
 		return result;
@@ -164,7 +151,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 		if (player.isOnline())
 			lastSeen.put(playerName, Duration.ZERO);
 		else if (player.isBanned())
-			lastSeen.put(playerName, ban);
+			lastSeen.put(playerName, BANNED);
 		else
 		{
 			DateTime logout = player.lastLogout();
@@ -247,10 +234,11 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 	{
 		for (long column : calculator.getColumns())
 			for (long row : calculator.getRows())
-				if (!takenPlots.containsKey(column) && !takenPlots.get(column).contains(row))
+				if (!(takenPlots.containsKey(column) && takenPlots.get(column).contains(row)))
 					freePlots.add(calculator.getDefaultEntrance(column, row));
 	}
 
+	private static final Duration BANNED = new Duration(Long.MAX_VALUE);
 	private final PlotFilter filter;
 	private final WorldGuardInterface worldGuard;
 	private final PlotEntranceRepository plotEntrance;
@@ -264,5 +252,4 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 	private RunsafeWorld world;
 	private List<String> ignoredRegions;
 	private Duration limit;
-	private Duration ban = new Duration(Long.MAX_VALUE);
 }
