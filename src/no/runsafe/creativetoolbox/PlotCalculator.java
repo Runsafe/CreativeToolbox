@@ -2,7 +2,6 @@ package no.runsafe.creativetoolbox;
 
 import no.runsafe.framework.configuration.IConfiguration;
 import no.runsafe.framework.event.IConfigurationChanged;
-import no.runsafe.framework.output.IOutput;
 import no.runsafe.framework.server.RunsafeLocation;
 import no.runsafe.framework.server.RunsafeServer;
 import no.runsafe.framework.server.RunsafeWorld;
@@ -12,11 +11,6 @@ import java.util.AbstractList;
 
 public class PlotCalculator implements IConfigurationChanged
 {
-	public PlotCalculator(IOutput output)
-	{
-		console = output;
-	}
-
 	public Rectangle2D getPlotArea(RunsafeLocation location)
 	{
 		if (!fence.contains(location.getBlockX(), location.getBlockZ()))
@@ -31,7 +25,7 @@ public class PlotCalculator implements IConfigurationChanged
 		return area;
 	}
 
-	public Rectangle2D getPlotArea(long column, long row)
+	Rectangle2D getPlotArea(long column, long row)
 	{
 		Rectangle2D area = new Rectangle2D.Double(
 			getOriginX(column),
@@ -141,5 +135,4 @@ public class PlotCalculator implements IConfigurationChanged
 	private RunsafeWorld world;
 	private static final float FACING_MIDDLE = 137.55f;
 	private static final float LOOKING_FORWARD = -1.65f;
-	private IOutput console;
 }

@@ -42,7 +42,7 @@ public class FindFreePlotCommand extends RunsafeAsyncPlayerCommand
 		{
 			target = getCandidate();
 		}
-		while (target != null && !manager.verifyFreePlot(target));
+		while (target != null && manager.plotIsTaken(target));
 
 		if (target == null)
 			return "Sorry, no free plots could be located.";

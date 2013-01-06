@@ -59,11 +59,11 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 		return freePlots;
 	}
 
-	public boolean verifyFreePlot(RunsafeLocation location)
+	public boolean plotIsTaken(RunsafeLocation location)
 	{
 		List<String> regions = worldGuard.getRegionsAtLocation(location);
 		if (regions == null || regions.isEmpty())
-			return true;
+			return false;
 		boolean ok = true;
 		for (String region : regions)
 			if (!ignoredRegions.contains(region))
@@ -73,7 +73,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 			setTaken(calculator.getColumn(location.getBlockX()), calculator.getRow(location.getBlockZ()));
 			freePlots.remove(location);
 		}
-		return ok;
+		return !ok;
 	}
 
 	public RunsafeLocation getPlotEntrance(String plot)
@@ -188,7 +188,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 			oldPlotList.remove(player.getName());
 	}
 
-	public RunsafeWorld getWorld()
+	RunsafeWorld getWorld()
 	{
 		return world;
 	}
