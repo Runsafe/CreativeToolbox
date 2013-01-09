@@ -11,7 +11,6 @@ import no.runsafe.framework.event.player.IPlayerRightClickBlock;
 import no.runsafe.framework.server.RunsafeLocation;
 import no.runsafe.framework.server.RunsafeServer;
 import no.runsafe.framework.server.block.RunsafeBlock;
-import no.runsafe.framework.server.event.player.RunsafePlayerClickEvent;
 import no.runsafe.framework.server.event.player.RunsafePlayerInteractEntityEvent;
 import no.runsafe.framework.server.item.RunsafeItemStack;
 import no.runsafe.framework.server.player.RunsafePlayer;
@@ -47,7 +46,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 	@Override
 	public void OnPlayerInteractEntityEvent(RunsafePlayerInteractEntityEvent event)
 	{
-		if (event.getRightClicked() instanceof RunsafePlayer)
+		if (event.getRightClicked() instanceof RunsafePlayer && event.getPlayer().hasPermission("runsafe.creative.list"))
 		{
 			if (event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getItemId() == listItem)
 			{
@@ -76,6 +75,8 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 		if (!regions.isEmpty())
 			for (String regionName : regions)
 				this.listRegion(regionName, triggerPlayer, true);
+		else if (triggerPlayer.hasPermission("runsafe.creative.list.showname"))
+			triggerPlayer.sendMessage(String.format("%s does not own any regions.", checkPlayer.getPrettyName()));
 		else
 			triggerPlayer.sendMessage("No regions owned by this player.");
 	}
