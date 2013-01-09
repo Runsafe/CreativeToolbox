@@ -1,8 +1,6 @@
 package no.runsafe.creativetoolbox.command;
 
-import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.PlotManager;
-import no.runsafe.creativetoolbox.database.PlotEntranceRepository;
 import no.runsafe.framework.command.RunsafeAsyncPlayerCommand;
 import no.runsafe.framework.server.RunsafeLocation;
 import no.runsafe.framework.server.player.RunsafePlayer;
@@ -42,11 +40,11 @@ public class TeleportCommand extends RunsafeAsyncPlayerCommand
 			RunsafeLocation target = warpTo.get(player.getName());
 			int air = 0;
 			int y = target.getBlockY();
-			for(; y < 256; ++y)
+			for (; y < 256; ++y)
 			{
-				if(target.getWorld().getBlockAt(target.getBlockX(), y, target.getBlockZ()).isAir())
+				if (target.getWorld().getBlockAt(target.getBlockX(), y, target.getBlockZ()).isAir())
 					air++;
-				if(air > 1)
+				if (air > 1)
 					break;
 			}
 			target.setY(y);
@@ -62,8 +60,13 @@ public class TeleportCommand extends RunsafeAsyncPlayerCommand
 		String plot = getArg("plotname");
 		RunsafeLocation target = manager.getPlotEntrance(plot);
 		if (target == null)
+		{
+			target = manager.getPlotEntrance(String.format("%s_%s", executor.getName(), plot));
+			if (target != null)
+				plot = String.format("%s_%s", executor.getName(), plot);
+		}
+		if (target == null)
 			return String.format("Plot '%s' not found.", plot);
-
 		warpTo.put(executor.getName(), target);
 
 		return String.format("Teleported to '%s'", plot);
