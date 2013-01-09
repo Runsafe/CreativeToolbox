@@ -55,6 +55,16 @@ public class PlotCalculator implements IConfigurationChanged
 		return new RunsafeLocation(world, x - 0.5, groundLevel, y - 0.5, FACING_MIDDLE, LOOKING_FORWARD);
 	}
 
+	public RunsafeLocation getMinPosition(RunsafeWorld world, Rectangle2D area)
+	{
+		return new RunsafeLocation(world, area.getMinX(), 0, area.getMinY());
+	}
+
+	public RunsafeLocation getMaxPosition(RunsafeWorld world, Rectangle2D area)
+	{
+		return new RunsafeLocation(world, area.getMaxX(), world.getMaxHeight(), area.getMaxY());
+	}
+
 	@Override
 	public void OnConfigurationChanged(IConfiguration configuration)
 	{

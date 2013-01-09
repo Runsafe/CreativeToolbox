@@ -49,5 +49,6 @@ public class Plugin extends RunsafeConfigurablePlugin
 		toolbox.addSubCommand(getInstance(RandomPlotCommand.class));
 		toolbox.addSubCommand(getInstance(DeleteHereCommand.class));
 		toolbox.addSubCommand(getInstance(FindFreePlotCommand.class));
+		toolbox.addSubCommand(getInstance(SelectCommand.class));
 	}
 }
