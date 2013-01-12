@@ -11,7 +11,6 @@ import no.runsafe.framework.server.RunsafeServer;
 import no.runsafe.framework.server.RunsafeWorld;
 import no.runsafe.framework.server.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
-import org.bukkit.ChatColor;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.Period;
@@ -111,18 +110,13 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 
 	private String formatReason(Duration status)
 	{
-		String info = null;
-		if (status != null && status.equals(BANNED))
-			info = "banned";
-		else if (status != null)
-			info = PeriodFormat.getDefault().print(new Period(status, DateTime.now(), PeriodType.yearMonthDay()));
+		if (status == null)
+			return "&cnull&r";
 
-		return String.format(
-			"%s%s%s",
-			info == null || info.equals("banned") ? ChatColor.RED : ChatColor.YELLOW,
-			info,
-			ChatColor.RESET
-		);
+		if (status.equals(BANNED))
+			return "&cbanned&r";
+
+		return PeriodFormat.getDefault().print(new Period(status, DateTime.now(), PeriodType.yearMonthDay()));
 	}
 
 	private Duration getPlotStatus(Set<String> owners)
