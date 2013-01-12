@@ -2,12 +2,12 @@
   <artifact type="jar" build-on-make="true" name="CreativeToolbox">
     <output-path>$PROJECT_DIR$/../out/</output-path>
     <root id="archive" name="CreativeToolbox.jar">
-      <element id="file-copy" path="$PROJECT_DIR$/plugin.yml" />
+      <element id="file-copy" path="$PROJECT_DIR$/src/plugin.yml" />
       <element id="directory" name="META-INF">
         <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
       </element>
       <element id="module-output" name="CreativeToolbox" />
-      <element id="file-copy" path="$PROJECT_DIR$/defaults.yml" />
+      <element id="file-copy" path="$PROJECT_DIR$/src/defaults.yml" />
     </root>
   </artifact>
 </component>
