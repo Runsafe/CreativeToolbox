@@ -104,9 +104,9 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 		{
 			PlotApproval approval = plotRepository.get(regionName);
 			if (approval == null || approval.getApproved() == null)
-				player.sendMessage("Region: " + regionName);
+				player.sendColouredMessage("Region: " + regionName);
 			else
-				player.sendMessage(String.format("Region: %s [Approved %s]", regionName, approval.getApproved()));
+				player.sendColouredMessage("Region: %s [Approved %s]", regionName, approval.getApproved());
 		}
 		else
 			player.sendMessage("Region: " + regionName);
@@ -117,10 +117,10 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 			Set<String> members = worldGuardInterface.getMembers(player.getWorld(), regionName);
 
 			for (String owner : owners)
-				player.sendMessage("     Owner: " + RunsafeServer.Instance.getPlayer(owner).getPrettyName());
+				player.sendColouredMessage("     Owner: " + RunsafeServer.Instance.getPlayer(owner).getPrettyName());
 
 			for (String member : members)
-				player.sendMessage("     Member: " + RunsafeServer.Instance.getPlayer(member).getPrettyName());
+				player.sendColouredMessage("     Member: " + RunsafeServer.Instance.getPlayer(member).getPrettyName());
 		}
 	}
 
