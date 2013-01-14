@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-public abstract class RandomPlotCommand extends PlayerAsyncCallbackCommand<RandomPlotCommand.Sudo>
+public class RandomPlotCommand extends PlayerAsyncCallbackCommand<RandomPlotCommand.Sudo>
 {
 	public RandomPlotCommand(PlotFilter filter, IScheduler scheduler)
 	{
