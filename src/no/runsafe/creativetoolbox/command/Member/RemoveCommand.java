@@ -1,7 +1,6 @@
 package no.runsafe.creativetoolbox.command.Member;
 
 import no.runsafe.creativetoolbox.PlotFilter;
-import no.runsafe.framework.command.RunsafeAsyncPlayerCommand;
 import no.runsafe.framework.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.server.RunsafeServer;
 import no.runsafe.framework.server.player.RunsafePlayer;

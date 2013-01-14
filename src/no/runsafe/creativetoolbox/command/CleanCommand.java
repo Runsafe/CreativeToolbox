@@ -1,6 +1,5 @@
 package no.runsafe.creativetoolbox.command;
 
-import no.runsafe.framework.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.command.player.PlayerCommand;
 import no.runsafe.framework.configuration.IConfiguration;
 import no.runsafe.framework.server.entity.RunsafeEntity;
@@ -66,5 +65,6 @@ public class CleanCommand extends PlayerCommand
 			results.append(String.format("  %s: %d.\n", name, counts.get(name)));
 		return results.toString();
 	}
+
 	private final IConfiguration config;
 }

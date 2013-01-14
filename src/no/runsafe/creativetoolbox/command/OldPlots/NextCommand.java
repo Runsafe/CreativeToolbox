@@ -3,7 +3,6 @@ package no.runsafe.creativetoolbox.command.OldPlots;
 import no.runsafe.creativetoolbox.PlayerTeleport;
 import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.framework.command.player.PlayerAsyncCallbackCommand;
-import no.runsafe.framework.server.RunsafeLocation;
 import no.runsafe.framework.server.player.RunsafePlayer;
 import no.runsafe.framework.timer.IScheduler;
 
