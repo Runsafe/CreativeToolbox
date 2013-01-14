@@ -1,34 +1,20 @@
 package no.runsafe.creativetoolbox.command;
 
-import no.runsafe.framework.command.RunsafeAsyncPlayerCommand;
-import no.runsafe.framework.command.RunsafePlayerCommand;
+import no.runsafe.framework.command.player.PlayerCommand;
 import no.runsafe.framework.server.entity.RunsafeEntity;
 import no.runsafe.framework.server.player.RunsafePlayer;
-import no.runsafe.framework.timer.IScheduler;
 
 import java.util.HashMap;
 
-public class ScanCommand extends RunsafePlayerCommand
+public class ScanCommand extends PlayerCommand
 {
 	public ScanCommand()
 	{
-		super("scan");
+		super("scan", "list number of items and mobs in world.", "runsafe.creative.scan.items");
 	}
 
 	@Override
-	public String getDescription()
-	{
-		return "list number of items and mobs in world.";
-	}
-
-	@Override
-	public String requiredPermission()
-	{
-		return "runsafe.creative.scan.items";
-	}
-
-	@Override
-	public String OnExecute(RunsafePlayer executor, String[] args)
+	public String OnExecute(RunsafePlayer executor, HashMap<String, String> parameters, String[] arguments)
 	{
 		HashMap<String, Integer> counts = new HashMap<String, Integer>();
 		int count = 0;

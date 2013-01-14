@@ -1,43 +1,49 @@
 package no.runsafe.creativetoolbox.command;
 
+import no.runsafe.creativetoolbox.PlayerTeleport;
 import no.runsafe.creativetoolbox.PlotManager;
-import no.runsafe.framework.command.RunsafeAsyncPlayerCommand;
+import no.runsafe.framework.command.player.PlayerAsyncCallbackCommand;
 import no.runsafe.framework.server.RunsafeLocation;
 import no.runsafe.framework.server.player.RunsafePlayer;
 import no.runsafe.framework.timer.IScheduler;
 
 import java.util.HashMap;
 
-public class TeleportCommand extends RunsafeAsyncPlayerCommand
+public class TeleportCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
 {
-
-	public TeleportCommand(
-		IScheduler scheduler,
-		PlotManager manager
-	)
+	public TeleportCommand(IScheduler scheduler, PlotManager manager)
 	{
-		super("teleport", scheduler, "plotname");
+		super("teleport", "teleport to a plot.", "runsafe.creative.teleport.plot", scheduler, "plotname");
 		this.manager = manager;
 	}
 
 	@Override
-	public String getDescription()
+	public PlayerTeleport OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters, String[] arguments)
 	{
-		return "teleport to a plot.";
-	}
-
-	@Override
-	public String requiredPermission()
-	{
-		return "runsafe.creative.teleport.plot";
-	}
-
-	@Override
-	public void OnCommandCompletion(RunsafePlayer player, String message)
-	{
-		if (warpTo.containsKey(player.getName()))
+		PlayerTeleport target = new PlayerTeleport();
+		target.who = executor;
+		String plot = parameters.get("plotname");
+		target.location = manager.getPlotEntrance(plot);
+		if (target.location == null)
 		{
-			RunsafeLocation target = warpTo.get(player.getName());
+			target.location = manager.getPlotEntrance(String.format("%s_%s", executor.getName(), plot));
+			if (target.location != null)
+				plot = String.format("%s_%s", executor.getName(), plot);
+		}
+		if (target.location == null)
+			target.message = String.format("Plot '%s' not found.", plot);
+		else
+			target.message = String.format("Teleported to '%s'", plot);
+
+		return target;
+	}
+
+	@Override
+	public void SyncPostExecute(PlayerTeleport result)
+	{
+		if (result.location != null)
+		{
+			RunsafeLocation target = result.location;
 			int air = 0;
 			int y = target.getBlockY();
 			for (; y < 256; ++y)
@@ -48,30 +54,10 @@ public class TeleportCommand extends RunsafeAsyncPlayerCommand
 					break;
 			}
 			target.setY(y);
-			player.teleport(target);
+			result.who.teleport(result.location);
 		}
-		super.OnCommandCompletion(player, message);
-	}
-
-	@Override
-	public String OnExecute(RunsafePlayer executor, String[] args)
-	{
-		warpTo.remove(executor.getName());
-		String plot = getArg("plotname");
-		RunsafeLocation target = manager.getPlotEntrance(plot);
-		if (target == null)
-		{
-			target = manager.getPlotEntrance(String.format("%s_%s", executor.getName(), plot));
-			if (target != null)
-				plot = String.format("%s_%s", executor.getName(), plot);
-		}
-		if (target == null)
-			return String.format("Plot '%s' not found.", plot);
-		warpTo.put(executor.getName(), target);
-
-		return String.format("Teleported to '%s'", plot);
+		result.who.sendColouredMessage(result.message);
 	}
 
 	private final PlotManager manager;
-	private final HashMap<String, RunsafeLocation> warpTo = new HashMap<String, RunsafeLocation>();
 }

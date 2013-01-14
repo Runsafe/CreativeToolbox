@@ -2,32 +2,28 @@ package no.runsafe.creativetoolbox.command.Member;
 
 import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.framework.command.RunsafeAsyncPlayerCommand;
+import no.runsafe.framework.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.server.RunsafeServer;
 import no.runsafe.framework.server.player.RunsafePlayer;
 import no.runsafe.framework.timer.IScheduler;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
+import java.util.HashMap;
 import java.util.List;
 
-public class RemoveCommand extends RunsafeAsyncPlayerCommand
+public class RemoveCommand extends PlayerAsyncCommand
 {
 	public RemoveCommand(IScheduler scheduler, PlotFilter filter, WorldGuardInterface worldGuard)
 	{
-		super("remove", scheduler, "player");
+		super("remove", "Remove a member from the plot you are standing in.", "runsafe.creative.member.remove", scheduler, "player");
 		plotFilter = filter;
 		worldGuardInterface = worldGuard;
 	}
 
 	@Override
-	public String requiredPermission()
+	public String OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters, String[] arguments)
 	{
-		return "runsafe.creative.member.remove";
-	}
-
-	@Override
-	public String OnExecute(RunsafePlayer executor, String[] args)
-	{
-		RunsafePlayer member = RunsafeServer.Instance.getPlayer(getArg("player"));
+		RunsafePlayer member = RunsafeServer.Instance.getPlayer(parameters.get("player"));
 		List<String> target = plotFilter.apply(worldGuardInterface.getRegionsAtLocation(executor.getLocation()));
 		List<String> ownedRegions = worldGuardInterface.getOwnedRegions(executor, plotFilter.getWorld());
 		if (target == null || target.size() == 0)

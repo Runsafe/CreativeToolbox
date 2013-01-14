@@ -9,7 +9,7 @@ import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotEntranceRepository;
 import no.runsafe.creativetoolbox.events.InteractEvents;
 import no.runsafe.framework.RunsafeConfigurablePlugin;
-import no.runsafe.framework.command.RunsafeCommand;
+import no.runsafe.framework.command.Command;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 public class Plugin extends RunsafeConfigurablePlugin
@@ -25,16 +25,16 @@ public class Plugin extends RunsafeConfigurablePlugin
 		addComponent(InteractEvents.class);
 		addComponent(PlotCalculator.class);
 
-		RunsafeCommand toolbox = new CreativeToolboxCommand();
+		Command toolbox = new Command("creativetoolbox", "A collection of tools for use in a minecraft creative world.", null);
 		addComponent(toolbox);
 
-		RunsafeCommand oldPlots = new OldPlotsCommand();
+		Command oldPlots = new Command("old", "Tool to handle old plots", null);
 		oldPlots.addSubCommand(getInstance(no.runsafe.creativetoolbox.command.OldPlots.ListCommand.class));
 		oldPlots.addSubCommand(getInstance(NextCommand.class));
 		oldPlots.addSubCommand(getInstance(PreviousCommand.class));
 		toolbox.addSubCommand(oldPlots);
 
-		RunsafeCommand member = new MemberCommand();
+		Command member = new Command("member", "Tools to handle plot membership", null);
 		member.addSubCommand(getInstance(AddCommand.class));
 		member.addSubCommand(getInstance(RemoveCommand.class));
 		toolbox.addSubCommand(member);

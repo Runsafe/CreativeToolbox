@@ -3,36 +3,28 @@ package no.runsafe.creativetoolbox.command;
 import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.database.PlotEntrance;
 import no.runsafe.creativetoolbox.database.PlotEntranceRepository;
+import no.runsafe.framework.command.ExecutableCommand;
 import no.runsafe.framework.command.RunsafePlayerCommand;
+import no.runsafe.framework.command.player.PlayerCommand;
+import no.runsafe.framework.server.ICommandExecutor;
 import no.runsafe.framework.server.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
+import java.util.HashMap;
 import java.util.List;
 
-public class DeleteHereCommand extends RunsafePlayerCommand
+public class DeleteHereCommand extends PlayerCommand
 {
 	public DeleteHereCommand(PlotFilter filter, WorldGuardInterface worldGuard, PlotEntranceRepository entranceRepository)
 	{
-		super("deletehere");
+		super("deletehere", "delete the region you are in.", "runsafe.creative.delete");
 		this.filter = filter;
 		this.worldGuard = worldGuard;
 		this.entrances = entranceRepository;
 	}
 
 	@Override
-	public String getDescription()
-	{
-		return "delete the region you are in.";
-	}
-
-	@Override
-	public String requiredPermission()
-	{
-		return "runsafe.creative.delete";
-	}
-
-	@Override
-	public String OnExecute(RunsafePlayer executor, String[] args)
+	public String OnExecute(RunsafePlayer executor, HashMap<String, String> parameters, String[] arguments)
 	{
 		List<String> delete = filter.apply(worldGuard.getRegionsAtLocation(executor.getLocation()));
 		if (delete == null || delete.size() == 0)

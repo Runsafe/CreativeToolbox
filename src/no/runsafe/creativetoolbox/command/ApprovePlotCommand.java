@@ -4,12 +4,14 @@ import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotApproval;
-import no.runsafe.framework.command.RunsafeAsyncPlayerCommand;
+import no.runsafe.framework.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.server.player.RunsafePlayer;
 import no.runsafe.framework.timer.IScheduler;
 import org.joda.time.DateTime;
 
-public class ApprovePlotCommand extends RunsafeAsyncPlayerCommand
+import java.util.HashMap;
+
+public class ApprovePlotCommand extends PlayerAsyncCommand
 {
 	public ApprovePlotCommand(
 		ApprovedPlotRepository approvalRepository,
@@ -17,32 +19,20 @@ public class ApprovePlotCommand extends RunsafeAsyncPlayerCommand
 		PlotManager plotManager,
 		IScheduler scheduler)
 	{
-		super("approve", scheduler, "plotname");
+		super("approve", "exempts a plot from the old plots command.", "runsafe.creative.approval.set", scheduler, "plotname");
 		repository = approvalRepository;
 		plotFilter = filter;
 		manager = plotManager;
 	}
 
 	@Override
-	public String requiredPermission()
-	{
-		return "runsafe.creative.approval.set";
-	}
-
-	@Override
-	public String getDescription()
-	{
-		return "exempts a plot from the old plots command.";
-	}
-
-	@Override
-	public String OnExecute(RunsafePlayer executor, String[] args)
+	public String OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters, String[] arguments)
 	{
 		String plot;
-		if(getArg("plotname").equals("."))
+		if (parameters.get("plotname").equals("."))
 			plot = manager.getCurrentRegionFiltered(executor);
 		else
-			plot = plotFilter.apply(getArg("plotname"));
+			plot = plotFilter.apply(parameters.get("plotname"));
 		if (plot == null)
 			return "You cannot approve that plot.";
 

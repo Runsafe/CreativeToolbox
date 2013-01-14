@@ -3,15 +3,16 @@ package no.runsafe.creativetoolbox.command;
 import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.database.PlotEntrance;
 import no.runsafe.creativetoolbox.database.PlotEntranceRepository;
-import no.runsafe.framework.command.RunsafeAsyncPlayerCommand;
+import no.runsafe.framework.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.output.IOutput;
 import no.runsafe.framework.server.player.RunsafePlayer;
 import no.runsafe.framework.timer.IScheduler;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
+import java.util.HashMap;
 import java.util.List;
 
-public class SetEntranceCommand extends RunsafeAsyncPlayerCommand
+public class SetEntranceCommand extends PlayerAsyncCommand
 {
 	public SetEntranceCommand(
 		PlotEntranceRepository repository,
@@ -21,7 +22,7 @@ public class SetEntranceCommand extends RunsafeAsyncPlayerCommand
 		WorldGuardInterface worldGuard
 	)
 	{
-		super("setentrance", scheduler);
+		super("setentrance", "define where users teleport to in a plot.", null, scheduler);
 		this.repository = repository;
 		this.console = output;
 		this.plotFilter = filter;
@@ -29,41 +30,31 @@ public class SetEntranceCommand extends RunsafeAsyncPlayerCommand
 	}
 
 	@Override
-	public boolean CanExecute(RunsafePlayer player, String[] args)
-	{
-		String region = getCurrentRegion(player);
-		if (region == null)
-			return true;
-
-		console.fine(String.format("Player is in region %s", region));
-		return player.hasPermission("runsafe.creative.entrance.set")
-			|| worldGuard.getOwners(player.getWorld(), region).contains(player.getName().toLowerCase());
-	}
-
-	@Override
-	public boolean CouldExecute(RunsafePlayer player)
-	{
-		String region = getCurrentRegion(player);
-		if (region == null)
-			return false;
-
-		console.fine(String.format("Player is in region %s", region));
-		return player.hasPermission("runsafe.creative.entrance.set")
-			|| worldGuard.getOwners(player.getWorld(), region).contains(player.getName().toLowerCase());
-	}
-
-	@Override
-	public String getDescription()
-	{
-		return "define where users teleport to in a plot.";
-	}
-
-	@Override
-	public String OnExecute(RunsafePlayer executor, String[] args)
+	public String OnExecute(RunsafePlayer executor, HashMap<String, String> parameters, String[] arguments)
 	{
 		String currentRegion = getCurrentRegion(executor);
 		if (currentRegion == null)
 			return "No plot at your current location.";
+
+		console.fine(String.format("Player is in region %s", currentRegion));
+		if (!executor.hasPermission("runsafe.creative.entrance.set")
+			|| worldGuard.getOwners(executor.getWorld(), currentRegion).contains(executor.getName().toLowerCase()))
+			return String.format("You are not allowed to set the entrance for the region %s", currentRegion);
+
+		return null;
+	}
+
+	@Override
+	public String OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters, String[] arguments)
+	{
+		String currentRegion = getCurrentRegion(executor);
+		if (currentRegion == null)
+			return null;
+
+		console.fine(String.format("Player is in region %s", currentRegion));
+		if (!executor.hasPermission("runsafe.creative.entrance.set")
+			|| worldGuard.getOwners(executor.getWorld(), currentRegion).contains(executor.getName().toLowerCase()))
+			return null;
 
 		PlotEntrance entrance = new PlotEntrance();
 		entrance.setName(currentRegion);

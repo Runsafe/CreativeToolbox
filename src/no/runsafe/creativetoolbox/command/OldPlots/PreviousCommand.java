@@ -1,7 +1,8 @@
 package no.runsafe.creativetoolbox.command.OldPlots;
 
+import no.runsafe.creativetoolbox.PlayerTeleport;
 import no.runsafe.creativetoolbox.PlotManager;
-import no.runsafe.framework.command.RunsafeAsyncPlayerCommand;
+import no.runsafe.framework.command.player.PlayerAsyncCallbackCommand;
 import no.runsafe.framework.server.RunsafeLocation;
 import no.runsafe.framework.server.player.RunsafePlayer;
 import no.runsafe.framework.timer.IScheduler;
@@ -9,34 +10,26 @@ import no.runsafe.framework.timer.IScheduler;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PreviousCommand extends RunsafeAsyncPlayerCommand
+public class PreviousCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
 {
 	public PreviousCommand(IScheduler scheduler, PlotManager manager)
 	{
-		super("previous", scheduler);
+		super("previous", "Teleport to the previous plot.", "runsafe.creative.scan.old-plots", scheduler);
 		this.manager = manager;
 	}
 
 	@Override
-	public String getDescription()
+	public PlayerTeleport OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters, String[] arguments)
 	{
-		return "Teleport to the previous plot.";
-	}
-
-	@Override
-	public String requiredPermission()
-	{
-		return "runsafe.creative.scan.old-plots";
-	}
-
-	@Override
-	public String OnExecute(RunsafePlayer player, String[] strings)
-	{
-		warpTo.remove(player.getName());
-		Map<String, String> plots = manager.getOldPlotWorkList(player);
-		String current = manager.getOldPlotPointer(player);
+		PlayerTeleport target = new PlayerTeleport();
+		target.who = executor;
+		Map<String, String> plots = manager.getOldPlotWorkList(executor);
+		String current = manager.getOldPlotPointer(executor);
 		if (current == null)
-			return "There was no previous plot.";
+		{
+			target.message = "There was no previous plot.";
+			return target;
+		}
 		String prev = null;
 		boolean found = false;
 		int n = 0;
@@ -50,23 +43,35 @@ public class PreviousCommand extends RunsafeAsyncPlayerCommand
 			prev = plot;
 			n++;
 		}
-		if(found && prev == null)
-			return "Already at the first plot!";
+		if (found && prev == null)
+		{
+			target.message = "Already at the first plot!";
+			return target;
+		}
 		if (prev != null && found)
 		{
-			manager.setOldPlotPointer(player, prev);
-			warpTo.put(player.getName(), manager.getPlotEntrance(prev));
-			return String.format("[%d/%d] Previous plot is %s, reason: %s", n, plots.size(), prev, plots.get(prev));
+			manager.setOldPlotPointer(executor, prev);
+			target.location = manager.getPlotEntrance(prev);
+			target.message = String.format("[%d/%d] Previous plot is %s, reason: %s", n, plots.size(), prev, plots.get(prev));
+			return target;
 		}
-		return "Unable to find current plot";
+		target.message = "Unable to find current plot";
+		return target;
 	}
 
 	@Override
-	public void OnCommandCompletion(RunsafePlayer player, String message)
+	public void SyncPostExecute(PlayerTeleport result)
 	{
-		if (warpTo.get(player.getName()) != null)
-			player.teleport(warpTo.get(player.getName()));
-		super.OnCommandCompletion(player, message);
+		if (result.location != null)
+			result.who.teleport(result.location);
+		result.who.sendColouredMessage(result.message);
+	}
+
+	class Warp
+	{
+		public String message = null;
+		public RunsafePlayer who = null;
+		public RunsafeLocation location = null;
 	}
 
 	private final HashMap<String, RunsafeLocation> warpTo = new HashMap<String, RunsafeLocation>();

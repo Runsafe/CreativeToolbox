@@ -3,14 +3,16 @@ package no.runsafe.creativetoolbox.command;
 import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotApproval;
-import no.runsafe.framework.command.RunsafeAsyncCommand;
+import no.runsafe.framework.command.AsyncCommand;
+import no.runsafe.framework.server.ICommandExecutor;
 import no.runsafe.framework.server.player.RunsafePlayer;
 import no.runsafe.framework.timer.IScheduler;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
+import java.util.HashMap;
 import java.util.List;
 
-public class CheckApprovalCommand extends RunsafeAsyncCommand
+public class CheckApprovalCommand extends AsyncCommand
 {
 	public CheckApprovalCommand(
 		ApprovedPlotRepository approvalRepository,
@@ -19,31 +21,19 @@ public class CheckApprovalCommand extends RunsafeAsyncCommand
 		IScheduler scheduler
 	)
 	{
-		super("checkapproval", scheduler, "plotname");
+		super("checkapproval", "find out who approved a plot.", "runsafe.creative.approval.read", scheduler, "plotname");
 		repository = approvalRepository;
 		plotFilter = filter;
 		worldGuardInterface = worldGuard;
 	}
 
 	@Override
-	public String requiredPermission()
+	public String OnAsyncExecute(ICommandExecutor executor, HashMap<String, String> parameters, String[] arguments)
 	{
-		return "runsafe.creative.approval.read";
-	}
-
-	@Override
-	public String getDescription()
-	{
-		return "find out who approved a plot.";
-	}
-
-	@Override
-	public String OnExecute(RunsafePlayer executor, String[] args)
-	{
-		String plot = getArg("plotname");
-		if (plot.equals("."))
+		String plot = parameters.get("plotname");
+		if (plot.equals(".") && executor instanceof RunsafePlayer)
 		{
-			List<String> here = plotFilter.apply(worldGuardInterface.getRegionsAtLocation(executor.getLocation()));
+			List<String> here = plotFilter.apply(worldGuardInterface.getRegionsAtLocation(((RunsafePlayer) executor).getLocation()));
 			if (here == null || here.size() == 0)
 				return "No plot here";
 			plot = here.get(0);

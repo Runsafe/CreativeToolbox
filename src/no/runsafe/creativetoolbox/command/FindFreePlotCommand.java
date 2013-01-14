@@ -1,7 +1,8 @@
 package no.runsafe.creativetoolbox.command;
 
+import no.runsafe.creativetoolbox.PlayerTeleport;
 import no.runsafe.creativetoolbox.PlotManager;
-import no.runsafe.framework.command.RunsafeAsyncPlayerCommand;
+import no.runsafe.framework.command.player.PlayerAsyncCallbackCommand;
 import no.runsafe.framework.server.RunsafeLocation;
 import no.runsafe.framework.server.player.RunsafePlayer;
 import no.runsafe.framework.timer.IScheduler;
@@ -10,52 +11,38 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-public class FindFreePlotCommand extends RunsafeAsyncPlayerCommand
+public class FindFreePlotCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
 {
 	public FindFreePlotCommand(
 		PlotManager manager,
 		IScheduler scheduler
 	)
 	{
-		super("findfreeplot", scheduler);
+		super("findfreeplot", "teleport to a random empty plot.", "runsafe.creative.teleport.free", scheduler);
 		this.manager = manager;
 	}
 
 	@Override
-	public String getDescription()
+	public PlayerTeleport OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters, String[] arguments)
 	{
-		return "teleport to a random empty plot.";
-	}
-
-	@Override
-	public String requiredPermission()
-	{
-		return "runsafe.creative.teleport.free";
-	}
-
-	@Override
-	public String OnExecute(RunsafePlayer executor, String[] args)
-	{
-		warpTo.remove(executor.getName());
-		RunsafeLocation target;
+		PlayerTeleport target = new PlayerTeleport();
+		target.who = executor;
 		do
 		{
-			target = getCandidate();
+			target.location = getCandidate();
 		}
-		while (target != null && manager.plotIsTaken(target));
+		while (target.location != null && manager.plotIsTaken(target.location));
 
-		if (target == null)
-			return "Sorry, no free plots could be located.";
-		warpTo.put(executor.getName(), target);
-		return null;
+		if (target.location == null)
+			target.message = "Sorry, no free plots could be located.";
+		return target;
 	}
 
-	@Override
-	public void OnCommandCompletion(RunsafePlayer player, String message)
+	public void SyncPostExecute(PlayerTeleport result)
 	{
-		if (warpTo.get(player.getName()) != null)
-			player.teleport(warpTo.get(player.getName()));
-		super.OnCommandCompletion(player, message);
+		if (result.location != null)
+			result.who.teleport(result.location);
+		result.who.sendColouredMessage(result.message);
 	}
 
 	private RunsafeLocation getCandidate()

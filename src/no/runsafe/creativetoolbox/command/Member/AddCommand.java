@@ -1,34 +1,28 @@
 package no.runsafe.creativetoolbox.command.Member;
 
-import net.minecraft.server.v1_4_6.StructureBoundingBox;
 import no.runsafe.creativetoolbox.PlotFilter;
-import no.runsafe.framework.command.RunsafeAsyncPlayerCommand;
+import no.runsafe.framework.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.server.RunsafeServer;
 import no.runsafe.framework.server.player.RunsafePlayer;
 import no.runsafe.framework.timer.IScheduler;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
+import java.util.HashMap;
 import java.util.List;
 
-public class AddCommand extends RunsafeAsyncPlayerCommand
+public class AddCommand extends PlayerAsyncCommand
 {
 	public AddCommand(IScheduler scheduler, PlotFilter filter, WorldGuardInterface worldGuard)
 	{
-		super("add", scheduler, "player");
+		super("add", "Add a member to the plot you are standing in", "runsafe.creative.member.add", scheduler, "player");
 		plotFilter = filter;
 		worldGuardInterface = worldGuard;
 	}
 
 	@Override
-	public String requiredPermission()
+	public String OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters, String[] arguments)
 	{
-		return "runsafe.creative.member.add";
-	}
-
-	@Override
-	public String OnExecute(RunsafePlayer executor, String[] args)
-	{
-		RunsafePlayer member = RunsafeServer.Instance.getPlayer(getArg("player"));
+		RunsafePlayer member = RunsafeServer.Instance.getPlayer(parameters.get("player"));
 		List<String> target = plotFilter.apply(worldGuardInterface.getRegionsAtLocation(executor.getLocation()));
 		List<String> ownedRegions = worldGuardInterface.getOwnedRegions(executor, plotFilter.getWorld());
 		if (target == null || target.size() == 0)

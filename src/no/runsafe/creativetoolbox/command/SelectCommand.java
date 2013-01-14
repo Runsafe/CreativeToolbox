@@ -3,18 +3,18 @@ package no.runsafe.creativetoolbox.command;
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.Plugin;
 import no.runsafe.framework.RunsafePlugin;
-import no.runsafe.framework.command.RunsafeAsyncPlayerCommand;
+import no.runsafe.framework.command.player.PlayerCommand;
 import no.runsafe.framework.server.player.RunsafePlayer;
-import no.runsafe.framework.timer.IScheduler;
 import no.runsafe.worldeditbridge.WorldEditInterface;
 
 import java.awt.geom.Rectangle2D;
+import java.util.HashMap;
 
-public class SelectCommand extends RunsafeAsyncPlayerCommand
+public class SelectCommand extends PlayerCommand
 {
-	public SelectCommand(IScheduler scheduler, PlotCalculator calculator)
+	public SelectCommand(PlotCalculator calculator)
 	{
-		super("select", scheduler);
+		super("select", "Sets your WorldEdit region to the plot you are in", "runsafe.creative.select");
 		RunsafePlugin bridge = Plugin.Instances.get("WorldEditBridge");
 		if (bridge != null)
 			worldEdit = bridge.getComponent(WorldEditInterface.class);
@@ -22,21 +22,7 @@ public class SelectCommand extends RunsafeAsyncPlayerCommand
 	}
 
 	@Override
-	public String getDescription()
-	{
-		return "Sets your WorldEdit region to the plot you are in";
-	}
-
-	@Override
-	public String requiredPermission()
-	{
-		if (worldEdit == null)
-			return null;
-		return "runsafe.creative.select";
-	}
-
-	@Override
-	public String OnExecute(RunsafePlayer executor, String[] args)
+	public String OnExecute(RunsafePlayer executor, HashMap<String, String> parameters, String[] arguments)
 	{
 		Rectangle2D area = plotCalculator.getPlotArea(executor.getLocation());
 		worldEdit.select(
@@ -48,5 +34,5 @@ public class SelectCommand extends RunsafeAsyncPlayerCommand
 	}
 
 	private WorldEditInterface worldEdit;
-	private PlotCalculator plotCalculator;
+	private final PlotCalculator plotCalculator;
 }
