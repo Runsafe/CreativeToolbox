@@ -26,7 +26,7 @@ public class ApprovePlotCommand extends PlayerAsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters, String[] arguments)
+	public String OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters)
 	{
 		String plot;
 		if (parameters.get("plotname").equals("."))

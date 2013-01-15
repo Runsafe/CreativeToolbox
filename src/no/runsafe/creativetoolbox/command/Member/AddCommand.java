@@ -20,7 +20,7 @@ public class AddCommand extends PlayerAsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters, String[] arguments)
+	public String OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters)
 	{
 		RunsafePlayer member = RunsafeServer.Instance.getPlayer(parameters.get("player"));
 		List<String> target = plotFilter.apply(worldGuardInterface.getRegionsAtLocation(executor.getLocation()));

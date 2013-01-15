@@ -19,7 +19,7 @@ public class ListCommand extends PlayerAsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters, String[] arguments)
+	public String OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters)
 	{
 		int max_listed = config.getConfigValueAsInt("max_listed");
 		if (executor != null)

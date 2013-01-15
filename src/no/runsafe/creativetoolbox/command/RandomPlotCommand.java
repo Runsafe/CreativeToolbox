@@ -19,7 +19,7 @@ public class RandomPlotCommand extends PlayerAsyncCallbackCommand<RandomPlotComm
 	}
 
 	@Override
-	public Sudo OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters, String[] arguments)
+	public Sudo OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters)
 	{
 		if (plotFilter.getWorld() == null)
 			return null;

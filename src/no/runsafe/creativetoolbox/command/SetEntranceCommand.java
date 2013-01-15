@@ -30,7 +30,7 @@ public class SetEntranceCommand extends PlayerAsyncCommand
 	}
 
 	@Override
-	public String OnExecute(RunsafePlayer executor, HashMap<String, String> parameters, String[] arguments)
+	public String OnExecute(RunsafePlayer executor, HashMap<String, String> parameters)
 	{
 		String currentRegion = getCurrentRegion(executor);
 		if (currentRegion == null)
@@ -45,7 +45,7 @@ public class SetEntranceCommand extends PlayerAsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters, String[] arguments)
+	public String OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters)
 	{
 		String currentRegion = getCurrentRegion(executor);
 		if (currentRegion == null)

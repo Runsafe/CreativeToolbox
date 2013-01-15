@@ -28,7 +28,7 @@ public class CheckApprovalCommand extends AsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(ICommandExecutor executor, HashMap<String, String> parameters, String[] arguments)
+	public String OnAsyncExecute(ICommandExecutor executor, HashMap<String, String> parameters)
 	{
 		String plot = parameters.get("plotname");
 		if (plot.equals(".") && executor instanceof RunsafePlayer)

@@ -14,7 +14,7 @@ public class ScanCommand extends PlayerCommand
 	}
 
 	@Override
-	public String OnExecute(RunsafePlayer executor, HashMap<String, String> parameters, String[] arguments)
+	public String OnExecute(RunsafePlayer executor, HashMap<String, String> parameters)
 	{
 		HashMap<String, Integer> counts = new HashMap<String, Integer>();
 		int count = 0;

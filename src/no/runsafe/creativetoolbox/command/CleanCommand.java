@@ -66,5 +66,11 @@ public class CleanCommand extends PlayerCommand
 		return results.toString();
 	}
 
+	@Override
+	public String OnExecute(RunsafePlayer executor, HashMap<String, String> parameters)
+	{
+		return null;
+	}
+
 	private final IConfiguration config;
 }

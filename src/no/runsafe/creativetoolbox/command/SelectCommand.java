@@ -22,7 +22,7 @@ public class SelectCommand extends PlayerCommand
 	}
 
 	@Override
-	public String OnExecute(RunsafePlayer executor, HashMap<String, String> parameters, String[] arguments)
+	public String OnExecute(RunsafePlayer executor, HashMap<String, String> parameters)
 	{
 		Rectangle2D area = plotCalculator.getPlotArea(executor.getLocation());
 		worldEdit.select(
