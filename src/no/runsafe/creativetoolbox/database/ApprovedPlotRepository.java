@@ -1,9 +1,7 @@
 package no.runsafe.creativetoolbox.database;
 
 import no.runsafe.framework.database.IDatabase;
-import no.runsafe.framework.database.IRepository;
-import no.runsafe.framework.database.ISchemaUpdater;
-import no.runsafe.framework.database.SchemaRevisionRepository;
+import no.runsafe.framework.database.Repository;
 import no.runsafe.framework.output.IOutput;
 import org.joda.time.DateTime;
 
@@ -12,9 +10,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-public class ApprovedPlotRepository implements IRepository<PlotApproval, String>, ISchemaUpdater
+public class ApprovedPlotRepository extends Repository
 {
 	public ApprovedPlotRepository(IOutput output, IDatabase db)
 	{
@@ -22,35 +21,6 @@ public class ApprovedPlotRepository implements IRepository<PlotApproval, String>
 		database = db;
 	}
 
-	@Override
-	public void Run(SchemaRevisionRepository repository, IDatabase database)
-	{
-		int revision = repository.getRevision("creativetoolbox_plot_approval");
-		if (revision < 1)
-		{
-			console.write("Creating table creativetoolbox_plot_approval");
-			PreparedStatement create = database.prepare(
-				"CREATE TABLE creativetoolbox_plot_approval (" +
-					"`name` varchar(255) NOT NULL," +
-					"`approved` datetime NOT NULL," +
-					"`approved_by` varchar(255) NOT NULL," +
-					"PRIMARY KEY(`name`)" +
-					")"
-			);
-			try
-			{
-				create.execute();
-				revision = 1;
-			}
-			catch (SQLException e)
-			{
-				console.write(e.getMessage());
-			}
-		}
-		repository.setRevision("creativetoolbox_plot_approval", revision);
-	}
-
-	@Override
 	public PlotApproval get(String plotName)
 	{
 		PreparedStatement select = database.prepare("SELECT name, approved, approved_by FROM creativetoolbox_plot_approval WHERE name=?");
@@ -74,7 +44,6 @@ public class ApprovedPlotRepository implements IRepository<PlotApproval, String>
 		return null;
 	}
 
-	@Override
 	public void persist(PlotApproval plotApproval)
 	{
 		PreparedStatement insert = database.prepare(
@@ -94,7 +63,6 @@ public class ApprovedPlotRepository implements IRepository<PlotApproval, String>
 		}
 	}
 
-	@Override
 	public void delete(PlotApproval plotApproval)
 	{
 		PreparedStatement delete = database.prepare(
@@ -129,6 +97,29 @@ public class ApprovedPlotRepository implements IRepository<PlotApproval, String>
 			console.write(e.getMessage());
 		}
 		return null;
+	}
+
+	@Override
+	public String getTableName()
+	{
+		return "creativetoolbox_plot_approval";
+	}
+
+	@Override
+	public HashMap<Integer, List<String>> getSchemaUpdateQueries()
+	{
+		HashMap<Integer, List<String>> queries = new HashMap<Integer, List<String>>();
+		List<String> sql = new ArrayList<String>();
+		sql.add(
+			"CREATE TABLE creativetoolbox_plot_approval (" +
+				"`name` varchar(255) NOT NULL," +
+				"`approved` datetime NOT NULL," +
+				"`approved_by` varchar(255) NOT NULL," +
+				"PRIMARY KEY(`name`)" +
+				")"
+		);
+		queries.put(1, sql);
+		return queries;
 	}
 
 	private final IOutput console;

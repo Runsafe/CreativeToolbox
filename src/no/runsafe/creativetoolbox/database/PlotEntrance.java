@@ -1,22 +1,26 @@
 package no.runsafe.creativetoolbox.database;
 
-import no.runsafe.framework.database.RunsafeEntity;
 import no.runsafe.framework.server.RunsafeLocation;
 
-public class PlotEntrance extends RunsafeEntity {
-	public String getName() {
+public class PlotEntrance
+{
+	public String getName()
+	{
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(String name)
+	{
 		this.name = name;
 	}
 
-	public RunsafeLocation getLocation() {
+	public RunsafeLocation getLocation()
+	{
 		return location;
 	}
 
-	public void setLocation(RunsafeLocation location) {
+	public void setLocation(RunsafeLocation location)
+	{
 		this.location = location;
 	}
 

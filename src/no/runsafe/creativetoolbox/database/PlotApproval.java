@@ -1,11 +1,9 @@
 package no.runsafe.creativetoolbox.database;
 
-import no.runsafe.framework.database.RunsafeEntity;
 import org.joda.time.DateTime;
 
-public class PlotApproval extends RunsafeEntity
+public class PlotApproval
 {
-
 	public String getName()
 	{
 		return name;

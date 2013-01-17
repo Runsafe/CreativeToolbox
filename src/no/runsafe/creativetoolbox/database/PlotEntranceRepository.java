@@ -2,8 +2,7 @@ package no.runsafe.creativetoolbox.database;
 
 import no.runsafe.framework.configuration.IConfiguration;
 import no.runsafe.framework.database.IDatabase;
-import no.runsafe.framework.database.IRepository;
-import no.runsafe.framework.database.ISchemaUpdater;
+import no.runsafe.framework.database.Repository;
 import no.runsafe.framework.database.SchemaRevisionRepository;
 import no.runsafe.framework.event.IConfigurationChanged;
 import no.runsafe.framework.output.IOutput;
@@ -14,9 +13,11 @@ import no.runsafe.framework.server.RunsafeWorld;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-public class PlotEntranceRepository implements ISchemaUpdater, IRepository<PlotEntrance, String>, IConfigurationChanged
+public class PlotEntranceRepository extends Repository implements IConfigurationChanged
 {
 	public PlotEntranceRepository(IOutput output, IDatabase database)
 	{
@@ -24,7 +25,6 @@ public class PlotEntranceRepository implements ISchemaUpdater, IRepository<PlotE
 		this.console = output;
 	}
 
-	@Override
 	public PlotEntrance get(String regionName)
 	{
 		if (cache.containsKey(regionName.toLowerCase()))
@@ -65,7 +65,6 @@ public class PlotEntranceRepository implements ISchemaUpdater, IRepository<PlotE
 		return null;
 	}
 
-	@Override
 	public void persist(PlotEntrance entrance)
 	{
 		PreparedStatement insert = database.prepare(
@@ -89,7 +88,6 @@ public class PlotEntranceRepository implements ISchemaUpdater, IRepository<PlotE
 		}
 	}
 
-	@Override
 	public void delete(PlotEntrance entrance)
 	{
 		delete(entrance.getName());
@@ -112,45 +110,39 @@ public class PlotEntranceRepository implements ISchemaUpdater, IRepository<PlotE
 	}
 
 	@Override
-	public void Run(SchemaRevisionRepository repository, IDatabase database)
-	{
-		int revision = repository.getRevision("creativetoolbox_plot_entrance");
-		if (revision < 1)
-		{
-			console.write("Creating table creativetoolbox_plot_entrance");
-			PreparedStatement create = database.prepare(
-				"CREATE TABLE creativetoolbox_plot_entrance (" +
-					"`name` varchar(255) NOT NULL," +
-					"`x` double NOT NULL," +
-					"`y` double NOT NULL," +
-					"`z` double NOT NULL," +
-					"`pitch` float NOT NULL," +
-					"`yaw` float NOT NULL," +
-					"PRIMARY KEY(`name`)" +
-					")"
-			);
-			try
-			{
-				create.execute();
-				revision = 1;
-			}
-			catch (SQLException e)
-			{
-				console.write(e.getMessage());
-			}
-		}
-		repository.setRevision("creativetoolbox_plot_entrance", revision);
-	}
-
-	private final IDatabase database;
-	private final HashMap<String, PlotEntrance> cache = new HashMap<String, PlotEntrance>();
-	private final IOutput console;
-
-	@Override
 	public void OnConfigurationChanged(IConfiguration configuration)
 	{
 		world = RunsafeServer.Instance.getWorld(configuration.getConfigValueAsString("world"));
 	}
 
+	@Override
+	public String getTableName()
+	{
+		return "creativetoolbox_plot_entrance";
+	}
+
+	@Override
+	public HashMap<Integer, List<String>> getSchemaUpdateQueries()
+	{
+		HashMap<Integer, List<String>> queries = new HashMap<Integer, List<String>>();
+		List<String> sql = new ArrayList<String>();
+		sql.add(
+			"CREATE TABLE creativetoolbox_plot_entrance (" +
+				"`name` varchar(255) NOT NULL," +
+				"`x` double NOT NULL," +
+				"`y` double NOT NULL," +
+				"`z` double NOT NULL," +
+				"`pitch` float NOT NULL," +
+				"`yaw` float NOT NULL," +
+				"PRIMARY KEY(`name`)" +
+				")"
+		);
+		queries.put(1, sql);
+		return queries;
+	}
+
+	private final IDatabase database;
+	private final HashMap<String, PlotEntrance> cache = new HashMap<String, PlotEntrance>();
+	private final IOutput console;
 	private RunsafeWorld world;
 }

@@ -8,7 +8,10 @@
       <w>plotname</w>
       <w>randomplot</w>
       <w>setentrance</w>
+      <w>showname</w>
       <w>teleported</w>
+      <w>worldedit</w>
+      <w>worldguard</w>
     </words>
   </dictionary>
 </component>
