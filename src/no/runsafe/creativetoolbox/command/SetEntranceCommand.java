@@ -38,7 +38,7 @@ public class SetEntranceCommand extends PlayerAsyncCommand
 
 		console.fine(String.format("Player is in region %s", currentRegion));
 		if (!executor.hasPermission("runsafe.creative.entrance.set")
-			|| worldGuard.getOwners(executor.getWorld(), currentRegion).contains(executor.getName().toLowerCase()))
+			|| !worldGuard.getOwners(executor.getWorld(), currentRegion).contains(executor.getName().toLowerCase()))
 			return String.format("You are not allowed to set the entrance for the region %s", currentRegion);
 
 		return null;
@@ -53,7 +53,7 @@ public class SetEntranceCommand extends PlayerAsyncCommand
 
 		console.fine(String.format("Player is in region %s", currentRegion));
 		if (!executor.hasPermission("runsafe.creative.entrance.set")
-			|| worldGuard.getOwners(executor.getWorld(), currentRegion).contains(executor.getName().toLowerCase()))
+			|| !worldGuard.getOwners(executor.getWorld(), currentRegion).contains(executor.getName().toLowerCase()))
 			return null;
 
 		PlotEntrance entrance = new PlotEntrance();
