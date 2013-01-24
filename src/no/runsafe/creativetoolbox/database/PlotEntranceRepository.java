@@ -3,7 +3,6 @@ package no.runsafe.creativetoolbox.database;
 import no.runsafe.framework.configuration.IConfiguration;
 import no.runsafe.framework.database.IDatabase;
 import no.runsafe.framework.database.Repository;
-import no.runsafe.framework.database.SchemaRevisionRepository;
 import no.runsafe.framework.event.IConfigurationChanged;
 import no.runsafe.framework.output.IOutput;
 import no.runsafe.framework.server.RunsafeLocation;
