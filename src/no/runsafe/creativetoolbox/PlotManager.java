@@ -78,10 +78,14 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 	public RunsafeLocation getPlotEntrance(String plot)
 	{
 		PlotEntrance entrance = plotEntrance.get(plot);
-		if (entrance != null)
-			return entrance.getLocation();
-
 		Rectangle2D rect = worldGuard.getRectangle(world, plot);
+		if (entrance != null)
+		{
+			if (!rect.contains(entrance.getLocation().getBlockX(), entrance.getLocation().getBlockZ()))
+				plotEntrance.delete(plot);
+			else
+				return entrance.getLocation();
+		}
 		if (rect == null)
 			return null;
 		return calculator.getDefaultEntrance(worldGuard.getRegionLocation(world, plot));
