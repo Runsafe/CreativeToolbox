@@ -4,8 +4,6 @@
       <root url="jar://$PROJECT_DIR$/../out/RunsafeWorldGuardBridge.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES>
-      <root url="file://$PROJECT_DIR$/../WorldGuardBridge/src" />
-    </SOURCES>
+    <SOURCES />
   </library>
 </component>

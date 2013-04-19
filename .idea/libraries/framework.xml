@@ -4,8 +4,6 @@
       <root url="jar://$PROJECT_DIR$/../out/framework.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES>
-      <root url="file://$PROJECT_DIR$/../Framework/src" />
-    </SOURCES>
+    <SOURCES />
   </library>
 </component>
