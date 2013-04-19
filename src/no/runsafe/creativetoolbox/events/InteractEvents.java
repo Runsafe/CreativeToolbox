@@ -117,7 +117,13 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 			Set<String> members = worldGuardInterface.getMembers(player.getWorld(), regionName);
 
 			for (String owner : owners)
-				player.sendColouredMessage("     Owner: " + RunsafeServer.Instance.getPlayer(owner).getPrettyName());
+			{
+				RunsafePlayer theOwner = RunsafeServer.Instance.getPlayer(owner);
+				player.sendColouredMessage("     Owner: " + theOwner.getPrettyName());
+
+				if (player.hasPermission("runsafe.creative.list.seen"))
+					player.sendColouredMessage("     " + theOwner.getLastSeen(player));
+			}
 
 			for (String member : members)
 				player.sendColouredMessage("     Member: " + RunsafeServer.Instance.getPlayer(member).getPrettyName());
