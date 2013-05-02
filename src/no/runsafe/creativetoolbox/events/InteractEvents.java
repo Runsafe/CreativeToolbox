@@ -119,17 +119,24 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 			for (String owner : owners)
 			{
 				RunsafePlayer theOwner = RunsafeServer.Instance.getPlayer(owner);
-				player.sendColouredMessage("     Owner: " + theOwner.getPrettyName());
-
-				if (player.hasPermission("runsafe.creative.list.seen"))
+				if (theOwner != null)
 				{
-					String seen = theOwner.getLastSeen(player);
-					player.sendColouredMessage("     " + (seen == null ? "Player never seen" : seen));
+					player.sendColouredMessage("     Owner: " + theOwner.getPrettyName());
+
+					if (player.hasPermission("runsafe.creative.list.seen"))
+					{
+						String seen = theOwner.getLastSeen(player);
+						player.sendColouredMessage("     " + (seen == null ? "Player never seen" : seen));
+					}
 				}
 			}
 
 			for (String member : members)
-				player.sendColouredMessage("     Member: " + RunsafeServer.Instance.getPlayer(member).getPrettyName());
+			{
+				RunsafePlayer theMember = RunsafeServer.Instance.getPlayer(member);
+				if (theMember != null)
+					player.sendColouredMessage("     Member: " + theMember.getPrettyName());
+			}
 		}
 	}
 
