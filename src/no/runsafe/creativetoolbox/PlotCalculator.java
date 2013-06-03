@@ -50,6 +50,8 @@ public class PlotCalculator implements IConfigurationChanged
 
 	public RunsafeLocation getDefaultEntrance(long column, long row)
 	{
+		if (world == null)
+			return null;
 		long x = (long) (getOriginX(column) + prototype.getWidth());
 		long y = (long) (getOriginY(row) + prototype.getHeight());
 		return new RunsafeLocation(world, x - 0.5, groundLevel, y - 0.5, FACING_MIDDLE, LOOKING_FORWARD);

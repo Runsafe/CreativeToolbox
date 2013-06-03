@@ -77,6 +77,8 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 
 	public RunsafeLocation getPlotEntrance(String plot)
 	{
+		if (world == null)
+			return null;
 		PlotEntrance entrance = plotEntrance.get(plot);
 		Rectangle2D rect = worldGuard.getRectangle(world, plot);
 		if (entrance != null)
@@ -231,10 +233,11 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 
 	private void ScanFreePlots()
 	{
-		for (long column : calculator.getColumns())
-			for (long row : calculator.getRows())
-				if (!(takenPlots.containsKey(column) && takenPlots.get(column).contains(row)))
-					freePlots.add(calculator.getDefaultEntrance(column, row));
+		if (world != null)
+			for (long column : calculator.getColumns())
+				for (long row : calculator.getRows())
+					if (!(takenPlots.containsKey(column) && takenPlots.get(column).contains(row)))
+						freePlots.add(calculator.getDefaultEntrance(column, row));
 	}
 
 	private static final Duration BANNED = new Duration(Long.MAX_VALUE);
