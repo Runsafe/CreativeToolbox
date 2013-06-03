@@ -209,15 +209,16 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 	private void ScanTakenPlots()
 	{
 		Map<String, Rectangle2D> taken = worldGuard.getRegionRectanglesInWorld(filter.getWorld());
-		for (String region : taken.keySet())
-		{
-			if (!ignoredRegions.contains(region))
+		if (taken != null)
+			for (String region : taken.keySet())
 			{
-				long col = calculator.getColumn((int) taken.get(region).getCenterX());
-				long row = calculator.getRow((int) taken.get(region).getCenterY());
-				setTaken(col, row);
+				if (!ignoredRegions.contains(region))
+				{
+					long col = calculator.getColumn((int) taken.get(region).getCenterX());
+					long row = calculator.getRow((int) taken.get(region).getCenterY());
+					setTaken(col, row);
+				}
 			}
-		}
 	}
 
 	private void setTaken(long col, long row)
