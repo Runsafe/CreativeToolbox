@@ -3,8 +3,8 @@ package no.runsafe.creativetoolbox.command;
 import no.runsafe.creativetoolbox.PlayerTeleport;
 import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.framework.command.player.PlayerAsyncCallbackCommand;
-import no.runsafe.framework.server.ICommandExecutor;
 import no.runsafe.framework.server.RunsafeLocation;
+import no.runsafe.framework.server.RunsafeWorld;
 import no.runsafe.framework.server.player.RunsafePlayer;
 import no.runsafe.framework.timer.IScheduler;
 
@@ -45,16 +45,17 @@ public class TeleportCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
 		if (result.location != null)
 		{
 			RunsafeLocation target = result.location;
+			RunsafeWorld world = result.location.getWorld();
 			int air = 0;
 			int y = target.getBlockY();
 			for (; y < 256; ++y)
 			{
-				if (target.getWorld().getBlockAt(target.getBlockX(), y, target.getBlockZ()).isAir())
+				if (world.getBlockAt(target.getBlockX(), y, target.getBlockZ()).isAir())
 					air++;
 				if (air > 1)
 					break;
 			}
-			target.setY(y);
+			target.setY(y - 1);
 			result.who.teleport(result.location);
 		}
 		result.who.sendColouredMessage(result.message);
