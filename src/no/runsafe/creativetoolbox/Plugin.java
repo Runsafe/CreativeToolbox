@@ -17,7 +17,7 @@ public class Plugin extends RunsafeConfigurablePlugin
 	@Override
 	protected void PluginSetup()
 	{
-		addComponent(Instances.get("RunsafeWorldGuardBridge").getComponent(WorldGuardInterface.class));
+		addComponent(getPluginAPI(WorldGuardInterface.class));
 		addComponent(PlotFilter.class);
 		addComponent(PlotManager.class);
 		addComponent(ApprovedPlotRepository.class);
