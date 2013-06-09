@@ -9,12 +9,10 @@ import no.runsafe.framework.server.RunsafeLocation;
 import no.runsafe.framework.server.RunsafeServer;
 import no.runsafe.framework.server.RunsafeWorld;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PlotEntranceRepository extends Repository implements IConfigurationChanged
 {
@@ -29,62 +27,43 @@ public class PlotEntranceRepository extends Repository implements IConfiguration
 		if (cache.containsKey(regionName.toLowerCase()))
 			return cache.get(regionName.toLowerCase());
 
-		PreparedStatement select = database.prepare(
-			"SELECT * FROM creativetoolbox_plot_entrance WHERE name=?"
-		);
+		Map<String, Object> data = database.QueryRow("SELECT * FROM creativetoolbox_plot_entrance WHERE name=?", regionName);
 
-		try
-		{
-			select.setString(1, regionName);
-			ResultSet result = select.executeQuery();
-			if (result.first())
-			{
-				RunsafeLocation location = new RunsafeLocation(
-					world,
-					result.getDouble("x"),
-					result.getDouble("y"),
-					result.getDouble("z"),
-					result.getFloat("yaw"),
-					result.getFloat("pitch")
-				);
-				PlotEntrance entrance = new PlotEntrance();
-				entrance.setName(regionName);
-				entrance.setLocation(location);
-				cache.put(regionName.toLowerCase(), entrance);
-			}
-			else
-				cache.put(regionName.toLowerCase(), null);
+		if (data == null || data.isEmpty())
+			cache.put(regionName.toLowerCase(), null);
 
-			return cache.get(regionName.toLowerCase());
-		}
-		catch (SQLException e)
+		else
 		{
-			console.write(e.getMessage());
+			RunsafeLocation location = new RunsafeLocation(
+				world,
+				(Double) data.get("x"),
+				(Double) data.get("y"),
+				(Double) data.get("z"),
+				(Float) data.get("yaw"),
+				(Float) data.get("pitch")
+			);
+			PlotEntrance entrance = new PlotEntrance();
+			entrance.setName(regionName);
+			entrance.setLocation(location);
+			cache.put(regionName.toLowerCase(), entrance);
 		}
-		return null;
+
+		return cache.get(regionName.toLowerCase());
 	}
 
 	public void persist(PlotEntrance entrance)
 	{
-		PreparedStatement insert = database.prepare(
+		database.Update(
 			"INSERT INTO creativetoolbox_plot_entrance (name, x, y, z, yaw, pitch) VALUES (?, ?, ?, ?, ?, ?)" +
-				"ON DUPLICATE KEY UPDATE x=VALUES(x), y=VALUES(y), z=VALUES(z), yaw=VALUES(yaw), pitch=VALUES(pitch)"
+				"ON DUPLICATE KEY UPDATE x=VALUES(x), y=VALUES(y), z=VALUES(z), yaw=VALUES(yaw), pitch=VALUES(pitch)",
+			entrance.getName(),
+			entrance.getLocation().getX(),
+			entrance.getLocation().getY(),
+			entrance.getLocation().getZ(),
+			entrance.getLocation().getYaw(),
+			entrance.getLocation().getPitch()
 		);
-		try
-		{
-			insert.setString(1, entrance.getName());
-			insert.setDouble(2, entrance.getLocation().getX());
-			insert.setDouble(3, entrance.getLocation().getY());
-			insert.setDouble(4, entrance.getLocation().getZ());
-			insert.setFloat(5, entrance.getLocation().getYaw());
-			insert.setFloat(6, entrance.getLocation().getPitch());
-			insert.execute();
-			cache.put(entrance.getName().toLowerCase(), entrance);
-		}
-		catch (SQLException e)
-		{
-			console.write(e.getMessage());
-		}
+		cache.put(entrance.getName().toLowerCase(), entrance);
 	}
 
 	public void delete(PlotEntrance entrance)
@@ -94,18 +73,9 @@ public class PlotEntranceRepository extends Repository implements IConfiguration
 
 	public void delete(String region)
 	{
-		PreparedStatement delete = database.prepare("DELETE FROM creativetoolbox_plot_entrance WHERE name=?");
-		try
-		{
-			delete.setString(1, region);
-			delete.execute();
-			if (cache.containsKey(region))
-				cache.remove(region);
-		}
-		catch (SQLException e)
-		{
-			console.write(e.getMessage());
-		}
+		database.Execute("DELETE FROM creativetoolbox_plot_entrance WHERE name=?", region);
+		if (cache.containsKey(region))
+			cache.remove(region);
 	}
 
 	@Override
