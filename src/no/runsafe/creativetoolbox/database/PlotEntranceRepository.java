@@ -4,7 +4,6 @@ import no.runsafe.framework.configuration.IConfiguration;
 import no.runsafe.framework.database.IDatabase;
 import no.runsafe.framework.database.Repository;
 import no.runsafe.framework.event.IConfigurationChanged;
-import no.runsafe.framework.output.IOutput;
 import no.runsafe.framework.server.RunsafeLocation;
 import no.runsafe.framework.server.RunsafeServer;
 import no.runsafe.framework.server.RunsafeWorld;
@@ -16,10 +15,9 @@ import java.util.Map;
 
 public class PlotEntranceRepository extends Repository implements IConfigurationChanged
 {
-	public PlotEntranceRepository(IOutput output, IDatabase database)
+	public PlotEntranceRepository(IDatabase database)
 	{
 		this.database = database;
-		this.console = output;
 	}
 
 	public PlotEntrance get(String regionName)
@@ -36,11 +34,11 @@ public class PlotEntranceRepository extends Repository implements IConfiguration
 		{
 			RunsafeLocation location = new RunsafeLocation(
 				world,
-				(Double) data.get("x"),
-				(Double) data.get("y"),
-				(Double) data.get("z"),
-				(Float) data.get("yaw"),
-				(Float) data.get("pitch")
+					getDoubleValue(data, "x"),
+					getDoubleValue(data, "y"),
+					getDoubleValue(data, "z"),
+					getFloatValue(data, "yaw"),
+					getFloatValue(data, "pitch")
 			);
 			PlotEntrance entrance = new PlotEntrance();
 			entrance.setName(regionName);
@@ -112,6 +110,5 @@ public class PlotEntranceRepository extends Repository implements IConfiguration
 
 	private final IDatabase database;
 	private final HashMap<String, PlotEntrance> cache = new HashMap<String, PlotEntrance>();
-	private final IOutput console;
 	private RunsafeWorld world;
 }
