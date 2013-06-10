@@ -4,32 +4,30 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import no.runsafe.framework.database.IDatabase;
 import no.runsafe.framework.database.Repository;
-import no.runsafe.framework.output.IOutput;
+import no.runsafe.framework.database.Row;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ApprovedPlotRepository extends Repository
 {
-	public ApprovedPlotRepository(IOutput output, IDatabase db)
+	public ApprovedPlotRepository(IDatabase db)
 	{
-		console = output;
 		database = db;
 	}
 
 	public PlotApproval get(String plotName)
 	{
-		Map<String, Object> data = database.QueryRow("SELECT name, approved, approved_by FROM creativetoolbox_plot_approval WHERE name=?", plotName);
-		if (data == null || data.isEmpty())
+		Row data = database.QueryRow("SELECT name, approved, approved_by FROM creativetoolbox_plot_approval WHERE name=?", plotName);
+		if (data == null)
 			return null;
 
 		PlotApproval approval = new PlotApproval();
-		approval.setName((String) data.get("name"));
-		approval.setApproved(convert(data.get("approved")));
-		approval.setApprovedBy((String) data.get("approved_by"));
+		approval.setName(data.String("name"));
+		approval.setApproved(data.DateTime("approved"));
+		approval.setApprovedBy(data.String("approved_by"));
 		return approval;
 	}
 
@@ -85,6 +83,5 @@ public class ApprovedPlotRepository extends Repository
 		return queries;
 	}
 
-	private final IOutput console;
 	private final IDatabase database;
 }

@@ -3,6 +3,7 @@ package no.runsafe.creativetoolbox.database;
 import no.runsafe.framework.configuration.IConfiguration;
 import no.runsafe.framework.database.IDatabase;
 import no.runsafe.framework.database.Repository;
+import no.runsafe.framework.database.Row;
 import no.runsafe.framework.event.IConfigurationChanged;
 import no.runsafe.framework.server.RunsafeLocation;
 import no.runsafe.framework.server.RunsafeServer;
@@ -11,7 +12,6 @@ import no.runsafe.framework.server.RunsafeWorld;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class PlotEntranceRepository extends Repository implements IConfigurationChanged
 {
@@ -25,20 +25,20 @@ public class PlotEntranceRepository extends Repository implements IConfiguration
 		if (cache.containsKey(regionName.toLowerCase()))
 			return cache.get(regionName.toLowerCase());
 
-		Map<String, Object> data = database.QueryRow("SELECT * FROM creativetoolbox_plot_entrance WHERE name=?", regionName);
+		Row data = database.QueryRow("SELECT * FROM creativetoolbox_plot_entrance WHERE name=?", regionName);
 
-		if (data == null || data.isEmpty())
+		if (data == null)
 			cache.put(regionName.toLowerCase(), null);
 
 		else
 		{
 			RunsafeLocation location = new RunsafeLocation(
 				world,
-					getDoubleValue(data, "x"),
-					getDoubleValue(data, "y"),
-					getDoubleValue(data, "z"),
-					getFloatValue(data, "yaw"),
-					getFloatValue(data, "pitch")
+					data.Double("x"),
+					data.Double("y"),
+					data.Double("z"),
+					data.Float("yaw"),
+					data.Float("pitch")
 			);
 			PlotEntrance entrance = new PlotEntrance();
 			entrance.setName(regionName);
