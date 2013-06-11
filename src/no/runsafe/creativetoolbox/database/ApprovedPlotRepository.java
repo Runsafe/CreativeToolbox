@@ -36,7 +36,7 @@ public class ApprovedPlotRepository extends Repository
 		database.Update(
 			"INSERT INTO creativetoolbox_plot_approval (name, approved, approved_by) VALUES (?, ?, ?)" +
 				"ON DUPLICATE KEY UPDATE approved=VALUES(approved), approved_by=VALUES(approved_by)",
-			plotApproval.getName(), convert(plotApproval.getApproved()), plotApproval.getApprovedBy()
+			plotApproval.getName(), plotApproval.getApproved(), plotApproval.getApprovedBy()
 		);
 	}
 
