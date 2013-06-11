@@ -9,7 +9,7 @@ import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotEntranceRepository;
 import no.runsafe.creativetoolbox.events.InteractEvents;
 import no.runsafe.framework.RunsafeConfigurablePlugin;
-import no.runsafe.framework.command.Command;
+import no.runsafe.framework.api.command.Command;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 public class Plugin extends RunsafeConfigurablePlugin

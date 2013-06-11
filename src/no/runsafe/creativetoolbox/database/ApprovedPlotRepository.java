@@ -2,9 +2,9 @@ package no.runsafe.creativetoolbox.database;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
-import no.runsafe.framework.database.IDatabase;
-import no.runsafe.framework.database.Repository;
-import no.runsafe.framework.database.Row;
+import no.runsafe.framework.api.database.IDatabase;
+import no.runsafe.framework.internal.database.Repository;
+import no.runsafe.framework.internal.database.Row;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -54,7 +54,7 @@ public class ApprovedPlotRepository extends Repository
 				@Override
 				public String apply(@Nullable Object o)
 				{
-					return (String)o;
+					return (String) o;
 				}
 			}
 		);

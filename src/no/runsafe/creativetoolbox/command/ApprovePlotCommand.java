@@ -4,9 +4,9 @@ import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotApproval;
-import no.runsafe.framework.command.player.PlayerAsyncCommand;
-import no.runsafe.framework.server.player.RunsafePlayer;
-import no.runsafe.framework.timer.IScheduler;
+import no.runsafe.framework.api.IScheduler;
+import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
+import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import org.joda.time.DateTime;
 
 import java.util.HashMap;

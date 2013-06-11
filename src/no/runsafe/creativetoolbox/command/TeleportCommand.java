@@ -2,11 +2,11 @@ package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.creativetoolbox.PlayerTeleport;
 import no.runsafe.creativetoolbox.PlotManager;
-import no.runsafe.framework.command.player.PlayerAsyncCallbackCommand;
-import no.runsafe.framework.server.RunsafeLocation;
-import no.runsafe.framework.server.RunsafeWorld;
-import no.runsafe.framework.server.player.RunsafePlayer;
-import no.runsafe.framework.timer.IScheduler;
+import no.runsafe.framework.api.IScheduler;
+import no.runsafe.framework.api.command.player.PlayerAsyncCallbackCommand;
+import no.runsafe.framework.minecraft.RunsafeLocation;
+import no.runsafe.framework.minecraft.RunsafeWorld;
+import no.runsafe.framework.minecraft.player.RunsafePlayer;
 
 import java.util.HashMap;
 

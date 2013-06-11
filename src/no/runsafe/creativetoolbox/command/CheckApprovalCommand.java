@@ -3,10 +3,10 @@ package no.runsafe.creativetoolbox.command;
 import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotApproval;
-import no.runsafe.framework.command.AsyncCommand;
-import no.runsafe.framework.server.ICommandExecutor;
-import no.runsafe.framework.server.player.RunsafePlayer;
-import no.runsafe.framework.timer.IScheduler;
+import no.runsafe.framework.api.IScheduler;
+import no.runsafe.framework.api.command.ICommandExecutor;
+import no.runsafe.framework.internal.command.AsyncCommand;
+import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.util.HashMap;

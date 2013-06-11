@@ -1,6 +1,6 @@
 package no.runsafe.creativetoolbox.database;
 
-import no.runsafe.framework.server.RunsafeLocation;
+import no.runsafe.framework.minecraft.RunsafeLocation;
 
 public class PlotEntrance
 {
