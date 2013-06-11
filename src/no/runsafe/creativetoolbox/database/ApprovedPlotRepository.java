@@ -4,7 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import no.runsafe.framework.api.database.IDatabase;
 import no.runsafe.framework.api.database.IRow;
-import no.runsafe.framework.internal.database.Repository;
+import no.runsafe.framework.api.database.Repository;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
