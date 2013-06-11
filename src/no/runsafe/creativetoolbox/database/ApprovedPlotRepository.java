@@ -3,8 +3,8 @@ package no.runsafe.creativetoolbox.database;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import no.runsafe.framework.api.database.IDatabase;
+import no.runsafe.framework.api.database.IRow;
 import no.runsafe.framework.internal.database.Repository;
-import no.runsafe.framework.internal.database.Row;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class ApprovedPlotRepository extends Repository
 
 	public PlotApproval get(String plotName)
 	{
-		Row data = database.QueryRow("SELECT name, approved, approved_by FROM creativetoolbox_plot_approval WHERE name=?", plotName);
+		IRow data = database.QueryRow("SELECT name, approved, approved_by FROM creativetoolbox_plot_approval WHERE name=?", plotName);
 		if (data == null)
 			return null;
 
