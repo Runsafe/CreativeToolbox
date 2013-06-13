@@ -81,6 +81,8 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 			return null;
 		PlotEntrance entrance = plotEntrance.get(plot);
 		Rectangle2D rect = worldGuard.getRectangle(world, plot);
+		if (rect == null)
+			return null;
 		if (entrance != null)
 		{
 			if (!rect.contains(entrance.getLocation().getBlockX(), entrance.getLocation().getBlockZ()))
@@ -88,8 +90,6 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 			else
 				return entrance.getLocation();
 		}
-		if (rect == null)
-			return null;
 		return calculator.getDefaultEntrance(worldGuard.getRegionLocation(world, plot));
 	}
 
