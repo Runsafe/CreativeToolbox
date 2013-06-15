@@ -5,7 +5,6 @@ import no.runsafe.framework.api.database.IDatabase;
 import no.runsafe.framework.api.database.IRow;
 import no.runsafe.framework.api.database.Repository;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
-import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.RunsafeWorld;
 
@@ -25,24 +24,15 @@ public class PlotEntranceRepository extends Repository implements IConfiguration
 		if (cache.containsKey(regionName.toLowerCase()))
 			return cache.get(regionName.toLowerCase());
 
-		IRow data = database.QueryRow("SELECT * FROM creativetoolbox_plot_entrance WHERE name=?", regionName);
+		IRow data = database.QueryRow("SELECT ? AS world, * FROM creativetoolbox_plot_entrance WHERE name=?", world.getName(), regionName);
 
 		if (data == null)
 			cache.put(regionName.toLowerCase(), null);
-
 		else
 		{
-			RunsafeLocation location = new RunsafeLocation(
-				world,
-				data.Double("x"),
-				data.Double("y"),
-				data.Double("z"),
-				data.Float("yaw"),
-				data.Float("pitch")
-			);
 			PlotEntrance entrance = new PlotEntrance();
 			entrance.setName(regionName);
-			entrance.setLocation(location);
+			entrance.setLocation(data.Location());
 			cache.put(regionName.toLowerCase(), entrance);
 		}
 

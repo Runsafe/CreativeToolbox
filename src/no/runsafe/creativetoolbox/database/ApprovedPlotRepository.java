@@ -4,6 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import no.runsafe.framework.api.database.IDatabase;
 import no.runsafe.framework.api.database.IRow;
+import no.runsafe.framework.api.database.IValue;
 import no.runsafe.framework.api.database.Repository;
 
 import javax.annotation.Nullable;
@@ -49,12 +50,12 @@ public class ApprovedPlotRepository extends Repository
 	{
 		return Lists.transform(
 			database.QueryColumn("SELECT name FROM creativetoolbox_plot_approval"),
-			new Function<Object, String>()
+			new Function<IValue, String>()
 			{
 				@Override
-				public String apply(@Nullable Object o)
+				public String apply(@Nullable IValue value)
 				{
-					return (String) o;
+					return value != null ? value.String() : null;
 				}
 			}
 		);
