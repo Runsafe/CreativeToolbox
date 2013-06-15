@@ -148,6 +148,8 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 			return lastSeen.get(playerName);
 
 		RunsafePlayer player = RunsafeServer.Instance.getPlayer(playerName);
+		if (player == null)
+			return null;
 		if (player.isOnline())
 			lastSeen.put(playerName, Duration.ZERO);
 		else if (player.isBanned())
