@@ -35,8 +35,8 @@ public class PlotCalculator implements IConfigurationChanged
 		Rectangle2D area = new Rectangle2D.Double(
 			getOriginX(column) - (includePadding ? roadWidth : 0),
 			getOriginY(row) - (includePadding ? roadWidth : 0),
-			prototype.getWidth() - 1 + (includePadding ? roadWidth : 0),
-			prototype.getHeight() - 1 + (includePadding ? roadWidth : 0)
+			prototype.getWidth() - 1 + (includePadding ? roadWidth * 2 : 0),
+			prototype.getHeight() - 1 + (includePadding ? roadWidth * 2 : 0)
 		);
 		if (!fence.contains(area))
 			return null;
@@ -51,8 +51,8 @@ public class PlotCalculator implements IConfigurationChanged
 		return new Rectangle2D.Double(
 			rectangle.getX() - roadWidth,
 			rectangle.getY() - roadWidth,
-			rectangle.getWidth() + roadWidth,
-			rectangle.getHeight() + roadWidth
+			rectangle.getWidth() + roadWidth * 2,
+			rectangle.getHeight() + roadWidth * 2
 		);
 	}
 
