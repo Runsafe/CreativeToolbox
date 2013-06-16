@@ -30,8 +30,8 @@ public class PlotCalculator implements IConfigurationChanged
 		Rectangle2D area = new Rectangle2D.Double(
 			getOriginX(column),
 			getOriginY(row),
-			prototype.getWidth(),
-			prototype.getHeight()
+			prototype.getWidth() - 1,
+			prototype.getHeight() - 1
 		);
 		if (!fence.contains(area))
 			return null;
