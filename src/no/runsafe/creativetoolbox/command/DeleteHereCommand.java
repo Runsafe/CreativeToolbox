@@ -1,22 +1,28 @@
 package no.runsafe.creativetoolbox.command;
 
+import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.database.PlotEntranceRepository;
 import no.runsafe.framework.api.command.player.PlayerCommand;
+import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
+import no.runsafe.worldeditbridge.WorldEditInterface;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
+import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.List;
 
 public class DeleteHereCommand extends PlayerCommand
 {
-	public DeleteHereCommand(PlotFilter filter, WorldGuardInterface worldGuard, PlotEntranceRepository entranceRepository)
+	public DeleteHereCommand(PlotFilter filter, WorldGuardInterface worldGuard, WorldEditInterface worldEdit, PlotEntranceRepository entranceRepository, PlotCalculator plotCalculator)
 	{
 		super("deletehere", "delete the region you are in.", "runsafe.creative.delete");
 		this.filter = filter;
 		this.worldGuard = worldGuard;
+		this.worldEdit = worldEdit;
 		this.entrances = entranceRepository;
+		this.plotCalculator = plotCalculator;
 	}
 
 	@Override
@@ -28,6 +34,10 @@ public class DeleteHereCommand extends PlayerCommand
 		StringBuilder results = new StringBuilder();
 		for (String region : delete)
 		{
+			Rectangle2D area = plotCalculator.pad(worldGuard.getRectangle(executor.getWorld(), region));
+			RunsafeLocation minPos = plotCalculator.getMinPosition(executor.getWorld(), area);
+			RunsafeLocation maxPos = plotCalculator.getMaxPosition(executor.getWorld(), area);
+			worldEdit.regenerate(executor, minPos, maxPos);
 			worldGuard.deleteRegion(filter.getWorld(), region);
 			entrances.delete(region);
 			results.append(String.format("Deleted region '%s'.", region));
@@ -37,5 +47,7 @@ public class DeleteHereCommand extends PlayerCommand
 
 	private final PlotFilter filter;
 	private final WorldGuardInterface worldGuard;
+	private final WorldEditInterface worldEdit;
 	private final PlotEntranceRepository entrances;
+	private final PlotCalculator plotCalculator;
 }
