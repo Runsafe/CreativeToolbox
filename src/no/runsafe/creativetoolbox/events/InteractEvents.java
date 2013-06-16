@@ -108,7 +108,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 			if (approval == null || approval.getApproved() == null)
 				player.sendColouredMessage("Region: " + regionName);
 			else
-				player.sendColouredMessage("Region: %s [Approved %s]", regionName, approval.getApproved());
+				player.sendColouredMessage("Region: %s [Approved %s]", regionName, approval.getApproved().toDate());
 		}
 		else
 			player.sendMessage("Region: " + regionName);
