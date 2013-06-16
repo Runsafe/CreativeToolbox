@@ -3,6 +3,7 @@ package no.runsafe.creativetoolbox.command;
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.framework.RunsafePlugin;
 import no.runsafe.framework.api.command.player.PlayerCommand;
+import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldeditbridge.WorldEditInterface;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
@@ -38,11 +39,11 @@ public class RegenerateCommand extends PlayerCommand
 			area = plotCalculator.getPlotArea(executor.getLocation());
 		}
 		console.fine("Calling WorldEdit.");
-		return worldEdit.regenerate(
-			executor,
-			plotCalculator.getMinPosition(executor.getWorld(), area),
-			plotCalculator.getMaxPosition(executor.getWorld(), area)
-		) ? "Plot regenerated." : "Could not regenerate plot.";
+		RunsafeLocation minPos = plotCalculator.getMinPosition(executor.getWorld(), area);
+		console.fine("Min position: ", minPos);
+		RunsafeLocation maxPos = plotCalculator.getMaxPosition(executor.getWorld(), area);
+		console.fine("Min position: ", maxPos);
+		return worldEdit.regenerate(executor, minPos, maxPos) ? "Plot regenerated." : "Could not regenerate plot.";
 	}
 
 	private final WorldEditInterface worldEdit;
