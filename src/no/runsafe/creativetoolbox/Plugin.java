@@ -7,6 +7,7 @@ import no.runsafe.creativetoolbox.command.OldPlots.NextCommand;
 import no.runsafe.creativetoolbox.command.OldPlots.PreviousCommand;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotEntranceRepository;
+import no.runsafe.creativetoolbox.database.PlotVoteRepository;
 import no.runsafe.creativetoolbox.events.InteractEvents;
 import no.runsafe.framework.RunsafeConfigurablePlugin;
 import no.runsafe.framework.api.command.Command;
@@ -23,6 +24,7 @@ public class Plugin extends RunsafeConfigurablePlugin
 		addComponent(PlotFilter.class);
 		addComponent(PlotManager.class);
 		addComponent(ApprovedPlotRepository.class);
+		addComponent(PlotVoteRepository.class);
 		addComponent(PlotEntranceRepository.class);
 		addComponent(InteractEvents.class);
 		addComponent(PlotCalculator.class);
