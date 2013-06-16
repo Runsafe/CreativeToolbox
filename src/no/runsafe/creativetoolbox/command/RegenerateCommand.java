@@ -24,12 +24,20 @@ public class RegenerateCommand extends PlayerCommand
 	@Override
 	public String OnExecute(RunsafePlayer executor, HashMap<String, String> params)
 	{
+		console.fine("Executing regeneration");
 		List<String> candidate = worldGuard.getRegionsAtLocation(executor.getLocation());
 		Rectangle2D area;
 		if (candidate != null && candidate.size() == 1)
+		{
+			console.fine("Found 1 region: %s", candidate.get(0));
 			area = worldGuard.getRectangle(executor.getWorld(), candidate.get(0));
+		}
 		else
+		{
+			console.fine("Using location.");
 			area = plotCalculator.getPlotArea(executor.getLocation());
+		}
+		console.fine("Calling WorldEdit.");
 		return worldEdit.regenerate(
 			executor,
 			plotCalculator.getMinPosition(executor.getWorld(), area),
