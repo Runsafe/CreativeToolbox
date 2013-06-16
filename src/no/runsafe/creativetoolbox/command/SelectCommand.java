@@ -4,6 +4,7 @@ import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.framework.RunsafePlugin;
 import no.runsafe.framework.api.command.player.PlayerCommand;
+import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldeditbridge.WorldEditInterface;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
@@ -29,14 +30,12 @@ public class SelectCommand extends PlayerCommand
 		List<String> candidate = filter.apply(worldGuard.getRegionsAtLocation(executor.getLocation()));
 		Rectangle2D area;
 		if (candidate != null && candidate.size() == 1)
-			area = worldGuard.getRectangle(executor.getWorld(), candidate.get(0));
+			area = plotCalculator.pad(worldGuard.getRectangle(executor.getWorld(), candidate.get(0)));
 		else
-			area = plotCalculator.getPlotArea(executor.getLocation());
-		worldEdit.select(
-			executor,
-			plotCalculator.getMinPosition(executor.getWorld(), area),
-			plotCalculator.getMaxPosition(executor.getWorld(), area)
-		);
+			area = plotCalculator.getPlotArea(executor.getLocation(), true);
+		RunsafeLocation minPos = plotCalculator.getMinPosition(executor.getWorld(), area);
+		RunsafeLocation maxPos = plotCalculator.getMaxPosition(executor.getWorld(), area);
+		worldEdit.select(executor, minPos, maxPos);
 		return null;
 	}
 

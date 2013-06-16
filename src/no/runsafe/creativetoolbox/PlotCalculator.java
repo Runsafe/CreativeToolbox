@@ -13,10 +13,15 @@ public class PlotCalculator implements IConfigurationChanged
 {
 	public Rectangle2D getPlotArea(RunsafeLocation location)
 	{
+		return getPlotArea(location, false);
+	}
+
+	public Rectangle2D getPlotArea(RunsafeLocation location, boolean includePadding)
+	{
 		if (!fence.contains(location.getBlockX(), location.getBlockZ()))
 			return null;
 
-		Rectangle2D area = getPlotArea(getColumn(location.getBlockX()), getRow(location.getBlockZ()));
+		Rectangle2D area = getPlotArea(getColumn(location.getBlockX()), getRow(location.getBlockZ()), includePadding);
 
 		// Location is in the padding between plots
 		if (!area.contains(location.getBlockX(), location.getBlockZ()))
@@ -25,17 +30,30 @@ public class PlotCalculator implements IConfigurationChanged
 		return area;
 	}
 
-	Rectangle2D getPlotArea(long column, long row)
+	Rectangle2D getPlotArea(long column, long row, boolean includePadding)
 	{
 		Rectangle2D area = new Rectangle2D.Double(
-			getOriginX(column),
-			getOriginY(row),
-			prototype.getWidth() - 1,
-			prototype.getHeight() - 1
+			getOriginX(column) - (includePadding ? roadWidth : 0),
+			getOriginY(row) - (includePadding ? roadWidth : 0),
+			prototype.getWidth() - 1 + (includePadding ? roadWidth : 0),
+			prototype.getHeight() - 1 + (includePadding ? roadWidth : 0)
 		);
 		if (!fence.contains(area))
 			return null;
 		return area;
+	}
+
+	public Rectangle2D pad(Rectangle2D rectangle)
+	{
+		if (rectangle == null)
+			return null;
+
+		return new Rectangle2D.Double(
+			rectangle.getX() - roadWidth,
+			rectangle.getY() - roadWidth,
+			rectangle.getWidth() + roadWidth,
+			rectangle.getHeight() + roadWidth
+		);
 	}
 
 	public RunsafeLocation getDefaultEntrance(RunsafeLocation location)
