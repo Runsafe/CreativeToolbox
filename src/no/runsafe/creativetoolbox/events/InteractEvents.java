@@ -16,6 +16,7 @@ import no.runsafe.framework.minecraft.event.player.RunsafePlayerInteractEntityEv
 import no.runsafe.framework.minecraft.item.meta.RunsafeMeta;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
+import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
@@ -156,5 +157,5 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 	private final PlotFilter plotFilter;
 	private final ApprovedPlotRepository plotRepository;
 	private final PlotVoteRepository votes;
-	private final DateTimeFormatter dateFormat = ISODateTimeFormat.basicDate();
+	private final DateTimeFormatter dateFormat = DateTimeFormat.forPattern("dd.MM.YYYY");
 }
