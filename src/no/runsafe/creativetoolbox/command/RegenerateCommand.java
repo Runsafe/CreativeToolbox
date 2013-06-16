@@ -43,8 +43,10 @@ public class RegenerateCommand extends PlayerCommand
 		console.fine("Area is %s", area);
 		console.fine("Calling WorldEdit.");
 		RunsafeLocation minPos = plotCalculator.getMinPosition(executor.getWorld(), area);
+		minPos.offset(-2, 0, -2);
 		console.fine("Min position: %s", minPos);
 		RunsafeLocation maxPos = plotCalculator.getMaxPosition(executor.getWorld(), area);
+		maxPos.offset(3, 0, 3);
 		console.fine("Min position: %s", maxPos);
 		return worldEdit.regenerate(executor, minPos, maxPos) ? "Plot regenerated." : "Could not regenerate plot.";
 	}
