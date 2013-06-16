@@ -1,6 +1,7 @@
 package no.runsafe.creativetoolbox.database;
 
 import no.runsafe.framework.api.database.IDatabase;
+import no.runsafe.framework.api.database.IRow;
 import no.runsafe.framework.api.database.Repository;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import org.apache.commons.lang.StringUtils;
@@ -23,6 +24,14 @@ public class PlotVoteRepository extends Repository
 				"ON DUPLICATE KEY UPDATE rank=VALUES(`rank`)",
 			plot, player.getName(), StringUtils.join(player.getGroups(), ",")
 		) > 0;
+	}
+
+	public int tally(String regionName)
+	{
+		IRow answer = database.QueryRow("SELECT COUNT(*) AS tally FROM creative_plot_vote WHERE `plot`=?", regionName);
+		if (answer == null)
+			return 0;
+		return answer.Integer("tally");
 	}
 
 	@Override

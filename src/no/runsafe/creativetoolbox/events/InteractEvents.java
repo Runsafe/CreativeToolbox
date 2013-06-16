@@ -3,6 +3,7 @@ package no.runsafe.creativetoolbox.events;
 import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotApproval;
+import no.runsafe.creativetoolbox.database.PlotVoteRepository;
 import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.event.IAsyncEvent;
 import no.runsafe.framework.api.event.player.IPlayerInteractEntityEvent;
@@ -24,12 +25,13 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 	public InteractEvents(
 		PlotFilter plotFilter,
 		WorldGuardInterface worldGuard,
-		ApprovedPlotRepository plotRepository
-	)
+		ApprovedPlotRepository plotRepository,
+		PlotVoteRepository votes)
 	{
 		this.worldGuardInterface = worldGuard;
 		this.plotFilter = plotFilter;
 		this.plotRepository = plotRepository;
+		this.votes = votes;
 	}
 
 	@Override
@@ -111,6 +113,13 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 		else
 			player.sendMessage("Region: " + regionName);
 
+		if (player.hasPermission("runsafe.creative.vote.tally"))
+		{
+			int tally = votes.tally(regionName);
+			if(tally > 0)
+				player.sendColouredMessage("  This plot has %d votes!", tally);
+		}
+
 		if (!simple)
 		{
 			Set<String> owners = worldGuardInterface.getOwners(player.getWorld(), regionName);
@@ -144,4 +153,5 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 	private int listItem;
 	private final PlotFilter plotFilter;
 	private final ApprovedPlotRepository plotRepository;
+	private final PlotVoteRepository votes;
 }

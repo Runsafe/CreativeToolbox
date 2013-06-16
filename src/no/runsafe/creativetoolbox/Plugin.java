@@ -53,5 +53,6 @@ public class Plugin extends RunsafeConfigurablePlugin
 		toolbox.addSubCommand(getInstance(FindFreePlotCommand.class));
 		toolbox.addSubCommand(getInstance(SelectCommand.class));
 		toolbox.addSubCommand(getInstance(RegenerateCommand.class));
+		toolbox.addSubCommand(getInstance(VoteCommand.class));
 	}
 }

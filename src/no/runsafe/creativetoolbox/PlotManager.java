@@ -190,6 +190,13 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 			oldPlotList.remove(player.getName());
 	}
 
+	public boolean voteValid(RunsafePlayer player, String region)
+	{
+		return !worldGuard.getOwners(world, region).contains(player.getName())
+			&& !worldGuard.getMembers(world, region).contains(player.getName());
+
+	}
+
 	RunsafeWorld getWorld()
 	{
 		return world;
