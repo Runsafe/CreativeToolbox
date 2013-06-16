@@ -24,7 +24,7 @@ public class VoteCommand extends PlayerCommand
 			return "You are not allowed to vote for this plot.";
 
 		votes.recordVote(player, region);
-		return String.format("Thank you for voting for the plot %s", region);
+		return String.format("Thank you for voting for the plot \"%s\".", region);
 	}
 
 	private final PlotManager manager;
