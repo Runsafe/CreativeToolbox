@@ -1,6 +1,7 @@
 package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.creativetoolbox.PlotCalculator;
+import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.framework.RunsafePlugin;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.minecraft.RunsafeLocation;
@@ -14,9 +15,10 @@ import java.util.List;
 
 public class RegenerateCommand extends PlayerCommand
 {
-	public RegenerateCommand(PlotCalculator calculator)
+	public RegenerateCommand(PlotCalculator calculator, PlotFilter filter)
 	{
 		super("regenerate", "Regenerates the plot you are currently in.", "runsafe.creative.regenerate");
+		this.filter = filter;
 		worldEdit = RunsafePlugin.getFirstPluginAPI(WorldEditInterface.class);
 		worldGuard = RunsafePlugin.getFirstPluginAPI(WorldGuardInterface.class);
 		plotCalculator = calculator;
@@ -26,7 +28,7 @@ public class RegenerateCommand extends PlayerCommand
 	public String OnExecute(RunsafePlayer executor, HashMap<String, String> params)
 	{
 		console.fine("Executing regeneration");
-		List<String> candidate = worldGuard.getRegionsAtLocation(executor.getLocation());
+		List<String> candidate = filter.apply(worldGuard.getRegionsAtLocation(executor.getLocation()));
 		Rectangle2D area;
 		if (candidate != null && candidate.size() == 1)
 		{
@@ -50,4 +52,5 @@ public class RegenerateCommand extends PlayerCommand
 	private final WorldEditInterface worldEdit;
 	private final WorldGuardInterface worldGuard;
 	private final PlotCalculator plotCalculator;
+	private final PlotFilter filter;
 }
