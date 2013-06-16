@@ -16,6 +16,8 @@ import no.runsafe.framework.minecraft.event.player.RunsafePlayerInteractEntityEv
 import no.runsafe.framework.minecraft.item.meta.RunsafeMeta;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 
 import java.util.List;
 import java.util.Set;
@@ -108,7 +110,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 			if (approval == null || approval.getApproved() == null)
 				player.sendColouredMessage("Region: " + regionName);
 			else
-				player.sendColouredMessage("Region: %s [Approved %s]", regionName, approval.getApproved().toDate());
+				player.sendColouredMessage("Region: %s [Approved %s]", regionName, dateFormat.print(approval.getApproved()));
 		}
 		else
 			player.sendMessage("Region: " + regionName);
@@ -116,7 +118,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 		if (player.hasPermission("runsafe.creative.vote.tally"))
 		{
 			int tally = votes.tally(regionName);
-			if(tally > 0)
+			if (tally > 0)
 				player.sendColouredMessage("  This plot has %d votes!", tally);
 		}
 
@@ -154,4 +156,5 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 	private final PlotFilter plotFilter;
 	private final ApprovedPlotRepository plotRepository;
 	private final PlotVoteRepository votes;
+	private final DateTimeFormatter dateFormat = ISODateTimeFormat.basicDate();
 }
