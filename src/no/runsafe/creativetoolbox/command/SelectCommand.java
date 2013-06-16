@@ -2,7 +2,6 @@ package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotFilter;
-import no.runsafe.framework.RunsafePlugin;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
@@ -15,12 +14,12 @@ import java.util.List;
 
 public class SelectCommand extends PlayerCommand
 {
-	public SelectCommand(PlotCalculator calculator, PlotFilter filter)
+	public SelectCommand(WorldEditInterface worldEdit, WorldGuardInterface worldGuard, PlotCalculator calculator, PlotFilter filter)
 	{
 		super("select", "Sets your WorldEdit region to the plot you are in", "runsafe.creative.select");
+		this.worldEdit = worldEdit;
+		this.worldGuard = worldGuard;
 		this.filter = filter;
-		worldEdit = RunsafePlugin.getFirstPluginAPI(WorldEditInterface.class);
-		worldGuard = RunsafePlugin.getFirstPluginAPI(WorldGuardInterface.class);
 		plotCalculator = calculator;
 	}
 

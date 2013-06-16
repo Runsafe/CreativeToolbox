@@ -10,6 +10,7 @@ import no.runsafe.creativetoolbox.database.PlotEntranceRepository;
 import no.runsafe.creativetoolbox.events.InteractEvents;
 import no.runsafe.framework.RunsafeConfigurablePlugin;
 import no.runsafe.framework.api.command.Command;
+import no.runsafe.worldeditbridge.WorldEditInterface;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 public class Plugin extends RunsafeConfigurablePlugin
@@ -17,7 +18,8 @@ public class Plugin extends RunsafeConfigurablePlugin
 	@Override
 	protected void PluginSetup()
 	{
-		addComponent(Instances.get("RunsafeWorldGuardBridge").getComponent(WorldGuardInterface.class));
+		addComponent(getFirstPluginAPI(WorldGuardInterface.class));
+		addComponent(getFirstPluginAPI(WorldEditInterface.class));
 		addComponent(PlotFilter.class);
 		addComponent(PlotManager.class);
 		addComponent(ApprovedPlotRepository.class);

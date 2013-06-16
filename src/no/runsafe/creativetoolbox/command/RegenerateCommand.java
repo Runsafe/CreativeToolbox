@@ -2,7 +2,6 @@ package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotFilter;
-import no.runsafe.framework.RunsafePlugin;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
@@ -15,12 +14,12 @@ import java.util.List;
 
 public class RegenerateCommand extends PlayerCommand
 {
-	public RegenerateCommand(PlotCalculator calculator, PlotFilter filter)
+	public RegenerateCommand(WorldEditInterface worldEdit, WorldGuardInterface worldGuard, PlotCalculator calculator, PlotFilter filter)
 	{
 		super("regenerate", "Regenerates the plot you are currently in.", "runsafe.creative.regenerate");
+		this.worldEdit = worldEdit;
+		this.worldGuard = worldGuard;
 		this.filter = filter;
-		worldEdit = RunsafePlugin.getFirstPluginAPI(WorldEditInterface.class);
-		worldGuard = RunsafePlugin.getFirstPluginAPI(WorldGuardInterface.class);
 		plotCalculator = calculator;
 	}
 
