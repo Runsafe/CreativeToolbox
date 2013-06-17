@@ -1,8 +1,7 @@
 package no.runsafe.creativetoolbox;
 
-import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
-import no.runsafe.creativetoolbox.database.PlotEntrance;
-import no.runsafe.creativetoolbox.database.PlotEntranceRepository;
+import no.runsafe.creativetoolbox.database.*;
+import no.runsafe.creativetoolbox.event.PlotApprovedEvent;
 import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.api.event.plugin.IPluginEnabled;
@@ -27,13 +26,14 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 		WorldGuardInterface worldGuardInterface,
 		PlotEntranceRepository plotEntranceRepository,
 		ApprovedPlotRepository approvedPlotRepository,
-		PlotCalculator plotCalculator
+		PlotVoteRepository voteRepository, PlotCalculator plotCalculator
 	)
 	{
 		filter = plotFilter;
 		worldGuard = worldGuardInterface;
 		plotEntrance = plotEntranceRepository;
 		plotApproval = approvedPlotRepository;
+		this.voteRepository = voteRepository;
 		calculator = plotCalculator;
 	}
 
@@ -194,7 +194,42 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 	{
 		return !worldGuard.getOwners(world, region).contains(player.getName())
 			&& !worldGuard.getMembers(world, region).contains(player.getName());
+	}
 
+	public boolean vote(RunsafePlayer player, String region)
+	{
+		boolean voted = voteRepository.recordVote(player, region);
+		int score = voteRepository.tally(region, voteranks);
+		if (score >= autoApprove)
+		{
+			PlotApproval approval = plotApproval.get(region);
+			if (approval == null)
+				approve("Popular vote", region);
+		}
+		return voted;
+	}
+
+	public PlotApproval approve(String approver, String plot)
+	{
+		PlotApproval approval = new PlotApproval();
+		approval.setApproved(DateTime.now());
+		approval.setApprovedBy(approver);
+		approval.setName(plot);
+		plotApproval.persist(approval);
+		approval = plotApproval.get(plot);
+		if (approval != null)
+		{
+			for (String owner : worldGuard.getOwners(world, plot))
+			{
+				int approved = 0;
+				for (String region : worldGuard.getOwnedRegions(RunsafeServer.Instance.getOfflinePlayerExact(owner), world))
+					if (plotApproval.get(region) != null)
+						approved++;
+
+				new PlotApprovedEvent(owner, approval, approved).Fire();
+			}
+		}
+		return approval;
 	}
 
 	RunsafeWorld getWorld()
@@ -208,6 +243,8 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 		world = RunsafeServer.Instance.getWorld(config.getConfigValueAsString("world"));
 		ignoredRegions = config.getConfigValueAsList("free.ignore");
 		limit = new Period(0, 0, 0, config.getConfigValueAsInt("old_after"), 0, 0, 0, 0).toDurationTo(DateTime.now());
+		autoApprove = config.getConfigValueAsInt("vote.approved");
+		voteranks = config.getConfigValuesAsIntegerMap("vote.rank");
 	}
 
 	@Override
@@ -254,6 +291,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 	private final WorldGuardInterface worldGuard;
 	private final PlotEntranceRepository plotEntrance;
 	private final ApprovedPlotRepository plotApproval;
+	private final PlotVoteRepository voteRepository;
 	private final PlotCalculator calculator;
 	private final Map<String, String> oldPlotPointers = new HashMap<String, String>();
 	private final Map<String, Map<String, String>> oldPlotList = new HashMap<String, Map<String, String>>();
@@ -263,4 +301,6 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 	private RunsafeWorld world;
 	private List<String> ignoredRegions;
 	private Duration limit;
+	private int autoApprove;
+	private Map<String, Integer> voteranks;
 }

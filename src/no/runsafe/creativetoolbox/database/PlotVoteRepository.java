@@ -2,6 +2,7 @@ package no.runsafe.creativetoolbox.database;
 
 import no.runsafe.framework.api.database.IDatabase;
 import no.runsafe.framework.api.database.IRow;
+import no.runsafe.framework.api.database.IValue;
 import no.runsafe.framework.api.database.Repository;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import org.apache.commons.lang.StringUtils;
@@ -9,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PlotVoteRepository extends Repository
 {
@@ -32,6 +34,17 @@ public class PlotVoteRepository extends Repository
 		if (answer == null)
 			return 0;
 		return answer.Integer("tally");
+	}
+
+	public int tally(String region, Map<String, Integer> voteranks)
+	{
+		List<IValue> votes = database.QueryColumn("SELECT `rank` FROM creative_plot_vote WHERE `plot`=?", region);
+		int tally = 0;
+		if (votes != null)
+			for (IValue vote : votes)
+				if (voteranks.containsKey(vote.String().toLowerCase()))
+					tally += voteranks.get(vote.String().toLowerCase());
+		return tally;
 	}
 
 	@Override

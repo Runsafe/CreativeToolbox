@@ -23,3 +23,10 @@ plot:
   origin:
     x: -37
     y: -37
+vote:
+  approved: 50
+  rank:
+    builder: 1
+    superuser: 10
+    moderator: 20
+    admin: 30
