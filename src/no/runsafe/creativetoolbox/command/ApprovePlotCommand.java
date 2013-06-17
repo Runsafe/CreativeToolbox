@@ -4,9 +4,9 @@ import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotApproval;
+import no.runsafe.creativetoolbox.event.PlotApprovedEvent;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
-import no.runsafe.framework.minecraft.event.player.RunsafeCustomEvent;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.joda.time.DateTime;
@@ -43,13 +43,13 @@ public class ApprovePlotCommand extends PlayerAsyncCommand
 		approval.setApproved(DateTime.now());
 		approval.setApprovedBy(executor.getName());
 		approval.setName(plot);
-		approval.setOwners(worldGuard.getOwners(executor.getWorld(), plot));
 		repository.persist(approval);
 		approval = repository.get(plot);
 		if (approval == null)
 			return String.format("Failed approving plot %s!", plot);
 
-		new RunsafeCustomEvent(executor, "creative.plot.approved", approval).Fire();
+		for(String owner : worldGuard.getOwners(executor.getWorld(), plot))
+			new PlotApprovedEvent(executor, owner, approval).Fire();
 
 		console.broadcastColoured("&6The creative plot &l%s&r&6 has been approved.", plot);
 		return null;
