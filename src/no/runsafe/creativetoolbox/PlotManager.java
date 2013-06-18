@@ -238,6 +238,8 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 
 	public boolean claim(RunsafePlayer claimer, RunsafePlayer owner, String plotName, Rectangle2D region)
 	{
+		if (!claimer.getWorld().equals(world))
+			return false;
 		if (worldGuard.createRegion(
 			owner, world, plotName,
 			calculator.getMinPosition(world, region),
