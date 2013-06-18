@@ -91,8 +91,8 @@ public class PlotCalculator implements IConfigurationChanged
 		prototype = new Rectangle2D.Double(
 			configuration.getConfigValueAsDouble("plot.origin.x"),
 			configuration.getConfigValueAsDouble("plot.origin.y"),
-			configuration.getConfigValueAsDouble("plot.w"),
-			configuration.getConfigValueAsDouble("plot.h")
+			configuration.getConfigValueAsDouble("plot.w") + 1 - Double.MIN_VALUE,
+			configuration.getConfigValueAsDouble("plot.h") + 1 - Double.MIN_VALUE
 		);
 		fence = new Rectangle2D.Double(
 			configuration.getConfigValueAsDouble("fence.x"),
@@ -136,12 +136,12 @@ public class PlotCalculator implements IConfigurationChanged
 
 	private long getOriginX(long column)
 	{
-		return (long) (Math.floor(prototype.getX()) + column * (prototype.getWidth() + roadWidth));
+		return (long) (Math.floor(prototype.getX()) + Math.floor(column * (prototype.getWidth() + roadWidth)));
 	}
 
 	private long getOriginY(long row)
 	{
-		return (long) (Math.floor(prototype.getY()) + row * (prototype.getHeight() + roadWidth));
+		return (long) (Math.floor(prototype.getY()) + Math.floor(row * (prototype.getHeight() + roadWidth)));
 	}
 
 	private static AbstractList<Long> range(final long begin, final long end)

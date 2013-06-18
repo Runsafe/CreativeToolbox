@@ -31,7 +31,7 @@ public class ClaimCommand extends PlayerCommand
 			return String.format("This plot is already claimed as %s!", current);
 
 		RunsafeWorld world = player.getWorld();
-		RunsafePlayer owner = RunsafeServer.Instance.getOfflinePlayerExact(params.get("owner"));
+		RunsafePlayer owner = RunsafeServer.Instance.getPlayer(params.get("owner"));
 
 		if (owner instanceof RunsafeAmbiguousPlayer)
 			return owner.toString();
