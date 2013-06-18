@@ -64,9 +64,11 @@ public class RegenerateCommand extends PlayerCommand
 		List<String> candidate = filter.apply(worldGuard.getRegionsAtLocation(executor.getLocation()));
 		Rectangle2D area;
 		if (candidate != null && candidate.size() == 1)
-			area = plotCalculator.pad(worldGuard.getRectangle(executor.getWorld(), candidate.get(0)));
+			area = worldGuard.getRectangle(executor.getWorld(), candidate.get(0));
 		else
-			area = plotCalculator.getPlotArea(executor.getLocation(), regenPadding);
+			area = plotCalculator.getPlotArea(executor.getLocation(), false);
+		if (regenPadding)
+			area = plotCalculator.pad(area);
 		RunsafeLocation minPos = plotCalculator.getMinPosition(executor.getWorld(), area);
 		RunsafeLocation maxPos = plotCalculator.getMaxPosition(executor.getWorld(), area);
 		return worldEdit.regenerate(executor, minPos, maxPos) ? "Plot regenerated." : "Could not regenerate plot.";
