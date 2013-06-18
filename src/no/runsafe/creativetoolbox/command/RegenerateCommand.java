@@ -38,7 +38,7 @@ public class RegenerateCommand extends PlayerCommand
 					generator.setMode(PlotChunkGenerator.Mode.NORMAL);
 				if (arguments[0].equalsIgnoreCase("void"))
 					generator.setMode(PlotChunkGenerator.Mode.VOID);
-				return regenerate(executor);
+				return regenerate(executor, false);
 			}
 			catch (Exception e)
 			{
@@ -50,7 +50,7 @@ public class RegenerateCommand extends PlayerCommand
 				generator.setMode(PlotChunkGenerator.Mode.NORMAL);
 			}
 		}
-		return regenerate(executor);
+		return regenerate(executor, true);
 	}
 
 	@Override
@@ -59,14 +59,14 @@ public class RegenerateCommand extends PlayerCommand
 		return null;
 	}
 
-	private String regenerate(RunsafePlayer executor)
+	private String regenerate(RunsafePlayer executor, boolean regenPadding)
 	{
 		List<String> candidate = filter.apply(worldGuard.getRegionsAtLocation(executor.getLocation()));
 		Rectangle2D area;
 		if (candidate != null && candidate.size() == 1)
 			area = plotCalculator.pad(worldGuard.getRectangle(executor.getWorld(), candidate.get(0)));
 		else
-			area = plotCalculator.getPlotArea(executor.getLocation(), true);
+			area = plotCalculator.getPlotArea(executor.getLocation(), regenPadding);
 		RunsafeLocation minPos = plotCalculator.getMinPosition(executor.getWorld(), area);
 		RunsafeLocation maxPos = plotCalculator.getMaxPosition(executor.getWorld(), area);
 		return worldEdit.regenerate(executor, minPos, maxPos) ? "Plot regenerated." : "Could not regenerate plot.";
