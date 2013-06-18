@@ -91,14 +91,14 @@ public class PlotCalculator implements IConfigurationChanged
 		prototype = new Rectangle2D.Double(
 			configuration.getConfigValueAsDouble("plot.origin.x"),
 			configuration.getConfigValueAsDouble("plot.origin.y"),
-			configuration.getConfigValueAsDouble("plot.w") + 1 - Double.MIN_VALUE,
-			configuration.getConfigValueAsDouble("plot.h") + 1 - Double.MIN_VALUE
+			configuration.getConfigValueAsDouble("plot.w") + 0.9,
+			configuration.getConfigValueAsDouble("plot.h") + 0.9
 		);
 		fence = new Rectangle2D.Double(
 			configuration.getConfigValueAsDouble("fence.x"),
 			configuration.getConfigValueAsDouble("fence.y"),
-			configuration.getConfigValueAsDouble("fence.w"),
-			configuration.getConfigValueAsDouble("fence.h")
+			configuration.getConfigValueAsDouble("fence.w") + 0.9,
+			configuration.getConfigValueAsDouble("fence.h") + 0.9
 		);
 		roadWidth = configuration.getConfigValueAsInt("plot.spacing");
 		groundLevel = configuration.getConfigValueAsInt("plot.groundLevel");
@@ -109,14 +109,14 @@ public class PlotCalculator implements IConfigurationChanged
 	{
 		// Find the offset from the center of the origin plot along the X axis
 		double relativeX = blockX - prototype.getCenterX();
-		return Math.round(relativeX / (prototype.getWidth() + roadWidth));
+		return Math.round(relativeX / (Math.floor(prototype.getWidth()) + roadWidth));
 	}
 
 	public long getRow(long blockZ)
 	{
 		// Find the offset from the center of the origin plot along the Y axis
 		double relativeY = blockZ - prototype.getCenterY();
-		return Math.round(relativeY / (prototype.getHeight() + roadWidth));
+		return Math.round(relativeY / (Math.floor(prototype.getHeight()) + roadWidth));
 	}
 
 	public AbstractList<Long> getColumns()
