@@ -5,6 +5,7 @@ import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.RunsafeWorld;
+import no.runsafe.framework.minecraft.player.RunsafeAmbiguousPlayer;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
@@ -31,6 +32,10 @@ public class ClaimCommand extends PlayerCommand
 
 		RunsafeWorld world = player.getWorld();
 		RunsafePlayer owner = RunsafeServer.Instance.getOfflinePlayerExact(params.get("owner"));
+
+		if (owner instanceof RunsafeAmbiguousPlayer)
+			return owner.toString();
+
 		List<String> existing = worldGuard.getOwnedRegions(owner, world);
 		int n = 1;
 		String plotName = String.format("%s_%%d", owner.getName().toLowerCase());
