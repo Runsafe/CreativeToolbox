@@ -44,11 +44,7 @@ public class ClaimCommand extends PlayerCommand
 		plotName = String.format(plotName, n);
 
 		Rectangle2D region = calculator.getPlotArea(player.getLocation());
-		if (worldGuard.createRegion(
-			owner, world, plotName,
-			calculator.getMinPosition(world, region),
-			calculator.getMaxPosition(world, region)
-		))
+		if (manager.claim(player, owner, plotName, region))
 			return String.format("Successfully claimed the plot \"%s\" for %s!", plotName, owner.getPrettyName());
 
 		return String.format("Unable to claim a new plot for %s :(", owner.getPrettyName());

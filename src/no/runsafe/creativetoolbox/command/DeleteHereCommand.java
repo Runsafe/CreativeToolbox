@@ -2,6 +2,7 @@ package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotFilter;
+import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.creativetoolbox.database.PlotEntranceRepository;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.minecraft.RunsafeLocation;
@@ -15,7 +16,7 @@ import java.util.List;
 
 public class DeleteHereCommand extends PlayerCommand
 {
-	public DeleteHereCommand(PlotFilter filter, WorldGuardInterface worldGuard, WorldEditInterface worldEdit, PlotEntranceRepository entranceRepository, PlotCalculator plotCalculator)
+	public DeleteHereCommand(PlotFilter filter, WorldGuardInterface worldGuard, WorldEditInterface worldEdit, PlotEntranceRepository entranceRepository, PlotCalculator plotCalculator, PlotManager manager)
 	{
 		super("deletehere", "delete the region you are in.", "runsafe.creative.delete");
 		this.filter = filter;
@@ -23,6 +24,7 @@ public class DeleteHereCommand extends PlayerCommand
 		this.worldEdit = worldEdit;
 		this.entrances = entranceRepository;
 		this.plotCalculator = plotCalculator;
+		this.manager = manager;
 	}
 
 	@Override
@@ -34,12 +36,11 @@ public class DeleteHereCommand extends PlayerCommand
 		StringBuilder results = new StringBuilder();
 		for (String region : delete)
 		{
+			manager.delete(region);
 			Rectangle2D area = plotCalculator.pad(worldGuard.getRectangle(executor.getWorld(), region));
 			RunsafeLocation minPos = plotCalculator.getMinPosition(executor.getWorld(), area);
 			RunsafeLocation maxPos = plotCalculator.getMaxPosition(executor.getWorld(), area);
 			worldEdit.regenerate(executor, minPos, maxPos);
-			worldGuard.deleteRegion(filter.getWorld(), region);
-			entrances.delete(region);
 			results.append(String.format("Deleted region '%s'.", region));
 		}
 		return results.toString();
@@ -50,4 +51,5 @@ public class DeleteHereCommand extends PlayerCommand
 	private final WorldEditInterface worldEdit;
 	private final PlotEntranceRepository entrances;
 	private final PlotCalculator plotCalculator;
+	private final PlotManager manager;
 }

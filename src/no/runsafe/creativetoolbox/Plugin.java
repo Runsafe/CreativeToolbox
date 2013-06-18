@@ -7,6 +7,7 @@ import no.runsafe.creativetoolbox.command.OldPlots.NextCommand;
 import no.runsafe.creativetoolbox.command.OldPlots.PreviousCommand;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotEntranceRepository;
+import no.runsafe.creativetoolbox.database.PlotLogRepository;
 import no.runsafe.creativetoolbox.database.PlotVoteRepository;
 import no.runsafe.creativetoolbox.event.InteractEvents;
 import no.runsafe.framework.RunsafeConfigurablePlugin;
@@ -23,6 +24,7 @@ public class Plugin extends RunsafeConfigurablePlugin
 		addComponent(getFirstPluginAPI(WorldGuardInterface.class));
 		addComponent(getFirstPluginAPI(WorldEditInterface.class));
 		addComponent(getFirstPluginAPI(PlotChunkGenerator.class));
+		addComponent(PlotLogRepository.class);
 		addComponent(PlotFilter.class);
 		addComponent(PlotManager.class);
 		addComponent(ApprovedPlotRepository.class);

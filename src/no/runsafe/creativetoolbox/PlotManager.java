@@ -28,8 +28,8 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 		PlotEntranceRepository plotEntranceRepository,
 		ApprovedPlotRepository approvedPlotRepository,
 		PlotVoteRepository voteRepository, PlotCalculator plotCalculator,
-		IDebug debugger
-	)
+		IDebug debugger,
+		PlotLogRepository plotLog)
 	{
 		filter = plotFilter;
 		worldGuard = worldGuardInterface;
@@ -38,6 +38,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 		this.voteRepository = voteRepository;
 		calculator = plotCalculator;
 		console = debugger;
+		this.plotLog = plotLog;
 	}
 
 	public String getCurrentRegionFiltered(RunsafePlayer player)
@@ -235,6 +236,21 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 		return approval;
 	}
 
+	public boolean claim(RunsafePlayer claimer, RunsafePlayer owner, String plotName, Rectangle2D region)
+	{
+		if (worldGuard.createRegion(
+			owner, world, plotName,
+			calculator.getMinPosition(world, region),
+			calculator.getMaxPosition(world, region)
+		))
+		{
+			plotLog.log(plotName, claimer.getName());
+			setTaken(calculator.getColumn((long) region.getCenterX()), calculator.getRow((long) region.getCenterY()));
+			return true;
+		}
+		return false;
+	}
+
 	public void extendPlot(RunsafePlayer player, String target, RunsafeLocation location)
 	{
 		if (!player.getWorld().equals(world))
@@ -267,9 +283,25 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 			}
 		}
 		if (worldGuard.redefineRegion(world, target, targetSize.getMinPosition(), targetSize.getMaxPosition()))
+		{
+			for (long column = targetSize.getMinimumColumn(); column <= targetCol; ++column)
+				for (long row = targetSize.getMinimumRow(); row <= targetRow; ++row)
+					setTaken(column, row);
+
 			player.sendColouredMessage("The plot has been extended!");
+		}
 		else
 			player.sendColouredMessage("An error occurred while extending plot.");
+	}
+
+	public void delete(String region)
+	{
+		Rectangle2D area = worldGuard.getRectangle(world, region);
+		long col = calculator.getColumn((int) area.getCenterX());
+		long row = calculator.getRow((int) area.getCenterY());
+		setFree(col, row);
+		worldGuard.deleteRegion(filter.getWorld(), region);
+		plotEntrance.delete(region);
 	}
 
 	RunsafeWorld getWorld()
@@ -314,6 +346,12 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 		return takenPlots.containsKey(col) && takenPlots.get(col).contains(row);
 	}
 
+	private void setFree(long col, long row)
+	{
+		if (takenPlots.containsKey(col))
+			takenPlots.get(col).remove(row);
+	}
+
 	private void setTaken(long col, long row)
 	{
 		if (!takenPlots.containsKey(col))
@@ -339,6 +377,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 	private final PlotVoteRepository voteRepository;
 	private final PlotCalculator calculator;
 	private final IDebug console;
+	private final PlotLogRepository plotLog;
 	private final Map<String, String> oldPlotPointers = new HashMap<String, String>();
 	private final Map<String, Map<String, String>> oldPlotList = new HashMap<String, Map<String, String>>();
 	private final HashMap<String, Duration> lastSeen = new HashMap<String, Duration>();
