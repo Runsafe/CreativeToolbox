@@ -64,6 +64,12 @@ public class PlotDimension
 		return new PlotDimension(calculator, new Rectangle2D.Double(x, y, w, h), world);
 	}
 
+	@Override
+	public String toString()
+	{
+		return String.format("(%d,%d -> %d,%d)", getMinimumColumn(), getMinimumRow(), getMaximumColumn(), getMaximumRow());
+	}
+
 	private final PlotCalculator calculator;
 	private final Rectangle2D area;
 	private final RunsafeWorld world;

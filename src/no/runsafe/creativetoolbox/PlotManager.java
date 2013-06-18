@@ -3,6 +3,7 @@ package no.runsafe.creativetoolbox;
 import no.runsafe.creativetoolbox.database.*;
 import no.runsafe.creativetoolbox.event.PlotApprovedEvent;
 import no.runsafe.framework.api.IConfiguration;
+import no.runsafe.framework.api.IDebug;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.api.event.plugin.IPluginEnabled;
 import no.runsafe.framework.minecraft.RunsafeLocation;
@@ -26,7 +27,8 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 		WorldGuardInterface worldGuardInterface,
 		PlotEntranceRepository plotEntranceRepository,
 		ApprovedPlotRepository approvedPlotRepository,
-		PlotVoteRepository voteRepository, PlotCalculator plotCalculator
+		PlotVoteRepository voteRepository, PlotCalculator plotCalculator,
+		IDebug debugger
 	)
 	{
 		filter = plotFilter;
@@ -35,6 +37,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 		plotApproval = approvedPlotRepository;
 		this.voteRepository = voteRepository;
 		calculator = plotCalculator;
+		console = debugger;
 	}
 
 	public String getCurrentRegionFiltered(RunsafePlayer player)
@@ -240,12 +243,14 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 		Rectangle2D area = worldGuard.getRectangle(world, target);
 		PlotDimension currentSize = calculator.getPlotDimensions(area);
 		PlotDimension targetSize = currentSize.expandToInclude(calculator.getPlotArea(location));
+		ScanTakenPlots();
 		long firstCol = currentSize.getMinimumColumn();
 		long lastCol = currentSize.getMaximumColumn();
 		long firstRow = currentSize.getMinimumRow();
 		long lastRow = currentSize.getMaximumRow();
 		long targetCol = targetSize.getMaximumColumn();
 		long targetRow = targetSize.getMaximumRow();
+		console.fine("Extending plot %s to %s", currentSize, targetSize);
 		for (long column = targetSize.getMinimumColumn(); column <= targetCol; ++column)
 		{
 			for (long row = targetSize.getMinimumRow(); row <= targetRow; ++row)
@@ -255,6 +260,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 
 				if (isTaken(column, row))
 				{
+					console.fine("Plot (%d,%d) is taken!", column, row);
 					player.sendColouredMessage("Unable to extend plot here, overlap detected!");
 					return;
 				}
@@ -332,6 +338,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 	private final ApprovedPlotRepository plotApproval;
 	private final PlotVoteRepository voteRepository;
 	private final PlotCalculator calculator;
+	private final IDebug console;
 	private final Map<String, String> oldPlotPointers = new HashMap<String, String>();
 	private final Map<String, Map<String, String>> oldPlotList = new HashMap<String, Map<String, String>>();
 	private final HashMap<String, Duration> lastSeen = new HashMap<String, Duration>();
