@@ -136,12 +136,12 @@ public class PlotCalculator implements IConfigurationChanged
 
 	private long getOriginX(long column)
 	{
-		return (long) (prototype.getX() + column * (prototype.getWidth() + roadWidth));
+		return (long) (Math.floor(prototype.getX()) + column * (prototype.getWidth() + roadWidth));
 	}
 
 	private long getOriginY(long row)
 	{
-		return (long) (prototype.getY() + row * (prototype.getHeight() + roadWidth));
+		return (long) (Math.floor(prototype.getY()) + row * (prototype.getHeight() + roadWidth));
 	}
 
 	private static AbstractList<Long> range(final long begin, final long end)
