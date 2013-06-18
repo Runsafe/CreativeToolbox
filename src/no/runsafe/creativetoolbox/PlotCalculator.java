@@ -129,6 +129,11 @@ public class PlotCalculator implements IConfigurationChanged
 		return range(getRow((long) fence.getMinY()), getRow((long) fence.getMaxY()));
 	}
 
+	public PlotDimension getPlotDimensions(Rectangle2D area)
+	{
+		return new PlotDimension(this, area, world);
+	}
+
 	private long getOriginX(long column)
 	{
 		return (long) (prototype.getX() + column * (prototype.getWidth() + roadWidth));

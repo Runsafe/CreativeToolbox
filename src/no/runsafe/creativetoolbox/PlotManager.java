@@ -232,6 +232,40 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 		return approval;
 	}
 
+	public void extendPlot(RunsafePlayer player, String target, RunsafeLocation location)
+	{
+		if (!player.getWorld().equals(world))
+			return;
+
+		Rectangle2D area = worldGuard.getRectangle(world, target);
+		PlotDimension currentSize = calculator.getPlotDimensions(area);
+		PlotDimension targetSize = currentSize.expandToInclude(calculator.getPlotArea(location));
+		long firstCol = currentSize.getMinimumColumn();
+		long lastCol = currentSize.getMaximumColumn();
+		long firstRow = currentSize.getMinimumRow();
+		long lastRow = currentSize.getMaximumRow();
+		long targetCol = targetSize.getMaximumColumn();
+		long targetRow = targetSize.getMaximumRow();
+		for (long column = targetSize.getMinimumColumn(); column <= targetCol; ++column)
+		{
+			for (long row = targetSize.getMinimumRow(); row <= targetRow; ++row)
+			{
+				if (column >= firstCol && column <= lastCol && row >= firstRow && row <= lastRow)
+					continue;
+
+				if (isTaken(column, row))
+				{
+					player.sendColouredMessage("Unable to extend plot here, overlap detected!");
+					return;
+				}
+			}
+		}
+		if (worldGuard.redefineRegion(world, target, targetSize.getMinPosition(), targetSize.getMaxPosition()))
+			player.sendColouredMessage("The plot has been extended!");
+		else
+			player.sendColouredMessage("An error occurred while extending plot.");
+	}
+
 	RunsafeWorld getWorld()
 	{
 		return world;
@@ -267,6 +301,11 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 					setTaken(col, row);
 				}
 			}
+	}
+
+	private boolean isTaken(long col, long row)
+	{
+		return takenPlots.containsKey(col) && takenPlots.get(col).contains(row);
 	}
 
 	private void setTaken(long col, long row)

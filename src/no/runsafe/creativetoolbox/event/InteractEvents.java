@@ -1,6 +1,7 @@
-package no.runsafe.creativetoolbox.events;
+package no.runsafe.creativetoolbox.event;
 
 import no.runsafe.creativetoolbox.PlotFilter;
+import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.creativetoolbox.database.PlotVoteRepository;
@@ -18,21 +19,22 @@ import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEntityEvent, IConfigurationChanged, IAsyncEvent
 {
 	public InteractEvents(
 		PlotFilter plotFilter,
 		WorldGuardInterface worldGuard,
-		ApprovedPlotRepository plotRepository,
+		PlotManager manager, ApprovedPlotRepository plotRepository,
 		PlotVoteRepository votes)
 	{
 		this.worldGuardInterface = worldGuard;
 		this.plotFilter = plotFilter;
+		this.manager = manager;
 		this.plotRepository = plotRepository;
 		this.votes = votes;
 	}
@@ -40,6 +42,13 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 	@Override
 	public boolean OnPlayerRightClick(RunsafePlayer player, RunsafeMeta itemInHand, RunsafeBlock block)
 	{
+		if (extensions.containsKey(player.getName()))
+		{
+			String target = extensions.get(player.getName());
+			extensions.remove(player.getName());
+			manager.extendPlot(player, target, block.getLocation());
+			return false;
+		}
 		if (itemInHand != null && itemInHand.getItemId() == listItem)
 		{
 			this.listPlotsByLocation(block.getLocation(), player);
@@ -65,6 +74,11 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 	public void OnConfigurationChanged(IConfiguration configuration)
 	{
 		listItem = configuration.getConfigValueAsInt("list_item");
+	}
+
+	public void startPlotExtension(RunsafePlayer player, String plot)
+	{
+		extensions.put(player.getName(), plot);
 	}
 
 	private void listPlotsByPlayer(RunsafePlayer checkPlayer, RunsafePlayer triggerPlayer)
@@ -154,8 +168,10 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 
 	private final WorldGuardInterface worldGuardInterface;
 	private int listItem;
+	private final PlotManager manager;
 	private final PlotFilter plotFilter;
 	private final ApprovedPlotRepository plotRepository;
 	private final PlotVoteRepository votes;
 	private final DateTimeFormatter dateFormat = DateTimeFormat.forPattern("dd.MM.YYYY");
+	private final ConcurrentHashMap<String, String> extensions = new ConcurrentHashMap<String, String>();
 }

@@ -8,7 +8,7 @@ import no.runsafe.creativetoolbox.command.OldPlots.PreviousCommand;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotEntranceRepository;
 import no.runsafe.creativetoolbox.database.PlotVoteRepository;
-import no.runsafe.creativetoolbox.events.InteractEvents;
+import no.runsafe.creativetoolbox.event.InteractEvents;
 import no.runsafe.framework.RunsafeConfigurablePlugin;
 import no.runsafe.framework.api.command.Command;
 import no.runsafe.worldeditbridge.WorldEditInterface;
@@ -57,5 +57,6 @@ public class Plugin extends RunsafeConfigurablePlugin
 		toolbox.addSubCommand(getInstance(RegenerateCommand.class));
 		toolbox.addSubCommand(getInstance(VoteCommand.class));
 		toolbox.addSubCommand(getInstance(ClaimCommand.class));
+		toolbox.addSubCommand(getInstance(ExtendCommand.class));
 	}
 }
