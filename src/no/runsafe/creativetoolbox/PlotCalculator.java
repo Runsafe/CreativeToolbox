@@ -91,14 +91,14 @@ public class PlotCalculator implements IConfigurationChanged
 		prototype = new Rectangle2D.Double(
 			configuration.getConfigValueAsDouble("plot.origin.x"),
 			configuration.getConfigValueAsDouble("plot.origin.y"),
-			configuration.getConfigValueAsDouble("plot.w") + 0.9,
-			configuration.getConfigValueAsDouble("plot.h") + 0.9
+			configuration.getConfigValueAsDouble("plot.w"),
+			configuration.getConfigValueAsDouble("plot.h")
 		);
 		fence = new Rectangle2D.Double(
 			configuration.getConfigValueAsDouble("fence.x"),
 			configuration.getConfigValueAsDouble("fence.y"),
-			configuration.getConfigValueAsDouble("fence.w") + 0.9,
-			configuration.getConfigValueAsDouble("fence.h") + 0.9
+			configuration.getConfigValueAsDouble("fence.w"),
+			configuration.getConfigValueAsDouble("fence.h")
 		);
 		roadWidth = configuration.getConfigValueAsInt("plot.spacing");
 		groundLevel = configuration.getConfigValueAsInt("plot.groundLevel");
@@ -109,14 +109,14 @@ public class PlotCalculator implements IConfigurationChanged
 	{
 		// Find the offset from the center of the origin plot along the X axis
 		double relativeX = blockX - prototype.getCenterX();
-		return Math.round(relativeX / (Math.floor(prototype.getWidth()) + roadWidth));
+		return Math.round(relativeX / (prototype.getWidth() + roadWidth));
 	}
 
 	public long getRow(long blockZ)
 	{
 		// Find the offset from the center of the origin plot along the Y axis
 		double relativeY = blockZ - prototype.getCenterY();
-		return Math.round(relativeY / (Math.floor(prototype.getHeight()) + roadWidth));
+		return Math.round(relativeY / (prototype.getHeight() + roadWidth));
 	}
 
 	public AbstractList<Long> getColumns()
@@ -136,12 +136,12 @@ public class PlotCalculator implements IConfigurationChanged
 
 	private long getOriginX(long column)
 	{
-		return (long) (Math.floor(prototype.getX()) + Math.floor(column * (prototype.getWidth() + roadWidth)));
+		return (long) (prototype.getX() + column * (prototype.getWidth() + roadWidth));
 	}
 
 	private long getOriginY(long row)
 	{
-		return (long) (Math.floor(prototype.getY()) + Math.floor(row * (prototype.getHeight() + roadWidth)));
+		return (long) (prototype.getY() + row * (prototype.getHeight() + roadWidth));
 	}
 
 	private static AbstractList<Long> range(final long begin, final long end)
