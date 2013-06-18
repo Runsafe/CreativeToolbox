@@ -12,6 +12,7 @@ import no.runsafe.creativetoolbox.event.InteractEvents;
 import no.runsafe.framework.RunsafeConfigurablePlugin;
 import no.runsafe.framework.api.command.Command;
 import no.runsafe.worldeditbridge.WorldEditInterface;
+import no.runsafe.worldgenerator.PlotChunkGenerator;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 public class Plugin extends RunsafeConfigurablePlugin
@@ -21,6 +22,7 @@ public class Plugin extends RunsafeConfigurablePlugin
 	{
 		addComponent(getFirstPluginAPI(WorldGuardInterface.class));
 		addComponent(getFirstPluginAPI(WorldEditInterface.class));
+		addComponent(getFirstPluginAPI(PlotChunkGenerator.class));
 		addComponent(PlotFilter.class);
 		addComponent(PlotManager.class);
 		addComponent(ApprovedPlotRepository.class);

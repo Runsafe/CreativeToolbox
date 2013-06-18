@@ -9,12 +9,14 @@
     <property name="lib.dir" value="${framework.dir}/workspace/lib"/>
     <property name="worldedit.dir" value="../../WorldEditBridge/lastStable/archive/build/jar"/>
     <property name="worldguard.dir" value="../../WorldGuardBridge/lastStable/archive/build/jar"/>
+    <property name="plotgenerator.dir" value="../../PlotGenerator/lastStable/archive/build/jar"/>
 
     <path id="classpath">
         <fileset dir="${runsafe.dir}" includes="framework.jar"/>
         <fileset dir="${lib.dir}" includes="*.jar"/>
         <fileset dir="${worldedit.dir}" includes="*.jar"/>
         <fileset dir="${worldguard.dir}" includes="*.jar"/>
+        <fileset dir="${plotgenerator.dir}" includes="*.jar"/>
     </path>
 
     <target name="clean">
