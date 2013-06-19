@@ -197,8 +197,8 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 	public boolean voteValid(RunsafePlayer player, String region)
 	{
 		return player.getWorld().equals(world)
-			&& !worldGuard.getOwners(world, region).contains(player.getName())
-			&& !worldGuard.getMembers(world, region).contains(player.getName());
+			&& !worldGuard.getOwners(world, region).contains(player.getName().toLowerCase())
+			&& !worldGuard.getMembers(world, region).contains(player.getName().toLowerCase());
 	}
 
 	public boolean vote(RunsafePlayer player, String region)
