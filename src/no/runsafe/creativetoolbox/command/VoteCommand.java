@@ -18,6 +18,9 @@ public class VoteCommand extends PlayerCommand
 	public String OnExecute(RunsafePlayer player, HashMap<String, String> stringStringHashMap)
 	{
 		String region = manager.getCurrentRegionFiltered(player);
+		if (region == null)
+			return "There is no plot here.";
+
 		if (!manager.voteValid(player, region))
 			return "You are not allowed to vote for this plot.";
 
