@@ -40,7 +40,7 @@ public class DeleteHereCommand extends PlayerCommand
 			RunsafeLocation minPos = plotCalculator.getMinPosition(executor.getWorld(), area);
 			RunsafeLocation maxPos = plotCalculator.getMaxPosition(executor.getWorld(), area);
 			manager.delete(region);
-			worldEdit.regenerate(executor, minPos, maxPos);
+			worldEdit.regenerate(executor, minPos, maxPos, false);
 			results.append(String.format("Deleted region '%s'.", region));
 		}
 		return results.toString();
