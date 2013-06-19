@@ -3,7 +3,7 @@ package no.runsafe.creativetoolbox;
 import no.runsafe.creativetoolbox.database.*;
 import no.runsafe.creativetoolbox.event.PlotApprovedEvent;
 import no.runsafe.framework.api.IConfiguration;
-import no.runsafe.framework.api.IDebug;
+import no.runsafe.framework.api.IOutput;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.api.event.plugin.IPluginEnabled;
 import no.runsafe.framework.minecraft.RunsafeLocation;
@@ -28,7 +28,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 		PlotEntranceRepository plotEntranceRepository,
 		ApprovedPlotRepository approvedPlotRepository,
 		PlotVoteRepository voteRepository, PlotCalculator plotCalculator,
-		IDebug debugger,
+		IOutput debugger,
 		PlotLogRepository plotLog)
 	{
 		filter = plotFilter;
@@ -224,6 +224,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 		approval = plotApproval.get(plot);
 		if (approval != null)
 		{
+			console.broadcastColoured("&6The creative plot &l%s&r&6 has been approved.", plot);
 			for (String owner : worldGuard.getOwners(world, plot))
 			{
 				int approved = 0;
@@ -379,7 +380,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 	private final ApprovedPlotRepository plotApproval;
 	private final PlotVoteRepository voteRepository;
 	private final PlotCalculator calculator;
-	private final IDebug console;
+	private final IOutput console;
 	private final PlotLogRepository plotLog;
 	private final Map<String, String> oldPlotPointers = new HashMap<String, String>();
 	private final Map<String, Map<String, String>> oldPlotList = new HashMap<String, Map<String, String>>();

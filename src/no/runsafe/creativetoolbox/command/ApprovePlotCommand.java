@@ -33,7 +33,6 @@ public class ApprovePlotCommand extends PlayerAsyncCommand
 		if (approval == null)
 			return String.format("Failed approving plot %s!", plot);
 
-		console.broadcastColoured("&6The creative plot &l%s&r&6 has been approved.", plot);
 		return null;
 	}
 
