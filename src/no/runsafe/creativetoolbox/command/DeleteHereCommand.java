@@ -36,10 +36,10 @@ public class DeleteHereCommand extends PlayerCommand
 		StringBuilder results = new StringBuilder();
 		for (String region : delete)
 		{
-			manager.delete(region);
 			Rectangle2D area = plotCalculator.pad(worldGuard.getRectangle(executor.getWorld(), region));
 			RunsafeLocation minPos = plotCalculator.getMinPosition(executor.getWorld(), area);
 			RunsafeLocation maxPos = plotCalculator.getMaxPosition(executor.getWorld(), area);
+			manager.delete(region);
 			worldEdit.regenerate(executor, minPos, maxPos);
 			results.append(String.format("Deleted region '%s'.", region));
 		}
