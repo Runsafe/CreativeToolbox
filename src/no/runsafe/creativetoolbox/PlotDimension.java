@@ -46,22 +46,12 @@ public class PlotDimension
 
 	public PlotDimension expandToInclude(Rectangle2D including)
 	{
-		double x = area.getMinX();
-		double y = area.getMinY();
-		double w = area.getWidth();
-		double h = area.getHeight();
+		double newX = Math.min(area.getMinX(), including.getMinX());
+		double newY = Math.min(area.getMinY(), including.getMinY());
+		double newW = Math.max(area.getMaxX(), including.getMaxX()) - newX;
+		double newH = Math.max(area.getMaxY(), including.getMaxY()) - newY;
 
-		if (including.getMinX() < x)
-			x = including.getMinX();
-		else if (including.getMaxX() > x + w)
-			w = including.getMaxX() - x;
-
-		if (including.getMinY() < y)
-			y = including.getMinY();
-		else if (including.getMaxY() > y + h)
-			h = including.getMaxY() - y;
-
-		return new PlotDimension(calculator, new Rectangle2D.Double(x, y, w, h), world);
+		return new PlotDimension(calculator, new Rectangle2D.Double(newX, newY, newW, newH), world);
 	}
 
 	@Override
