@@ -21,6 +21,8 @@ public class FindCommand extends AsyncCommand
 	public String OnAsyncExecute(ICommandExecutor executor, HashMap<String, String> param)
 	{
 		List<String> hits = tagRepository.findPlots(param.get("lookup"));
+		if (hits == null || hits.isEmpty())
+			return String.format("No plots have been tagged with %s..", param.get("lookup"));
 		if (hits.size() > 20)
 			return String.format("Too many hits (%d).", hits.size());
 		return String.format("Found these plots: %s", Strings.join(hits, ", "));
