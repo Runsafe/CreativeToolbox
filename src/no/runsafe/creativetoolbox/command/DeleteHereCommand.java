@@ -2,6 +2,8 @@ package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotFilter;
+import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
+import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.creativetoolbox.event.SyncInteractEvents;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
@@ -20,13 +22,14 @@ public class DeleteHereCommand extends PlayerAsyncCommand
 		WorldGuardInterface worldGuard,
 		PlotCalculator plotCalculator,
 		SyncInteractEvents interactEvents,
-		IScheduler scheduler)
+		IScheduler scheduler, ApprovedPlotRepository approvedPlotRepository)
 	{
 		super("deletehere", "delete the region you are in.", "runsafe.creative.delete", scheduler);
 		this.filter = filter;
 		this.worldGuard = worldGuard;
 		this.plotCalculator = plotCalculator;
 		this.interactEvents = interactEvents;
+		this.approvedPlotRepository = approvedPlotRepository;
 	}
 
 	@Override
@@ -38,6 +41,10 @@ public class DeleteHereCommand extends PlayerAsyncCommand
 		Map<String, Rectangle2D> regions = new HashMap<String, Rectangle2D>();
 		for (String region : delete)
 		{
+			PlotApproval approval = approvedPlotRepository.get(region);
+			if (approval != null && approval.getApproved() != null)
+				return "You may not delete an approved plot!";
+
 			Rectangle2D area = plotCalculator.pad(worldGuard.getRectangle(executor.getWorld(), region));
 			regions.put(region, area);
 		}
@@ -49,4 +56,5 @@ public class DeleteHereCommand extends PlayerAsyncCommand
 	private final WorldGuardInterface worldGuard;
 	private final PlotCalculator plotCalculator;
 	private final SyncInteractEvents interactEvents;
+	private final ApprovedPlotRepository approvedPlotRepository;
 }

@@ -2,6 +2,8 @@ package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotFilter;
+import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
+import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.creativetoolbox.event.SyncInteractEvents;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
@@ -20,13 +22,14 @@ public class RegenerateCommand extends PlayerAsyncCommand
 		PlotCalculator calculator,
 		PlotFilter filter,
 		SyncInteractEvents interactEvents,
-		IScheduler scheduler)
+		IScheduler scheduler, ApprovedPlotRepository approvedPlotRepository)
 	{
 		super("regenerate", "Regenerates the plot you are currently in.", "runsafe.creative.regenerate", scheduler);
 		this.worldGuard = worldGuard;
 		this.filter = filter;
 		plotCalculator = calculator;
 		this.interactEvents = interactEvents;
+		this.approvedPlotRepository = approvedPlotRepository;
 	}
 
 	@Override
@@ -35,7 +38,12 @@ public class RegenerateCommand extends PlayerAsyncCommand
 		List<String> candidate = filter.apply(worldGuard.getRegionsAtLocation(executor.getLocation()));
 		Rectangle2D area;
 		if (candidate != null && candidate.size() == 1)
+		{
+			PlotApproval approval = approvedPlotRepository.get(candidate.get(0));
+			if (approval != null && approval.getApproved() != null)
+				return "You may not regenerate an approved plot!";
 			area = worldGuard.getRectangle(executor.getWorld(), candidate.get(0));
+		}
 		else
 			area = plotCalculator.getPlotArea(executor.getLocation(), false);
 
@@ -73,4 +81,5 @@ public class RegenerateCommand extends PlayerAsyncCommand
 	private final PlotCalculator plotCalculator;
 	private final PlotFilter filter;
 	private final SyncInteractEvents interactEvents;
+	private final ApprovedPlotRepository approvedPlotRepository;
 }
