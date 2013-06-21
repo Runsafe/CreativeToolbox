@@ -2,54 +2,51 @@ package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotFilter;
-import no.runsafe.creativetoolbox.PlotManager;
-import no.runsafe.creativetoolbox.database.PlotEntranceRepository;
-import no.runsafe.framework.api.command.player.PlayerCommand;
-import no.runsafe.framework.minecraft.RunsafeLocation;
+import no.runsafe.creativetoolbox.event.SyncInteractEvents;
+import no.runsafe.framework.api.IScheduler;
+import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
-import no.runsafe.worldeditbridge.WorldEditInterface;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class DeleteHereCommand extends PlayerCommand
+public class DeleteHereCommand extends PlayerAsyncCommand
 {
-	public DeleteHereCommand(PlotFilter filter, WorldGuardInterface worldGuard, WorldEditInterface worldEdit, PlotEntranceRepository entranceRepository, PlotCalculator plotCalculator, PlotManager manager)
+	public DeleteHereCommand(
+		PlotFilter filter,
+		WorldGuardInterface worldGuard,
+		PlotCalculator plotCalculator,
+		SyncInteractEvents interactEvents,
+		IScheduler scheduler)
 	{
-		super("deletehere", "delete the region you are in.", "runsafe.creative.delete");
+		super("deletehere", "delete the region you are in.", "runsafe.creative.delete", scheduler);
 		this.filter = filter;
 		this.worldGuard = worldGuard;
-		this.worldEdit = worldEdit;
-		this.entrances = entranceRepository;
 		this.plotCalculator = plotCalculator;
-		this.manager = manager;
+		this.interactEvents = interactEvents;
 	}
 
 	@Override
-	public String OnExecute(RunsafePlayer executor, HashMap<String, String> parameters)
+	public String OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters)
 	{
 		List<String> delete = filter.apply(worldGuard.getRegionsAtLocation(executor.getLocation()));
 		if (delete == null || delete.size() == 0)
 			return "No regions to delete!";
-		StringBuilder results = new StringBuilder();
+		Map<String, Rectangle2D> regions = new HashMap<String, Rectangle2D>();
 		for (String region : delete)
 		{
 			Rectangle2D area = plotCalculator.pad(worldGuard.getRectangle(executor.getWorld(), region));
-			RunsafeLocation minPos = plotCalculator.getMinPosition(executor.getWorld(), area);
-			RunsafeLocation maxPos = plotCalculator.getMaxPosition(executor.getWorld(), area);
-			manager.delete(region);
-			worldEdit.regenerate(executor, minPos, maxPos, false);
-			results.append(String.format("Deleted region '%s'.", region));
+			regions.put(region, area);
 		}
-		return results.toString();
+		interactEvents.startDeletion(executor, regions);
+		return String.format("Right click ground to confirm deletion of %d region%s.", regions.size(), regions.size() > 1 ? "s" : "");
 	}
 
 	private final PlotFilter filter;
 	private final WorldGuardInterface worldGuard;
-	private final WorldEditInterface worldEdit;
-	private final PlotEntranceRepository entrances;
 	private final PlotCalculator plotCalculator;
-	private final PlotManager manager;
+	private final SyncInteractEvents interactEvents;
 }

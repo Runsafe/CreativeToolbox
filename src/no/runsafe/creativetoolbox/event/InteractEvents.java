@@ -30,7 +30,8 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 	public InteractEvents(
 		PlotFilter plotFilter,
 		WorldGuardInterface worldGuard,
-		PlotManager manager, ApprovedPlotRepository plotRepository,
+		PlotManager manager,
+		ApprovedPlotRepository plotRepository,
 		PlotVoteRepository votes)
 	{
 		this.worldGuardInterface = worldGuard;
@@ -50,6 +51,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 			manager.extendPlot(player, target, block.getLocation());
 			return false;
 		}
+
 		if (itemInHand != null && itemInHand.getItemId() == listItem)
 		{
 			this.listPlotsByLocation(block.getLocation(), player);

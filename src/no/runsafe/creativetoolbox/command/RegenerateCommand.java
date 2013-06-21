@@ -2,10 +2,10 @@ package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotFilter;
-import no.runsafe.framework.api.command.player.PlayerCommand;
-import no.runsafe.framework.minecraft.RunsafeLocation;
+import no.runsafe.creativetoolbox.event.SyncInteractEvents;
+import no.runsafe.framework.api.IScheduler;
+import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
-import no.runsafe.worldeditbridge.WorldEditInterface;
 import no.runsafe.worldgenerator.PlotChunkGenerator;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
@@ -13,53 +13,24 @@ import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.List;
 
-public class RegenerateCommand extends PlayerCommand
+public class RegenerateCommand extends PlayerAsyncCommand
 {
-	public RegenerateCommand(WorldEditInterface worldEdit, WorldGuardInterface worldGuard, PlotCalculator calculator, PlotFilter filter, PlotChunkGenerator generator)
+	public RegenerateCommand(
+		WorldGuardInterface worldGuard,
+		PlotCalculator calculator,
+		PlotFilter filter,
+		SyncInteractEvents interactEvents,
+		IScheduler scheduler)
 	{
-		super("regenerate", "Regenerates the plot you are currently in.", "runsafe.creative.regenerate");
-		this.worldEdit = worldEdit;
+		super("regenerate", "Regenerates the plot you are currently in.", "runsafe.creative.regenerate", scheduler);
 		this.worldGuard = worldGuard;
 		this.filter = filter;
 		plotCalculator = calculator;
-		this.generator = generator;
+		this.interactEvents = interactEvents;
 	}
 
 	@Override
-	public String OnExecute(RunsafePlayer executor, HashMap<String, String> parameters, String[] arguments)
-	{
-		if (arguments != null && arguments.length > 0)
-		{
-			try
-			{
-				if (arguments[0].equalsIgnoreCase("flat"))
-					generator.setMode(PlotChunkGenerator.Mode.FLAT);
-				if (arguments[0].equalsIgnoreCase("normal"))
-					generator.setMode(PlotChunkGenerator.Mode.NORMAL);
-				if (arguments[0].equalsIgnoreCase("void"))
-					generator.setMode(PlotChunkGenerator.Mode.VOID);
-				return regenerate(executor, false);
-			}
-			catch (Exception e)
-			{
-				console.logException(e);
-				return "Internal error in command!";
-			}
-			finally
-			{
-				generator.setMode(PlotChunkGenerator.Mode.NORMAL);
-			}
-		}
-		return regenerate(executor, true);
-	}
-
-	@Override
-	public String OnExecute(RunsafePlayer player, HashMap<String, String> stringStringHashMap)
-	{
-		return null;
-	}
-
-	private String regenerate(RunsafePlayer executor, boolean regenPadding)
+	public String OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters, String[] arguments)
 	{
 		List<String> candidate = filter.apply(worldGuard.getRegionsAtLocation(executor.getLocation()));
 		Rectangle2D area;
@@ -67,16 +38,39 @@ public class RegenerateCommand extends PlayerCommand
 			area = worldGuard.getRectangle(executor.getWorld(), candidate.get(0));
 		else
 			area = plotCalculator.getPlotArea(executor.getLocation(), false);
-		if (regenPadding)
-			area = plotCalculator.pad(area);
-		RunsafeLocation minPos = plotCalculator.getMinPosition(executor.getWorld(), area);
-		RunsafeLocation maxPos = plotCalculator.getMaxPosition(executor.getWorld(), area);
-		return worldEdit.regenerate(executor, minPos, maxPos, false) ? "Plot regenerated." : "Could not regenerate plot.";
+
+		if (arguments != null && arguments.length > 0)
+		{
+			PlotChunkGenerator.Mode mode = getMode(arguments[0]);
+			if (mode == null)
+				return String.format("Unknown generator, %s!", arguments[0]);
+			interactEvents.startRegeneration(executor, area, mode);
+		}
+		else
+			interactEvents.startRegeneration(executor, plotCalculator.pad(area), null);
+
+		return "Right click the ground to confirm regeneration.";
 	}
 
-	private final WorldEditInterface worldEdit;
+	@Override
+	public String OnAsyncExecute(RunsafePlayer player, HashMap<String, String> parameters)
+	{
+		return null;
+	}
+
+	private PlotChunkGenerator.Mode getMode(String value)
+	{
+		if (value.equalsIgnoreCase("flat"))
+			return PlotChunkGenerator.Mode.FLAT;
+		if (value.equalsIgnoreCase("normal"))
+			return PlotChunkGenerator.Mode.NORMAL;
+		if (value.equalsIgnoreCase("void"))
+			return PlotChunkGenerator.Mode.VOID;
+		return null;
+	}
+
 	private final WorldGuardInterface worldGuard;
 	private final PlotCalculator plotCalculator;
 	private final PlotFilter filter;
-	private final PlotChunkGenerator generator;
+	private final SyncInteractEvents interactEvents;
 }
