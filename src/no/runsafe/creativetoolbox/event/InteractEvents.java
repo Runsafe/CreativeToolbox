@@ -17,6 +17,7 @@ import no.runsafe.framework.minecraft.event.player.RunsafePlayerInteractEntityEv
 import no.runsafe.framework.minecraft.item.meta.RunsafeMeta;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
+import org.bukkit.craftbukkit.libs.joptsimple.internal.Strings;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -92,8 +93,10 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 		List<String> regions = plotFilter.apply(worldGuardInterface.getOwnedRegions(checkPlayer, checkPlayer.getWorld()));
 
 		if (!regions.isEmpty())
-			for (String regionName : regions)
-				this.listRegion(regionName, triggerPlayer, true);
+			triggerPlayer.sendColouredMessage(Strings.join(
+				manager.tag(triggerPlayer, regions),
+				"\n"
+			));
 		else if (triggerPlayer.hasPermission("runsafe.creative.list.showname"))
 			triggerPlayer.sendMessage(String.format("%s does not own any regions.", checkPlayer.getPrettyName()));
 		else
@@ -112,12 +115,12 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 
 		if (regions != null && !regions.isEmpty())
 			for (String regionName : regions)
-				this.listRegion(regionName, player, false);
+				this.listRegion(regionName, player);
 		else
 			player.sendMessage("No regions found at this point.");
 	}
 
-	private void listRegion(String regionName, RunsafePlayer player, Boolean simple)
+	private void listRegion(String regionName, RunsafePlayer player)
 	{
 		if (player.hasPermission("runsafe.creative.approval.read"))
 		{
@@ -137,32 +140,29 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 				player.sendColouredMessage("  This plot has %d votes!", tally);
 		}
 
-		if (!simple)
+		Set<String> owners = worldGuardInterface.getOwners(player.getWorld(), regionName);
+		Set<String> members = worldGuardInterface.getMembers(player.getWorld(), regionName);
+
+		for (String owner : owners)
 		{
-			Set<String> owners = worldGuardInterface.getOwners(player.getWorld(), regionName);
-			Set<String> members = worldGuardInterface.getMembers(player.getWorld(), regionName);
-
-			for (String owner : owners)
+			RunsafePlayer theOwner = RunsafeServer.Instance.getPlayer(owner);
+			if (theOwner != null)
 			{
-				RunsafePlayer theOwner = RunsafeServer.Instance.getPlayer(owner);
-				if (theOwner != null)
-				{
-					player.sendColouredMessage("     Owner: " + theOwner.getPrettyName());
+				player.sendColouredMessage("     Owner: " + theOwner.getPrettyName());
 
-					if (player.hasPermission("runsafe.creative.list.seen"))
-					{
-						String seen = theOwner.getLastSeen(player);
-						player.sendColouredMessage("     " + (seen == null ? "Player never seen" : seen));
-					}
+				if (player.hasPermission("runsafe.creative.list.seen"))
+				{
+					String seen = theOwner.getLastSeen(player);
+					player.sendColouredMessage("     " + (seen == null ? "Player never seen" : seen));
 				}
 			}
+		}
 
-			for (String member : members)
-			{
-				RunsafePlayer theMember = RunsafeServer.Instance.getPlayer(member);
-				if (theMember != null)
-					player.sendColouredMessage("     Member: " + theMember.getPrettyName());
-			}
+		for (String member : members)
+		{
+			RunsafePlayer theMember = RunsafeServer.Instance.getPlayer(member);
+			if (theMember != null)
+				player.sendColouredMessage("     Member: " + theMember.getPrettyName());
 		}
 	}
 

@@ -1,6 +1,7 @@
 package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.creativetoolbox.PlotFilter;
+import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.minecraft.RunsafeServer;
@@ -17,12 +18,13 @@ public class ListCommand extends PlayerAsyncCommand
 		RunsafeServer server,
 		WorldGuardInterface worldGuard,
 		PlotFilter filter,
-		IScheduler scheduler)
+		IScheduler scheduler, PlotManager manager)
 	{
 		super("list", "lists plots owned by a player.", "runsafe.creative.list", scheduler, "playerName");
 		this.server = server;
 		this.worldGuard = worldGuard;
 		this.filter = filter;
+		this.manager = manager;
 	}
 
 	@Override
@@ -36,7 +38,10 @@ public class ListCommand extends PlayerAsyncCommand
 
 		RunsafePlayer player = server.getPlayer(parameters.get("playerName"));
 
-		List<String> property = filter.apply(worldGuard.getOwnedRegions(player, filter.getWorld()));
+		List<String> property = manager.tag(
+			executor,
+			filter.apply(worldGuard.getOwnedRegions(player, filter.getWorld()))
+		);
 		return String.format(
 			"%d regions owned by %s:\n  %s",
 			property.size(),
@@ -48,4 +53,5 @@ public class ListCommand extends PlayerAsyncCommand
 	private final RunsafeServer server;
 	private final WorldGuardInterface worldGuard;
 	private final PlotFilter filter;
+	private final PlotManager manager;
 }

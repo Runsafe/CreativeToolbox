@@ -11,10 +11,13 @@ import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.RunsafeWorld;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
+import org.bukkit.craftbukkit.libs.joptsimple.internal.Strings;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.Period;
 import org.joda.time.PeriodType;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.PeriodFormat;
 
 import java.awt.geom.Rectangle2D;
@@ -214,6 +217,34 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 		return voted;
 	}
 
+	public List<String> tag(RunsafePlayer player, List<String> plotNames)
+	{
+		if (plotNames == null)
+			return null;
+		boolean approval = player.hasPermission("runsafe.creative.approval.read");
+		boolean votes = player.hasPermission("runsafe.creative.vote.tally");
+		List<String> tagged = new ArrayList<String>();
+		for (String plot : plotNames)
+		{
+			List<String> tags = new ArrayList<String>();
+			tags.add(plot);
+			if (approval)
+			{
+				PlotApproval approved = plotApproval.get(plot);
+				if (approved != null && approved.getApproved() != null)
+					tags.add(String.format("[approved %s]", dateFormat.print(approved.getApproved())));
+			}
+			if (votes)
+			{
+				int voteCount = voteRepository.tally(plot);
+				if (voteCount > 0)
+					tags.add(String.format("[%d vote%s]", voteCount, voteCount > 1 ? "s" : ""));
+			}
+			tagged.add(Strings.join(tags, " "));
+		}
+		return tagged;
+	}
+
 	public PlotApproval approve(String approver, String plot)
 	{
 		PlotApproval approval = new PlotApproval();
@@ -392,4 +423,5 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 	private Duration limit;
 	private int autoApprove;
 	private Map<String, Integer> voteranks;
+	private final DateTimeFormatter dateFormat = DateTimeFormat.forPattern("dd.MM.YYYY");
 }
