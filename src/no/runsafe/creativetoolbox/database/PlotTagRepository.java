@@ -39,14 +39,14 @@ public class PlotTagRepository extends Repository
 	public boolean addTag(String plot, String tag)
 	{
 		return database.Update(
-			"INSERT INTO creative_plot_tags (`plot`,`tag`) VALUES (?, ?)" +
+			"INSERT INTO creative_plot_tags (`name`,`tag`) VALUES (?, ?)" +
 				"ON DUPLICATE KEY UPDATE `tag`=VALUES(`tag`)"
 		) > 0;
 	}
 
 	public boolean setTags(String plot, List<String> tags)
 	{
-		boolean success = database.Execute("DELETE FROM creative_plot_tags WHERE `plot`=?", plot);
+		boolean success = database.Execute("DELETE FROM creative_plot_tags WHERE `name`=?", plot);
 		if (tags != null)
 			for (String tag : tags)
 				success = success && addTag(plot, tag);
@@ -56,7 +56,7 @@ public class PlotTagRepository extends Repository
 	public List<String> findPlots(String tag)
 	{
 		List<IValue> plots = database.QueryColumn(
-			"SELECT `plot` FROM creative_plot_tags WHERE `tag` LIKE ?",
+			"SELECT `name` FROM creative_plot_tags WHERE `tag` LIKE ?",
 			tag
 		);
 		if (plots == null)
