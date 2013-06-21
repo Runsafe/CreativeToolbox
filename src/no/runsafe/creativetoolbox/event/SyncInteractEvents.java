@@ -102,7 +102,8 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 					results.append(String.format("Deleted region '%s'.", region));
 				}
 			}
-			player.sendColouredMessage(results.toString());
+			if (!nothing)
+				player.sendColouredMessage(results.toString());
 		}
 		return nothing;
 	}
