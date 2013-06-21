@@ -1,14 +1,13 @@
 package no.runsafe.creativetoolbox;
 
 import no.runsafe.creativetoolbox.command.*;
-import no.runsafe.creativetoolbox.command.Member.AddCommand;
 import no.runsafe.creativetoolbox.command.Member.RemoveCommand;
 import no.runsafe.creativetoolbox.command.OldPlots.NextCommand;
 import no.runsafe.creativetoolbox.command.OldPlots.PreviousCommand;
-import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
-import no.runsafe.creativetoolbox.database.PlotEntranceRepository;
-import no.runsafe.creativetoolbox.database.PlotLogRepository;
-import no.runsafe.creativetoolbox.database.PlotVoteRepository;
+import no.runsafe.creativetoolbox.command.Tag.ClearCommand;
+import no.runsafe.creativetoolbox.command.Tag.FindCommand;
+import no.runsafe.creativetoolbox.command.Tag.SetCommand;
+import no.runsafe.creativetoolbox.database.*;
 import no.runsafe.creativetoolbox.event.InteractEvents;
 import no.runsafe.framework.RunsafeConfigurablePlugin;
 import no.runsafe.framework.api.command.Command;
@@ -30,6 +29,7 @@ public class Plugin extends RunsafeConfigurablePlugin
 		addComponent(ApprovedPlotRepository.class);
 		addComponent(PlotVoteRepository.class);
 		addComponent(PlotEntranceRepository.class);
+		addComponent(PlotTagRepository.class);
 		addComponent(InteractEvents.class);
 		addComponent(PlotCalculator.class);
 
@@ -43,9 +43,16 @@ public class Plugin extends RunsafeConfigurablePlugin
 		toolbox.addSubCommand(oldPlots);
 
 		Command member = new Command("member", "Tools to handle plot membership", null);
-		member.addSubCommand(getInstance(AddCommand.class));
+		member.addSubCommand(getInstance(no.runsafe.creativetoolbox.command.Member.AddCommand.class));
 		member.addSubCommand(getInstance(RemoveCommand.class));
 		toolbox.addSubCommand(member);
+
+		Command tag = new Command("tag", "Plot tagging tool", null);
+		tag.addSubCommand(getInstance(no.runsafe.creativetoolbox.command.Tag.AddCommand.class));
+		tag.addSubCommand(getInstance(ClearCommand.class));
+		tag.addSubCommand(getInstance(FindCommand.class));
+		tag.addSubCommand(getInstance(SetCommand.class));
+		toolbox.addSubCommand(tag);
 
 		toolbox.addSubCommand(getInstance(ApprovePlotCommand.class));
 		toolbox.addSubCommand(getInstance(CheckApprovalCommand.class));
