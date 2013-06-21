@@ -9,6 +9,7 @@ import no.runsafe.creativetoolbox.command.Tag.FindCommand;
 import no.runsafe.creativetoolbox.command.Tag.SetCommand;
 import no.runsafe.creativetoolbox.database.*;
 import no.runsafe.creativetoolbox.event.InteractEvents;
+import no.runsafe.creativetoolbox.event.SyncInteractEvents;
 import no.runsafe.framework.RunsafeConfigurablePlugin;
 import no.runsafe.framework.api.command.Command;
 import no.runsafe.worldeditbridge.WorldEditInterface;
@@ -31,6 +32,7 @@ public class Plugin extends RunsafeConfigurablePlugin
 		addComponent(PlotEntranceRepository.class);
 		addComponent(PlotTagRepository.class);
 		addComponent(InteractEvents.class);
+		addComponent(SyncInteractEvents.class);
 		addComponent(PlotCalculator.class);
 
 		Command toolbox = new Command("creativetoolbox", "A collection of tools for use in a minecraft creative world.", null);

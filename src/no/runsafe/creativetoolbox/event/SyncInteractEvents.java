@@ -37,7 +37,9 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 	@Override
 	public boolean OnPlayerRightClick(RunsafePlayer player, RunsafeMeta itemInHand, RunsafeBlock block)
 	{
-		return executeRegenerations(player, block.getLocation()) && executeDeletion(player, block.getLocation());
+		return
+			deletions.isEmpty() && regenerations.isEmpty()
+				|| executeRegenerations(player, block.getLocation()) && executeDeletion(player, block.getLocation());
 	}
 
 	private boolean executeRegenerations(RunsafePlayer player, RunsafeLocation location)
