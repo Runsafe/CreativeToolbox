@@ -40,7 +40,8 @@ public class PlotTagRepository extends Repository
 	{
 		return database.Update(
 			"INSERT INTO creative_plot_tags (`name`,`tag`) VALUES (?, ?)" +
-				"ON DUPLICATE KEY UPDATE `tag`=VALUES(`tag`)"
+				"ON DUPLICATE KEY UPDATE `tag`=VALUES(`tag`)",
+			plot, tag
 		) > 0;
 	}
 
