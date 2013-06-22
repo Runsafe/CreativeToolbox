@@ -239,7 +239,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		{
 			PlotApproval approved = plotApproval.get(plot);
 			if (approved != null && approved.getApproved() != null)
-				tags.add(String.format("&2[&aapproved &a%s&2]&r", dateFormat.print(approved.getApproved())));
+				tags.add(String.format("&2[approved &a%s&2]&r", dateFormat.print(approved.getApproved())));
 		}
 		if (player.hasPermission("runsafe.creative.vote.tally"))
 		{
