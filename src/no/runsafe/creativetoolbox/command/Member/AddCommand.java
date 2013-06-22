@@ -38,11 +38,11 @@ public class AddCommand extends PlayerAsyncCommand
 			{
 				if (worldGuardInterface.addMemberToRegion(plotFilter.getWorld(), region, member))
 				{
-					results.append(String.format("Player %s was successfully added to your plot %s.", member.getName(), region));
+					results.append(String.format("Player %s was successfully added to the plot %s.", member.getName(), region));
 					new PlotMembershipGrantedEvent(member, region).Fire();
 				}
 				else
-					results.append(String.format("Could not add player %s to your plot %s.", member.getName(), region));
+					results.append(String.format("Could not add player %s to the plot %s.", member.getName(), region));
 			}
 			else
 				results.append(String.format("You do not appear to be an owner of %s.", region));
