@@ -41,11 +41,11 @@ public class RemoveCommand extends PlayerAsyncCommand
 						RunsafePlayer target = RunsafeServer.Instance.getOfflinePlayerExact(member);
 						if (worldGuardInterface.removeMemberFromRegion(plotFilter.getWorld(), region, target))
 						{
-							results.append(String.format("Player %s was successfully removed from the plot %s.", member, region));
+							results.append(String.format("%s was successfully removed from the plot %s.", target.getPrettyName(), region));
 							new PlotMembershipRevokedEvent(target, region).Fire();
 						}
 						else
-							results.append(String.format("Could not remove player %s from the plot %s.", member, region));
+							results.append(String.format("Could not remove %s from the plot %s.", target.getPrettyName(), region));
 					}
 			}
 			else
