@@ -151,7 +151,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 			if (showSeen && player.hasPermission("runsafe.creative.list.seen"))
 			{
 				String seen = plotMember.getLastSeen(player);
-				player.sendColouredMessage("     &8%s&r", (seen == null ? "Player never seen" : seen));
+				player.sendColouredMessage("     %s&r", (seen == null ? "Player never seen" : seen));
 			}
 		}
 	}
