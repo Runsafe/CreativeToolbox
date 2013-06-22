@@ -3,7 +3,6 @@ package no.runsafe.creativetoolbox.event;
 import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
-import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.creativetoolbox.database.PlotTagRepository;
 import no.runsafe.creativetoolbox.database.PlotVoteRepository;
 import no.runsafe.framework.api.IConfiguration;
@@ -145,7 +144,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 		{
 			int tally = votes.tally(regionName);
 			if (tally > 0)
-				player.sendColouredMessage("  This plot has %d votes!", tally);
+				player.sendColouredMessage("  This plot has %d vote%s!", tally, tally > 1 ? "s" : "");
 		}
 	}
 
