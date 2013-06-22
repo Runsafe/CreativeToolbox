@@ -2,9 +2,7 @@ package no.runsafe.creativetoolbox.event;
 
 import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.PlotManager;
-import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotTagRepository;
-import no.runsafe.creativetoolbox.database.PlotVoteRepository;
 import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.event.IAsyncEvent;
 import no.runsafe.framework.api.event.player.IPlayerInteractEntityEvent;
@@ -18,8 +16,6 @@ import no.runsafe.framework.minecraft.item.meta.RunsafeMeta;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.bukkit.craftbukkit.libs.joptsimple.internal.Strings;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import java.util.List;
 import java.util.Set;
@@ -31,13 +27,11 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 		PlotFilter plotFilter,
 		WorldGuardInterface worldGuard,
 		PlotManager manager,
-		PlotVoteRepository votes,
 		PlotTagRepository tagRepository)
 	{
 		this.worldGuardInterface = worldGuard;
 		this.plotFilter = plotFilter;
 		this.manager = manager;
-		this.votes = votes;
 		this.tagRepository = tagRepository;
 	}
 
@@ -120,7 +114,6 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 			{
 				player.sendColouredMessage("Region: %s", manager.tag(player, regionName));
 				listTags(player, regionName);
-				listVotes(player, regionName);
 				listPlotMembers(player, regionName);
 			}
 		else
@@ -133,17 +126,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 		{
 			List<String> tags = tagRepository.getTags(regionName);
 			if (tags != null && !tags.isEmpty())
-				player.sendColouredMessage("  Tags: &o%s&r", Strings.join(tags, ", "));
-		}
-	}
-
-	private void listVotes(RunsafePlayer player, String regionName)
-	{
-		if (player.hasPermission("runsafe.creative.vote.tally"))
-		{
-			int tally = votes.tally(regionName);
-			if (tally > 0)
-				player.sendColouredMessage("  This plot has %d vote%s!", tally, tally > 1 ? "s" : "");
+				player.sendColouredMessage("  &7Tags: &o%s&r", Strings.join(tags, ", "));
 		}
 	}
 
@@ -151,11 +134,11 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 	{
 		Set<String> owners = worldGuardInterface.getOwners(manager.getWorld(), regionName);
 		for (String owner : owners)
-			listPlotMember(player, "Owner", owner, true);
+			listPlotMember(player, "&2Owner&r", owner, true);
 
 		Set<String> members = worldGuardInterface.getMembers(manager.getWorld(), regionName);
 		for (String member : members)
-			listPlotMember(player, "Member", member, false);
+			listPlotMember(player, "&1Member&r", member, false);
 	}
 
 	private void listPlotMember(RunsafePlayer player, String label, String member, boolean showSeen)
@@ -168,7 +151,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 			if (showSeen && player.hasPermission("runsafe.creative.list.seen"))
 			{
 				String seen = plotMember.getLastSeen(player);
-				player.sendColouredMessage("     %s", (seen == null ? "Player never seen" : seen));
+				player.sendColouredMessage("     &8%s&r", (seen == null ? "Player never seen" : seen));
 			}
 		}
 	}
@@ -177,7 +160,6 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 	private int listItem;
 	private final PlotManager manager;
 	private final PlotFilter plotFilter;
-	private final PlotVoteRepository votes;
 	private final PlotTagRepository tagRepository;
 	private final ConcurrentHashMap<String, String> extensions = new ConcurrentHashMap<String, String>();
 }
