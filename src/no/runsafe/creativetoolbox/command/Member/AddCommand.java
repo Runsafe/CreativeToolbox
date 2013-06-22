@@ -8,7 +8,9 @@ import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.player.RunsafeAmbiguousPlayer;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
+import org.bukkit.craftbukkit.libs.joptsimple.internal.Strings;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,23 +33,25 @@ public class AddCommand extends PlayerAsyncCommand
 		List<String> ownedRegions = worldGuardInterface.getOwnedRegions(executor, plotFilter.getWorld());
 		if (target == null || target.size() == 0)
 			return "No region defined at your location!";
-		StringBuilder results = new StringBuilder();
+		List<String> results = new ArrayList<String>();
 		for (String region : target)
 		{
 			if (ownedRegions.contains(region) || executor.hasPermission("runsafe.creative.member.override"))
 			{
 				if (worldGuardInterface.addMemberToRegion(plotFilter.getWorld(), region, member))
 				{
-					results.append(String.format("%s was successfully added to the plot %s.", member.getPrettyName(), region));
+					results.add(String.format("%s was successfully added to the plot %s.", member.getPrettyName(), region));
 					new PlotMembershipGrantedEvent(member, region).Fire();
 				}
 				else
-					results.append(String.format("Could not add %s to the plot %s.", member.getPrettyName(), region));
+					results.add(String.format("Could not add %s to the plot %s.", member.getPrettyName(), region));
 			}
 			else
-				results.append(String.format("You do not appear to be an owner of %s.", region));
+				results.add(String.format("You do not appear to be an owner of %s.", region));
 		}
-		return results.toString();
+		if (results.isEmpty())
+			return null;
+		return Strings.join(results, "\n");
 	}
 
 	private final WorldGuardInterface worldGuardInterface;

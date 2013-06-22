@@ -7,7 +7,9 @@ import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
+import org.bukkit.craftbukkit.libs.joptsimple.internal.Strings;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -29,7 +31,7 @@ public class RemoveCommand extends PlayerAsyncCommand
 			return "No region defined at your location!";
 
 		List<String> ownedRegions = worldGuardInterface.getOwnedRegions(executor, plotFilter.getWorld());
-		StringBuilder results = new StringBuilder();
+		List<String> results = new ArrayList<String>();
 		for (String region : targets)
 		{
 			if (ownedRegions.contains(region) || executor.hasPermission("runsafe.creative.member.override"))
@@ -41,17 +43,19 @@ public class RemoveCommand extends PlayerAsyncCommand
 						RunsafePlayer target = RunsafeServer.Instance.getOfflinePlayerExact(member);
 						if (worldGuardInterface.removeMemberFromRegion(plotFilter.getWorld(), region, target))
 						{
-							results.append(String.format("%s was successfully removed from the plot %s.", target.getPrettyName(), region));
+							results.add(String.format("%s was successfully removed from the plot %s.", target.getPrettyName(), region));
 							new PlotMembershipRevokedEvent(target, region).Fire();
 						}
 						else
-							results.append(String.format("Could not remove %s from the plot %s.", target.getPrettyName(), region));
+							results.add(String.format("Could not remove %s from the plot %s.", target.getPrettyName(), region));
 					}
 			}
 			else
-				results.append(String.format("You do not appear to be an owner of %s.", region));
+				results.add(String.format("You do not appear to be an owner of %s.", region));
 		}
-		return results.toString();
+		if (results.isEmpty())
+			return null;
+		return Strings.join(results, "\n");
 	}
 
 	private final WorldGuardInterface worldGuardInterface;
