@@ -221,28 +221,29 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 	{
 		if (plotNames == null)
 			return null;
-		boolean approval = player.hasPermission("runsafe.creative.approval.read");
-		boolean votes = player.hasPermission("runsafe.creative.vote.tally");
 		List<String> tagged = new ArrayList<String>();
 		for (String plot : plotNames)
-		{
-			List<String> tags = new ArrayList<String>();
-			tags.add(plot);
-			if (approval)
-			{
-				PlotApproval approved = plotApproval.get(plot);
-				if (approved != null && approved.getApproved() != null)
-					tags.add(String.format("[approved %s]", dateFormat.print(approved.getApproved())));
-			}
-			if (votes)
-			{
-				int voteCount = voteRepository.tally(plot);
-				if (voteCount > 0)
-					tags.add(String.format("[%d vote%s]", voteCount, voteCount > 1 ? "s" : ""));
-			}
-			tagged.add(Strings.join(tags, " "));
-		}
+			tagged.add(tag(player, plot));
 		return tagged;
+	}
+
+	public String tag(RunsafePlayer player, String plot)
+	{
+		List<String> tags = new ArrayList<String>();
+		tags.add(plot);
+		if (player.hasPermission("runsafe.creative.approval.read"))
+		{
+			PlotApproval approved = plotApproval.get(plot);
+			if (approved != null && approved.getApproved() != null)
+				tags.add(String.format("[approved %s]", dateFormat.print(approved.getApproved())));
+		}
+		if (player.hasPermission("runsafe.creative.vote.tally"))
+		{
+			int voteCount = voteRepository.tally(plot);
+			if (voteCount > 0)
+				tags.add(String.format("[%d vote%s]", voteCount, voteCount > 1 ? "s" : ""));
+		}
+		return Strings.join(tags, " ");
 	}
 
 	public PlotApproval approve(String approver, String plot)
@@ -339,7 +340,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 		plotEntrance.delete(region);
 	}
 
-	RunsafeWorld getWorld()
+	public RunsafeWorld getWorld()
 	{
 		return world;
 	}

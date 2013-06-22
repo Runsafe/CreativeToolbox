@@ -4,6 +4,7 @@ import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotApproval;
+import no.runsafe.creativetoolbox.database.PlotTagRepository;
 import no.runsafe.creativetoolbox.database.PlotVoteRepository;
 import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.event.IAsyncEvent;
@@ -32,13 +33,14 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 		WorldGuardInterface worldGuard,
 		PlotManager manager,
 		ApprovedPlotRepository plotRepository,
-		PlotVoteRepository votes)
+		PlotVoteRepository votes, PlotTagRepository tagRepository)
 	{
 		this.worldGuardInterface = worldGuard;
 		this.plotFilter = plotFilter;
 		this.manager = manager;
 		this.plotRepository = plotRepository;
 		this.votes = votes;
+		this.tagRepository = tagRepository;
 	}
 
 	@Override
@@ -117,54 +119,59 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 
 		if (regions != null && !regions.isEmpty())
 			for (String regionName : regions)
-				this.listRegion(regionName, player);
+			{
+				player.sendColouredMessage("Region: %s", manager.tag(player, regionName));
+				listTags(player, regionName);
+				listVotes(player, regionName);
+				listPlotMembers(player, regionName);
+			}
 		else
 			player.sendMessage("No regions found at this point.");
 	}
 
-	private void listRegion(String regionName, RunsafePlayer player)
+	private void listTags(RunsafePlayer player, String regionName)
 	{
-		if (player.hasPermission("runsafe.creative.approval.read"))
+		if (player.hasPermission("runsafe.creative.tag.read"))
 		{
-			PlotApproval approval = plotRepository.get(regionName);
-			if (approval == null || approval.getApproved() == null)
-				player.sendColouredMessage("Region: " + regionName);
-			else
-				player.sendColouredMessage("Region: %s [Approved %s]", regionName, dateFormat.print(approval.getApproved()));
+			List<String> tags = tagRepository.getTags(regionName);
+			if (tags != null && !tags.isEmpty())
+				player.sendColouredMessage("  Tags: &o%s&r", Strings.join(tags, ", "));
 		}
-		else
-			player.sendMessage("Region: " + regionName);
+	}
 
+	private void listVotes(RunsafePlayer player, String regionName)
+	{
 		if (player.hasPermission("runsafe.creative.vote.tally"))
 		{
 			int tally = votes.tally(regionName);
 			if (tally > 0)
 				player.sendColouredMessage("  This plot has %d votes!", tally);
 		}
+	}
 
-		Set<String> owners = worldGuardInterface.getOwners(player.getWorld(), regionName);
-		Set<String> members = worldGuardInterface.getMembers(player.getWorld(), regionName);
-
+	private void listPlotMembers(RunsafePlayer player, String regionName)
+	{
+		Set<String> owners = worldGuardInterface.getOwners(manager.getWorld(), regionName);
 		for (String owner : owners)
-		{
-			RunsafePlayer theOwner = RunsafeServer.Instance.getPlayer(owner);
-			if (theOwner != null)
-			{
-				player.sendColouredMessage("     Owner: " + theOwner.getPrettyName());
+			listPlotMember(player, "Owner", owner, true);
 
-				if (player.hasPermission("runsafe.creative.list.seen"))
-				{
-					String seen = theOwner.getLastSeen(player);
-					player.sendColouredMessage("     " + (seen == null ? "Player never seen" : seen));
-				}
-			}
-		}
-
+		Set<String> members = worldGuardInterface.getMembers(manager.getWorld(), regionName);
 		for (String member : members)
+			listPlotMember(player, "Member", member, false);
+	}
+
+	private void listPlotMember(RunsafePlayer player, String label, String member, boolean showSeen)
+	{
+		RunsafePlayer plotMember = RunsafeServer.Instance.getPlayer(member);
+		if (plotMember != null)
 		{
-			RunsafePlayer theMember = RunsafeServer.Instance.getPlayer(member);
-			if (theMember != null)
-				player.sendColouredMessage("     Member: " + theMember.getPrettyName());
+			player.sendColouredMessage("     %s: %s", label, plotMember.getPrettyName());
+
+			if (showSeen && player.hasPermission("runsafe.creative.list.seen"))
+			{
+				String seen = plotMember.getLastSeen(player);
+				player.sendColouredMessage("     %s", (seen == null ? "Player never seen" : seen));
+			}
 		}
 	}
 
@@ -174,6 +181,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 	private final PlotFilter plotFilter;
 	private final ApprovedPlotRepository plotRepository;
 	private final PlotVoteRepository votes;
+	private final PlotTagRepository tagRepository;
 	private final DateTimeFormatter dateFormat = DateTimeFormat.forPattern("dd.MM.YYYY");
 	private final ConcurrentHashMap<String, String> extensions = new ConcurrentHashMap<String, String>();
 }
