@@ -5,6 +5,7 @@ import no.runsafe.creativetoolbox.event.PlotMembershipGrantedEvent;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.minecraft.RunsafeServer;
+import no.runsafe.framework.minecraft.player.RunsafeAmbiguousPlayer;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
@@ -24,6 +25,8 @@ public class AddCommand extends PlayerAsyncCommand
 	public String OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters)
 	{
 		RunsafePlayer member = RunsafeServer.Instance.getPlayer(parameters.get("player"));
+		if (member instanceof RunsafeAmbiguousPlayer)
+			return member.toString();
 		List<String> target = plotFilter.apply(worldGuardInterface.getRegionsAtLocation(executor.getLocation()));
 		List<String> ownedRegions = worldGuardInterface.getOwnedRegions(executor, plotFilter.getWorld());
 		if (target == null || target.size() == 0)

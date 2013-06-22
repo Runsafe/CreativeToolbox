@@ -1,7 +1,6 @@
 package no.runsafe.creativetoolbox.command.Member;
 
 import no.runsafe.creativetoolbox.PlotFilter;
-import no.runsafe.creativetoolbox.event.PlotMembershipGrantedEvent;
 import no.runsafe.creativetoolbox.event.PlotMembershipRevokedEvent;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
@@ -11,6 +10,7 @@ import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public class RemoveCommand extends PlayerAsyncCommand
 {
@@ -24,23 +24,29 @@ public class RemoveCommand extends PlayerAsyncCommand
 	@Override
 	public String OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters)
 	{
-		RunsafePlayer member = RunsafeServer.Instance.getPlayer(parameters.get("player"));
-		List<String> target = plotFilter.apply(worldGuardInterface.getRegionsAtLocation(executor.getLocation()));
-		List<String> ownedRegions = worldGuardInterface.getOwnedRegions(executor, plotFilter.getWorld());
-		if (target == null || target.size() == 0)
+		List<String> targets = plotFilter.apply(worldGuardInterface.getRegionsAtLocation(executor.getLocation()));
+		if (targets == null || targets.isEmpty())
 			return "No region defined at your location!";
+
+		List<String> ownedRegions = worldGuardInterface.getOwnedRegions(executor, plotFilter.getWorld());
 		StringBuilder results = new StringBuilder();
-		for (String region : target)
+		for (String region : targets)
 		{
 			if (ownedRegions.contains(region) || executor.hasPermission(getPermission()))
 			{
-				if (worldGuardInterface.removeMemberFromRegion(plotFilter.getWorld(), region, member))
-				{
-					results.append(String.format("Player %s was successfully removed from your plot %s.", member.getName(), region));
-					new PlotMembershipRevokedEvent(member, region).Fire();
-				}
-				else
-					results.append(String.format("Could not remove player %s from your plot %s.", member.getName(), region));
+				Set<String> members = worldGuardInterface.getMembers(executor.getWorld(), region);
+				for (String member : members)
+					if (member.toLowerCase().startsWith(parameters.get("player").toLowerCase()))
+					{
+						RunsafePlayer target = RunsafeServer.Instance.getOfflinePlayerExact(member);
+						if (worldGuardInterface.removeMemberFromRegion(plotFilter.getWorld(), region, target))
+						{
+							results.append(String.format("Player %s was successfully removed from the plot %s.", member, region));
+							new PlotMembershipRevokedEvent(target, region).Fire();
+						}
+						else
+							results.append(String.format("Could not remove player %s from the plot %s.", member, region));
+					}
 			}
 			else
 				results.append(String.format("You do not appear to be an owner of %s.", region));
