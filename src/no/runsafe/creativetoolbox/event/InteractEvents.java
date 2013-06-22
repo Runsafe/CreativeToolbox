@@ -112,7 +112,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 		if (regions != null && !regions.isEmpty())
 			for (String regionName : regions)
 			{
-				player.sendColouredMessage("Region: %s", manager.tag(player, regionName));
+				player.sendColouredMessage("&6Region: &l%s", manager.tag(player, regionName));
 				listTags(player, regionName);
 				listPlotMembers(player, regionName);
 			}
@@ -126,7 +126,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 		{
 			List<String> tags = tagRepository.getTags(regionName);
 			if (tags != null && !tags.isEmpty())
-				player.sendColouredMessage("  &7Tags: &o%s&r", Strings.join(tags, ", "));
+				player.sendColouredMessage("&7Tags: &o%s&r", Strings.join(tags, " "));
 		}
 	}
 
