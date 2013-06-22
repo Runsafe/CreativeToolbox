@@ -1,6 +1,7 @@
 package no.runsafe.creativetoolbox.command.Member;
 
 import no.runsafe.creativetoolbox.PlotFilter;
+import no.runsafe.creativetoolbox.event.PlotMembershipGrantedEvent;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.minecraft.RunsafeServer;
@@ -33,7 +34,10 @@ public class AddCommand extends PlayerAsyncCommand
 			if (ownedRegions.contains(region))
 			{
 				if (worldGuardInterface.addMemberToRegion(plotFilter.getWorld(), region, member))
+				{
 					results.append(String.format("Player %s was successfully added to your plot %s.", member.getName(), region));
+					new PlotMembershipGrantedEvent(member, region).Fire();
+				}
 				else
 					results.append(String.format("Could not add player %s to your plot %s.", member.getName(), region));
 			}

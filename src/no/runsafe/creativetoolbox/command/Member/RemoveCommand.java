@@ -1,6 +1,8 @@
 package no.runsafe.creativetoolbox.command.Member;
 
 import no.runsafe.creativetoolbox.PlotFilter;
+import no.runsafe.creativetoolbox.event.PlotMembershipGrantedEvent;
+import no.runsafe.creativetoolbox.event.PlotMembershipRevokedEvent;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.minecraft.RunsafeServer;
@@ -33,7 +35,10 @@ public class RemoveCommand extends PlayerAsyncCommand
 			if (ownedRegions.contains(region))
 			{
 				if (worldGuardInterface.removeMemberFromRegion(plotFilter.getWorld(), region, member))
+				{
 					results.append(String.format("Player %s was successfully removed from your plot %s.", member.getName(), region));
+					new PlotMembershipRevokedEvent(member, region).Fire();
+				}
 				else
 					results.append(String.format("Could not remove player %s from your plot %s.", member.getName(), region));
 			}

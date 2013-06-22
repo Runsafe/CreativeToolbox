@@ -2,13 +2,16 @@ package no.runsafe.creativetoolbox;
 
 import no.runsafe.creativetoolbox.database.*;
 import no.runsafe.creativetoolbox.event.PlotApprovedEvent;
+import no.runsafe.creativetoolbox.event.PlotMembershipRevokedEvent;
 import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.IOutput;
+import no.runsafe.framework.api.event.player.IPlayerCustomEvent;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.api.event.plugin.IPluginEnabled;
 import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.RunsafeWorld;
+import no.runsafe.framework.minecraft.event.player.RunsafeCustomEvent;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.bukkit.craftbukkit.libs.joptsimple.internal.Strings;
@@ -23,7 +26,7 @@ import org.joda.time.format.PeriodFormat;
 import java.awt.geom.Rectangle2D;
 import java.util.*;
 
-public class PlotManager implements IConfigurationChanged, IPluginEnabled
+public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlayerCustomEvent
 {
 	public PlotManager(
 		PlotFilter plotFilter,
@@ -200,6 +203,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 	public boolean voteValid(RunsafePlayer player, String region)
 	{
 		return player.getWorld().equals(world)
+			&& (!voteBlacklist.containsKey(region) || !voteBlacklist.get(region).contains(player.getName().toLowerCase()))
 			&& !worldGuard.getOwners(world, region).contains(player.getName().toLowerCase())
 			&& !worldGuard.getMembers(world, region).contains(player.getName().toLowerCase());
 	}
@@ -362,6 +366,18 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 		ScanFreePlots();
 	}
 
+	@Override
+	public void OnPlayerCustomEvent(RunsafeCustomEvent event)
+	{
+		if (event instanceof PlotMembershipRevokedEvent)
+		{
+			String plot = (String) event.getData();
+			if (!voteBlacklist.containsKey(plot))
+				voteBlacklist.put(plot, new ArrayList<String>());
+			voteBlacklist.get(plot).add(event.getPlayer().getName().toLowerCase());
+		}
+	}
+
 	private void ScanTakenPlots()
 	{
 		Map<String, Rectangle2D> taken = worldGuard.getRegionRectanglesInWorld(filter.getWorld());
@@ -419,6 +435,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled
 	private final HashMap<String, Duration> lastSeen = new HashMap<String, Duration>();
 	private final HashMap<Long, ArrayList<Long>> takenPlots = new HashMap<Long, ArrayList<Long>>();
 	private final ArrayList<RunsafeLocation> freePlots = new ArrayList<RunsafeLocation>();
+	private final Map<String, List<String>> voteBlacklist = new HashMap<String, List<String>>();
 	private RunsafeWorld world;
 	private List<String> ignoredRegions;
 	private Duration limit;
