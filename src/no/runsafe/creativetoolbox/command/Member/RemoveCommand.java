@@ -32,7 +32,7 @@ public class RemoveCommand extends PlayerAsyncCommand
 		StringBuilder results = new StringBuilder();
 		for (String region : targets)
 		{
-			if (ownedRegions.contains(region) || executor.hasPermission(getPermission()))
+			if (ownedRegions.contains(region) || executor.hasPermission("runsafe.creative.member.override"))
 			{
 				Set<String> members = worldGuardInterface.getMembers(executor.getWorld(), region);
 				for (String member : members)
