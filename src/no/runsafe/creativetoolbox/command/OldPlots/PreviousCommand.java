@@ -67,13 +67,5 @@ public class PreviousCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
 		result.who.sendColouredMessage(result.message);
 	}
 
-	class Warp
-	{
-		public String message = null;
-		public RunsafePlayer who = null;
-		public RunsafeLocation location = null;
-	}
-
-	private final HashMap<String, RunsafeLocation> warpTo = new HashMap<String, RunsafeLocation>();
 	private final PlotManager manager;
 }

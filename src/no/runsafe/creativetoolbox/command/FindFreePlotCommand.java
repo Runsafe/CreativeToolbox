@@ -57,6 +57,5 @@ public class FindFreePlotCommand extends PlayerAsyncCallbackCommand<PlayerTelepo
 	}
 
 	private final PlotManager manager;
-	private final HashMap<String, RunsafeLocation> warpTo = new HashMap<String, RunsafeLocation>();
 	private final Random rng = new Random();
 }

@@ -31,13 +31,12 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 		PlotFilter plotFilter,
 		WorldGuardInterface worldGuard,
 		PlotManager manager,
-		ApprovedPlotRepository plotRepository,
-		PlotVoteRepository votes, PlotTagRepository tagRepository)
+		PlotVoteRepository votes,
+		PlotTagRepository tagRepository)
 	{
 		this.worldGuardInterface = worldGuard;
 		this.plotFilter = plotFilter;
 		this.manager = manager;
-		this.plotRepository = plotRepository;
 		this.votes = votes;
 		this.tagRepository = tagRepository;
 	}
@@ -178,9 +177,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 	private int listItem;
 	private final PlotManager manager;
 	private final PlotFilter plotFilter;
-	private final ApprovedPlotRepository plotRepository;
 	private final PlotVoteRepository votes;
 	private final PlotTagRepository tagRepository;
-	private final DateTimeFormatter dateFormat = DateTimeFormat.forPattern("dd.MM.YYYY");
 	private final ConcurrentHashMap<String, String> extensions = new ConcurrentHashMap<String, String>();
 }
