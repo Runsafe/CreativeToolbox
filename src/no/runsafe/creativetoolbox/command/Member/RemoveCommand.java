@@ -32,7 +32,7 @@ public class RemoveCommand extends PlayerAsyncCommand
 		StringBuilder results = new StringBuilder();
 		for (String region : target)
 		{
-			if (ownedRegions.contains(region))
+			if (ownedRegions.contains(region) || executor.hasPermission(getPermission()))
 			{
 				if (worldGuardInterface.removeMemberFromRegion(plotFilter.getWorld(), region, member))
 				{
