@@ -138,7 +138,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 
 		Set<String> members = worldGuardInterface.getMembers(manager.getWorld(), regionName);
 		for (String member : members)
-			listPlotMember(player, "&1Member&r", member, false);
+			listPlotMember(player, "&3Member&r", member, false);
 	}
 
 	private void listPlotMember(RunsafePlayer player, String label, String member, boolean showSeen)
@@ -146,7 +146,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 		RunsafePlayer plotMember = RunsafeServer.Instance.getPlayer(member);
 		if (plotMember != null)
 		{
-			player.sendColouredMessage("     %s: %s", label, plotMember.getPrettyName());
+			player.sendColouredMessage("   %s: %s", label, plotMember.getPrettyName());
 
 			if (showSeen && player.hasPermission("runsafe.creative.list.seen"))
 			{
