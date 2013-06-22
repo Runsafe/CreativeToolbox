@@ -27,6 +27,8 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 	public void startRegeneration(RunsafePlayer executor, Rectangle2D area, PlotChunkGenerator.Mode mode)
 	{
 		regenerations.put(executor.getName(), area);
+		if (mode != null)
+			generator.put(executor.getName(), mode);
 	}
 
 	public void startDeletion(RunsafePlayer executor, Map<String, Rectangle2D> regions)
@@ -46,7 +48,8 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 	{
 		if (regenerations.containsKey(player.getName()))
 		{
-			boolean changeMode = generator.containsKey(player.getName());
+			boolean changeMode = generator.containsKey(player.getName())
+				&& generator.get(player.getName()) != PlotChunkGenerator.Mode.NORMAL;
 			try
 			{
 				Rectangle2D area = regenerations.get(player.getName());
