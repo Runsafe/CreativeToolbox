@@ -43,7 +43,7 @@ public class ListCommand extends PlayerAsyncCommand
 			filter.apply(worldGuard.getOwnedRegions(player, filter.getWorld()))
 		);
 		return String.format(
-			"%d regions owned by %s:\n  %s",
+			"%d plots owned by %s:\n  %s",
 			property.size(),
 			player.getPrettyName(),
 			StringUtils.join(property, "\n  ")

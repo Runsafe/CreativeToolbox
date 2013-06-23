@@ -102,7 +102,7 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 					RunsafeLocation maxPos = calculator.getMaxPosition(player.getWorld(), area);
 					manager.delete(region);
 					worldEdit.regenerate(player, minPos, maxPos, false);
-					results.append(String.format("Deleted region '%s'.", region));
+					results.append(String.format("Deleted plot '%s'.", region));
 				}
 			}
 			if (!nothing)

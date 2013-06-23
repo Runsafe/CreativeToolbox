@@ -93,10 +93,8 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 				manager.tag(triggerPlayer, regions),
 				"\n"
 			));
-		else if (triggerPlayer.hasPermission("runsafe.creative.list.showname"))
-			triggerPlayer.sendMessage(String.format("%s does not own any regions.", checkPlayer.getPrettyName()));
 		else
-			triggerPlayer.sendMessage("No regions owned by this player.");
+			triggerPlayer.sendColouredMessage("%s does not own any plots.", checkPlayer.getPrettyName());
 	}
 
 	private void listPlotsByLocation(RunsafeLocation location, RunsafePlayer player)
@@ -112,12 +110,12 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 		if (regions != null && !regions.isEmpty())
 			for (String regionName : regions)
 			{
-				player.sendColouredMessage("&6Region: &l%s", manager.tag(player, regionName));
+				player.sendColouredMessage("&6Plot: &l%s", manager.tag(player, regionName));
 				listTags(player, regionName);
 				listPlotMembers(player, regionName);
 			}
 		else
-			player.sendMessage("No regions found at this point.");
+			player.sendMessage("No plots found at this location.");
 	}
 
 	private void listTags(RunsafePlayer player, String regionName)
