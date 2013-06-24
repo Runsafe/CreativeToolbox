@@ -3,28 +3,30 @@ package no.runsafe.creativetoolbox;
 import no.runsafe.creativetoolbox.database.PlotLogRepository;
 import no.runsafe.creativetoolbox.database.PlotMemberRepository;
 import no.runsafe.framework.api.IConfiguration;
-import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
+import no.runsafe.framework.api.event.plugin.IPluginEnabled;
 import no.runsafe.framework.minecraft.RunsafeWorld;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.util.List;
 
-public class ImportWorldGuardRegions implements IConfigurationChanged
+public class ImportWorldGuardRegions implements IPluginEnabled
 {
 	public ImportWorldGuardRegions(
 		PlotManager manager,
 		WorldGuardInterface worldGuard,
 		PlotLogRepository logRepository,
-		PlotMemberRepository memberRepository)
+		PlotMemberRepository memberRepository,
+		IConfiguration config)
 	{
 		this.manager = manager;
 		this.worldGuard = worldGuard;
 		this.logRepository = logRepository;
 		this.memberRepository = memberRepository;
+		this.config = config;
 	}
 
 	@Override
-	public void OnConfigurationChanged(IConfiguration config)
+	public void OnPluginEnabled()
 	{
 		RunsafeWorld world = manager.getWorld();
 		List<String> regions = worldGuard.getRegionsInWorld(world);
@@ -48,4 +50,5 @@ public class ImportWorldGuardRegions implements IConfigurationChanged
 	private final WorldGuardInterface worldGuard;
 	private final PlotLogRepository logRepository;
 	private final PlotMemberRepository memberRepository;
+	private final IConfiguration config;
 }
