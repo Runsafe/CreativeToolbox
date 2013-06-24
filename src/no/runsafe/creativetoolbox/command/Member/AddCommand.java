@@ -1,6 +1,7 @@
 package no.runsafe.creativetoolbox.command.Member;
 
 import no.runsafe.creativetoolbox.PlotFilter;
+import no.runsafe.creativetoolbox.database.PlotMemberRepository;
 import no.runsafe.creativetoolbox.event.PlotMembershipGrantedEvent;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
@@ -16,11 +17,12 @@ import java.util.List;
 
 public class AddCommand extends PlayerAsyncCommand
 {
-	public AddCommand(IScheduler scheduler, PlotFilter filter, WorldGuardInterface worldGuard)
+	public AddCommand(IScheduler scheduler, PlotFilter filter, WorldGuardInterface worldGuard, PlotMemberRepository members)
 	{
 		super("add", "Add a member to the plot you are standing in", "runsafe.creative.member.add", scheduler, "player");
 		plotFilter = filter;
 		worldGuardInterface = worldGuard;
+		this.members = members;
 	}
 
 	@Override
@@ -40,6 +42,7 @@ public class AddCommand extends PlayerAsyncCommand
 			{
 				if (worldGuardInterface.addMemberToRegion(plotFilter.getWorld(), region, member))
 				{
+					members.addMember(region, member.getName(), false);
 					results.add(String.format("%s was successfully added to the plot %s.", member.getPrettyName(), region));
 					new PlotMembershipGrantedEvent(member, region).Fire();
 				}
@@ -56,4 +59,5 @@ public class AddCommand extends PlayerAsyncCommand
 
 	private final WorldGuardInterface worldGuardInterface;
 	private final PlotFilter plotFilter;
+	private final PlotMemberRepository members;
 }

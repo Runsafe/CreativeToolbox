@@ -24,6 +24,7 @@ public class Plugin extends RunsafeConfigurablePlugin
 		addComponent(getFirstPluginAPI(WorldGuardInterface.class));
 		addComponent(getFirstPluginAPI(WorldEditInterface.class));
 		addComponent(getFirstPluginAPI(PlotChunkGenerator.class));
+		addComponent(PlotMemberRepository.class);
 		addComponent(PlotLogRepository.class);
 		addComponent(PlotFilter.class);
 		addComponent(PlotManager.class);
@@ -34,6 +35,7 @@ public class Plugin extends RunsafeConfigurablePlugin
 		addComponent(InteractEvents.class);
 		addComponent(SyncInteractEvents.class);
 		addComponent(PlotCalculator.class);
+		addComponent(ImportWorldGuardRegions.class);
 
 		Command toolbox = new Command("creativetoolbox", "A collection of tools for use in a minecraft creative world.", null);
 		addComponent(toolbox);

@@ -2,6 +2,7 @@ package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotManager;
+import no.runsafe.creativetoolbox.database.PlotMemberRepository;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.RunsafeWorld;
@@ -15,12 +16,13 @@ import java.util.List;
 
 public class ClaimCommand extends PlayerCommand
 {
-	public ClaimCommand(PlotManager manager, PlotCalculator calculator, WorldGuardInterface worldGuard)
+	public ClaimCommand(PlotManager manager, PlotCalculator calculator, WorldGuardInterface worldGuard, PlotMemberRepository members)
 	{
 		super("claim", "Claims a plot", "runsafe.creative.claim", "owner");
 		this.manager = manager;
 		this.calculator = calculator;
 		this.worldGuard = worldGuard;
+		this.members = members;
 	}
 
 	@Override
@@ -45,7 +47,10 @@ public class ClaimCommand extends PlayerCommand
 
 		Rectangle2D region = calculator.getPlotArea(player.getLocation());
 		if (manager.claim(player, owner, plotName, region))
+		{
+			members.addMember(plotName, owner.getName(), true);
 			return String.format("Successfully claimed the plot \"%s\" for %s!", plotName, owner.getPrettyName());
+		}
 
 		return String.format("Unable to claim a new plot for %s :(", owner.getPrettyName());
 	}
@@ -53,4 +58,5 @@ public class ClaimCommand extends PlayerCommand
 	private final PlotManager manager;
 	private final PlotCalculator calculator;
 	private final WorldGuardInterface worldGuard;
+	private final PlotMemberRepository members;
 }

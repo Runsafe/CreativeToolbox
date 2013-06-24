@@ -1,6 +1,7 @@
 package no.runsafe.creativetoolbox.command.Member;
 
 import no.runsafe.creativetoolbox.PlotFilter;
+import no.runsafe.creativetoolbox.database.PlotMemberRepository;
 import no.runsafe.creativetoolbox.event.PlotMembershipRevokedEvent;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
@@ -16,11 +17,12 @@ import java.util.Set;
 
 public class RemoveCommand extends PlayerAsyncCommand
 {
-	public RemoveCommand(IScheduler scheduler, PlotFilter filter, WorldGuardInterface worldGuard)
+	public RemoveCommand(IScheduler scheduler, PlotFilter filter, WorldGuardInterface worldGuard, PlotMemberRepository memberRepository)
 	{
 		super("remove", "Remove a member from the plot you are standing in.", "runsafe.creative.member.remove", scheduler, "player");
 		plotFilter = filter;
 		worldGuardInterface = worldGuard;
+		this.memberRepository = memberRepository;
 	}
 
 	@Override
@@ -43,6 +45,7 @@ public class RemoveCommand extends PlayerAsyncCommand
 						RunsafePlayer target = RunsafeServer.Instance.getOfflinePlayerExact(member);
 						if (worldGuardInterface.removeMemberFromRegion(plotFilter.getWorld(), region, target))
 						{
+							memberRepository.removeMember(region, member);
 							results.add(String.format("%s was successfully removed from the plot %s.", target.getPrettyName(), region));
 							new PlotMembershipRevokedEvent(target, region).Fire();
 						}
@@ -60,4 +63,5 @@ public class RemoveCommand extends PlayerAsyncCommand
 
 	private final WorldGuardInterface worldGuardInterface;
 	private final PlotFilter plotFilter;
+	private final PlotMemberRepository memberRepository;
 }
