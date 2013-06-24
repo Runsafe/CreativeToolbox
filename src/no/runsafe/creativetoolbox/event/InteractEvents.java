@@ -2,6 +2,7 @@ package no.runsafe.creativetoolbox.event;
 
 import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.PlotManager;
+import no.runsafe.creativetoolbox.database.PlotLogRepository;
 import no.runsafe.creativetoolbox.database.PlotTagRepository;
 import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.event.IAsyncEvent;
@@ -27,12 +28,13 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 		PlotFilter plotFilter,
 		WorldGuardInterface worldGuard,
 		PlotManager manager,
-		PlotTagRepository tagRepository)
+		PlotTagRepository tagRepository, PlotLogRepository logRepository)
 	{
 		this.worldGuardInterface = worldGuard;
 		this.plotFilter = plotFilter;
 		this.manager = manager;
 		this.tagRepository = tagRepository;
+		this.logRepository = logRepository;
 	}
 
 	@Override
@@ -111,11 +113,24 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 			for (String regionName : regions)
 			{
 				player.sendColouredMessage("&6Plot: &l%s", manager.tag(player, regionName));
+				listClaimInfo(player, regionName);
 				listTags(player, regionName);
 				listPlotMembers(player, regionName);
 			}
 		else
 			player.sendMessage("No plots found at this location.");
+	}
+
+	private void listClaimInfo(RunsafePlayer player, String regionName)
+	{
+		if (player.hasPermission("runsafe.creative.claim.log"))
+		{
+			String claim = logRepository.getClaim(regionName);
+			if (claim == null)
+				return;
+
+			player.sendColouredMessage("&bClaimed: %s", claim);
+		}
 	}
 
 	private void listTags(RunsafePlayer player, String regionName)
@@ -159,5 +174,6 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 	private final PlotManager manager;
 	private final PlotFilter plotFilter;
 	private final PlotTagRepository tagRepository;
+	private final PlotLogRepository logRepository;
 	private final ConcurrentHashMap<String, String> extensions = new ConcurrentHashMap<String, String>();
 }

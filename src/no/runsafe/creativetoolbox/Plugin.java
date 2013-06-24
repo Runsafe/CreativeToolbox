@@ -71,5 +71,6 @@ public class Plugin extends RunsafeConfigurablePlugin
 		toolbox.addSubCommand(getInstance(VoteCommand.class));
 		toolbox.addSubCommand(getInstance(ClaimCommand.class));
 		toolbox.addSubCommand(getInstance(ExtendCommand.class));
+		toolbox.addSubCommand(getInstance(GriefCleanupCommand.class));
 	}
 }

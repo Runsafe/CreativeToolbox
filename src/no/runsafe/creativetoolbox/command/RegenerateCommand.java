@@ -7,6 +7,7 @@ import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.creativetoolbox.event.SyncInteractEvents;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
+import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldgenerator.PlotChunkGenerator;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
@@ -22,7 +23,8 @@ public class RegenerateCommand extends PlayerAsyncCommand
 		PlotCalculator calculator,
 		PlotFilter filter,
 		SyncInteractEvents interactEvents,
-		IScheduler scheduler, ApprovedPlotRepository approvedPlotRepository)
+		IScheduler scheduler,
+		ApprovedPlotRepository approvedPlotRepository)
 	{
 		super("regenerate", "Regenerates the plot you are currently in.", "runsafe.creative.regenerate", scheduler);
 		this.worldGuard = worldGuard;
@@ -35,17 +37,16 @@ public class RegenerateCommand extends PlayerAsyncCommand
 	@Override
 	public String OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters, String[] arguments)
 	{
+		Rectangle2D area = getArea(executor.getLocation());
+
 		List<String> candidate = filter.apply(worldGuard.getRegionsAtLocation(executor.getLocation()));
-		Rectangle2D area;
-		if (candidate != null && candidate.size() == 1)
-		{
-			PlotApproval approval = approvedPlotRepository.get(candidate.get(0));
-			if (approval != null && approval.getApproved() != null)
-				return "You may not regenerate an approved plot!";
-			area = worldGuard.getRectangle(executor.getWorld(), candidate.get(0));
-		}
-		else
-			area = plotCalculator.getPlotArea(executor.getLocation(), false);
+		if (candidate != null && !candidate.isEmpty())
+			for (String plot : candidate)
+			{
+				PlotApproval approval = approvedPlotRepository.get(plot);
+				if (approval != null && approval.getApproved() != null)
+					return "You may not regenerate an approved plot!";
+			}
 
 		if (arguments != null && arguments.length > 0)
 		{
@@ -64,6 +65,15 @@ public class RegenerateCommand extends PlayerAsyncCommand
 	public String OnAsyncExecute(RunsafePlayer player, HashMap<String, String> parameters)
 	{
 		return null;
+	}
+
+	private Rectangle2D getArea(RunsafeLocation location)
+	{
+		List<String> candidate = filter.apply(worldGuard.getRegionsAtLocation(location));
+		if (candidate != null && candidate.size() == 1)
+			return worldGuard.getRectangle(location.getWorld(), candidate.get(0));
+		else
+			return plotCalculator.getPlotArea(location, false);
 	}
 
 	private PlotChunkGenerator.Mode getMode(String value)

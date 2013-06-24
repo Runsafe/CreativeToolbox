@@ -2,6 +2,7 @@ package no.runsafe.creativetoolbox;
 
 import no.runsafe.creativetoolbox.database.*;
 import no.runsafe.creativetoolbox.event.PlotApprovedEvent;
+import no.runsafe.creativetoolbox.event.PlotDeletedEvent;
 import no.runsafe.creativetoolbox.event.PlotMembershipRevokedEvent;
 import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.IOutput;
@@ -33,7 +34,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		WorldGuardInterface worldGuardInterface,
 		PlotEntranceRepository plotEntranceRepository,
 		ApprovedPlotRepository approvedPlotRepository,
-		PlotVoteRepository voteRepository, PlotCalculator plotCalculator,
+		PlotVoteRepository voteRepository, PlotTagRepository tagRepository, PlotCalculator plotCalculator,
 		IOutput debugger,
 		PlotLogRepository plotLog)
 	{
@@ -42,6 +43,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		plotEntrance = plotEntranceRepository;
 		plotApproval = approvedPlotRepository;
 		this.voteRepository = voteRepository;
+		this.tagRepository = tagRepository;
 		calculator = plotCalculator;
 		console = debugger;
 		this.plotLog = plotLog;
@@ -342,6 +344,9 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		setFree(col, row);
 		worldGuard.deleteRegion(filter.getWorld(), region);
 		plotEntrance.delete(region);
+		tagRepository.setTags(region, null);
+		voteRepository.clear(region);
+		new PlotDeletedEvent(null, region).Fire();
 	}
 
 	public RunsafeWorld getWorld()
@@ -427,6 +432,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 	private final PlotEntranceRepository plotEntrance;
 	private final ApprovedPlotRepository plotApproval;
 	private final PlotVoteRepository voteRepository;
+	private final PlotTagRepository tagRepository;
 	private final PlotCalculator calculator;
 	private final IOutput console;
 	private final PlotLogRepository plotLog;

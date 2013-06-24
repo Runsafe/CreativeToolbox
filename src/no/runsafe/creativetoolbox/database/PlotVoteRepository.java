@@ -28,6 +28,11 @@ public class PlotVoteRepository extends Repository
 		) > 0;
 	}
 
+	public void clear(String region)
+	{
+		database.Execute("DELETE FROM creative_plot_vote WHERE `plot`=?", region);
+	}
+
 	public int tally(String regionName)
 	{
 		IRow answer = database.QueryRow("SELECT COUNT(*) AS tally FROM creative_plot_vote WHERE `plot`=?", regionName);

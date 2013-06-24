@@ -8,6 +8,8 @@ import no.runsafe.framework.minecraft.RunsafeWorld;
 
 import java.awt.geom.Rectangle2D;
 import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlotCalculator implements IConfigurationChanged
 {
@@ -41,6 +43,35 @@ public class PlotCalculator implements IConfigurationChanged
 		if (!fence.contains(area))
 			return null;
 		return area;
+	}
+
+	public List<Rectangle2D> getPaddingSelection(Rectangle2D plotArea)
+	{
+		List<Rectangle2D> regions = new ArrayList<Rectangle2D>();
+		regions.add(
+			new Rectangle2D.Double(
+				plotArea.getMinX(), plotArea.getMinY(),
+				prototype.getWidth(), roadWidth)
+		);
+		regions.add(
+			new Rectangle2D.Double(
+				plotArea.getMinX(), plotArea.getMinY() + roadWidth,
+				roadWidth, prototype.getHeight()
+			)
+		);
+		regions.add(
+			new Rectangle2D.Double(
+				plotArea.getMinX() + prototype.getWidth(), plotArea.getMinY(),
+				roadWidth, prototype.getHeight()
+			)
+		);
+		regions.add(
+			new Rectangle2D.Double(
+				plotArea.getMinX(), plotArea.getMinY() + prototype.getHeight(),
+				prototype.getWidth(), roadWidth
+			)
+		);
+		return regions;
 	}
 
 	public Rectangle2D pad(Rectangle2D rectangle)

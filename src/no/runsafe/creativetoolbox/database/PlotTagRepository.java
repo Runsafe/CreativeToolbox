@@ -38,6 +38,8 @@ public class PlotTagRepository extends Repository
 
 	public boolean addTag(String plot, String tag)
 	{
+		if (tag == null || tag.isEmpty() || tag.trim().isEmpty())
+			return false;
 		return database.Update(
 			"INSERT INTO creative_plot_tags (`name`,`tag`) VALUES (?, ?)" +
 				"ON DUPLICATE KEY UPDATE `tag`=VALUES(`tag`)",
