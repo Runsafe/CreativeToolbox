@@ -6,6 +6,7 @@ import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.framework.api.IDebug;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.minecraft.RunsafeLocation;
+import no.runsafe.framework.minecraft.RunsafeWorld;
 import no.runsafe.framework.minecraft.block.RunsafeBlock;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldeditbridge.WorldEditInterface;
@@ -75,12 +76,15 @@ public class GriefCleanupCommand extends PlayerCommand
 		RunsafeLocation max = plotCalculator.getMaxPosition(player.getWorld(), area);
 		RunsafeLocation min = plotCalculator.getMinPosition(player.getWorld(), area);
 		debugger.fine("Cleaning area %s - %s", min, max);
+		RunsafeWorld world = player.getWorld();
 		int counter = 0;
 		for (int x = min.getBlockX(); x <= max.getBlockX(); ++x)
 			for (int y = max.getBlockY(); y >= min.getBlockY(); --y)
 				for (int z = min.getBlockZ(); z >= max.getBlockZ(); ++z)
 				{
-					RunsafeBlock block = player.getWorld().getBlockAt(x, y, z);
+					RunsafeBlock block = world.getBlockAt(x, y, z);
+					if (y == 67)
+						debugger.finer("Block at %s is %d", block.getLocation(), block.getTypeId());
 					if (removeIds.contains(Integer.valueOf(block.getTypeId())))
 					{
 						block.setTypeId(0);
