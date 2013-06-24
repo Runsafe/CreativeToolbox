@@ -51,24 +51,24 @@ public class PlotCalculator implements IConfigurationChanged
 		regions.add(
 			new Rectangle2D.Double(
 				plotArea.getMinX(), plotArea.getMinY(),
-				prototype.getWidth(), roadWidth)
+				prototype.getWidth() + roadWidth, roadWidth - 1)
 		);
 		regions.add(
 			new Rectangle2D.Double(
 				plotArea.getMinX(), plotArea.getMinY() + roadWidth,
-				roadWidth, prototype.getHeight()
+				roadWidth - 1, prototype.getHeight() + roadWidth
 			)
 		);
 		regions.add(
 			new Rectangle2D.Double(
 				plotArea.getMinX() + prototype.getWidth(), plotArea.getMinY(),
-				roadWidth, prototype.getHeight()
+				roadWidth - 1, prototype.getHeight() + roadWidth
 			)
 		);
 		regions.add(
 			new Rectangle2D.Double(
 				plotArea.getMinX(), plotArea.getMinY() + prototype.getHeight(),
-				prototype.getWidth(), roadWidth
+				prototype.getWidth() + roadWidth, roadWidth - 1
 			)
 		);
 		return regions;
