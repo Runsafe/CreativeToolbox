@@ -3,7 +3,6 @@ package no.runsafe.creativetoolbox.command;
 import com.google.common.collect.Lists;
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotFilter;
-import no.runsafe.framework.api.IDebug;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.RunsafeWorld;
@@ -18,14 +17,13 @@ import java.util.List;
 
 public class GriefCleanupCommand extends PlayerCommand
 {
-	public GriefCleanupCommand(WorldGuardInterface worldGuard, WorldEditInterface worldEdit, PlotCalculator plotCalculator, PlotFilter filter, IDebug debugger)
+	public GriefCleanupCommand(WorldGuardInterface worldGuard, WorldEditInterface worldEdit, PlotCalculator plotCalculator, PlotFilter filter)
 	{
 		super("griefcleanup", "Cleans up griefed plots.", "runsafe.creative.degrief", "what");
 		this.worldEdit = worldEdit;
 		this.worldGuard = worldGuard;
 		this.plotCalculator = plotCalculator;
 		this.filter = filter;
-		this.debugger = debugger;
 	}
 
 	@Override
@@ -75,18 +73,13 @@ public class GriefCleanupCommand extends PlayerCommand
 		List<Integer> removeIds = Lists.newArrayList(remove);
 		RunsafeLocation max = plotCalculator.getMaxPosition(player.getWorld(), area);
 		RunsafeLocation min = plotCalculator.getMinPosition(player.getWorld(), area);
-		debugger.fine("Cleaning area %s - %s", min, max);
 		RunsafeWorld world = player.getWorld();
 		int counter = 0;
-		debugger.fine("X: %d - %d Y: %d - %d Z: %d - %d", min.getBlockX(), max.getBlockX(), max.getBlockY(), min.getBlockY(), min.getBlockZ(), max.getBlockZ());
 		for (int x = min.getBlockX(); x <= max.getBlockX(); ++x)
 			for (int y = max.getBlockY(); y >= min.getBlockY(); --y)
-				for (int z = min.getBlockZ(); z >= max.getBlockZ(); ++z)
+				for (int z = min.getBlockZ(); z <= max.getBlockZ(); ++z)
 				{
-					debugger.fine("(Scan %d,%d,%d)", x, y, z);
 					RunsafeBlock block = world.getBlockAt(x, y, z);
-					if (y == 67)
-						debugger.finer("Block at %s is %d", block.getLocation(), block.getTypeId());
 					if (removeIds.contains(Integer.valueOf(block.getTypeId())))
 					{
 						block.setTypeId(0);
@@ -115,5 +108,4 @@ public class GriefCleanupCommand extends PlayerCommand
 	private final WorldEditInterface worldEdit;
 	private final PlotCalculator plotCalculator;
 	private final PlotFilter filter;
-	private final IDebug debugger;
 }
