@@ -3,6 +3,7 @@ package no.runsafe.creativetoolbox.command;
 import com.google.common.collect.Lists;
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotFilter;
+import no.runsafe.framework.api.IDebug;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.block.RunsafeBlock;
@@ -16,13 +17,14 @@ import java.util.List;
 
 public class GriefCleanupCommand extends PlayerCommand
 {
-	public GriefCleanupCommand(WorldGuardInterface worldGuard, WorldEditInterface worldEdit, PlotCalculator plotCalculator, PlotFilter filter)
+	public GriefCleanupCommand(WorldGuardInterface worldGuard, WorldEditInterface worldEdit, PlotCalculator plotCalculator, PlotFilter filter, IDebug debugger)
 	{
 		super("griefcleanup", "Cleans up griefed plots.", "runsafe.creative.degrief", "what");
 		this.worldEdit = worldEdit;
 		this.worldGuard = worldGuard;
 		this.plotCalculator = plotCalculator;
 		this.filter = filter;
+		this.debugger = debugger;
 	}
 
 	@Override
@@ -72,13 +74,14 @@ public class GriefCleanupCommand extends PlayerCommand
 		List<Integer> removeIds = Lists.newArrayList(remove);
 		RunsafeLocation max = plotCalculator.getMaxPosition(player.getWorld(), area);
 		RunsafeLocation min = plotCalculator.getMinPosition(player.getWorld(), area);
+		debugger.fine("Cleaning area %s - %s", min, max);
 		int counter = 0;
 		for (int x = min.getBlockX(); x <= max.getBlockX(); ++x)
 			for (int y = max.getBlockY(); y >= min.getBlockY(); --y)
 				for (int z = min.getBlockZ(); z >= max.getBlockZ(); ++z)
 				{
 					RunsafeBlock block = player.getWorld().getBlockAt(x, y, z);
-					if (removeIds.contains(block.getTypeId()))
+					if (removeIds.contains(Integer.valueOf(block.getTypeId())))
 					{
 						block.setTypeId(0);
 						counter++;
@@ -106,4 +109,5 @@ public class GriefCleanupCommand extends PlayerCommand
 	private final WorldEditInterface worldEdit;
 	private final PlotCalculator plotCalculator;
 	private final PlotFilter filter;
+	private final IDebug debugger;
 }
