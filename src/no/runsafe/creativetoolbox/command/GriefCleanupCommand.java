@@ -83,6 +83,7 @@ public class GriefCleanupCommand extends PlayerCommand
 			for (int y = max.getBlockY(); y >= min.getBlockY(); --y)
 				for (int z = min.getBlockZ(); z >= max.getBlockZ(); ++z)
 				{
+					debugger.fine("(Scan %d,%d,%d)", x, y, z);
 					RunsafeBlock block = world.getBlockAt(x, y, z);
 					if (y == 67)
 						debugger.finer("Block at %s is %d", block.getLocation(), block.getTypeId());
