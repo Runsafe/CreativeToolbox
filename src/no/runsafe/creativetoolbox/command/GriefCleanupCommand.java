@@ -78,6 +78,7 @@ public class GriefCleanupCommand extends PlayerCommand
 		debugger.fine("Cleaning area %s - %s", min, max);
 		RunsafeWorld world = player.getWorld();
 		int counter = 0;
+		debugger.fine("X: %d - %d Y: %d - %d Z: %d - %d", min.getBlockX(), max.getBlockX(), max.getBlockY(), min.getBlockY(), min.getBlockZ(), max.getBlockZ());
 		for (int x = min.getBlockX(); x <= max.getBlockX(); ++x)
 			for (int y = max.getBlockY(); y >= min.getBlockY(); --y)
 				for (int z = min.getBlockZ(); z >= max.getBlockZ(); ++z)
