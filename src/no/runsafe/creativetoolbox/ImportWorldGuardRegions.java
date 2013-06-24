@@ -1,6 +1,5 @@
 package no.runsafe.creativetoolbox;
 
-import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.creativetoolbox.database.PlotLogRepository;
 import no.runsafe.creativetoolbox.database.PlotMemberRepository;
 import no.runsafe.framework.api.IConfiguration;
@@ -23,7 +22,6 @@ public class ImportWorldGuardRegions implements IConfigurationChanged
 		this.logRepository = logRepository;
 		this.memberRepository = memberRepository;
 	}
-
 
 	@Override
 	public void OnConfigurationChanged(IConfiguration config)
