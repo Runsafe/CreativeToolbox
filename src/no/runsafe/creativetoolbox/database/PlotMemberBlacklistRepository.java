@@ -30,10 +30,11 @@ public class PlotMemberBlacklistRepository extends Repository implements IConfig
 
 	public void remove(RunsafePlayer blacklisted)
 	{
-		if (blacklist.contains(blacklisted.getName().toLowerCase()))
-			blacklist.remove(blacklisted.getName().toLowerCase());
+		String playerName = blacklisted.getName().toLowerCase();
+		if (blacklist.contains(playerName))
+			blacklist.remove(playerName);
 
-		database.Execute("DELETE FROM creative_blacklist WHERE `player`=?", blacklisted.getName().toLowerCase());
+		database.Execute("DELETE FROM creative_blacklist WHERE `player`=?", playerName);
 	}
 
 	public boolean isBlacklisted(RunsafePlayer player)
