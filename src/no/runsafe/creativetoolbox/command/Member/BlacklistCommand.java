@@ -27,6 +27,9 @@ public class BlacklistCommand extends ExecutableCommand
 		if (player instanceof RunsafeAmbiguousPlayer)
 			return player.toString();
 
+		if (blacklistRepository.isBlacklisted(player))
+			return "&cThat player is already blacklisted.";
+
 		blacklistRepository.add(executor, player);
 		return String.format("The player %s has been blacklisted.", player.getPrettyName());
 	}
