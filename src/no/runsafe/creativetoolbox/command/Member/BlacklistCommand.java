@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 public class BlacklistCommand extends ExecutableCommand
 {
-	protected BlacklistCommand(PlotMemberBlacklistRepository blacklistRepository)
+	public BlacklistCommand(PlotMemberBlacklistRepository blacklistRepository)
 	{
 		super("blacklist", "Blocks a certain player from being added to any additional creative plots", "runsafe.creative.blacklist", "player");
 		this.blacklistRepository = blacklistRepository;
