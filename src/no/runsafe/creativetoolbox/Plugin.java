@@ -1,8 +1,8 @@
 package no.runsafe.creativetoolbox;
 
 import no.runsafe.creativetoolbox.command.*;
-import no.runsafe.creativetoolbox.command.Member.RemoveCommand;
 import no.runsafe.creativetoolbox.command.Member.BlacklistCommand;
+import no.runsafe.creativetoolbox.command.Member.RemoveCommand;
 import no.runsafe.creativetoolbox.command.OldPlots.NextCommand;
 import no.runsafe.creativetoolbox.command.OldPlots.PreviousCommand;
 import no.runsafe.creativetoolbox.command.Tag.ClearCommand;
@@ -33,6 +33,7 @@ public class Plugin extends RunsafeConfigurablePlugin
 		addComponent(PlotVoteRepository.class);
 		addComponent(PlotEntranceRepository.class);
 		addComponent(PlotTagRepository.class);
+		addComponent(PlotMemberBlacklistRepository.class);
 		addComponent(InteractEvents.class);
 		addComponent(SyncInteractEvents.class);
 		addComponent(PlotCalculator.class);
