@@ -31,6 +31,10 @@ public class AddCommand extends PlayerAsyncCommand
 	public String OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters)
 	{
 		RunsafePlayer member = RunsafeServer.Instance.getPlayer(parameters.get("player"));
+
+		if (member == null)
+			return "&cUnable to find player.";
+
 		if (member instanceof RunsafeAmbiguousPlayer)
 			return member.toString();
 
