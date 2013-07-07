@@ -22,7 +22,7 @@ public class BlacklistCommand extends ExecutableCommand
 	{
 		RunsafePlayer player = RunsafeServer.Instance.getPlayer(params.get("player"));
 		if (player == null)
-			return "Unable to locate player.";
+			return "&cUnable to locate player.";
 
 		if (player instanceof RunsafeAmbiguousPlayer)
 			return player.toString();
