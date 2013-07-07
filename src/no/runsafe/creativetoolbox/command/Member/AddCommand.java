@@ -1,6 +1,7 @@
 package no.runsafe.creativetoolbox.command.Member;
 
 import no.runsafe.creativetoolbox.PlotFilter;
+import no.runsafe.creativetoolbox.database.PlotMemberBlacklistRepository;
 import no.runsafe.creativetoolbox.database.PlotMemberRepository;
 import no.runsafe.creativetoolbox.event.PlotMembershipGrantedEvent;
 import no.runsafe.framework.api.IScheduler;
@@ -17,12 +18,13 @@ import java.util.List;
 
 public class AddCommand extends PlayerAsyncCommand
 {
-	public AddCommand(IScheduler scheduler, PlotFilter filter, WorldGuardInterface worldGuard, PlotMemberRepository members)
+	public AddCommand(IScheduler scheduler, PlotFilter filter, WorldGuardInterface worldGuard, PlotMemberRepository members, PlotMemberBlacklistRepository blacklistRepository)
 	{
 		super("add", "Add a member to the plot you are standing in", "runsafe.creative.member.add", scheduler, "player");
 		plotFilter = filter;
 		worldGuardInterface = worldGuard;
 		this.members = members;
+		this.blacklistRepository = blacklistRepository;
 	}
 
 	@Override
@@ -31,6 +33,10 @@ public class AddCommand extends PlayerAsyncCommand
 		RunsafePlayer member = RunsafeServer.Instance.getPlayer(parameters.get("player"));
 		if (member instanceof RunsafeAmbiguousPlayer)
 			return member.toString();
+
+		if (blacklistRepository.isBlacklisted(member))
+			return String.format("The player %s has been blacklisted from being added as a member.", member.getPrettyName());
+
 		List<String> target = plotFilter.apply(worldGuardInterface.getRegionsAtLocation(executor.getLocation()));
 		List<String> ownedRegions = worldGuardInterface.getOwnedRegions(executor, plotFilter.getWorld());
 		if (target == null || target.size() == 0)
@@ -60,4 +66,5 @@ public class AddCommand extends PlayerAsyncCommand
 	private final WorldGuardInterface worldGuardInterface;
 	private final PlotFilter plotFilter;
 	private final PlotMemberRepository members;
+	private final PlotMemberBlacklistRepository blacklistRepository;
 }

@@ -2,6 +2,7 @@ package no.runsafe.creativetoolbox;
 
 import no.runsafe.creativetoolbox.command.*;
 import no.runsafe.creativetoolbox.command.Member.RemoveCommand;
+import no.runsafe.creativetoolbox.command.Member.BlacklistCommand;
 import no.runsafe.creativetoolbox.command.OldPlots.NextCommand;
 import no.runsafe.creativetoolbox.command.OldPlots.PreviousCommand;
 import no.runsafe.creativetoolbox.command.Tag.ClearCommand;
@@ -49,6 +50,7 @@ public class Plugin extends RunsafeConfigurablePlugin
 		Command member = new Command("member", "Tools to handle plot membership", null);
 		member.addSubCommand(getInstance(no.runsafe.creativetoolbox.command.Member.AddCommand.class));
 		member.addSubCommand(getInstance(RemoveCommand.class));
+		member.addSubCommand(getInstance(BlacklistCommand.class));
 		toolbox.addSubCommand(member);
 
 		Command tag = new Command("tag", "Plot tagging tool", null);
