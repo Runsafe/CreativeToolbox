@@ -51,12 +51,13 @@ public class RegenerateCommand extends PlayerAsyncCommand
 		if (arguments != null && arguments.length > 0)
 		{
 			PlotChunkGenerator.Mode mode = getMode(arguments[0]);
+			PlotChunkGenerator.Biome biome = arguments.length > 1 ? getBiome(arguments[1]) : null;
 			if (mode == null)
 				return String.format("Unknown generator, %s!", arguments[0]);
-			interactEvents.startRegeneration(executor, area, mode);
+			interactEvents.startRegeneration(executor, area, mode, biome);
 		}
 		else
-			interactEvents.startRegeneration(executor, plotCalculator.pad(area), null);
+			interactEvents.startRegeneration(executor, plotCalculator.pad(area), null, null);
 
 		return "Right click the ground to confirm regeneration.";
 	}
@@ -84,6 +85,16 @@ public class RegenerateCommand extends PlayerAsyncCommand
 			return PlotChunkGenerator.Mode.NORMAL;
 		if (value.equalsIgnoreCase("void"))
 			return PlotChunkGenerator.Mode.VOID;
+		return null;
+	}
+
+	private PlotChunkGenerator.Biome getBiome(String value)
+	{
+		for(PlotChunkGenerator.Biome biome : PlotChunkGenerator.Biome.values())
+		{
+			if(biome.name().toLowerCase().startsWith(value.toLowerCase()))
+				return biome;
+		}
 		return null;
 	}
 

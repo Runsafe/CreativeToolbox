@@ -24,11 +24,19 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 		this.manager = manager;
 	}
 
-	public void startRegeneration(RunsafePlayer executor, Rectangle2D area, PlotChunkGenerator.Mode mode)
+	public void startRegeneration(RunsafePlayer executor, Rectangle2D area, PlotChunkGenerator.Mode mode, PlotChunkGenerator.Biome biome)
 	{
 		regenerations.put(executor.getName(), area);
+
 		if (mode != null)
 			generator.put(executor.getName(), mode);
+		else if (generator.containsKey(executor.getName()))
+			generator.remove(executor.getName());
+
+		if (biome != null)
+			generatorMode.put(executor.getName(), biome);
+		else if (generatorMode.containsKey(executor.getName()))
+			generatorMode.remove(executor.getName());
 	}
 
 	public void startDeletion(RunsafePlayer executor, Map<String, Rectangle2D> regions)
@@ -58,10 +66,16 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 					regenerations.remove(player.getName());
 					if (changeMode)
 						generator.remove(player.getName());
+					if (generatorMode.containsKey(player.getName()))
+						generatorMode.remove(player.getName());
 					return true;
 				}
 				if (changeMode)
+				{
 					plotGenerator.setMode(generator.get(player.getName()));
+					if (generatorMode.containsKey(player.getName()))
+						plotGenerator.setBiome(generatorMode.get(player.getName()));
+				}
 				RunsafeLocation minPos = calculator.getMinPosition(player.getWorld(), area);
 				RunsafeLocation maxPos = calculator.getMaxPosition(player.getWorld(), area);
 				player.sendMessage(
@@ -77,6 +91,7 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 				{
 					plotGenerator.setMode(PlotChunkGenerator.Mode.NORMAL);
 					generator.remove(player.getName());
+					plotGenerator.setBiome(null);
 				}
 				regenerations.remove(player.getName());
 			}
@@ -114,6 +129,7 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 	private final ConcurrentHashMap<String, Map<String, Rectangle2D>> deletions = new ConcurrentHashMap<String, Map<String, Rectangle2D>>();
 	private final ConcurrentHashMap<String, Rectangle2D> regenerations = new ConcurrentHashMap<String, Rectangle2D>();
 	private final ConcurrentHashMap<String, PlotChunkGenerator.Mode> generator = new ConcurrentHashMap<String, PlotChunkGenerator.Mode>();
+	private final ConcurrentHashMap<String, PlotChunkGenerator.Biome> generatorMode = new ConcurrentHashMap<String, PlotChunkGenerator.Biome>();
 	private final PlotChunkGenerator plotGenerator;
 	private final PlotCalculator calculator;
 	private final WorldEditInterface worldEdit;
