@@ -2,8 +2,13 @@ package no.runsafe.creativetoolbox.event;
 
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotManager;
+import no.runsafe.creativetoolbox.Plugin;
+import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.event.player.IPlayerRightClickBlock;
+import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.minecraft.RunsafeLocation;
+import no.runsafe.framework.minecraft.RunsafeServer;
+import no.runsafe.framework.minecraft.RunsafeWorld;
 import no.runsafe.framework.minecraft.block.RunsafeBlock;
 import no.runsafe.framework.minecraft.item.meta.RunsafeMeta;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
@@ -14,7 +19,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class SyncInteractEvents implements IPlayerRightClickBlock
+public class SyncInteractEvents implements IPlayerRightClickBlock, IConfigurationChanged
 {
 	public SyncInteractEvents(PlotChunkGenerator plotGenerator, PlotCalculator calculator, WorldEditInterface worldEdit, PlotManager manager)
 	{
@@ -52,6 +57,12 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 				|| executeRegenerations(player, block.getLocation()) && executeDeletion(player, block.getLocation());
 	}
 
+	@Override
+	public void OnConfigurationChanged(IConfiguration config)
+	{
+		world = RunsafeServer.Instance.getWorld(config.getConfigValueAsString("world"));
+	}
+
 	private boolean executeRegenerations(RunsafePlayer player, RunsafeLocation location)
 	{
 		if (regenerations.containsKey(player.getName()))
@@ -72,7 +83,13 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 				}
 				if (changeMode)
 				{
-					plotGenerator.setMode(generator.get(player.getName()));
+					PlotChunkGenerator.Mode mode = generator.get(player.getName());
+					if (mode == PlotChunkGenerator.Mode.DEFAULT)
+						plotGenerator.setDefaultGenerator(
+							Plugin.Instances.get("CreativeToolbox")
+								.getDefaultWorldGenerator("world", String.valueOf(world.getRaw().getSeed()))
+						);
+					plotGenerator.setMode(mode);
 					if (generatorMode.containsKey(player.getName()))
 						plotGenerator.setBiome(generatorMode.get(player.getName()));
 				}
@@ -134,4 +151,5 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 	private final PlotCalculator calculator;
 	private final WorldEditInterface worldEdit;
 	private final PlotManager manager;
+	private RunsafeWorld world;
 }
