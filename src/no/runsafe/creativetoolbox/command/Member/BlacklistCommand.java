@@ -22,10 +22,13 @@ public class BlacklistCommand extends ExecutableCommand
 	{
 		RunsafePlayer player = RunsafeServer.Instance.getPlayer(params.get("player"));
 		if (player == null)
-			return "Unable to locate player.";
+			return "&cUnable to locate player.";
 
 		if (player instanceof RunsafeAmbiguousPlayer)
 			return player.toString();
+
+		if (blacklistRepository.isBlacklisted(player))
+			return "&cThat player is already blacklisted.";
 
 		blacklistRepository.add(executor, player);
 		return String.format("The player %s has been blacklisted.", player.getPrettyName());
