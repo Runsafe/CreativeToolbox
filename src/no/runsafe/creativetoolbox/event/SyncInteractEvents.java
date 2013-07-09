@@ -2,12 +2,9 @@ package no.runsafe.creativetoolbox.event;
 
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotManager;
-import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.event.player.IPlayerRightClickBlock;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.minecraft.RunsafeLocation;
-import no.runsafe.framework.minecraft.RunsafeServer;
-import no.runsafe.framework.minecraft.RunsafeWorld;
 import no.runsafe.framework.minecraft.block.RunsafeBlock;
 import no.runsafe.framework.minecraft.item.meta.RunsafeMeta;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
@@ -18,7 +15,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class SyncInteractEvents implements IPlayerRightClickBlock, IConfigurationChanged
+public class SyncInteractEvents implements IPlayerRightClickBlock
 {
 	public SyncInteractEvents(PlotChunkGenerator plotGenerator, PlotCalculator calculator, WorldEditInterface worldEdit, PlotManager manager)
 	{
@@ -28,7 +25,7 @@ public class SyncInteractEvents implements IPlayerRightClickBlock, IConfiguratio
 		this.manager = manager;
 	}
 
-	public void startRegeneration(RunsafePlayer executor, Rectangle2D area, PlotChunkGenerator.Mode mode, PlotChunkGenerator.Biome biome)
+	public void startRegeneration(RunsafePlayer executor, Rectangle2D area, PlotChunkGenerator.Mode mode)
 	{
 		regenerations.put(executor.getName(), area);
 
@@ -36,11 +33,6 @@ public class SyncInteractEvents implements IPlayerRightClickBlock, IConfiguratio
 			generator.put(executor.getName(), mode);
 		else if (generator.containsKey(executor.getName()))
 			generator.remove(executor.getName());
-
-		if (biome != null)
-			generatorMode.put(executor.getName(), biome);
-		else if (generatorMode.containsKey(executor.getName()))
-			generatorMode.remove(executor.getName());
 	}
 
 	public void startDeletion(RunsafePlayer executor, Map<String, Rectangle2D> regions)
@@ -54,12 +46,6 @@ public class SyncInteractEvents implements IPlayerRightClickBlock, IConfiguratio
 		return
 			deletions.isEmpty() && regenerations.isEmpty()
 				|| executeRegenerations(player, block.getLocation()) && executeDeletion(player, block.getLocation());
-	}
-
-	@Override
-	public void OnConfigurationChanged(IConfiguration config)
-	{
-		world = RunsafeServer.Instance.getWorld(config.getConfigValueAsString("world"));
 	}
 
 	private boolean executeRegenerations(RunsafePlayer player, RunsafeLocation location)
@@ -76,16 +62,12 @@ public class SyncInteractEvents implements IPlayerRightClickBlock, IConfiguratio
 					regenerations.remove(player.getName());
 					if (changeMode)
 						generator.remove(player.getName());
-					if (generatorMode.containsKey(player.getName()))
-						generatorMode.remove(player.getName());
 					return true;
 				}
 				if (changeMode)
 				{
 					PlotChunkGenerator.Mode mode = generator.get(player.getName());
 					plotGenerator.setMode(mode);
-					if (generatorMode.containsKey(player.getName()))
-						plotGenerator.setBiome(generatorMode.get(player.getName()));
 				}
 				RunsafeLocation minPos = calculator.getMinPosition(player.getWorld(), area);
 				RunsafeLocation maxPos = calculator.getMaxPosition(player.getWorld(), area);
@@ -102,7 +84,6 @@ public class SyncInteractEvents implements IPlayerRightClickBlock, IConfiguratio
 				{
 					plotGenerator.setMode(PlotChunkGenerator.Mode.NORMAL);
 					generator.remove(player.getName());
-					plotGenerator.setBiome(null);
 				}
 				regenerations.remove(player.getName());
 			}
@@ -140,10 +121,8 @@ public class SyncInteractEvents implements IPlayerRightClickBlock, IConfiguratio
 	private final ConcurrentHashMap<String, Map<String, Rectangle2D>> deletions = new ConcurrentHashMap<String, Map<String, Rectangle2D>>();
 	private final ConcurrentHashMap<String, Rectangle2D> regenerations = new ConcurrentHashMap<String, Rectangle2D>();
 	private final ConcurrentHashMap<String, PlotChunkGenerator.Mode> generator = new ConcurrentHashMap<String, PlotChunkGenerator.Mode>();
-	private final ConcurrentHashMap<String, PlotChunkGenerator.Biome> generatorMode = new ConcurrentHashMap<String, PlotChunkGenerator.Biome>();
 	private final PlotChunkGenerator plotGenerator;
 	private final PlotCalculator calculator;
 	private final WorldEditInterface worldEdit;
 	private final PlotManager manager;
-	private RunsafeWorld world;
 }
