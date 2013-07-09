@@ -85,6 +85,8 @@ public class RegenerateCommand extends PlayerAsyncCommand
 			return PlotChunkGenerator.Mode.NORMAL;
 		if (value.equalsIgnoreCase("void"))
 			return PlotChunkGenerator.Mode.VOID;
+		if (value.equalsIgnoreCase("default"))
+			return PlotChunkGenerator.Mode.DEFAULT;
 		return null;
 	}
 
