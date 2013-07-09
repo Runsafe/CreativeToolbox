@@ -30,8 +30,6 @@ public class SyncInteractEvents implements IPlayerRightClickBlock, IConfiguratio
 
 	public void startRegeneration(RunsafePlayer executor, Rectangle2D area, PlotChunkGenerator.Mode mode, PlotChunkGenerator.Biome biome)
 	{
-		if (area == null)
-			return;
 		regenerations.put(executor.getName(), area);
 
 		if (mode != null)
