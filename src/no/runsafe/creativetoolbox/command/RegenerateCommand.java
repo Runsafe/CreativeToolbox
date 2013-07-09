@@ -38,6 +38,8 @@ public class RegenerateCommand extends PlayerAsyncCommand
 	public String OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters, String[] arguments)
 	{
 		Rectangle2D area = getArea(executor.getLocation());
+		if (area == null)
+			return "No plot at this point.";
 
 		List<String> candidate = filter.apply(worldGuard.getRegionsAtLocation(executor.getLocation()));
 		if (candidate != null && !candidate.isEmpty())
@@ -48,16 +50,9 @@ public class RegenerateCommand extends PlayerAsyncCommand
 					return "You may not regenerate an approved plot!";
 			}
 
-		if (arguments != null && arguments.length > 0)
-		{
-			PlotChunkGenerator.Mode mode = getMode(arguments[0]);
-			PlotChunkGenerator.Biome biome = arguments.length > 1 ? getBiome(arguments[1]) : null;
-			if (mode == null)
-				return String.format("Unknown generator, %s!", arguments[0]);
-			interactEvents.startRegeneration(executor, area, mode, biome);
-		}
-		else
-			interactEvents.startRegeneration(executor, plotCalculator.pad(area), null, null);
+		PlotChunkGenerator.Mode mode = arguments.length > 0 ? getMode(arguments[0]) : null;
+		PlotChunkGenerator.Biome biome = arguments.length > 1 ? getBiome(arguments[1]) : null;
+		interactEvents.startRegeneration(executor, area, mode, biome);
 
 		return "Right click the ground to confirm regeneration.";
 	}
@@ -92,9 +87,9 @@ public class RegenerateCommand extends PlayerAsyncCommand
 
 	private PlotChunkGenerator.Biome getBiome(String value)
 	{
-		for(PlotChunkGenerator.Biome biome : PlotChunkGenerator.Biome.values())
+		for (PlotChunkGenerator.Biome biome : PlotChunkGenerator.Biome.values())
 		{
-			if(biome.name().toLowerCase().startsWith(value.toLowerCase()))
+			if (biome.name().toLowerCase().startsWith(value.toLowerCase()))
 				return biome;
 		}
 		return null;
