@@ -84,11 +84,6 @@ public class SyncInteractEvents implements IPlayerRightClickBlock, IConfiguratio
 				if (changeMode)
 				{
 					PlotChunkGenerator.Mode mode = generator.get(player.getName());
-					if (mode == PlotChunkGenerator.Mode.DEFAULT)
-						plotGenerator.setDefaultGenerator(
-							Plugin.Instances.get("CreativeToolbox")
-								.getDefaultWorldGenerator("world", String.valueOf(world.getRaw().getSeed()))
-						);
 					plotGenerator.setMode(mode);
 					if (generatorMode.containsKey(player.getName()))
 						plotGenerator.setBiome(generatorMode.get(player.getName()));
