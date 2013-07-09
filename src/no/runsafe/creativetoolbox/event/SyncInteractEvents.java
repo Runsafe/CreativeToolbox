@@ -2,7 +2,6 @@ package no.runsafe.creativetoolbox.event;
 
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotManager;
-import no.runsafe.creativetoolbox.Plugin;
 import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.event.player.IPlayerRightClickBlock;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
@@ -31,6 +30,8 @@ public class SyncInteractEvents implements IPlayerRightClickBlock, IConfiguratio
 
 	public void startRegeneration(RunsafePlayer executor, Rectangle2D area, PlotChunkGenerator.Mode mode, PlotChunkGenerator.Biome biome)
 	{
+		if (area == null)
+			return;
 		regenerations.put(executor.getName(), area);
 
 		if (mode != null)
