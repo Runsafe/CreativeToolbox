@@ -30,7 +30,7 @@ public class GriefCleanupCommand extends PlayerCommand
 	public List<String> getParameterOptions(String parameter)
 	{
 		if (parameter.equals("what"))
-			return Lists.newArrayList("road", "lava", "water", "cobblestone", "all");
+			return Lists.newArrayList("road", "lava", "water", "cobblestone", "obsidian", "all");
 		return null;
 	}
 
@@ -50,6 +50,9 @@ public class GriefCleanupCommand extends PlayerCommand
 
 		if (what.equals("cobblestone"))
 			return cleanup(executor, area, 4);
+
+		if (what.equals("obsidian"))
+			return cleanup(executor, area, 49);
 
 		if (what.equals("all"))
 			return cleanup(executor, area, 4, 8, 9, 10, 11);
