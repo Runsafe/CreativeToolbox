@@ -31,6 +31,9 @@ public class ImportWorldGuardRegions implements IPluginEnabled
 	@Override
 	public void OnPluginEnabled()
 	{
+		if (config.getConfigValueAsBoolean("imported"))
+			return;
+
 		RunsafeWorld world = manager.getWorld();
 		List<String> regions = worldGuard.getRegionsInWorld(world);
 		int members = 0;
@@ -39,7 +42,7 @@ public class ImportWorldGuardRegions implements IPluginEnabled
 		{
 			String claim = logRepository.getClaim(region);
 			if (claim == null)
-				if(!logRepository.log(region, "unknown"))
+				if (!logRepository.log(region, "unknown"))
 					console.warning("Unable to import region %s to claim repository!", region);
 
 			for (String member : worldGuard.getMembers(world, region))
