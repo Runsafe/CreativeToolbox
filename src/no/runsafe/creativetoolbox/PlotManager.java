@@ -403,7 +403,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		int membercleaned = memberRepository.cleanStaleData();
 
 		console.logInformation(
-			"Deleted %d plots, cleared tags from %d deleted plots and %d members.",
+			"Deleted &a%d&r plots, cleared tags from &a%d&r deleted plots and &a%d&r members.",
 			deleted, cleared, membercleaned
 		);
 	}

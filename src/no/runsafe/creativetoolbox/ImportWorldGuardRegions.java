@@ -43,7 +43,7 @@ public class ImportWorldGuardRegions implements IPluginEnabled
 			String claim = logRepository.getClaim(region);
 			if (claim == null)
 				if (!logRepository.log(region, "unknown"))
-					console.warning("Unable to import region %s to claim repository!", region);
+					console.logWarning("Unable to import region &c%s&r to claim repository!", region);
 
 			for (String member : worldGuard.getMembers(world, region))
 			{
@@ -57,7 +57,7 @@ public class ImportWorldGuardRegions implements IPluginEnabled
 				owners++;
 			}
 		}
-		console.logInformation("Imported %d owners and %d members to %d plots.", owners, members, regions.size());
+		console.logInformation("Imported &a%d&r owners and &a%d&r members to &a%d&r plots.", owners, members, regions.size());
 		config.setConfigValue("imported", true);
 		config.save();
 	}
