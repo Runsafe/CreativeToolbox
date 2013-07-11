@@ -68,6 +68,22 @@ public class PlotTagRepository extends Repository
 		});
 	}
 
+	public List<String> getTaggedPlots()
+	{
+		return Lists.transform(
+			database.QueryColumn("SELECT DISTINCT `name` FROM creative_plot_tags"),
+			new Function<IValue, String>()
+			{
+				@Override
+				public String apply(@Nullable IValue plot)
+				{
+					assert plot != null;
+					return plot.String();
+				}
+			}
+		);
+	}
+
 	@Override
 	public String getTableName()
 	{

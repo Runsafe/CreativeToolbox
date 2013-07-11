@@ -1,9 +1,13 @@
 package no.runsafe.creativetoolbox.database;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 import no.runsafe.framework.api.database.IDatabase;
 import no.runsafe.framework.api.database.IRow;
+import no.runsafe.framework.api.database.IValue;
 import no.runsafe.framework.api.database.Repository;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +25,27 @@ public class PlotLogRepository extends Repository
 		return database.Execute("INSERT INTO `creative_plot_log` (`plot`,`claimer`,`claimed`) VALUES (?, ?, NOW())" +
 			"ON DUPLICATE KEY UPDATE `claimer`=VALUES(`claimer`), `claimed`=VALUES(`claimed`)",
 			plot, claimer);
+	}
+
+	public void delete(String plot)
+	{
+		database.Execute("DELETE FROM `creative_plot_log` WHERE `plot`=?", plot);
+	}
+
+	public List<String> getPlots()
+	{
+		return Lists.transform(
+			database.QueryColumn("SELECT `plot` FROM `creative_plot_log`"),
+			new Function<IValue, String>()
+			{
+				@Override
+				public String apply(@Nullable IValue plot)
+				{
+					assert plot != null;
+					return plot.String();
+				}
+			}
+		);
 	}
 
 	public String getClaim(String plot)

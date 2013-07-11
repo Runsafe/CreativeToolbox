@@ -88,6 +88,11 @@ public class PlotMemberRepository extends Repository
 		});
 	}
 
+	public void cleanStaleData()
+	{
+		database.Execute("DELETE FROM creative_plot_member WHERE `plot` NOT IN (SELECT name FROM creative_plot_log)");
+	}
+
 	@Override
 	public HashMap<Integer, List<String>> getSchemaUpdateQueries()
 	{

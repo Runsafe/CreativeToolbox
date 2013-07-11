@@ -34,7 +34,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		WorldGuardInterface worldGuardInterface,
 		PlotEntranceRepository plotEntranceRepository,
 		ApprovedPlotRepository approvedPlotRepository,
-		PlotVoteRepository voteRepository, PlotTagRepository tagRepository, PlotCalculator plotCalculator,
+		PlotVoteRepository voteRepository, PlotTagRepository tagRepository, PlotMemberRepository memberRepository, PlotCalculator plotCalculator,
 		IOutput debugger,
 		PlotLogRepository plotLog)
 	{
@@ -44,6 +44,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		plotApproval = approvedPlotRepository;
 		this.voteRepository = voteRepository;
 		this.tagRepository = tagRepository;
+		this.memberRepository = memberRepository;
 		calculator = plotCalculator;
 		console = debugger;
 		this.plotLog = plotLog;
@@ -286,6 +287,10 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 			calculator.getMaxPosition(world, region)
 		))
 		{
+			voteRepository.clear(plotName);
+			PlotApproval approval = plotApproval.get(plotName);
+			if (approval != null)
+				plotApproval.delete(approval);
 			if (!plotLog.log(plotName, claimer.getName()))
 				console.warning("Unable to log plot %s claimed by %s", plotName, claimer.getPrettyName());
 			setTaken(calculator.getColumn((long) region.getCenterX()), calculator.getRow((long) region.getCenterY()));
@@ -370,6 +375,24 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 	{
 		ScanTakenPlots();
 		ScanFreePlots();
+		CleanStaleData();
+	}
+
+	private void CleanStaleData()
+	{
+		Set<String> current = worldGuard.getRegionRectanglesInWorld(filter.getWorld()).keySet();
+
+		List<String> loggedPlots = plotLog.getPlots();
+		for (String plot : loggedPlots)
+			if (!current.contains(plot))
+				plotLog.delete(plot);
+
+		List<String> taggedPlots = tagRepository.getTaggedPlots();
+		for (String plot : taggedPlots)
+			if (!current.contains(plot))
+				tagRepository.setTags(plot, null);
+
+		memberRepository.cleanStaleData();
 	}
 
 	@Override
@@ -434,6 +457,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 	private final ApprovedPlotRepository plotApproval;
 	private final PlotVoteRepository voteRepository;
 	private final PlotTagRepository tagRepository;
+	private final PlotMemberRepository memberRepository;
 	private final PlotCalculator calculator;
 	private final IOutput console;
 	private final PlotLogRepository plotLog;
