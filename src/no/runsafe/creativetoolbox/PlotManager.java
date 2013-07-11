@@ -383,16 +383,29 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		Set<String> current = worldGuard.getRegionRectanglesInWorld(filter.getWorld()).keySet();
 
 		List<String> loggedPlots = plotLog.getPlots();
+		int deleted = 0;
 		for (String plot : loggedPlots)
 			if (!current.contains(plot))
+			{
 				plotLog.delete(plot);
+				deleted++;
+			}
 
 		List<String> taggedPlots = tagRepository.getTaggedPlots();
+		int cleared = 0;
 		for (String plot : taggedPlots)
 			if (!current.contains(plot))
+			{
 				tagRepository.setTags(plot, null);
+				cleared++;
+			}
 
-		memberRepository.cleanStaleData();
+		int membercleaned = memberRepository.cleanStaleData();
+
+		console.logInformation(
+			"Deleted %d plots, cleared tags from %d deleted plots and %d members.",
+			deleted, cleared, membercleaned
+		);
 	}
 
 	@Override

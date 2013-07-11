@@ -33,6 +33,8 @@ public class ImportWorldGuardRegions implements IPluginEnabled
 	{
 		RunsafeWorld world = manager.getWorld();
 		List<String> regions = worldGuard.getRegionsInWorld(world);
+		int members = 0;
+		int owners = 0;
 		for (String region : regions)
 		{
 			String claim = logRepository.getClaim(region);
@@ -41,11 +43,18 @@ public class ImportWorldGuardRegions implements IPluginEnabled
 					console.warning("Unable to import region %s to claim repository!", region);
 
 			for (String member : worldGuard.getMembers(world, region))
+			{
 				memberRepository.addMember(region, member, false);
+				members++;
+			}
 
 			for (String member : worldGuard.getOwners(world, region))
+			{
 				memberRepository.addMember(region, member, true);
+				owners++;
+			}
 		}
+		console.logInformation("Imported %d owners and %d members to %d plots.", owners, members, regions.size());
 		config.setConfigValue("imported", true);
 		config.save();
 	}
