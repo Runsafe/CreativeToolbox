@@ -21,7 +21,7 @@ public class VoteCommand extends PlayerCommand
 		if (region == null)
 			return "There is no plot here.";
 
-		if (!manager.voteValid(player, region))
+		if (manager.disallowVote(player, region))
 			return "You are not allowed to vote for this plot.";
 
 		return manager.vote(player, region)

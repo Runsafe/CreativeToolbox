@@ -15,6 +15,7 @@ public class PlotLogRepository extends Repository
 		this.database = database;
 	}
 
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	public boolean log(String plot, String claimer)
 	{
 		return database.Execute("INSERT INTO `creative_plot_log` (`plot`,`claimer`,`claimed`) VALUES (?, ?, NOW())" +

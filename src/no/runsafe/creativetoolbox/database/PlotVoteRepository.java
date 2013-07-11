@@ -41,14 +41,14 @@ public class PlotVoteRepository extends Repository
 		return answer.Integer("tally");
 	}
 
-	public int tally(String region, Map<String, Integer> voteranks)
+	public int tally(String region, Map<String, Integer> voteRanks)
 	{
 		List<IValue> votes = database.QueryColumn("SELECT `rank` FROM creative_plot_vote WHERE `plot`=?", region);
 		int tally = 0;
 		if (votes != null)
 			for (IValue vote : votes)
-				if (voteranks.containsKey(vote.String().toLowerCase()))
-					tally += voteranks.get(vote.String().toLowerCase());
+				if (voteRanks.containsKey(vote.String().toLowerCase()))
+					tally += voteRanks.get(vote.String().toLowerCase());
 		return tally;
 	}
 

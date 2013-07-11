@@ -38,13 +38,7 @@ public class PlotTagRepository extends Repository
 
 	public boolean addTag(String plot, String tag)
 	{
-		if (tag == null || tag.isEmpty() || tag.trim().isEmpty())
-			return false;
-		return database.Update(
-			"INSERT INTO creative_plot_tags (`name`,`tag`) VALUES (?, ?)" +
-				"ON DUPLICATE KEY UPDATE `tag`=VALUES(`tag`)",
-			plot, tag
-		) > 0;
+		return !(tag == null || tag.isEmpty() || tag.trim().isEmpty()) && insertTag(plot, tag);
 	}
 
 	public boolean setTags(String plot, List<String> tags)
@@ -94,6 +88,15 @@ public class PlotTagRepository extends Repository
 		);
 		revisions.put(1, sql);
 		return revisions;
+	}
+
+	private boolean insertTag(String plot, String tag)
+	{
+		return database.Update(
+			"INSERT INTO creative_plot_tags (`name`,`tag`) VALUES (?, ?)" +
+				"ON DUPLICATE KEY UPDATE `tag`=VALUES(`tag`)",
+			plot, tag
+		) > 0;
 	}
 
 	private final IDatabase database;

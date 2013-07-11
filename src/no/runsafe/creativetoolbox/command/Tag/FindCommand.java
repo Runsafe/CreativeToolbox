@@ -28,5 +28,5 @@ public class FindCommand extends AsyncCommand
 		return String.format("Found these plots: %s", Strings.join(hits, ", "));
 	}
 
-	private PlotTagRepository tagRepository;
+	private final PlotTagRepository tagRepository;
 }

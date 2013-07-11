@@ -164,7 +164,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 			return null;
 		if (player.isOnline())
 			lastSeen.put(playerName, Duration.ZERO);
-		else if (player.isBanned())
+		else if (!player.isNotBanned())
 			lastSeen.put(playerName, BANNED);
 		else
 		{
@@ -202,18 +202,18 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 			oldPlotList.remove(player.getName());
 	}
 
-	public boolean voteValid(RunsafePlayer player, String region)
+	public boolean disallowVote(RunsafePlayer player, String region)
 	{
-		return player.getWorld().equals(world)
-			&& (!voteBlacklist.containsKey(region) || !voteBlacklist.get(region).contains(player.getName().toLowerCase()))
-			&& !worldGuard.getOwners(world, region).contains(player.getName().toLowerCase())
-			&& !worldGuard.getMembers(world, region).contains(player.getName().toLowerCase());
+		return !player.getWorld().equals(world)
+			|| (voteBlacklist.containsKey(region) && voteBlacklist.get(region).contains(player.getName().toLowerCase()))
+			|| worldGuard.getOwners(world, region).contains(player.getName().toLowerCase())
+			|| worldGuard.getMembers(world, region).contains(player.getName().toLowerCase());
 	}
 
 	public boolean vote(RunsafePlayer player, String region)
 	{
 		boolean voted = voteRepository.recordVote(player, region);
-		int score = voteRepository.tally(region, voteranks);
+		int score = voteRepository.tally(region, voteRanks);
 		if (score >= autoApprove)
 		{
 			PlotApproval approval = plotApproval.get(region);
@@ -286,7 +286,8 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 			calculator.getMaxPosition(world, region)
 		))
 		{
-			plotLog.log(plotName, claimer.getName());
+			if (!plotLog.log(plotName, claimer.getName()))
+				console.warning("Unable to log plot %s claimed by %s", plotName, claimer.getPrettyName());
 			setTaken(calculator.getColumn((long) region.getCenterX()), calculator.getRow((long) region.getCenterY()));
 			return true;
 		}
@@ -336,7 +337,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 			player.sendColouredMessage("An error occurred while extending plot.");
 	}
 
-	public void delete(String region)
+	public void delete(RunsafePlayer deletor, String region)
 	{
 		Rectangle2D area = worldGuard.getRectangle(world, region);
 		long col = calculator.getColumn((int) area.getCenterX());
@@ -346,7 +347,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		plotEntrance.delete(region);
 		tagRepository.setTags(region, null);
 		voteRepository.clear(region);
-		new PlotDeletedEvent(null, region).Fire();
+		new PlotDeletedEvent(deletor, region).Fire();
 	}
 
 	public RunsafeWorld getWorld()
@@ -361,7 +362,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		ignoredRegions = config.getConfigValueAsList("free.ignore");
 		limit = new Period(0, 0, 0, config.getConfigValueAsInt("old_after"), 0, 0, 0, 0).toDurationTo(DateTime.now());
 		autoApprove = config.getConfigValueAsInt("vote.approved");
-		voteranks = config.getConfigValuesAsIntegerMap("vote.rank");
+		voteRanks = config.getConfigValuesAsIntegerMap("vote.rank");
 	}
 
 	@Override
@@ -446,6 +447,6 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 	private List<String> ignoredRegions;
 	private Duration limit;
 	private int autoApprove;
-	private Map<String, Integer> voteranks;
+	private Map<String, Integer> voteRanks;
 	private final DateTimeFormatter dateFormat = DateTimeFormat.forPattern("dd.MM.YYYY");
 }

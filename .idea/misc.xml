@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="EntryPointsManager">
-    <entry_points version="2.0" />
+    <entry_points version="2.0">
+      <entry_point TYPE="method" FQNAME="no.runsafe.creativetoolbox.database.ApprovedPlotRepository void delete(no.runsafe.creativetoolbox.database.PlotApproval plotApproval)" />
+      <entry_point TYPE="method" FQNAME="no.runsafe.creativetoolbox.event.PlotApprovedEvent no.runsafe.creativetoolbox.database.PlotApproval getApproval()" />
+      <entry_point TYPE="method" FQNAME="no.runsafe.creativetoolbox.event.PlotApprovedEvent java.lang.String getOwner()" />
+      <entry_point TYPE="method" FQNAME="no.runsafe.creativetoolbox.event.PlotApprovedEvent int getApprovedPlots()" />
+      <entry_point TYPE="method" FQNAME="no.runsafe.creativetoolbox.database.PlotEntranceRepository void delete(no.runsafe.creativetoolbox.database.PlotEntrance entrance)" />
+      <entry_point TYPE="method" FQNAME="no.runsafe.creativetoolbox.PlotManager java.util.List&lt;no.runsafe.framework.minecraft.RunsafeLocation&gt; getPlotEntrances()" />
+      <entry_point TYPE="method" FQNAME="no.runsafe.creativetoolbox.database.PlotMemberRepository java.util.List&lt;java.lang.String&gt; getMembers(java.lang.String plot, boolean owners, boolean members)" />
+      <entry_point TYPE="method" FQNAME="no.runsafe.creativetoolbox.database.PlotMemberRepository java.util.List&lt;java.lang.String&gt; getPlots(java.lang.String player, boolean owner, boolean member)" />
+    </entry_points>
   </component>
   <component name="ProjectResources">
     <default-html-doctype>http://www.w3.org/1999/xhtml</default-html-doctype>

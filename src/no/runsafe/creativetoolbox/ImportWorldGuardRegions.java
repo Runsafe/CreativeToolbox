@@ -3,12 +3,14 @@ package no.runsafe.creativetoolbox;
 import no.runsafe.creativetoolbox.database.PlotLogRepository;
 import no.runsafe.creativetoolbox.database.PlotMemberRepository;
 import no.runsafe.framework.api.IConfiguration;
+import no.runsafe.framework.api.IOutput;
 import no.runsafe.framework.api.event.plugin.IPluginEnabled;
 import no.runsafe.framework.minecraft.RunsafeWorld;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.util.List;
 
+@SuppressWarnings("WeakerAccess")
 public class ImportWorldGuardRegions implements IPluginEnabled
 {
 	public ImportWorldGuardRegions(
@@ -16,13 +18,14 @@ public class ImportWorldGuardRegions implements IPluginEnabled
 		WorldGuardInterface worldGuard,
 		PlotLogRepository logRepository,
 		PlotMemberRepository memberRepository,
-		IConfiguration config)
+		IConfiguration config, IOutput console)
 	{
 		this.manager = manager;
 		this.worldGuard = worldGuard;
 		this.logRepository = logRepository;
 		this.memberRepository = memberRepository;
 		this.config = config;
+		this.console = console;
 	}
 
 	@Override
@@ -34,7 +37,8 @@ public class ImportWorldGuardRegions implements IPluginEnabled
 		{
 			String claim = logRepository.getClaim(region);
 			if (claim == null)
-				logRepository.log(region, "unknown");
+				if(!logRepository.log(region, "unknown"))
+					console.warning("Unable to import region %s to claim repository!", region);
 
 			for (String member : worldGuard.getMembers(world, region))
 				memberRepository.addMember(region, member, false);
@@ -51,4 +55,5 @@ public class ImportWorldGuardRegions implements IPluginEnabled
 	private final PlotLogRepository logRepository;
 	private final PlotMemberRepository memberRepository;
 	private final IConfiguration config;
+	private final IOutput console;
 }

@@ -95,6 +95,8 @@ public class GriefCleanupCommand extends PlayerCommand
 	private String regeneratePadding(RunsafePlayer player, Rectangle2D plotArea)
 	{
 		List<Rectangle2D> padding = plotCalculator.getPaddingSelection(plotArea);
+		if(padding == null || padding.isEmpty())
+			return "Unable to regenerate roads!";
 		for (Rectangle2D area : padding)
 		{
 			worldEdit.regenerate(
