@@ -404,7 +404,10 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		int membercleaned = memberRepository.cleanStaleData();
 
 		for(RunsafePlayer player : blackList.getBlacklist())
+		{
 			removeMember(player);
+			membercleaned++;
+		}
 
 		console.logInformation(
 			"Deleted &a%d&r plots, cleared tags from &a%d&r deleted plots and &a%d&r members.",
@@ -431,6 +434,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 			Set<String> members = worldGuard.getMembers(world, region);
 			if (members != null && members.contains(player.getName()))
 			{
+				console.finer("Removing member %s from %s.", player.getPrettyName(), region);
 				worldGuard.removeMemberFromRegion(world, region, player);
 				memberRepository.removeMember(region, player.getName());
 			}

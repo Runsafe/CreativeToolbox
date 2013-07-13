@@ -7,7 +7,6 @@ import no.runsafe.framework.api.command.ICommandExecutor;
 import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.player.RunsafeAmbiguousPlayer;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
-import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.util.HashMap;
 
