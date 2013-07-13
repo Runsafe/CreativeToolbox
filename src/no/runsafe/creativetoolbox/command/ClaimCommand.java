@@ -3,6 +3,7 @@ package no.runsafe.creativetoolbox.command;
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
+import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.creativetoolbox.database.PlotMemberRepository;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.minecraft.RunsafeServer;
@@ -52,11 +53,16 @@ public class ClaimCommand extends PlayerCommand
 			owner = executor;
 
 		List<String> existing = worldGuard.getOwnedRegions(owner, world);
+		console.fine("%s has %d plots.", owner, existing.size());
 		if (!existing.isEmpty())
 		{
 			for (String plot : existing)
-				if (approvalRepository.get(plot) == null)
+			{
+				PlotApproval approved = approvalRepository.get(plot);
+				console.fine("Plot %s is %s.", plot, approved != null ? "approved" : "unapproved");
+				if (approved == null)
 					return "You may not claim another plot before all your current ones have been approved.";
+			}
 		}
 
 		int n = 1;
