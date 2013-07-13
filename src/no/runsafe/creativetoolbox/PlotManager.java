@@ -35,7 +35,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		PlotEntranceRepository plotEntranceRepository,
 		ApprovedPlotRepository approvedPlotRepository,
 		PlotVoteRepository voteRepository, PlotTagRepository tagRepository, PlotMemberRepository memberRepository, PlotCalculator plotCalculator,
-		IOutput debugger,
+		PlotMemberBlacklistRepository blackList, IOutput debugger,
 		PlotLogRepository plotLog)
 	{
 		filter = plotFilter;
@@ -46,6 +46,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		this.tagRepository = tagRepository;
 		this.memberRepository = memberRepository;
 		calculator = plotCalculator;
+		this.blackList = blackList;
 		console = debugger;
 		this.plotLog = plotLog;
 	}
@@ -402,6 +403,9 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 
 		int membercleaned = memberRepository.cleanStaleData();
 
+		for(RunsafePlayer player : blackList.getBlacklist())
+			removeMember(player);
+
 		console.logInformation(
 			"Deleted &a%d&r plots, cleared tags from &a%d&r deleted plots and &a%d&r members.",
 			deleted, cleared, membercleaned
@@ -417,6 +421,19 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 			if (!voteBlacklist.containsKey(plot))
 				voteBlacklist.put(plot, new ArrayList<String>());
 			voteBlacklist.get(plot).add(event.getPlayer().getName().toLowerCase());
+		}
+	}
+
+	public void removeMember(RunsafePlayer player)
+	{
+		for (String region : worldGuard.getRegionsInWorld(world))
+		{
+			Set<String> members = worldGuard.getMembers(world, region);
+			if (members != null && members.contains(player.getName()))
+			{
+				worldGuard.removeMemberFromRegion(world, region, player);
+				memberRepository.removeMember(region, player.getName());
+			}
 		}
 	}
 
@@ -472,6 +489,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 	private final PlotTagRepository tagRepository;
 	private final PlotMemberRepository memberRepository;
 	private final PlotCalculator calculator;
+	private final PlotMemberBlacklistRepository blackList;
 	private final IOutput console;
 	private final PlotLogRepository plotLog;
 	private final Map<String, String> oldPlotPointers = new HashMap<String, String>();

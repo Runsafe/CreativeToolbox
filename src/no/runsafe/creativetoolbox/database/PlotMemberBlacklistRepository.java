@@ -1,5 +1,7 @@
 package no.runsafe.creativetoolbox.database;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.command.ICommandExecutor;
 import no.runsafe.framework.api.database.IDatabase;
@@ -8,6 +10,7 @@ import no.runsafe.framework.api.database.Repository;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +43,22 @@ public class PlotMemberBlacklistRepository extends Repository implements IConfig
 	public boolean isBlacklisted(RunsafePlayer player)
 	{
 		return blacklist.contains(player.getName().toLowerCase());
+	}
+
+	public List<RunsafePlayer> getBlacklist()
+	{
+		return Lists.transform(
+			database.QueryColumn("SELECT `player` FROM creative_blacklist"),
+			new Function<IValue, RunsafePlayer>()
+			{
+				@Override
+				public RunsafePlayer apply(@Nullable IValue player)
+				{
+					assert player != null;
+					return player.Player();
+				}
+			}
+		);
 	}
 
 	@Override
