@@ -2,6 +2,7 @@ package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotManager;
+import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotMemberRepository;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.minecraft.RunsafeServer;
@@ -16,47 +17,75 @@ import java.util.List;
 
 public class ClaimCommand extends PlayerCommand
 {
-	public ClaimCommand(PlotManager manager, PlotCalculator calculator, WorldGuardInterface worldGuard, PlotMemberRepository members)
+	public ClaimCommand(
+		PlotManager manager, PlotCalculator calculator, WorldGuardInterface worldGuard,
+		PlotMemberRepository members, ApprovedPlotRepository approvalRepository)
 	{
-		super("claim", "Claims a plot", "runsafe.creative.claim", "owner");
+		super("claim", "Claims a plot", null);
 		this.manager = manager;
 		this.calculator = calculator;
 		this.worldGuard = worldGuard;
 		this.members = members;
+		this.approvalRepository = approvalRepository;
 	}
 
 	@Override
-	public String OnExecute(RunsafePlayer player, HashMap<String, String> params)
+	public String OnExecute(RunsafePlayer executor, HashMap<String, String> params, String[] args)
 	{
-		String current = manager.getCurrentRegionFiltered(player);
+		String current = manager.getCurrentRegionFiltered(executor);
 		if (current != null)
 			return String.format("This plot is already claimed as %s!", current);
 
-		RunsafeWorld world = player.getWorld();
-		RunsafePlayer owner = RunsafeServer.Instance.getPlayer(params.get("owner"));
+		Rectangle2D region = calculator.getPlotArea(executor.getLocation());
+		if (region == null)
+			return "You need to stand in a plot to use this command.";
 
+		RunsafeWorld world = executor.getWorld();
+		RunsafePlayer owner = args.length == 0 ? null : RunsafeServer.Instance.getPlayer(args[0]);
 		if (owner instanceof RunsafeAmbiguousPlayer)
 			return owner.toString();
 
+		if (owner != null && !executor.hasPermission("runsafe.creative.claim"))
+			return "You can only claim plots for yourself.";
+
+		if (owner == null)
+			owner = executor;
+
 		List<String> existing = worldGuard.getOwnedRegions(owner, world);
+		if (!existing.isEmpty())
+		{
+			for (String plot : existing)
+				if (approvalRepository.get(plot) == null)
+					return "You may not claim another plot before all your current ones have been approved.";
+		}
+
 		int n = 1;
 		String plotName = String.format("%s_%%d", owner.getName().toLowerCase());
 		while (existing.contains(String.format(plotName, n)))
 			n++;
 		plotName = String.format(plotName, n);
 
-		Rectangle2D region = calculator.getPlotArea(player.getLocation());
-		if (manager.claim(player, owner, plotName, region))
+		if (manager.claim(executor, owner, plotName, region))
 		{
 			members.addMember(plotName, owner.getName(), true);
+			if (owner == executor)
+				return String.format("New plot \"%s\" created - use /ct teleport %d to get back to it!", plotName, n);
+
 			return String.format("Successfully claimed the plot \"%s\" for %s!", plotName, owner.getPrettyName());
 		}
 
 		return String.format("Unable to claim a new plot for %s :(", owner.getPrettyName());
 	}
 
+	@Override
+	public String OnExecute(RunsafePlayer player, HashMap<String, String> params)
+	{
+		return null;
+	}
+
 	private final PlotManager manager;
 	private final PlotCalculator calculator;
 	private final WorldGuardInterface worldGuard;
 	private final PlotMemberRepository members;
+	private final ApprovedPlotRepository approvalRepository;
 }
