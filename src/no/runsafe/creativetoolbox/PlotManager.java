@@ -9,6 +9,7 @@ import no.runsafe.framework.api.IOutput;
 import no.runsafe.framework.api.event.player.IPlayerCustomEvent;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.api.event.plugin.IPluginEnabled;
+import no.runsafe.framework.api.hook.IPlayerDataProvider;
 import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.RunsafeWorld;
@@ -27,7 +28,7 @@ import org.joda.time.format.PeriodFormat;
 import java.awt.geom.Rectangle2D;
 import java.util.*;
 
-public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlayerCustomEvent
+public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlayerCustomEvent, IPlayerDataProvider
 {
 	public PlotManager(
 		PlotFilter plotFilter,
@@ -379,6 +380,45 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		CleanStaleData();
 	}
 
+	@Override
+	public HashMap<String, String> GetPlayerData(RunsafePlayer player)
+	{
+		HashMap<String, String> data = new HashMap<String, String>();
+		if(blackList.isBlacklisted(player))
+			data.put("runsafe.creative.blacklisted", "true");
+
+		data.put("runsafe.creative.owner", memberRepository.getPlots(player.getName(), true, false).toString());
+		data.put("runsafe.creative.member", memberRepository.getPlots(player.getName(), false, true).toString());
+
+		return data;
+	}
+
+	@Override
+	public void OnPlayerCustomEvent(RunsafeCustomEvent event)
+	{
+		if (event instanceof PlotMembershipRevokedEvent)
+		{
+			String plot = (String) event.getData();
+			if (!voteBlacklist.containsKey(plot))
+				voteBlacklist.put(plot, new ArrayList<String>());
+			voteBlacklist.get(plot).add(event.getPlayer().getName().toLowerCase());
+		}
+	}
+
+	public void removeMember(RunsafePlayer player)
+	{
+		for (String region : worldGuard.getRegionsInWorld(world))
+		{
+			Set<String> members = worldGuard.getMembers(world, region);
+			if (members != null && members.contains(player.getName().toLowerCase()))
+			{
+				console.finer("Removing member %s from %s.", player.getPrettyName(), region);
+				worldGuard.removeMemberFromRegion(world, region, player);
+				memberRepository.removeMember(region, player.getName().toLowerCase());
+			}
+		}
+	}
+
 	private void CleanStaleData()
 	{
 		Set<String> current = worldGuard.getRegionRectanglesInWorld(filter.getWorld()).keySet();
@@ -413,32 +453,6 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 			"Deleted &a%d&r plots, cleared tags from &a%d&r deleted plots and &a%d&r members.",
 			deleted, cleared, membercleaned
 		);
-	}
-
-	@Override
-	public void OnPlayerCustomEvent(RunsafeCustomEvent event)
-	{
-		if (event instanceof PlotMembershipRevokedEvent)
-		{
-			String plot = (String) event.getData();
-			if (!voteBlacklist.containsKey(plot))
-				voteBlacklist.put(plot, new ArrayList<String>());
-			voteBlacklist.get(plot).add(event.getPlayer().getName().toLowerCase());
-		}
-	}
-
-	public void removeMember(RunsafePlayer player)
-	{
-		for (String region : worldGuard.getRegionsInWorld(world))
-		{
-			Set<String> members = worldGuard.getMembers(world, region);
-			if (members != null && members.contains(player.getName().toLowerCase()))
-			{
-				console.finer("Removing member %s from %s.", player.getPrettyName(), region);
-				worldGuard.removeMemberFromRegion(world, region, player);
-				memberRepository.removeMember(region, player.getName().toLowerCase());
-			}
-		}
 	}
 
 	private void ScanTakenPlots()
