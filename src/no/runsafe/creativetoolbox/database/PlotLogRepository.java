@@ -51,7 +51,7 @@ public class PlotLogRepository extends Repository
 	public String getClaim(String plot)
 	{
 		IRow data = database.QueryRow("SELECT * FROM creative_plot_log WHERE `plot`=?", plot);
-		if (data == null)
+		if (data.isEmpty())
 			return null;
 		return String.format("%s by %s", data.DateTime("claimed").toString("dd.MM.yyyy"), data.String("claimer"));
 	}

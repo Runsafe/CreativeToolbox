@@ -36,7 +36,7 @@ public class PlotVoteRepository extends Repository
 	public int tally(String regionName)
 	{
 		IRow answer = database.QueryRow("SELECT COUNT(*) AS tally FROM creative_plot_vote WHERE `plot`=?", regionName);
-		if (answer == null)
+		if (answer.isEmpty())
 			return 0;
 		return answer.Integer("tally");
 	}
@@ -45,7 +45,7 @@ public class PlotVoteRepository extends Repository
 	{
 		List<IValue> votes = database.QueryColumn("SELECT `rank` FROM creative_plot_vote WHERE `plot`=?", region);
 		int tally = 0;
-		if (votes != null)
+		if (!votes.isEmpty())
 			for (IValue vote : votes)
 				if (voteRanks.containsKey(vote.String().toLowerCase()))
 					tally += voteRanks.get(vote.String().toLowerCase());

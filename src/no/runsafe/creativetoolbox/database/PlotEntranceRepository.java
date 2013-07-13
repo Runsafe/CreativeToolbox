@@ -26,7 +26,7 @@ public class PlotEntranceRepository extends Repository implements IConfiguration
 
 		IRow data = database.QueryRow("SELECT ? AS world, e.* FROM creativetoolbox_plot_entrance AS e WHERE name=?", world.getName(), regionName);
 
-		if (data == null)
+		if (data.isEmpty())
 			cache.put(regionName.toLowerCase(), null);
 		else
 		{

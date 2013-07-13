@@ -22,7 +22,7 @@ public class ApprovedPlotRepository extends Repository
 	public PlotApproval get(String plotName)
 	{
 		IRow data = database.QueryRow("SELECT name, approved, approved_by FROM creativetoolbox_plot_approval WHERE name=?", plotName);
-		if (data.String("name") == null)
+		if (data.isEmpty())
 			return null;
 
 		PlotApproval approval = new PlotApproval();

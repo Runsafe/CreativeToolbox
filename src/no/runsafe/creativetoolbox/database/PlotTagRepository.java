@@ -24,7 +24,7 @@ public class PlotTagRepository extends Repository
 			"SELECT `tag` FROM creative_plot_tags WHERE name=?",
 			plot
 		);
-		if (tags == null)
+		if (tags.isEmpty())
 			return null;
 		return Lists.transform(tags, new Function<IValue, String>()
 		{
@@ -56,7 +56,7 @@ public class PlotTagRepository extends Repository
 			"SELECT `name` FROM creative_plot_tags WHERE `tag` LIKE ?",
 			tag
 		);
-		if (plots == null)
+		if (plots.isEmpty())
 			return null;
 		return Lists.transform(plots, new Function<IValue, String>()
 		{

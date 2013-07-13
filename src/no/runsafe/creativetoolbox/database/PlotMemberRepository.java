@@ -49,7 +49,7 @@ public class PlotMemberRepository extends Repository
 		else
 			data = database.QueryColumn("SELECT `player` FROM creative_plot_member WHERE plot=? AND owner=?", plot, owners ? 1 : 0);
 
-		if (data == null || data.isEmpty())
+		if (data.isEmpty())
 			return null;
 		return Lists.transform(data, new Function<IValue, String>()
 		{
@@ -74,7 +74,7 @@ public class PlotMemberRepository extends Repository
 		else
 			data = database.QueryColumn("SELECT DISTINCT `plot` FROM creative_plot_member WHERE player=? AND owner=?", player, owner ? 1 : 0);
 
-		if (data == null || data.isEmpty())
+		if (data.isEmpty())
 			return null;
 		return Lists.transform(data, new Function<IValue, String>()
 		{

@@ -66,7 +66,7 @@ public class PlotMemberBlacklistRepository extends Repository implements IConfig
 	{
 		blacklist.clear();
 		List<IValue> stored = database.QueryColumn("SELECT `player` FROM creative_blacklist");
-		if (stored != null)
+		if (!stored.isEmpty())
 			for (IValue value : stored)
 				blacklist.add(value.String());
 	}
