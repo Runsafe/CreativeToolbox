@@ -384,12 +384,12 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 	public HashMap<String, String> GetPlayerData(RunsafePlayer player)
 	{
 		HashMap<String, String> data = new HashMap<String, String>();
-		if (blackList.isBlacklisted(player))
-			data.put("runsafe.creative.blacklisted", "true");
+		data.put("runsafe.creative.blacklisted", blackList.isBlacklisted(player) ? "true" : "false");
 
 		List<String> plots = memberRepository.getPlots(player.getName(), true, false);
 		if (plots != null)
 			data.put("runsafe.creative.owner", plots.toString());
+
 		plots = memberRepository.getPlots(player.getName(), false, true);
 		if (plots != null)
 			data.put("runsafe.creative.member", plots.toString());
