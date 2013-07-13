@@ -432,11 +432,11 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		for (String region : worldGuard.getRegionsInWorld(world))
 		{
 			Set<String> members = worldGuard.getMembers(world, region);
-			if (members != null && members.contains(player.getName()))
+			if (members != null && members.contains(player.getName().toLowerCase()))
 			{
 				console.finer("Removing member %s from %s.", player.getPrettyName(), region);
 				worldGuard.removeMemberFromRegion(world, region, player);
-				memberRepository.removeMember(region, player.getName());
+				memberRepository.removeMember(region, player.getName().toLowerCase());
 			}
 		}
 	}
