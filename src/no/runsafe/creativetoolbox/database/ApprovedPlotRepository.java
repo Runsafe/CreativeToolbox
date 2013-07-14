@@ -48,17 +48,7 @@ public class ApprovedPlotRepository extends Repository
 
 	public List<String> getApprovedPlots()
 	{
-		return Lists.transform(
-			database.QueryColumn("SELECT name FROM creativetoolbox_plot_approval"),
-			new Function<IValue, String>()
-			{
-				@Override
-				public String apply(@Nullable IValue value)
-				{
-					return value != null ? value.String() : null;
-				}
-			}
-		);
+		return database.QueryStrings("SELECT name FROM creativetoolbox_plot_approval"),
 	}
 
 	@Override

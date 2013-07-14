@@ -20,20 +20,10 @@ public class PlotTagRepository extends Repository
 
 	public List<String> getTags(String plot)
 	{
-		List<IValue> tags = database.QueryColumn(
+		return database.QueryStrings(
 			"SELECT `tag` FROM creative_plot_tags WHERE name=?",
 			plot
 		);
-		if (tags.isEmpty())
-			return null;
-		return Lists.transform(tags, new Function<IValue, String>()
-		{
-			@Override
-			public String apply(@Nullable IValue tag)
-			{
-				return tag == null ? null : tag.String();
-			}
-		});
 	}
 
 	public boolean addTag(String plot, String tag)
@@ -52,36 +42,15 @@ public class PlotTagRepository extends Repository
 
 	public List<String> findPlots(String tag)
 	{
-		List<IValue> plots = database.QueryColumn(
+		return database.QueryStrings(
 			"SELECT `name` FROM creative_plot_tags WHERE `tag` LIKE ?",
 			tag
 		);
-		if (plots.isEmpty())
-			return null;
-		return Lists.transform(plots, new Function<IValue, String>()
-		{
-			@Override
-			public String apply(@Nullable IValue plot)
-			{
-				return plot == null ? null : plot.String();
-			}
-		});
 	}
 
 	public List<String> getTaggedPlots()
 	{
-		return Lists.transform(
-			database.QueryColumn("SELECT DISTINCT `name` FROM creative_plot_tags"),
-			new Function<IValue, String>()
-			{
-				@Override
-				public String apply(@Nullable IValue plot)
-				{
-					assert plot != null;
-					return plot.String();
-				}
-			}
-		);
+		return database.QueryStrings("SELECT DISTINCT `name` FROM creative_plot_tags");
 	}
 
 	@Override

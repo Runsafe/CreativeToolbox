@@ -34,18 +34,7 @@ public class PlotLogRepository extends Repository
 
 	public List<String> getPlots()
 	{
-		return Lists.transform(
-			database.QueryColumn("SELECT `plot` FROM `creative_plot_log`"),
-			new Function<IValue, String>()
-			{
-				@Override
-				public String apply(@Nullable IValue plot)
-				{
-					assert plot != null;
-					return plot.String();
-				}
-			}
-		);
+		return database.QueryStrings("SELECT `plot` FROM `creative_plot_log`");
 	}
 
 	public String getClaim(String plot)

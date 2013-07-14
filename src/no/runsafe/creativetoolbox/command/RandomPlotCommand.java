@@ -35,7 +35,7 @@ public class RandomPlotCommand extends PlayerAsyncCallbackCommand<RandomPlotComm
 		if (arguments.length > 0)
 		{
 			plots = tagRepository.findPlots(arguments[0]);
-			if (plots == null || plots.isEmpty())
+			if (plots.isEmpty())
 			{
 				executor.sendColouredMessage("&cSorry, found no plots tagged \"%s\".", arguments[0]);
 				return null;

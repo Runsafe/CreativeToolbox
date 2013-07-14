@@ -387,11 +387,11 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		data.put("runsafe.creative.blacklisted", blackList.isBlacklisted(player) ? "true" : "false");
 
 		List<String> plots = memberRepository.getPlots(player.getName(), true, false);
-		if (plots != null)
+		if (plots.isEmpty())
 			data.put("runsafe.creative.owner", plots.toString());
 
 		plots = memberRepository.getPlots(player.getName(), false, true);
-		if (plots != null)
+		if (plots.isEmpty())
 			data.put("runsafe.creative.member", plots.toString());
 
 		return data;

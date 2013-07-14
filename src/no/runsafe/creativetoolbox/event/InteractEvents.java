@@ -138,7 +138,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 		if (player.hasPermission("runsafe.creative.tag.read"))
 		{
 			List<String> tags = tagRepository.getTags(regionName);
-			if (tags != null && !tags.isEmpty())
+			if (!tags.isEmpty())
 				player.sendColouredMessage("&7Tags: &o%s&r", Strings.join(tags, " "));
 		}
 	}

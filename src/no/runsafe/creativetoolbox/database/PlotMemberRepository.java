@@ -43,24 +43,10 @@ public class PlotMemberRepository extends Repository
 		if (!owners && !members)
 			return null;
 
-		List<IValue> data;
 		if (owners && members)
-			data = database.QueryColumn("SELECT `player` FROM creative_plot_member WHERE plot=?", plot);
+			return database.QueryStrings("SELECT `player` FROM creative_plot_member WHERE plot=?", plot);
 		else
-			data = database.QueryColumn("SELECT `player` FROM creative_plot_member WHERE plot=? AND owner=?", plot, owners ? 1 : 0);
-
-		if (data.isEmpty())
-			return null;
-		return Lists.transform(data, new Function<IValue, String>()
-		{
-			@Override
-			public String apply(@Nullable IValue player)
-			{
-				if (player == null)
-					return null;
-				return player.String();
-			}
-		});
+			return database.QueryStrings("SELECT `player` FROM creative_plot_member WHERE plot=? AND owner=?", plot, owners ? 1 : 0);
 	}
 
 	public List<String> getPlots(String player, boolean owner, boolean member)
@@ -70,22 +56,9 @@ public class PlotMemberRepository extends Repository
 
 		List<IValue> data;
 		if (owner && member)
-			data = database.QueryColumn("SELECT DISTINCT `plot` FROM creative_plot_member WHERE player=?", player);
+			return database.QueryStrings("SELECT DISTINCT `plot` FROM creative_plot_member WHERE player=?", player);
 		else
-			data = database.QueryColumn("SELECT DISTINCT `plot` FROM creative_plot_member WHERE player=? AND owner=?", player, owner ? 1 : 0);
-
-		if (data.isEmpty())
-			return null;
-		return Lists.transform(data, new Function<IValue, String>()
-		{
-			@Override
-			public String apply(@Nullable IValue plot)
-			{
-				if (plot == null)
-					return null;
-				return plot.String();
-			}
-		});
+			return database.QueryStrings("SELECT DISTINCT `plot` FROM creative_plot_member WHERE player=? AND owner=?", player, owner ? 1 : 0);
 	}
 
 	public int cleanStaleData()

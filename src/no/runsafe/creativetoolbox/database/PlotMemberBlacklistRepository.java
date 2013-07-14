@@ -1,16 +1,12 @@
 package no.runsafe.creativetoolbox.database;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.command.ICommandExecutor;
 import no.runsafe.framework.api.database.IDatabase;
-import no.runsafe.framework.api.database.IValue;
 import no.runsafe.framework.api.database.Repository;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,28 +43,14 @@ public class PlotMemberBlacklistRepository extends Repository implements IConfig
 
 	public List<RunsafePlayer> getBlacklist()
 	{
-		return Lists.transform(
-			database.QueryColumn("SELECT `player` FROM creative_blacklist"),
-			new Function<IValue, RunsafePlayer>()
-			{
-				@Override
-				public RunsafePlayer apply(@Nullable IValue player)
-				{
-					assert player != null;
-					return player.Player();
-				}
-			}
-		);
+		return database.QueryPlayers("SELECT `player` FROM creative_blacklist");
 	}
 
 	@Override
 	public void OnConfigurationChanged(IConfiguration iConfiguration)
 	{
 		blacklist.clear();
-		List<IValue> stored = database.QueryColumn("SELECT `player` FROM creative_blacklist");
-		if (!stored.isEmpty())
-			for (IValue value : stored)
-				blacklist.add(value.String());
+		blacklist.addAll(database.QueryStrings("SELECT `player` FROM creative_blacklist"));
 	}
 
 	@Override
