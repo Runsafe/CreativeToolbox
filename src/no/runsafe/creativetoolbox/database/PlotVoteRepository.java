@@ -1,7 +1,6 @@
 package no.runsafe.creativetoolbox.database;
 
 import no.runsafe.framework.api.database.IDatabase;
-import no.runsafe.framework.api.database.IValue;
 import no.runsafe.framework.api.database.Repository;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import org.apache.commons.lang.StringUtils;
@@ -42,11 +41,11 @@ public class PlotVoteRepository extends Repository
 
 	public int tally(String region, Map<String, Integer> voteRanks)
 	{
-		List<IValue> votes = database.QueryColumn("SELECT `rank` FROM creative_plot_vote WHERE `plot`=?", region);
+		List<String> votes = database.QueryStrings("SELECT `rank` FROM creative_plot_vote WHERE `plot`=?", region);
 		int tally = 0;
-		for (IValue vote : votes)
-			if (voteRanks.containsKey(vote.String().toLowerCase()))
-				tally += voteRanks.get(vote.String().toLowerCase());
+		for (String vote : votes)
+			if (voteRanks.containsKey(vote.toLowerCase()))
+				tally += voteRanks.get(vote.toLowerCase());
 		return tally;
 	}
 

@@ -48,7 +48,7 @@ public class ApprovedPlotRepository extends Repository
 
 	public List<String> getApprovedPlots()
 	{
-		return database.QueryStrings("SELECT name FROM creativetoolbox_plot_approval"),
+		return database.QueryStrings("SELECT name FROM creativetoolbox_plot_approval");
 	}
 
 	@Override
