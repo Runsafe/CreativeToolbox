@@ -5,6 +5,7 @@ import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.minecraft.RunsafeServer;
+import no.runsafe.framework.minecraft.player.RunsafeAmbiguousPlayer;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.apache.commons.lang.StringUtils;
@@ -37,6 +38,12 @@ public class ListCommand extends PlayerAsyncCommand
 			return "No world defined!";
 
 		RunsafePlayer player = server.getPlayer(parameters.get("playerName"));
+
+		if (player == null)
+			return "&cNo such player";
+
+		if (player instanceof RunsafeAmbiguousPlayer)
+			return player.toString();
 
 		List<String> property = manager.tag(
 			executor,
