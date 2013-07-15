@@ -70,6 +70,11 @@ public class PlotEntranceRepository extends Repository implements IConfiguration
 			cache.remove(region);
 	}
 
+	public List<String> getPlots()
+	{
+		return database.QueryStrings("SELECT name FROM creativetoolbox_plot_entrance");
+	}
+
 	@Override
 	public void OnConfigurationChanged(IConfiguration configuration)
 	{

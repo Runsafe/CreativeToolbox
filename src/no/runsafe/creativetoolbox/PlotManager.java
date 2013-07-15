@@ -296,6 +296,9 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 			if (!plotLog.log(plotName, claimer.getName()))
 				console.warning("Unable to log plot %s claimed by %s", plotName, claimer.getPrettyName());
 			setTaken(calculator.getColumn((long) region.getCenterX()), calculator.getRow((long) region.getCenterY()));
+			PlotEntrance entrance = new PlotEntrance();
+			entrance.setName(plotName);
+			entrance.setLocation(calculator.getDefaultEntrance(worldGuard.getRegionLocation(world, plotName)));
 			return true;
 		}
 		return false;
@@ -370,6 +373,12 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		limit = new Period(0, 0, 0, config.getConfigValueAsInt("old_after"), 0, 0, 0, 0).toDurationTo(DateTime.now());
 		autoApprove = config.getConfigValueAsInt("vote.approved");
 		voteRanks = config.getConfigValuesAsIntegerMap("vote.rank");
+		if (!config.getConfigValueAsBoolean("imported.entrances"))
+		{
+			importEntrances();
+			config.setConfigValue("imported.entrances", true);
+			config.save();
+		}
 	}
 
 	@Override
@@ -420,6 +429,26 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 				worldGuard.removeMemberFromRegion(world, region, player);
 				memberRepository.removeMember(region, player.getName().toLowerCase());
 			}
+		}
+	}
+
+	private void importEntrances()
+	{
+		List<String> skip = plotEntrance.getPlots();
+		List<String> all = plotLog.getPlots();
+		for (String plot : all)
+		{
+			if (skip.contains(plot))
+				continue;
+
+			PlotEntrance entrance = plotEntrance.get(plot);
+			if (entrance != null)
+				continue;
+
+			PlotEntrance store = new PlotEntrance();
+			store.setName(plot);
+			store.setLocation(getPlotEntrance(plot));
+			plotEntrance.persist(store);
 		}
 	}
 

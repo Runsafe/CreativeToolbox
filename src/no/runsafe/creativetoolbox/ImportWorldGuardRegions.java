@@ -31,7 +31,7 @@ public class ImportWorldGuardRegions implements IPluginEnabled
 	@Override
 	public void OnPluginEnabled()
 	{
-		if (config.getConfigValueAsBoolean("imported"))
+		if (config.getConfigValueAsBoolean("imported.plots"))
 			return;
 
 		RunsafeWorld world = manager.getWorld();
