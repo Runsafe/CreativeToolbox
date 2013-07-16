@@ -37,6 +37,9 @@ public class ClaimCommand extends PlayerCommand
 		if (current != null)
 			return String.format("This plot is already claimed as %s!", current);
 
+		if (!manager.isCurrentClaimable(executor))
+			return "You may not claim a plot here.";
+
 		Rectangle2D region = calculator.getPlotArea(executor.getLocation());
 		if (region == null)
 			return "You need to stand in a plot to use this command.";

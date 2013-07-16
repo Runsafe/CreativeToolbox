@@ -60,6 +60,12 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		return regions.get(0);
 	}
 
+	public boolean isCurrentClaimable(RunsafePlayer player)
+	{
+		List<String> regions = worldGuard.getRegionsAtLocation(player.getLocation());
+		return ignoredRegions.containsAll(regions);
+	}
+
 	public java.util.List<RunsafeLocation> getPlotEntrances()
 	{
 		ArrayList<RunsafeLocation> entrances = new ArrayList<RunsafeLocation>();
