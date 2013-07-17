@@ -21,7 +21,7 @@ public class ListCommand extends PlayerAsyncCommand
 		PlotFilter filter,
 		IScheduler scheduler, PlotManager manager)
 	{
-		super("list", "lists plots owned by a player.", "runsafe.creative.list", scheduler, "playerName");
+		super("list", "lists plots owned by a player.", "runsafe.creative.list", scheduler, "player");
 		this.server = server;
 		this.worldGuard = worldGuard;
 		this.filter = filter;
@@ -37,7 +37,7 @@ public class ListCommand extends PlayerAsyncCommand
 		if (filter.getWorld() == null)
 			return "No world defined!";
 
-		RunsafePlayer player = server.getPlayer(parameters.get("playerName"));
+		RunsafePlayer player = server.getPlayer(parameters.get("player"));
 
 		if (player == null)
 			return "&cNo such player";
