@@ -381,6 +381,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		voteRanks = config.getConfigValuesAsIntegerMap("vote.rank");
 		if (!config.getConfigValueAsBoolean("imported.entrances"))
 		{
+			plotEntrance.OnConfigurationChanged(config);
 			importEntrances();
 			config.setConfigValue("imported.entrances", true);
 			config.save();
