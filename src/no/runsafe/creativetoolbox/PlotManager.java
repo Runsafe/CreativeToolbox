@@ -456,7 +456,10 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 			PlotEntrance store = new PlotEntrance();
 			store.setName(plot);
 			store.setLocation(getPlotEntrance(plot));
-			plotEntrance.persist(store);
+			if (store.getLocation() == null)
+				console.logWarning("Unable to get entrance for plot '%s'", plot);
+			else
+				plotEntrance.persist(store);
 		}
 	}
 

@@ -45,6 +45,8 @@ public class PlotEntranceRepository extends Repository implements IConfiguration
 
 	public void persist(PlotEntrance entrance)
 	{
+		if (entrance.getLocation() == null || entrance.getName() == null)
+			return;
 		database.Update(
 			"INSERT INTO creativetoolbox_plot_entrance (name, x, y, z, yaw, pitch) VALUES (?, ?, ?, ?, ?, ?)" +
 				"ON DUPLICATE KEY UPDATE x=VALUES(x), y=VALUES(y), z=VALUES(z), yaw=VALUES(yaw), pitch=VALUES(pitch)",
