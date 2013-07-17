@@ -382,6 +382,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		if (!config.getConfigValueAsBoolean("imported.entrances"))
 		{
 			plotEntrance.OnConfigurationChanged(config);
+			calculator.OnConfigurationChanged(config);
 			importEntrances();
 			config.setConfigValue("imported.entrances", true);
 			config.save();
