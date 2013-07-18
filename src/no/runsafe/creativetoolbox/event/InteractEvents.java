@@ -64,7 +64,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 			if (event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getItemId() == listItem)
 			{
 				this.listPlotsByPlayer((RunsafePlayer) event.getRightClicked(), event.getPlayer());
-				event.setCancelled(true);
+				event.cancel();
 			}
 		}
 	}
