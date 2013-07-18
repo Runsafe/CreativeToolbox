@@ -57,7 +57,7 @@ public class ClaimCommand extends PlayerCommand
 
 		List<String> existing = worldGuard.getOwnedRegions(owner, world);
 		console.fine("%s has %d plots.", owner, existing.size());
-		if (!existing.isEmpty())
+		if (!existing.isEmpty() && executor.getName().equals(owner.getName()))
 		{
 			for (String plot : existing)
 			{
