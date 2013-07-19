@@ -9,8 +9,8 @@ import no.runsafe.worldeditbridge.WorldEditInterface;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.awt.geom.Rectangle2D;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SelectCommand extends PlayerCommand
 {
@@ -24,7 +24,7 @@ public class SelectCommand extends PlayerCommand
 	}
 
 	@Override
-	public String OnExecute(RunsafePlayer executor, HashMap<String, String> parameters)
+	public String OnExecute(RunsafePlayer executor, Map<String, String> parameters)
 	{
 		List<String> candidate = filter.apply(worldGuard.getRegionsAtLocation(executor.getLocation()));
 		Rectangle2D area;

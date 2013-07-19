@@ -15,6 +15,7 @@ import org.bukkit.craftbukkit.libs.joptsimple.internal.Strings;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AddCommand extends PlayerAsyncCommand
 {
@@ -28,7 +29,7 @@ public class AddCommand extends PlayerAsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters)
+	public String OnAsyncExecute(RunsafePlayer executor, Map<String, String> parameters)
 	{
 		RunsafePlayer member = RunsafeServer.Instance.getPlayer(parameters.get("player"));
 

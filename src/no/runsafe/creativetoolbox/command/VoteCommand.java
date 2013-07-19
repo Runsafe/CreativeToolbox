@@ -4,7 +4,7 @@ import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class VoteCommand extends PlayerCommand
 {
@@ -15,7 +15,7 @@ public class VoteCommand extends PlayerCommand
 	}
 
 	@Override
-	public String OnExecute(RunsafePlayer player, HashMap<String, String> stringStringHashMap)
+	public String OnExecute(RunsafePlayer player, Map<String, String> stringStringHashMap)
 	{
 		String region = manager.getCurrentRegionFiltered(player);
 		if (region == null)

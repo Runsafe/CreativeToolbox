@@ -6,7 +6,7 @@ import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class AddCommand extends PlayerAsyncCommand
 {
@@ -19,7 +19,7 @@ public class AddCommand extends PlayerAsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(RunsafePlayer player, HashMap<String, String> params)
+	public String OnAsyncExecute(RunsafePlayer player, Map<String, String> params)
 	{
 		String plot = manager.getCurrentRegionFiltered(player);
 		if (plot == null)

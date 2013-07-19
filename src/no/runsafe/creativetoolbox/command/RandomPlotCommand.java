@@ -6,8 +6,8 @@ import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.player.PlayerAsyncCallbackCommand;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class RandomPlotCommand extends PlayerAsyncCallbackCommand<RandomPlotCommand.Sudo>
@@ -21,13 +21,13 @@ public class RandomPlotCommand extends PlayerAsyncCallbackCommand<RandomPlotComm
 	}
 
 	@Override
-	public Sudo OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters)
+	public Sudo OnAsyncExecute(RunsafePlayer executor, Map<String, String> parameters)
 	{
 		return null;
 	}
 
 	@Override
-	public Sudo OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters, String[] arguments)
+	public Sudo OnAsyncExecute(RunsafePlayer executor, Map<String, String> parameters, String[] arguments)
 	{
 		if (plotFilter.getWorld() == null)
 			return null;

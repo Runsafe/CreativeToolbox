@@ -9,7 +9,7 @@ import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.player.RunsafeAmbiguousPlayer;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class BlacklistCommand extends AsyncCommand
 {
@@ -21,7 +21,7 @@ public class BlacklistCommand extends AsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(ICommandExecutor executor, HashMap<String, String> params)
+	public String OnAsyncExecute(ICommandExecutor executor, Map<String, String> params)
 	{
 		RunsafePlayer player = RunsafeServer.Instance.getPlayer(params.get("player"));
 		if (player == null)

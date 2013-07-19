@@ -33,7 +33,7 @@ public class DeleteHereCommand extends PlayerAsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters)
+	public String OnAsyncExecute(RunsafePlayer executor, Map<String, String> parameters)
 	{
 		List<String> delete = filter.apply(worldGuard.getRegionsAtLocation(executor.getLocation()));
 		if (delete == null || delete.size() == 0)

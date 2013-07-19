@@ -7,7 +7,7 @@ import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class ApprovePlotCommand extends PlayerAsyncCommand
 {
@@ -19,7 +19,7 @@ public class ApprovePlotCommand extends PlayerAsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters)
+	public String OnAsyncExecute(RunsafePlayer executor, Map<String, String> parameters)
 	{
 		String plot;
 		if (parameters.get("plotname").equals("."))

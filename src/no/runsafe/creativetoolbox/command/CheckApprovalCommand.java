@@ -9,8 +9,8 @@ import no.runsafe.framework.api.command.ICommandExecutor;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CheckApprovalCommand extends AsyncCommand
 {
@@ -28,7 +28,7 @@ public class CheckApprovalCommand extends AsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(ICommandExecutor executor, HashMap<String, String> parameters)
+	public String OnAsyncExecute(ICommandExecutor executor, Map<String, String> parameters)
 	{
 		String plot = parameters.get("plotname");
 		if (plot.equals(".") && executor instanceof RunsafePlayer)

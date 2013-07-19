@@ -7,6 +7,7 @@ import no.runsafe.framework.minecraft.player.RunsafePlayer;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CleanCommand extends PlayerCommand
 {
@@ -17,7 +18,7 @@ public class CleanCommand extends PlayerCommand
 	}
 
 	@Override
-	public String OnExecute(RunsafePlayer executor, HashMap<String, String> parameters, String[] arguments)
+	public String OnExecute(RunsafePlayer executor, Map<String, String> parameters, String[] arguments)
 	{
 		HashMap<String, Integer> counts = new HashMap<String, Integer>();
 		List<String> noClean = config.getConfigValueAsList("clean.ignore");
@@ -67,7 +68,7 @@ public class CleanCommand extends PlayerCommand
 	}
 
 	@Override
-	public String OnExecute(RunsafePlayer executor, HashMap<String, String> parameters)
+	public String OnExecute(RunsafePlayer executor, Map<String, String> parameters)
 	{
 		return null;
 	}

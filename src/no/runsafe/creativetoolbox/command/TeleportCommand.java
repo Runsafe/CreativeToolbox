@@ -8,7 +8,7 @@ import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.RunsafeWorld;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class TeleportCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
 {
@@ -19,7 +19,7 @@ public class TeleportCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
 	}
 
 	@Override
-	public PlayerTeleport OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters)
+	public PlayerTeleport OnAsyncExecute(RunsafePlayer executor, Map<String, String> parameters)
 	{
 		PlayerTeleport target = new PlayerTeleport();
 		target.who = executor;

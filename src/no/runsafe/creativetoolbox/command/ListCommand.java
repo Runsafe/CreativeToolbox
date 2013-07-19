@@ -10,8 +10,8 @@ import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.apache.commons.lang.StringUtils;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ListCommand extends PlayerAsyncCommand
 {
@@ -29,7 +29,7 @@ public class ListCommand extends PlayerAsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters)
+	public String OnAsyncExecute(RunsafePlayer executor, Map<String, String> parameters)
 	{
 		if (!worldGuard.serverHasWorldGuard())
 			return "Unable to find WorldGuard!";

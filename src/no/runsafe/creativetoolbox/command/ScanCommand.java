@@ -5,6 +5,7 @@ import no.runsafe.framework.minecraft.entity.RunsafeEntity;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class ScanCommand extends PlayerCommand
 {
@@ -14,7 +15,7 @@ public class ScanCommand extends PlayerCommand
 	}
 
 	@Override
-	public String OnExecute(RunsafePlayer executor, HashMap<String, String> parameters)
+	public String OnExecute(RunsafePlayer executor, Map<String, String> parameters)
 	{
 		HashMap<String, Integer> counts = new HashMap<String, Integer>();
 		int count = 0;

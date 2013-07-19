@@ -7,8 +7,8 @@ import no.runsafe.framework.api.command.player.PlayerAsyncCallbackCommand;
 import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class FindFreePlotCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
@@ -23,7 +23,7 @@ public class FindFreePlotCommand extends PlayerAsyncCallbackCommand<PlayerTelepo
 	}
 
 	@Override
-	public PlayerTeleport OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters)
+	public PlayerTeleport OnAsyncExecute(RunsafePlayer executor, Map<String, String> parameters)
 	{
 		PlayerTeleport target = new PlayerTeleport();
 		target.who = executor;

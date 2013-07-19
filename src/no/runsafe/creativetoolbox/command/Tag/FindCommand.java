@@ -6,8 +6,8 @@ import no.runsafe.framework.api.command.AsyncCommand;
 import no.runsafe.framework.api.command.ICommandExecutor;
 import org.bukkit.craftbukkit.libs.joptsimple.internal.Strings;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FindCommand extends AsyncCommand
 {
@@ -18,7 +18,7 @@ public class FindCommand extends AsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(ICommandExecutor executor, HashMap<String, String> param)
+	public String OnAsyncExecute(ICommandExecutor executor, Map<String, String> param)
 	{
 		List<String> hits = tagRepository.findPlots(param.get("lookup"));
 		if (hits.isEmpty())

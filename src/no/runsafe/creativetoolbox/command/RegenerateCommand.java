@@ -13,8 +13,8 @@ import no.runsafe.worldgenerator.PlotChunkGenerator;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.awt.geom.Rectangle2D;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RegenerateCommand extends PlayerAsyncCommand
 {
@@ -35,7 +35,7 @@ public class RegenerateCommand extends PlayerAsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters, String[] arguments)
+	public String OnAsyncExecute(RunsafePlayer executor, Map<String, String> parameters, String[] arguments)
 	{
 		Rectangle2D area = getArea(executor.getLocation());
 		if (area == null)
@@ -57,7 +57,7 @@ public class RegenerateCommand extends PlayerAsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(RunsafePlayer player, HashMap<String, String> parameters)
+	public String OnAsyncExecute(RunsafePlayer player, Map<String, String> parameters)
 	{
 		return null;
 	}

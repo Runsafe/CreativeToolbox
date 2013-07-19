@@ -19,7 +19,7 @@ public class PreviousCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
 	}
 
 	@Override
-	public PlayerTeleport OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters)
+	public PlayerTeleport OnAsyncExecute(RunsafePlayer executor, Map<String, String> parameters)
 	{
 		PlayerTeleport target = new PlayerTeleport();
 		target.who = executor;

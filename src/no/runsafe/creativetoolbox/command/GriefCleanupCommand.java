@@ -12,8 +12,8 @@ import no.runsafe.worldeditbridge.WorldEditInterface;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.awt.geom.Rectangle2D;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GriefCleanupCommand extends PlayerCommand
 {
@@ -35,7 +35,7 @@ public class GriefCleanupCommand extends PlayerCommand
 	}
 
 	@Override
-	public String OnExecute(RunsafePlayer executor, HashMap<String, String> params)
+	public String OnExecute(RunsafePlayer executor, Map<String, String> params)
 	{
 		Rectangle2D area = getArea(executor.getLocation());
 		String what = params.get("what");
@@ -95,7 +95,7 @@ public class GriefCleanupCommand extends PlayerCommand
 	private String regeneratePadding(RunsafePlayer player, Rectangle2D plotArea)
 	{
 		List<Rectangle2D> padding = plotCalculator.getPaddingSelection(plotArea);
-		if(padding == null || padding.isEmpty())
+		if (padding == null || padding.isEmpty())
 			return "Unable to regenerate roads!";
 		for (Rectangle2D area : padding)
 		{

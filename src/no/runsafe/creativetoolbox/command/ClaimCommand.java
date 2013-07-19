@@ -13,8 +13,8 @@ import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.awt.geom.Rectangle2D;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ClaimCommand extends PlayerCommand
 {
@@ -31,7 +31,7 @@ public class ClaimCommand extends PlayerCommand
 	}
 
 	@Override
-	public String OnExecute(RunsafePlayer executor, HashMap<String, String> params, String[] args)
+	public String OnExecute(RunsafePlayer executor, Map<String, String> params, String[] args)
 	{
 		String current = manager.getCurrentRegionFiltered(executor);
 		if (current != null)
@@ -87,7 +87,7 @@ public class ClaimCommand extends PlayerCommand
 	}
 
 	@Override
-	public String OnExecute(RunsafePlayer player, HashMap<String, String> params)
+	public String OnExecute(RunsafePlayer player, Map<String, String> params)
 	{
 		return null;
 	}

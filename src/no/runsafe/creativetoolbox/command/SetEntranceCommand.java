@@ -9,8 +9,8 @@ import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SetEntranceCommand extends PlayerAsyncCommand
 {
@@ -30,7 +30,7 @@ public class SetEntranceCommand extends PlayerAsyncCommand
 	}
 
 	@Override
-	public String OnExecute(RunsafePlayer executor, HashMap<String, String> parameters)
+	public String OnExecute(RunsafePlayer executor, Map<String, String> parameters)
 	{
 		String currentRegion = getCurrentRegion(executor);
 		if (currentRegion == null)
@@ -45,7 +45,7 @@ public class SetEntranceCommand extends PlayerAsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(RunsafePlayer executor, HashMap<String, String> parameters)
+	public String OnAsyncExecute(RunsafePlayer executor, Map<String, String> parameters)
 	{
 		String currentRegion = getCurrentRegion(executor);
 		if (currentRegion == null)

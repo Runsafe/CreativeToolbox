@@ -7,7 +7,7 @@ import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.player.RunsafeAmbiguousPlayer;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class WhitelistCommand extends ExecutableCommand
 {
@@ -18,7 +18,7 @@ public class WhitelistCommand extends ExecutableCommand
 	}
 
 	@Override
-	protected String OnExecute(ICommandExecutor executor, HashMap<String, String> params)
+	protected String OnExecute(ICommandExecutor executor, Map<String, String> params)
 	{
 		RunsafePlayer player = RunsafeServer.Instance.getPlayer(params.get("player"));
 		if (player == null)
