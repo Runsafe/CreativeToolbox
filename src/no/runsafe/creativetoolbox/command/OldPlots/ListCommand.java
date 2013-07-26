@@ -1,21 +1,23 @@
 package no.runsafe.creativetoolbox.command.OldPlots;
 
+import com.google.common.collect.Lists;
+import no.runsafe.creativetoolbox.PlotList;
 import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class ListCommand extends PlayerAsyncCommand
 {
-	public ListCommand(PlotManager manager, IScheduler scheduler, IConfiguration config)
+	public ListCommand(PlotManager manager, IScheduler scheduler, IConfiguration config, PlotList plotList)
 	{
 		super("list", "list old plots that may be removed.", "runsafe.creative.scan.old-plots", scheduler);
 		this.manager = manager;
 		this.config = config;
+		this.plotList = plotList;
 	}
 
 	@Override
@@ -40,14 +42,16 @@ public class ListCommand extends PlayerAsyncCommand
 		}
 		if (result.length() == 0)
 			return "No old plots found.";
+		plotList.set(executor, Lists.newArrayList(hits.keySet()));
 		if (executor == null || n == hits.size())
 			result.append(String.format("%d plots found", hits.size()));
 		else
 			result.append(String.format("Showing %d of %d plots found", n, hits.size()));
-
+		result.append(String.format("Use /ct next!"));
 		return result.toString();
 	}
 
 	private final PlotManager manager;
 	private final IConfiguration config;
+	private final PlotList plotList;
 }

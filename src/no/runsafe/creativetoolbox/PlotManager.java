@@ -36,7 +36,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		PlotEntranceRepository plotEntranceRepository,
 		ApprovedPlotRepository approvedPlotRepository,
 		PlotVoteRepository voteRepository, PlotTagRepository tagRepository, PlotMemberRepository memberRepository, PlotCalculator plotCalculator,
-		PlotMemberBlacklistRepository blackList, IOutput debugger,
+		PlotMemberBlacklistRepository blackList, PlotList plotList, IOutput debugger,
 		PlotLogRepository plotLog)
 	{
 		filter = plotFilter;
@@ -48,6 +48,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		this.memberRepository = memberRepository;
 		calculator = plotCalculator;
 		this.blackList = blackList;
+		this.plotList = plotList;
 		console = debugger;
 		this.plotLog = plotLog;
 	}
@@ -363,6 +364,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		plotEntrance.delete(region);
 		tagRepository.setTags(region, null);
 		voteRepository.clear(region);
+		plotList.remove(region);
 		new PlotDeletedEvent(deletor, region).Fire();
 	}
 
@@ -552,6 +554,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 	private final PlotMemberRepository memberRepository;
 	private final PlotCalculator calculator;
 	private final PlotMemberBlacklistRepository blackList;
+	private final PlotList plotList;
 	private final IOutput console;
 	private final PlotLogRepository plotLog;
 	private final Map<String, String> oldPlotPointers = new HashMap<String, String>();

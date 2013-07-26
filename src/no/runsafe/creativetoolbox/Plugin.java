@@ -4,8 +4,6 @@ import no.runsafe.creativetoolbox.command.*;
 import no.runsafe.creativetoolbox.command.Member.BlacklistCommand;
 import no.runsafe.creativetoolbox.command.Member.RemoveCommand;
 import no.runsafe.creativetoolbox.command.Member.WhitelistCommand;
-import no.runsafe.creativetoolbox.command.OldPlots.NextCommand;
-import no.runsafe.creativetoolbox.command.OldPlots.PreviousCommand;
 import no.runsafe.creativetoolbox.command.Tag.ClearCommand;
 import no.runsafe.creativetoolbox.command.Tag.FindCommand;
 import no.runsafe.creativetoolbox.command.Tag.SetCommand;
@@ -30,6 +28,7 @@ public class Plugin extends RunsafeConfigurablePlugin
 		addComponent(PlotLogRepository.class);
 		addComponent(PlotFilter.class);
 		addComponent(PlotManager.class);
+		addComponent(PlotList.class);
 		addComponent(ApprovedPlotRepository.class);
 		addComponent(PlotVoteRepository.class);
 		addComponent(PlotEntranceRepository.class);
@@ -45,8 +44,8 @@ public class Plugin extends RunsafeConfigurablePlugin
 
 		Command oldPlots = new Command("old", "Tool to handle old plots", null);
 		oldPlots.addSubCommand(getInstance(no.runsafe.creativetoolbox.command.OldPlots.ListCommand.class));
-		oldPlots.addSubCommand(getInstance(NextCommand.class));
-		oldPlots.addSubCommand(getInstance(PreviousCommand.class));
+//		oldPlots.addSubCommand(getInstance(NextCommand.class));
+//		oldPlots.addSubCommand(getInstance(PreviousCommand.class));
 		toolbox.addSubCommand(oldPlots);
 
 		Command member = new Command("member", "Tools to handle plot membership", null);
@@ -79,5 +78,7 @@ public class Plugin extends RunsafeConfigurablePlugin
 		toolbox.addSubCommand(getInstance(ClaimCommand.class));
 		toolbox.addSubCommand(getInstance(ExtendCommand.class));
 		toolbox.addSubCommand(getInstance(GriefCleanupCommand.class));
+		toolbox.addSubCommand(getInstance(NextCommand.class));
+		toolbox.addSubCommand(getInstance(PreviousCommand.class));
 	}
 }
