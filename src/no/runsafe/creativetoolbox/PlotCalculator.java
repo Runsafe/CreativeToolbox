@@ -51,7 +51,7 @@ public class PlotCalculator implements IConfigurationChanged
 		regions.add(
 			new Rectangle2D.Double(
 				plotArea.getMinX(), plotArea.getMinY(),
-				plotArea.getWidth(), roadWidth)
+				plotArea.getWidth(), roadWidth - 1)
 		);
 		regions.add(
 			new Rectangle2D.Double(
