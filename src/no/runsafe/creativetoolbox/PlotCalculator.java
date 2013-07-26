@@ -51,37 +51,25 @@ public class PlotCalculator implements IConfigurationChanged
 		regions.add(
 			new Rectangle2D.Double(
 				plotArea.getMinX(), plotArea.getMinY(),
-				plotArea.getWidth() + roadWidth - 1, roadWidth - 1)
+				plotArea.getWidth(), roadWidth)
 		);
 		regions.add(
 			new Rectangle2D.Double(
 				plotArea.getMinX(), plotArea.getMinY(),
-				roadWidth - 1, plotArea.getHeight() + roadWidth - 1
+				roadWidth, plotArea.getHeight()
 			)
 		);
 		regions.add(
 			new Rectangle2D.Double(
 				plotArea.getMaxX(), plotArea.getMaxY(),
-				0 - plotArea.getWidth() + roadWidth - 1, 0 - roadWidth - 1)
+				0 - plotArea.getWidth(), 0 - roadWidth)
 		);
 		regions.add(
 			new Rectangle2D.Double(
 				plotArea.getMaxX(), plotArea.getMaxY(),
-				0 - roadWidth - 1, 0 - plotArea.getHeight() + roadWidth - 1
+				0 - roadWidth - 1, 0 - plotArea.getHeight()
 			)
 		);
-//		regions.add(
-//			new Rectangle2D.Double(
-//				plotArea.getMinX() + plotArea.getWidth() + roadWidth, plotArea.getMinY(),
-//				roadWidth - 1, plotArea.getHeight() + roadWidth - 1
-//			)
-//		);
-//		regions.add(
-//			new Rectangle2D.Double(
-//				plotArea.getMinX() + roadWidth, plotArea.getMinY() + plotArea.getHeight() + roadWidth,
-//				plotArea.getWidth() + roadWidth - 1, roadWidth - 1
-//			)
-//		);
 		return regions;
 	}
 
