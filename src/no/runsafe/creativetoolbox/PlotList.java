@@ -58,7 +58,7 @@ public class PlotList
 		{
 			List<String> list = lists.get(player.getName());
 			int i = list.indexOf(pointer.get(player.getName()));
-			pointer.put(player.getName(), list.get(i >= list.size() ? 0 : i + 1));
+			pointer.put(player.getName(), list.get(i + 1 >= list.size() ? 0 : i + 1));
 			return pointer.get(player.getName());
 		}
 		return null;
