@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class NextCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
 {
-	protected NextCommand(IScheduler scheduler, PlotList plotList, PlotManager manager)
+	public NextCommand(IScheduler scheduler, PlotList plotList, PlotManager manager)
 	{
 		super("next", "Teleport to the next plot in your current list", "runsafe.creative.teleport.list", scheduler);
 		this.plotList = plotList;
