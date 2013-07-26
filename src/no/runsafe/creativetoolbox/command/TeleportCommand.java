@@ -1,21 +1,28 @@
 package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.creativetoolbox.PlayerTeleport;
+import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.player.PlayerAsyncCallbackCommand;
 import no.runsafe.framework.minecraft.RunsafeLocation;
+import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.RunsafeWorld;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
+import no.runsafe.worldguardbridge.WorldGuardInterface;
 
+import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Map;
 
 public class TeleportCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
 {
-	public TeleportCommand(IScheduler scheduler, PlotManager manager)
+	public TeleportCommand(IScheduler scheduler, PlotManager manager, PlotFilter filter, WorldGuardInterface worldGuard)
 	{
 		super("teleport", "teleport to a plot.", "runsafe.creative.teleport.plot", scheduler, "plotname");
 		this.manager = manager;
+		this.filter = filter;
+		this.worldGuard = worldGuard;
 	}
 
 	@Override
@@ -61,5 +68,18 @@ public class TeleportCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
 		result.who.sendColouredMessage(result.message);
 	}
 
+	@Nullable
+	@Override
+	public List<String> getParameterOptionsPartial(String parameter, String arg)
+	{
+		if (!arg.contains("_"))
+			return null;
+
+		RunsafePlayer player = RunsafeServer.Instance.getOfflinePlayerExact(arg.substring(0, arg.lastIndexOf('_') - 1));
+		return filter.apply(worldGuard.getOwnedRegions(player, filter.getWorld()));
+	}
+
 	private final PlotManager manager;
+	private final PlotFilter filter;
+	private final WorldGuardInterface worldGuard;
 }
