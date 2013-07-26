@@ -45,6 +45,8 @@ public class PlotList
 		if (lists.containsKey(player.getName()))
 		{
 			List<String> list = lists.get(player.getName());
+			if (list == null || list.isEmpty())
+				return null;
 			int i = list.indexOf(pointer.get(player.getName()));
 			pointer.put(player.getName(), list.get(i > 0 ? i - 1 : list.size() - 1));
 			return pointer.get(player.getName());
@@ -57,6 +59,8 @@ public class PlotList
 		if (lists.containsKey(player.getName()))
 		{
 			List<String> list = lists.get(player.getName());
+			if (list == null || list.isEmpty())
+				return null;
 			int i = list.indexOf(pointer.get(player.getName()));
 			pointer.put(player.getName(), list.get(i + 1 >= list.size() ? 0 : i + 1));
 			return pointer.get(player.getName());

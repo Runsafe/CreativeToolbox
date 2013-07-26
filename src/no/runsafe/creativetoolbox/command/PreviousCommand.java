@@ -26,12 +26,16 @@ public class PreviousCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
 		PlayerTeleport target = new PlayerTeleport();
 		target.who = executor;
 		String plot = plotList.previous(executor);
-		target.location = manager.getPlotEntrance(plot);
-		if (target.location == null)
-			target.message = String.format("Plot '%s' not found.", plot);
+		if (plot == null)
+			target.message = "You do not have a list of plots.";
 		else
-			target.message = String.format("Teleported to '%s'", plot);
-
+		{
+			target.location = manager.getPlotEntrance(plot);
+			if (target.location == null)
+				target.message = String.format("Plot '%s' not found.", plot);
+			else
+				target.message = String.format("Teleported to '%s'", plot);
+		}
 		return target;
 	}
 
