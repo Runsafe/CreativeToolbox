@@ -1,5 +1,6 @@
 package no.runsafe.creativetoolbox.command;
 
+import com.google.common.collect.Lists;
 import no.runsafe.creativetoolbox.PlayerTeleport;
 import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.PlotManager;
@@ -73,7 +74,7 @@ public class TeleportCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
 	public List<String> getParameterOptionsPartial(String parameter, String arg)
 	{
 		if (!arg.contains("_"))
-			return null;
+			return Lists.newArrayList();
 
 		RunsafePlayer player = RunsafeServer.Instance.getOfflinePlayerExact(arg.substring(0, arg.lastIndexOf('_') - 1));
 		return filter.apply(worldGuard.getOwnedRegions(player, filter.getWorld()));
