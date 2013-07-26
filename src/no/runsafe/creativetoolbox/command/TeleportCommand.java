@@ -76,8 +76,9 @@ public class TeleportCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
 		console.fine("Tab completion: %s=%s", parameter, arg);
 		if (!arg.contains("_"))
 			return Lists.newArrayList();
-
+		console.fine("Doing tab completion");
 		RunsafePlayer player = RunsafeServer.Instance.getOfflinePlayerExact(arg.substring(0, arg.lastIndexOf('_') - 1));
+		console.fine("Found player %s using '%s'", player, arg.substring(0, arg.lastIndexOf('_') - 1));
 		return filter.apply(worldGuard.getOwnedRegions(player, filter.getWorld()));
 	}
 
