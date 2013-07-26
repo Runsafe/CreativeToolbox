@@ -73,6 +73,7 @@ public class TeleportCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
 	@Override
 	public List<String> getParameterOptionsPartial(String parameter, String arg)
 	{
+		console.fine("Tab completion: %s=%s", parameter, arg);
 		if (!arg.contains("_"))
 			return Lists.newArrayList();
 
