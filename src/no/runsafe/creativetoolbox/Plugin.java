@@ -4,6 +4,7 @@ import no.runsafe.creativetoolbox.command.*;
 import no.runsafe.creativetoolbox.command.Member.BlacklistCommand;
 import no.runsafe.creativetoolbox.command.Member.RemoveCommand;
 import no.runsafe.creativetoolbox.command.Member.WhitelistCommand;
+import no.runsafe.creativetoolbox.command.OldPlotsCommand;
 import no.runsafe.creativetoolbox.command.Tag.ClearCommand;
 import no.runsafe.creativetoolbox.command.Tag.FindCommand;
 import no.runsafe.creativetoolbox.command.Tag.SetCommand;
@@ -42,12 +43,6 @@ public class Plugin extends RunsafeConfigurablePlugin
 		Command toolbox = new Command("creativetoolbox", "A collection of tools for use in a minecraft creative world.", null);
 		addComponent(toolbox);
 
-		Command oldPlots = new Command("old", "Tool to handle old plots", null);
-		oldPlots.addSubCommand(getInstance(no.runsafe.creativetoolbox.command.OldPlots.ListCommand.class));
-//		oldPlots.addSubCommand(getInstance(NextCommand.class));
-//		oldPlots.addSubCommand(getInstance(PreviousCommand.class));
-		toolbox.addSubCommand(oldPlots);
-
 		Command member = new Command("member", "Tools to handle plot membership", null);
 		member.addSubCommand(getInstance(no.runsafe.creativetoolbox.command.Member.AddCommand.class));
 		member.addSubCommand(getInstance(RemoveCommand.class));
@@ -62,6 +57,7 @@ public class Plugin extends RunsafeConfigurablePlugin
 		tag.addSubCommand(getInstance(SetCommand.class));
 		toolbox.addSubCommand(tag);
 
+		toolbox.addSubCommand(getInstance(OldPlotsCommand.class));
 		toolbox.addSubCommand(getInstance(ApprovePlotCommand.class));
 		toolbox.addSubCommand(getInstance(CheckApprovalCommand.class));
 		toolbox.addSubCommand(getInstance(SetEntranceCommand.class));
