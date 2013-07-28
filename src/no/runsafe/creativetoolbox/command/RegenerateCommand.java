@@ -6,6 +6,8 @@ import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.creativetoolbox.event.SyncInteractEvents;
 import no.runsafe.framework.api.IScheduler;
+import no.runsafe.framework.api.command.argument.ITabComplete;
+import no.runsafe.framework.api.command.argument.OptionalArgument;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
@@ -13,6 +15,7 @@ import no.runsafe.worldgenerator.PlotChunkGenerator;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +29,7 @@ public class RegenerateCommand extends PlayerAsyncCommand
 		IScheduler scheduler,
 		ApprovedPlotRepository approvedPlotRepository)
 	{
-		super("regenerate", "Regenerates the plot you are currently in.", "runsafe.creative.regenerate", scheduler);
+		super("regenerate", "Regenerates the plot you are currently in.", "runsafe.creative.regenerate", scheduler, new GeneratorMode());
 		this.worldGuard = worldGuard;
 		this.filter = filter;
 		plotCalculator = calculator;
@@ -34,8 +37,26 @@ public class RegenerateCommand extends PlayerAsyncCommand
 		this.approvedPlotRepository = approvedPlotRepository;
 	}
 
+	public static class GeneratorMode extends OptionalArgument implements ITabComplete
+	{
+		public GeneratorMode()
+		{
+			super("mode");
+			for (PlotChunkGenerator.Mode mode : PlotChunkGenerator.Mode.values())
+				modes.add(mode.name().toLowerCase());
+		}
+
+		@Override
+		public List<String> getAlternatives(RunsafePlayer player, String arg)
+		{
+			return modes;
+		}
+
+		private final List<String> modes = new ArrayList<String>();
+	}
+
 	@Override
-	public String OnAsyncExecute(RunsafePlayer executor, Map<String, String> parameters, String[] arguments)
+	public String OnAsyncExecute(RunsafePlayer executor, Map<String, String> parameters)
 	{
 		Rectangle2D area = getArea(executor.getLocation());
 		if (area == null)
@@ -50,16 +71,10 @@ public class RegenerateCommand extends PlayerAsyncCommand
 					return "You may not regenerate an approved plot!";
 			}
 
-		PlotChunkGenerator.Mode mode = arguments.length > 0 ? getMode(arguments[0]) : null;
+		PlotChunkGenerator.Mode mode = parameters.containsKey("mode") ? getMode(parameters.get("mode")) : null;
 		interactEvents.startRegeneration(executor, area, mode);
 
 		return "Right click the ground to confirm regeneration.";
-	}
-
-	@Override
-	public String OnAsyncExecute(RunsafePlayer player, Map<String, String> parameters)
-	{
-		return null;
 	}
 
 	private Rectangle2D getArea(RunsafeLocation location)

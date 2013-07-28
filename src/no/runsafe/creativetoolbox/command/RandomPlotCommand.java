@@ -24,12 +24,6 @@ public class RandomPlotCommand extends PlayerAsyncCallbackCommand<RandomPlotComm
 	@Override
 	public Sudo OnAsyncExecute(RunsafePlayer executor, Map<String, String> parameters)
 	{
-		return null;
-	}
-
-	@Override
-	public Sudo OnAsyncExecute(RunsafePlayer executor, Map<String, String> parameters, String[] arguments)
-	{
 		if (plotFilter.getWorld() == null)
 			return null;
 		List<String> plots;
@@ -39,16 +33,7 @@ public class RandomPlotCommand extends PlayerAsyncCallbackCommand<RandomPlotComm
 			plots = tagRepository.findPlots(parameters.get("tag"));
 			if (plots.isEmpty())
 			{
-				executor.sendColouredMessage("&cSorry, found no plots tagged \"%s\".", arguments[0]);
-				return null;
-			}
-		}
-		else if (arguments.length > 0)
-		{
-			plots = tagRepository.findPlots(arguments[0]);
-			if (plots.isEmpty())
-			{
-				executor.sendColouredMessage("&cSorry, found no plots tagged \"%s\".", arguments[0]);
+				executor.sendColouredMessage("&cSorry, found no plots tagged \"%s\".", parameters.get("tag"));
 				return null;
 			}
 		}

@@ -1,6 +1,7 @@
 package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.framework.api.IConfiguration;
+import no.runsafe.framework.api.command.argument.OptionalArgument;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.minecraft.entity.RunsafeEntity;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
@@ -13,15 +14,18 @@ public class CleanCommand extends PlayerCommand
 {
 	public CleanCommand(IConfiguration configuration)
 	{
-		super("clean", "Remove items and mobs from the world", "runsafe.creative.clean");
+		super("clean", "Remove items and mobs from the world", "runsafe.creative.clean", new OptionalArgument("filter"));
 		config = configuration;
 	}
 
 	@Override
-	public String OnExecute(RunsafePlayer executor, Map<String, String> parameters, String[] arguments)
+	public String OnExecute(RunsafePlayer executor, Map<String, String> parameters)
 	{
 		HashMap<String, Integer> counts = new HashMap<String, Integer>();
 		List<String> noClean = config.getConfigValueAsList("clean.ignore");
+		String[] arguments = new String[0];
+		if (parameters.containsKey("filter"))
+			arguments = parameters.get("filter").split("\\s+");
 		int count = 0;
 		for (RunsafeEntity entity : executor.getWorld().getEntities())
 		{
@@ -65,12 +69,6 @@ public class CleanCommand extends PlayerCommand
 		for (String name : counts.keySet())
 			results.append(String.format("  %s: %d.\n", name, counts.get(name)));
 		return results.toString();
-	}
-
-	@Override
-	public String OnExecute(RunsafePlayer executor, Map<String, String> parameters)
-	{
-		return null;
 	}
 
 	private final IConfiguration config;
