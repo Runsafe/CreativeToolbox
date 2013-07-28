@@ -1,6 +1,5 @@
 package no.runsafe.creativetoolbox.command;
 
-import com.google.common.collect.Lists;
 import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.framework.api.command.argument.ITabComplete;
 import no.runsafe.framework.api.command.argument.RequiredArgument;
@@ -23,7 +22,7 @@ public class PlotArgument extends RequiredArgument implements ITabComplete
 	public List<String> getAlternatives(RunsafePlayer executor, String arg)
 	{
 		if (!arg.contains("_"))
-			return Lists.newArrayList();
+			return null;
 		RunsafePlayer player = RunsafeServer.Instance.getOfflinePlayerExact(arg.substring(0, arg.lastIndexOf('_')));
 		return filter.apply(worldGuard.getOwnedRegions(player, filter.getWorld()));
 	}
