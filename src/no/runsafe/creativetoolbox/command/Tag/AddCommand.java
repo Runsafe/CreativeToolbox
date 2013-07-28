@@ -3,6 +3,7 @@ package no.runsafe.creativetoolbox.command.Tag;
 import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.creativetoolbox.database.PlotTagRepository;
 import no.runsafe.framework.api.IScheduler;
+import no.runsafe.framework.api.command.argument.TrailingArgument;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 
@@ -12,10 +13,9 @@ public class AddCommand extends PlayerAsyncCommand
 {
 	public AddCommand(IScheduler scheduler, PlotTagRepository tagRepository, PlotManager manager)
 	{
-		super("add", "Add a tag to the current plot", "runsafe.creative.tag.add", scheduler, "tag");
+		super("add", "Add one or more tags to the current plot", "runsafe.creative.tag.add", scheduler, new TrailingArgument("tag"));
 		this.tagRepository = tagRepository;
 		this.manager = manager;
-		captureTail();
 	}
 
 	@Override

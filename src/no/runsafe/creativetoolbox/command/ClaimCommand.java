@@ -5,6 +5,8 @@ import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.creativetoolbox.database.PlotMemberRepository;
+import no.runsafe.framework.api.command.argument.OptionalArgument;
+import no.runsafe.framework.api.command.argument.PlayerArgument;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.RunsafeWorld;
@@ -22,7 +24,7 @@ public class ClaimCommand extends PlayerCommand
 		PlotManager manager, PlotCalculator calculator, WorldGuardInterface worldGuard,
 		PlotMemberRepository members, ApprovedPlotRepository approvalRepository)
 	{
-		super("claim", "Claims a plot", null);
+		super("claim", "Claims a plot", null, new PlayerArgument(false));
 		this.manager = manager;
 		this.calculator = calculator;
 		this.worldGuard = worldGuard;
@@ -31,7 +33,7 @@ public class ClaimCommand extends PlayerCommand
 	}
 
 	@Override
-	public String OnExecute(RunsafePlayer executor, Map<String, String> params, String[] args)
+	public String OnExecute(RunsafePlayer executor, Map<String, String> params) //, String[] args)
 	{
 		String current = manager.getCurrentRegionFiltered(executor);
 		if (current != null)
@@ -45,7 +47,7 @@ public class ClaimCommand extends PlayerCommand
 			return "You need to stand in a plot to use this command.";
 
 		RunsafeWorld world = executor.getWorld();
-		RunsafePlayer owner = args.length == 0 ? null : RunsafeServer.Instance.getPlayer(args[0]);
+		RunsafePlayer owner = params.containsKey("player") ? RunsafeServer.Instance.getPlayer(params.get("player")) : null;
 		if (owner instanceof RunsafeAmbiguousPlayer)
 			return owner.toString();
 
@@ -84,12 +86,6 @@ public class ClaimCommand extends PlayerCommand
 		}
 
 		return String.format("Unable to claim a new plot for %s :(", owner.getPrettyName());
-	}
-
-	@Override
-	public String OnExecute(RunsafePlayer player, Map<String, String> params)
-	{
-		return null;
 	}
 
 	private final PlotManager manager;
