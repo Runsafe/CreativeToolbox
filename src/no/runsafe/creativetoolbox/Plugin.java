@@ -4,7 +4,6 @@ import no.runsafe.creativetoolbox.command.*;
 import no.runsafe.creativetoolbox.command.Member.BlacklistCommand;
 import no.runsafe.creativetoolbox.command.Member.RemoveCommand;
 import no.runsafe.creativetoolbox.command.Member.WhitelistCommand;
-import no.runsafe.creativetoolbox.command.OldPlotsCommand;
 import no.runsafe.creativetoolbox.command.Tag.ClearCommand;
 import no.runsafe.creativetoolbox.command.Tag.FindCommand;
 import no.runsafe.creativetoolbox.command.Tag.SetCommand;
@@ -39,6 +38,7 @@ public class Plugin extends RunsafeConfigurablePlugin
 		addComponent(SyncInteractEvents.class);
 		addComponent(PlotCalculator.class);
 		addComponent(ImportWorldGuardRegions.class);
+		addComponent(PlotArgument.class);
 
 		Command toolbox = new Command("creativetoolbox", "A collection of tools for use in a minecraft creative world.", null);
 		addComponent(toolbox);

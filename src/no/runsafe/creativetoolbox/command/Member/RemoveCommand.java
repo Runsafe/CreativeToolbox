@@ -4,6 +4,7 @@ import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.database.PlotMemberRepository;
 import no.runsafe.creativetoolbox.event.PlotMembershipRevokedEvent;
 import no.runsafe.framework.api.IScheduler;
+import no.runsafe.framework.api.command.argument.PlayerArgument;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
@@ -19,7 +20,7 @@ public class RemoveCommand extends PlayerAsyncCommand
 {
 	public RemoveCommand(IScheduler scheduler, PlotFilter filter, WorldGuardInterface worldGuard, PlotMemberRepository memberRepository)
 	{
-		super("remove", "Remove a member from the plot you are standing in.", "runsafe.creative.member.remove", scheduler, "player");
+		super("remove", "Remove a member from the plot you are standing in.", "runsafe.creative.member.remove", scheduler, new PlayerArgument());
 		plotFilter = filter;
 		worldGuardInterface = worldGuard;
 		this.memberRepository = memberRepository;

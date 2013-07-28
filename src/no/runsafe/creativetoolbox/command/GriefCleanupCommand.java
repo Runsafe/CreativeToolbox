@@ -3,6 +3,7 @@ package no.runsafe.creativetoolbox.command;
 import com.google.common.collect.Lists;
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotFilter;
+import no.runsafe.framework.api.command.argument.EnumArgument;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.RunsafeWorld;
@@ -19,19 +20,14 @@ public class GriefCleanupCommand extends PlayerCommand
 {
 	public GriefCleanupCommand(WorldGuardInterface worldGuard, WorldEditInterface worldEdit, PlotCalculator plotCalculator, PlotFilter filter)
 	{
-		super("griefcleanup", "Cleans up griefed plots.", "runsafe.creative.degrief", "what");
+		super(
+			"griefcleanup", "Cleans up griefed plots.", "runsafe.creative.degrief",
+			new EnumArgument("what", Lists.newArrayList("road", "lava", "water", "cobblestone", "obsidian", "all"), true)
+		);
 		this.worldEdit = worldEdit;
 		this.worldGuard = worldGuard;
 		this.plotCalculator = plotCalculator;
 		this.filter = filter;
-	}
-
-	@Override
-	public List<String> getParameterOptions(String parameter)
-	{
-		if (parameter.equals("what"))
-			return Lists.newArrayList("road", "lava", "water", "cobblestone", "obsidian", "all");
-		return null;
 	}
 
 	@Override

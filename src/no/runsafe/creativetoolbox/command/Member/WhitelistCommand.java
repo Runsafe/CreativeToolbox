@@ -3,6 +3,7 @@ package no.runsafe.creativetoolbox.command.Member;
 import no.runsafe.creativetoolbox.database.PlotMemberBlacklistRepository;
 import no.runsafe.framework.api.command.ExecutableCommand;
 import no.runsafe.framework.api.command.ICommandExecutor;
+import no.runsafe.framework.api.command.argument.PlayerArgument;
 import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.player.RunsafeAmbiguousPlayer;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
@@ -13,7 +14,7 @@ public class WhitelistCommand extends ExecutableCommand
 {
 	public WhitelistCommand(PlotMemberBlacklistRepository blacklistRepository)
 	{
-		super("whitelist", "Removes a player from the membership blacklist.", "runsafe.creative.whitelist", "player");
+		super("whitelist", "Removes a player from the membership blacklist.", "runsafe.creative.whitelist", new PlayerArgument());
 		this.blacklistRepository = blacklistRepository;
 	}
 

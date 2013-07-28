@@ -11,9 +11,9 @@ import java.util.Map;
 
 public class ApprovePlotCommand extends PlayerAsyncCommand
 {
-	public ApprovePlotCommand(PlotFilter filter, PlotManager plotManager, IScheduler scheduler)
+	public ApprovePlotCommand(PlotFilter filter, PlotManager plotManager, IScheduler scheduler, PlotArgument plotName)
 	{
-		super("approve", "exempts a plot from the old plots command.", "runsafe.creative.approval.set", scheduler, "plotname");
+		super("approve", "exempts a plot from the old plots command.", "runsafe.creative.approval.set", scheduler, plotName);
 		plotFilter = filter;
 		manager = plotManager;
 	}

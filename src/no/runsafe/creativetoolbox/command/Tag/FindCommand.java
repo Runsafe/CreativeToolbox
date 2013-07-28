@@ -5,6 +5,7 @@ import no.runsafe.creativetoolbox.database.PlotTagRepository;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.AsyncCommand;
 import no.runsafe.framework.api.command.ICommandExecutor;
+import no.runsafe.framework.api.command.argument.RequiredArgument;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import org.bukkit.craftbukkit.libs.joptsimple.internal.Strings;
 
@@ -15,7 +16,7 @@ public class FindCommand extends AsyncCommand
 {
 	public FindCommand(IScheduler scheduler, PlotTagRepository tagRepository, PlotList plotList)
 	{
-		super("find", "Search for plots with a given tag", "runsafe.creative.tag.find", scheduler, "lookup");
+		super("find", "Search for plots with a given tag", "runsafe.creative.tag.find", scheduler, new RequiredArgument("lookup"));
 		this.tagRepository = tagRepository;
 		this.plotList = plotList;
 	}

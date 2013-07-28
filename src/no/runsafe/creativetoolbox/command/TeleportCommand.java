@@ -1,26 +1,22 @@
 package no.runsafe.creativetoolbox.command;
 
-import com.google.common.collect.Lists;
 import no.runsafe.creativetoolbox.PlayerTeleport;
 import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.player.PlayerAsyncCallbackCommand;
 import no.runsafe.framework.minecraft.RunsafeLocation;
-import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.RunsafeWorld;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
-import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Map;
 
 public class TeleportCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
 {
-	public TeleportCommand(IScheduler scheduler, PlotManager manager, PlotFilter filter, WorldGuardInterface worldGuard)
+	public TeleportCommand(IScheduler scheduler, PlotManager manager, PlotFilter filter, WorldGuardInterface worldGuard, PlotArgument plotName)
 	{
-		super("teleport", "teleport to a plot.", "runsafe.creative.teleport.plot", scheduler, "plotname");
+		super("teleport", "teleport to a plot.", "runsafe.creative.teleport.plot", scheduler, plotName);
 		this.manager = manager;
 		this.filter = filter;
 		this.worldGuard = worldGuard;
@@ -67,19 +63,6 @@ public class TeleportCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
 			result.who.teleport(result.location);
 		}
 		result.who.sendColouredMessage(result.message);
-	}
-
-	@Nullable
-	@Override
-	public List<String> getParameterOptionsPartial(String parameter, String arg)
-	{
-		console.fine("Tab completion: %s=%s", parameter, arg);
-		if (!arg.contains("_"))
-			return Lists.newArrayList();
-		console.fine("Doing tab completion");
-		RunsafePlayer player = RunsafeServer.Instance.getOfflinePlayerExact(arg.substring(0, arg.lastIndexOf('_')));
-		console.fine("Found player %s using '%s'", player, arg.substring(0, arg.lastIndexOf('_')));
-		return filter.apply(worldGuard.getOwnedRegions(player, filter.getWorld()));
 	}
 
 	private final PlotManager manager;

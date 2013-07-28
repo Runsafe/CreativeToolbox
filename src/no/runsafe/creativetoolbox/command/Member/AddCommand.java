@@ -5,6 +5,7 @@ import no.runsafe.creativetoolbox.database.PlotMemberBlacklistRepository;
 import no.runsafe.creativetoolbox.database.PlotMemberRepository;
 import no.runsafe.creativetoolbox.event.PlotMembershipGrantedEvent;
 import no.runsafe.framework.api.IScheduler;
+import no.runsafe.framework.api.command.argument.PlayerArgument;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.player.RunsafeAmbiguousPlayer;
@@ -21,7 +22,7 @@ public class AddCommand extends PlayerAsyncCommand
 {
 	public AddCommand(IScheduler scheduler, PlotFilter filter, WorldGuardInterface worldGuard, PlotMemberRepository members, PlotMemberBlacklistRepository blacklistRepository)
 	{
-		super("add", "Add a member to the plot you are standing in", "runsafe.creative.member.add", scheduler, "player");
+		super("add", "Add a member to the plot you are standing in", "runsafe.creative.member.add", scheduler, new PlayerArgument());
 		plotFilter = filter;
 		worldGuardInterface = worldGuard;
 		this.members = members;

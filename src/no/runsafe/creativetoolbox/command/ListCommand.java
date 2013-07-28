@@ -4,6 +4,7 @@ import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.PlotList;
 import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.framework.api.IScheduler;
+import no.runsafe.framework.api.command.argument.PlayerArgument;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.player.RunsafeAmbiguousPlayer;
@@ -22,7 +23,7 @@ public class ListCommand extends PlayerAsyncCommand
 		PlotFilter filter,
 		IScheduler scheduler, PlotManager manager, PlotList plotList)
 	{
-		super("list", "lists plots owned by a player.", "runsafe.creative.list", scheduler, "player");
+		super("list", "lists plots owned by a player.", "runsafe.creative.list", scheduler, new PlayerArgument());
 		this.server = server;
 		this.worldGuard = worldGuard;
 		this.filter = filter;
@@ -49,7 +50,7 @@ public class ListCommand extends PlayerAsyncCommand
 
 		List<String> plots = filter.apply(worldGuard.getOwnedRegions(player, filter.getWorld()));
 		List<String> property = manager.tag(executor, plots);
-		if(plots.size() > 0)
+		if (plots.size() > 0)
 			plotList.set(executor, plots);
 		return String.format(
 			"%d plots owned by %s:\n  %s",

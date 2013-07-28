@@ -18,10 +18,11 @@ public class CheckApprovalCommand extends AsyncCommand
 		ApprovedPlotRepository approvalRepository,
 		PlotFilter filter,
 		WorldGuardInterface worldGuard,
-		IScheduler scheduler
+		IScheduler scheduler,
+		PlotArgument plotName
 	)
 	{
-		super("checkapproval", "find out who approved a plot.", "runsafe.creative.approval.read", scheduler, "plotname");
+		super("checkapproval", "find out who approved a plot.", "runsafe.creative.approval.read", scheduler, plotName);
 		repository = approvalRepository;
 		plotFilter = filter;
 		worldGuardInterface = worldGuard;
