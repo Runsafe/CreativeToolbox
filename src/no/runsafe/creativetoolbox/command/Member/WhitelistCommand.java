@@ -18,7 +18,7 @@ public class WhitelistCommand extends ExecutableCommand
 	}
 
 	@Override
-	protected String OnExecute(ICommandExecutor executor, Map<String, String> params)
+	public String OnExecute(ICommandExecutor executor, Map<String, String> params)
 	{
 		RunsafePlayer player = RunsafeServer.Instance.getPlayer(params.get("player"));
 		if (player == null)
