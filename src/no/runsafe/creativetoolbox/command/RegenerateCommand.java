@@ -6,8 +6,7 @@ import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.creativetoolbox.event.SyncInteractEvents;
 import no.runsafe.framework.api.IScheduler;
-import no.runsafe.framework.api.command.argument.ITabComplete;
-import no.runsafe.framework.api.command.argument.OptionalArgument;
+import no.runsafe.framework.api.command.argument.EnumArgument;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
@@ -15,7 +14,6 @@ import no.runsafe.worldgenerator.PlotChunkGenerator;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,30 +27,15 @@ public class RegenerateCommand extends PlayerAsyncCommand
 		IScheduler scheduler,
 		ApprovedPlotRepository approvedPlotRepository)
 	{
-		super("regenerate", "Regenerates the plot you are currently in.", "runsafe.creative.regenerate", scheduler, new GeneratorMode());
+		super(
+			"regenerate", "Regenerates the plot you are currently in.", "runsafe.creative.regenerate", scheduler,
+			new EnumArgument("mode", PlotChunkGenerator.Mode.values(), false)
+		);
 		this.worldGuard = worldGuard;
 		this.filter = filter;
 		plotCalculator = calculator;
 		this.interactEvents = interactEvents;
 		this.approvedPlotRepository = approvedPlotRepository;
-	}
-
-	public static class GeneratorMode extends OptionalArgument implements ITabComplete
-	{
-		public GeneratorMode()
-		{
-			super("mode");
-			for (PlotChunkGenerator.Mode mode : PlotChunkGenerator.Mode.values())
-				modes.add(mode.name().toLowerCase());
-		}
-
-		@Override
-		public List<String> getAlternatives(RunsafePlayer player, String arg)
-		{
-			return modes;
-		}
-
-		private final List<String> modes = new ArrayList<String>();
 	}
 
 	@Override
