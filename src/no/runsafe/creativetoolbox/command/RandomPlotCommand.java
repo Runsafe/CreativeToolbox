@@ -3,6 +3,7 @@ package no.runsafe.creativetoolbox.command;
 import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.database.PlotTagRepository;
 import no.runsafe.framework.api.IScheduler;
+import no.runsafe.framework.api.command.argument.OptionalArgument;
 import no.runsafe.framework.api.command.player.PlayerAsyncCallbackCommand;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 
@@ -14,7 +15,7 @@ public class RandomPlotCommand extends PlayerAsyncCallbackCommand<RandomPlotComm
 {
 	public RandomPlotCommand(PlotFilter filter, IScheduler scheduler, PlotTagRepository tagRepository)
 	{
-		super("randomplot", "teleport to a random plot.", "runsafe.creative.teleport.random", scheduler);
+		super("randomplot", "teleport to a random plot.", "runsafe.creative.teleport.random", scheduler, new OptionalArgument("tag"));
 		plotFilter = filter;
 		this.tagRepository = tagRepository;
 		rng = new Random();
@@ -32,7 +33,17 @@ public class RandomPlotCommand extends PlayerAsyncCallbackCommand<RandomPlotComm
 		if (plotFilter.getWorld() == null)
 			return null;
 		List<String> plots;
-		if (arguments.length > 0)
+		if (parameters.containsKey("tag"))
+		{
+			console.fine("Optional argument tag detected: %s", parameters.get("tag"));
+			plots = tagRepository.findPlots(parameters.get("tag"));
+			if (plots.isEmpty())
+			{
+				executor.sendColouredMessage("&cSorry, found no plots tagged \"%s\".", arguments[0]);
+				return null;
+			}
+		}
+		else if (arguments.length > 0)
 		{
 			plots = tagRepository.findPlots(arguments[0]);
 			if (plots.isEmpty())
