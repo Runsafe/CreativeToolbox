@@ -452,7 +452,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 				continue;
 
 			PlotEntrance entrance = plotEntrance.get(plot);
-			if (entrance != null)
+			if (entrance != null && entrance.getLocation() != null)
 				continue;
 
 			PlotEntrance store = new PlotEntrance();
