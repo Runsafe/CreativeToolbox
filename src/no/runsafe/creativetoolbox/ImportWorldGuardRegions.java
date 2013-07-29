@@ -58,7 +58,7 @@ public class ImportWorldGuardRegions implements IPluginEnabled
 			}
 		}
 		console.logInformation("Imported &a%d&r owners and &a%d&r members to &a%d&r plots.", owners, members, regions.size());
-		config.setConfigValue("imported", true);
+		config.setConfigValue("imported.plots", true);
 		config.save();
 	}
 
