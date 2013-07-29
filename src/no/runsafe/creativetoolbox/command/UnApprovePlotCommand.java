@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class UnApprovePlotCommand extends PlayerAsyncCommand
 {
-	protected UnApprovePlotCommand(IScheduler scheduler, WorldGuardInterface worldGuard, PlotFilter filter, PlotManager manager, ApprovedPlotRepository approval)
+	public UnApprovePlotCommand(IScheduler scheduler, WorldGuardInterface worldGuard, PlotFilter filter, PlotManager manager, ApprovedPlotRepository approval)
 	{
 		super("unapprove", "Removes a previously granted approval.", "runsafe.creative.approval.revoke", scheduler, new PlotArgument(filter, worldGuard));
 		this.manager = manager;
