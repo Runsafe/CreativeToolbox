@@ -59,6 +59,7 @@ public class Plugin extends RunsafeConfigurablePlugin
 
 		toolbox.addSubCommand(getInstance(OldPlotsCommand.class));
 		toolbox.addSubCommand(getInstance(ApprovePlotCommand.class));
+		toolbox.addSubCommand(getInstance(UnApprovePlotCommand.class));
 		toolbox.addSubCommand(getInstance(CheckApprovalCommand.class));
 		toolbox.addSubCommand(getInstance(SetEntranceCommand.class));
 		toolbox.addSubCommand(getInstance(TeleportCommand.class));
