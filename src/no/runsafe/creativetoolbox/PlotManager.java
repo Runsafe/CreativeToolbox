@@ -449,11 +449,17 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		for (String plot : all)
 		{
 			if (skip.contains(plot))
+			{
+				console.finer("Plot %s entrance is already stored", plot);
 				continue;
+			}
 
 			PlotEntrance entrance = plotEntrance.get(plot);
 			if (entrance != null && entrance.getLocation() != null)
+			{
+				console.fine("Plot %s entrance is not stored, but exists?!", plot);
 				continue;
+			}
 
 			PlotEntrance store = new PlotEntrance();
 			store.setName(plot);
