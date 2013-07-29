@@ -381,14 +381,6 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		limit = new Period(0, 0, 0, config.getConfigValueAsInt("old_after"), 0, 0, 0, 0).toDurationTo(DateTime.now());
 		autoApprove = config.getConfigValueAsInt("vote.approved");
 		voteRanks = config.getConfigValuesAsIntegerMap("vote.rank");
-		if (!config.getConfigValueAsBoolean("imported.entrances"))
-		{
-			plotEntrance.OnConfigurationChanged(config);
-			calculator.OnConfigurationChanged(config);
-			importEntrances();
-			config.setConfigValue("imported.entrances", true);
-			config.save();
-		}
 	}
 
 	@Override
@@ -439,35 +431,6 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 				worldGuard.removeMemberFromRegion(world, region, player);
 				memberRepository.removeMember(region, player.getName().toLowerCase());
 			}
-		}
-	}
-
-	private void importEntrances()
-	{
-		List<String> skip = plotEntrance.getPlots();
-		List<String> all = plotLog.getPlots();
-		for (String plot : all)
-		{
-			if (skip.contains(plot))
-			{
-				console.finer("Plot %s entrance is already stored", plot);
-				continue;
-			}
-
-			PlotEntrance entrance = plotEntrance.get(plot);
-			if (entrance != null && entrance.getLocation() != null)
-			{
-				console.fine("Plot %s entrance is not stored, but exists?!", plot);
-				continue;
-			}
-
-			PlotEntrance store = new PlotEntrance();
-			store.setName(plot);
-			store.setLocation(getPlotEntrance(plot));
-			if (store.getLocation() == null)
-				console.logWarning("Unable to get entrance for plot '%s'", plot);
-			else
-				plotEntrance.persist(store);
 		}
 	}
 

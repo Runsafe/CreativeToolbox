@@ -37,7 +37,7 @@ public class Plugin extends RunsafeConfigurablePlugin
 		addComponent(InteractEvents.class);
 		addComponent(SyncInteractEvents.class);
 		addComponent(PlotCalculator.class);
-		addComponent(ImportWorldGuardRegions.class);
+		addComponent(Importers.class);
 		addComponent(PlotArgument.class);
 
 		Command toolbox = new Command("creativetoolbox", "A collection of tools for use in a minecraft creative world.", null);
