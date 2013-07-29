@@ -21,6 +21,8 @@ public class ScanCommand extends PlayerCommand
 		int count = 0;
 		for (RunsafeEntity entity : executor.getWorld().getEntities())
 		{
+			if (entity instanceof RunsafePlayer)
+				continue;
 			String name = entity.getRaw().getClass().getSimpleName();
 			if (!counts.containsKey(name))
 				counts.put(name, 1);
