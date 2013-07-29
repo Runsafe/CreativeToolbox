@@ -1,12 +1,9 @@
 package no.runsafe.creativetoolbox.database;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 import no.runsafe.framework.api.database.IDatabase;
 import no.runsafe.framework.api.database.IValue;
 import no.runsafe.framework.api.database.Repository;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
