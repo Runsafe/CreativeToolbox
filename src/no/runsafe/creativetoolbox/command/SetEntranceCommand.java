@@ -41,7 +41,7 @@ public class SetEntranceCommand extends PlayerAsyncCommand
 			|| worldGuard.getOwners(executor.getWorld(), currentRegion).contains(executor.getName().toLowerCase())))
 			return String.format("You are not allowed to set the entrance for the region %s", currentRegion);
 
-		return null;
+		return super.OnExecute(executor, parameters);
 	}
 
 	@Override
