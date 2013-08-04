@@ -306,6 +306,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 			PlotEntrance entrance = new PlotEntrance();
 			entrance.setName(plotName);
 			entrance.setLocation(calculator.getDefaultEntrance(worldGuard.getRegionLocation(world, plotName)));
+			plotEntrance.persist(entrance);
 			return true;
 		}
 		return false;
