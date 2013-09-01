@@ -365,6 +365,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		plotEntrance.delete(region);
 		tagRepository.setTags(region, null);
 		voteRepository.clear(region);
+		plotLog.delete(region);
 		plotList.remove(region);
 		new PlotDeletedEvent(deletor, region).Fire();
 	}
