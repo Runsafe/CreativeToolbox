@@ -5,6 +5,7 @@ import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.creativetoolbox.event.SyncInteractEvents;
+import no.runsafe.framework.api.IOutput;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
@@ -18,11 +19,11 @@ import java.util.Map;
 public class DeleteHereCommand extends PlayerAsyncCommand
 {
 	public DeleteHereCommand(
-		PlotFilter filter,
-		WorldGuardInterface worldGuard,
-		PlotCalculator plotCalculator,
-		SyncInteractEvents interactEvents,
-		IScheduler scheduler, ApprovedPlotRepository approvedPlotRepository)
+			PlotFilter filter,
+			WorldGuardInterface worldGuard,
+			PlotCalculator plotCalculator,
+			SyncInteractEvents interactEvents,
+			IScheduler scheduler, ApprovedPlotRepository approvedPlotRepository)
 	{
 		super("deletehere", "delete the region you are in.", "runsafe.creative.delete", scheduler);
 		this.filter = filter;

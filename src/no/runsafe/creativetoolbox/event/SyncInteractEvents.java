@@ -2,9 +2,12 @@ package no.runsafe.creativetoolbox.event;
 
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotManager;
+import no.runsafe.framework.api.IOutput;
 import no.runsafe.framework.api.event.player.IPlayerRightClickBlock;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.minecraft.RunsafeLocation;
+import no.runsafe.framework.minecraft.RunsafeServer;
+import no.runsafe.framework.minecraft.RunsafeWorld;
 import no.runsafe.framework.minecraft.block.RunsafeBlock;
 import no.runsafe.framework.minecraft.item.meta.RunsafeMeta;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
@@ -56,26 +59,32 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 				&& generator.get(player.getName()) != PlotChunkGenerator.Mode.NORMAL;
 			try
 			{
-				Rectangle2D area = regenerations.get(player.getName());
+				String playerName = player.getName();
+				Rectangle2D area = regenerations.get(playerName);
 				if (!area.contains(location.getX(), location.getZ()))
 				{
-					regenerations.remove(player.getName());
+					regenerations.remove(playerName);
 					if (changeMode)
-						generator.remove(player.getName());
+						generator.remove(playerName);
 					return true;
 				}
 				if (changeMode)
 				{
-					PlotChunkGenerator.Mode mode = generator.get(player.getName());
+					PlotChunkGenerator.Mode mode = generator.get(playerName);
 					plotGenerator.setMode(mode);
 				}
-				RunsafeLocation minPos = calculator.getMinPosition(player.getWorld(), area);
-				RunsafeLocation maxPos = calculator.getMaxPosition(player.getWorld(), area);
+
+				RunsafeWorld playerWorld = player.getWorld();
+				RunsafeLocation minPos = calculator.getMinPosition(playerWorld, area);
+				RunsafeLocation maxPos = calculator.getMaxPosition(playerWorld, area);
 				player.sendMessage(
 					worldEdit.regenerate(player, minPos, maxPos, false)
 						? "Plot regenerated."
 						: "Could not regenerate plot."
 				);
+				RunsafeServer.Instance.getLogger().info(String.format(
+						"%s regenerated area: %s, %s", playerName, minPos, maxPos
+				));
 				return false;
 			}
 			finally
@@ -110,6 +119,7 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 					manager.delete(player, region);
 					worldEdit.regenerate(player, minPos, maxPos, false);
 					results.append(String.format("Deleted plot '%s'.", region));
+					RunsafeServer.Instance.getLogger().info(String.format("%s deleted plot %s", player.getName(), region));
 				}
 			}
 			if (!nothing)
