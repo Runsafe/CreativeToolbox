@@ -51,7 +51,6 @@ public class PlotMemberRepository extends Repository
 		if (!owner && !member)
 			return null;
 
-		List<IValue> data;
 		if (owner && member)
 			return database.QueryStrings("SELECT DISTINCT `plot` FROM creative_plot_member WHERE player=?", player);
 		else
