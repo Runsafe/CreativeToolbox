@@ -1,7 +1,6 @@
 package no.runsafe.creativetoolbox.database;
 
 import no.runsafe.framework.api.database.IDatabase;
-import no.runsafe.framework.api.database.IValue;
 import no.runsafe.framework.api.database.Repository;
 
 import java.util.ArrayList;
