@@ -21,7 +21,7 @@ public class JumpCommand extends PlayerAsyncCallbackCommand<JumpCommand.Sudo>
 		Unapproved
 	}
 
-	protected JumpCommand(IScheduler scheduler, PlotFilter plotFilter, ApprovedPlotRepository approval, PlotList plotList)
+	public JumpCommand(IScheduler scheduler, PlotFilter plotFilter, ApprovedPlotRepository approval, PlotList plotList)
 	{
 		super("jump", "Find a random plot of a given kind", "runsafe.creative.teleport.random", scheduler, new EnumArgument("kind", JumpKinds.values(), true));
 		this.plotFilter = plotFilter;
