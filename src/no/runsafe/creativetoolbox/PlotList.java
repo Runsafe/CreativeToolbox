@@ -20,6 +20,11 @@ public class PlotList
 		return lists.get(player.getName()).indexOf(pointer.get(player.getName())) + 1;
 	}
 
+	public void wind(RunsafePlayer player, String to)
+	{
+		pointer.put(player.getName(), to);
+	}
+
 	public int count(RunsafePlayer player)
 	{
 		return lists.get(player.getName()).size();

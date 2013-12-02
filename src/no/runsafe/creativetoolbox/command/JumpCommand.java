@@ -1,6 +1,7 @@
 package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.creativetoolbox.PlotFilter;
+import no.runsafe.creativetoolbox.PlotList;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.argument.EnumArgument;
@@ -37,6 +38,8 @@ public class JumpCommand extends PlayerAsyncCallbackCommand<JumpCommand.Sudo>
 		if(params.get("kind").equals(JumpKinds.Approved.name()))
 		{
 			int r = rng.nextInt(approved.size());
+			plotList.set(executor, approved);
+			plotList.wind(executor, approved.get(r));
 			target.command = String.format("creativetoolbox teleport %s", approved.get(r));
 			return target;
 		}
@@ -46,6 +49,8 @@ public class JumpCommand extends PlayerAsyncCallbackCommand<JumpCommand.Sudo>
 			if (!approved.contains(value))
 				result.add(value);
 		int r = rng.nextInt(result.size());
+		plotList.set(executor, result);
+		plotList.wind(executor, result.get(r));
 		target.command = String.format("creativetoolbox teleport %s", result.get(r));
 		return target;
 	}
@@ -66,4 +71,5 @@ public class JumpCommand extends PlayerAsyncCallbackCommand<JumpCommand.Sudo>
 	private PlotFilter plotFilter;
 	private ApprovedPlotRepository approval;
 	private Random rng = new Random();
+	private PlotList plotList;
 }
