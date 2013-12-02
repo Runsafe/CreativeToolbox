@@ -5,7 +5,6 @@ import no.runsafe.creativetoolbox.PlotList;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.argument.EnumArgument;
-import no.runsafe.framework.api.command.argument.IArgument;
 import no.runsafe.framework.api.command.player.PlayerAsyncCallbackCommand;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 
@@ -22,11 +21,12 @@ public class JumpCommand extends PlayerAsyncCallbackCommand<JumpCommand.Sudo>
 		Unapproved
 	}
 
-	protected JumpCommand(IScheduler scheduler, PlotFilter plotFilter, ApprovedPlotRepository approval)
+	protected JumpCommand(IScheduler scheduler, PlotFilter plotFilter, ApprovedPlotRepository approval, PlotList plotList)
 	{
 		super("jump", "Find a random plot of a given kind", "runsafe.creative.teleport.random", scheduler, new EnumArgument("kind", JumpKinds.values(), true));
 		this.plotFilter = plotFilter;
 		this.approval = approval;
+		this.plotList = plotList;
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class JumpCommand extends PlayerAsyncCallbackCommand<JumpCommand.Sudo>
 		List<String> approved = approval.getApprovedPlots();
 		Sudo target = new Sudo();
 		target.player = executor;
-		if(params.get("kind").equals(JumpKinds.Approved.name()))
+		if (params.get("kind").equals(JumpKinds.Approved.name()))
 		{
 			int r = rng.nextInt(approved.size());
 			plotList.set(executor, approved);
