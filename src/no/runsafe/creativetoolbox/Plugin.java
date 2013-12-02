@@ -77,5 +77,6 @@ public class Plugin extends RunsafeConfigurablePlugin
 		toolbox.addSubCommand(getInstance(GriefCleanupCommand.class));
 		toolbox.addSubCommand(getInstance(NextCommand.class));
 		toolbox.addSubCommand(getInstance(PreviousCommand.class));
+		toolbox.addSubCommand(getInstance(JumpCommand.class));
 	}
 }
