@@ -3,17 +3,14 @@ package no.runsafe.creativetoolbox;
 import no.runsafe.creativetoolbox.database.*;
 import no.runsafe.creativetoolbox.event.PlotApprovedEvent;
 import no.runsafe.creativetoolbox.event.PlotDeletedEvent;
-import no.runsafe.creativetoolbox.event.PlotMembershipRevokedEvent;
 import no.runsafe.framework.api.IConfiguration;
-import no.runsafe.framework.api.IOutput;
-import no.runsafe.framework.api.event.player.IPlayerCustomEvent;
+import no.runsafe.framework.api.IDebug;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.api.event.plugin.IPluginEnabled;
 import no.runsafe.framework.api.hook.IPlayerDataProvider;
 import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.RunsafeWorld;
-import no.runsafe.framework.minecraft.event.player.RunsafeCustomEvent;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.bukkit.craftbukkit.libs.joptsimple.internal.Strings;
@@ -28,7 +25,7 @@ import org.joda.time.format.PeriodFormat;
 import java.awt.geom.Rectangle2D;
 import java.util.*;
 
-public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlayerCustomEvent, IPlayerDataProvider
+public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlayerDataProvider
 {
 	public PlotManager(
 		PlotFilter plotFilter,
@@ -36,7 +33,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		PlotEntranceRepository plotEntranceRepository,
 		ApprovedPlotRepository approvedPlotRepository,
 		PlotVoteRepository voteRepository, PlotTagRepository tagRepository, PlotMemberRepository memberRepository, PlotCalculator plotCalculator,
-		PlotMemberBlacklistRepository blackList, PlotList plotList, IOutput debugger,
+		PlotMemberBlacklistRepository blackList, PlotList plotList, IDebug debugger,
 		PlotLogRepository plotLog)
 	{
 		filter = plotFilter;
@@ -272,7 +269,6 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		approval = plotApproval.get(plot);
 		if (approval != null)
 		{
-			console.broadcastColoured("&6The creative plot &l%s&r&6 has been approved.", plot);
 			for (String owner : worldGuard.getOwners(world, plot))
 			{
 				int approved = 0;
@@ -301,7 +297,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 			if (approval != null)
 				plotApproval.delete(approval);
 			if (!plotLog.log(plotName, claimer.getName()))
-				console.warning("Unable to log plot %s claimed by %s", plotName, claimer.getPrettyName());
+				console.logWarning("Unable to log plot %s claimed by %s", plotName, claimer.getPrettyName());
 			setTaken(calculator.getColumn((long) region.getCenterX()), calculator.getRow((long) region.getCenterY()));
 			PlotEntrance entrance = new PlotEntrance();
 			entrance.setName(plotName);
@@ -327,7 +323,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		long lastRow = currentSize.getMaximumRow();
 		long targetCol = targetSize.getMaximumColumn();
 		long targetRow = targetSize.getMaximumRow();
-		console.fine("Extending plot %s to %s", currentSize, targetSize);
+		console.debugFine("Extending plot %s to %s", currentSize, targetSize);
 		for (long column = targetSize.getMinimumColumn(); column <= targetCol; ++column)
 		{
 			for (long row = targetSize.getMinimumRow(); row <= targetRow; ++row)
@@ -337,7 +333,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 
 				if (isTaken(column, row))
 				{
-					console.fine("Plot (%d,%d) is taken!", column, row);
+					console.debugFine("Plot (%d,%d) is taken!", column, row);
 					player.sendColouredMessage("Unable to extend plot here, overlap detected!");
 					return;
 				}
@@ -410,18 +406,6 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		return data;
 	}
 
-	@Override
-	public void OnPlayerCustomEvent(RunsafeCustomEvent event)
-	{
-		if (event instanceof PlotMembershipRevokedEvent)
-		{
-			String plot = (String) event.getData();
-			if (!voteBlacklist.containsKey(plot))
-				voteBlacklist.put(plot, new ArrayList<String>());
-			voteBlacklist.get(plot).add(event.getPlayer().getName().toLowerCase());
-		}
-	}
-
 	public void removeMember(RunsafePlayer player)
 	{
 		for (String region : worldGuard.getRegionsInWorld(world))
@@ -429,11 +413,18 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 			Set<String> members = worldGuard.getMembers(world, region);
 			if (members != null && members.contains(player.getName().toLowerCase()))
 			{
-				console.finer("Removing member %s from %s.", player.getPrettyName(), region);
+				console.debugFiner("Removing member %s from %s.", player.getPrettyName(), region);
 				worldGuard.removeMemberFromRegion(world, region, player);
 				memberRepository.removeMember(region, player.getName().toLowerCase());
 			}
 		}
+	}
+
+	public void memberRemoved(String plot, String name)
+	{
+		if (!voteBlacklist.containsKey(plot))
+			voteBlacklist.put(plot, new ArrayList<String>());
+		voteBlacklist.get(plot).add(name.toLowerCase());
 	}
 
 	private void CleanStaleData()
@@ -526,7 +517,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 	private final PlotCalculator calculator;
 	private final PlotMemberBlacklistRepository blackList;
 	private final PlotList plotList;
-	private final IOutput console;
+	private final IDebug console;
 	private final PlotLogRepository plotLog;
 	private final Map<String, String> oldPlotPointers = new HashMap<String, String>();
 	private final Map<String, Map<String, String>> oldPlotList = new HashMap<String, Map<String, String>>();

@@ -5,7 +5,7 @@ import no.runsafe.creativetoolbox.database.PlotEntranceRepository;
 import no.runsafe.creativetoolbox.database.PlotLogRepository;
 import no.runsafe.creativetoolbox.database.PlotMemberRepository;
 import no.runsafe.framework.api.IConfiguration;
-import no.runsafe.framework.api.IOutput;
+import no.runsafe.framework.api.IDebug;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.minecraft.RunsafeWorld;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
@@ -14,7 +14,7 @@ import java.util.List;
 
 public class Importers implements IConfigurationChanged
 {
-	public Importers(PlotManager manager, WorldGuardInterface worldGuard, PlotLogRepository logRepository, IOutput console, PlotMemberRepository memberRepository, PlotEntranceRepository plotEntrance, PlotFilter plotFilter)
+	public Importers(PlotManager manager, WorldGuardInterface worldGuard, PlotLogRepository logRepository, IDebug console, PlotMemberRepository memberRepository, PlotEntranceRepository plotEntrance, PlotFilter plotFilter)
 	{
 		this.manager = manager;
 		this.worldGuard = worldGuard;
@@ -80,14 +80,14 @@ public class Importers implements IConfigurationChanged
 		{
 			if (skip.contains(plot))
 			{
-				console.finer("Plot %s entrance is already stored", plot);
+				console.debugFiner("Plot %s entrance is already stored", plot);
 				continue;
 			}
 
 			PlotEntrance entrance = plotEntrance.get(plot);
 			if (entrance != null && entrance.getLocation() != null)
 			{
-				console.fine("Plot %s entrance is not stored, but exists?!", plot);
+				console.debugFine("Plot %s entrance is not stored, but exists?!", plot);
 				continue;
 			}
 
@@ -108,7 +108,7 @@ public class Importers implements IConfigurationChanged
 	private final PlotManager manager;
 	private final WorldGuardInterface worldGuard;
 	private final PlotLogRepository logRepository;
-	private final IOutput console;
+	private final IDebug console;
 	private final PlotMemberRepository memberRepository;
 	private final PlotEntranceRepository plotEntrance;
 	private final PlotFilter plotFilter;

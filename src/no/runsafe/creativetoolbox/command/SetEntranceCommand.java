@@ -3,7 +3,7 @@ package no.runsafe.creativetoolbox.command;
 import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.database.PlotEntrance;
 import no.runsafe.creativetoolbox.database.PlotEntranceRepository;
-import no.runsafe.framework.api.IOutput;
+import no.runsafe.framework.api.IDebug;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
@@ -16,7 +16,7 @@ public class SetEntranceCommand extends PlayerAsyncCommand
 {
 	public SetEntranceCommand(
 		PlotEntranceRepository repository,
-		IOutput output,
+		IDebug output,
 		PlotFilter filter,
 		IScheduler scheduler,
 		WorldGuardInterface worldGuard
@@ -24,7 +24,7 @@ public class SetEntranceCommand extends PlayerAsyncCommand
 	{
 		super("setentrance", "define where users teleport to in a plot.", null, scheduler);
 		this.repository = repository;
-		this.console = output;
+		this.debugger = output;
 		this.plotFilter = filter;
 		this.worldGuard = worldGuard;
 	}
@@ -36,7 +36,7 @@ public class SetEntranceCommand extends PlayerAsyncCommand
 		if (currentRegion == null)
 			return "No plot at your current location.";
 
-		console.fine(String.format("Player is in region %s", currentRegion));
+		debugger.debugFine(String.format("Player is in region %s", currentRegion));
 		if (!(executor.hasPermission("runsafe.creative.entrance.set")
 			|| worldGuard.getOwners(executor.getWorld(), currentRegion).contains(executor.getName().toLowerCase())))
 			return String.format("You are not allowed to set the entrance for the region %s", currentRegion);
@@ -51,7 +51,7 @@ public class SetEntranceCommand extends PlayerAsyncCommand
 		if (currentRegion == null)
 			return null;
 
-		console.fine(String.format("Player is in region %s", currentRegion));
+		debugger.debugFine(String.format("Player is in region %s", currentRegion));
 		if (!(executor.hasPermission("runsafe.creative.entrance.set")
 			|| worldGuard.getOwners(executor.getWorld(), currentRegion).contains(executor.getName().toLowerCase())))
 			return null;
@@ -72,7 +72,7 @@ public class SetEntranceCommand extends PlayerAsyncCommand
 	}
 
 	private final PlotEntranceRepository repository;
-	private final IOutput console;
+	private final IDebug debugger;
 	private final PlotFilter plotFilter;
 	private final WorldGuardInterface worldGuard;
 }

@@ -29,7 +29,7 @@ public class RandomPlotCommand extends PlayerAsyncCallbackCommand<RandomPlotComm
 		List<String> plots;
 		if (parameters.containsKey("tag"))
 		{
-			console.fine("Optional argument tag detected: %s", parameters.get("tag"));
+			console.debugFine("Optional argument tag detected: %s", parameters.get("tag"));
 			plots = tagRepository.findPlots(parameters.get("tag"));
 			if (plots.isEmpty())
 			{
