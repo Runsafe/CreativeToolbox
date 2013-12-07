@@ -1,6 +1,7 @@
 package no.runsafe.creativetoolbox.event;
 
 import no.runsafe.creativetoolbox.PlotCalculator;
+import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.framework.api.IOutput;
 import no.runsafe.framework.api.block.IBlock;
@@ -12,18 +13,23 @@ import no.runsafe.framework.minecraft.item.meta.RunsafeMeta;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldeditbridge.WorldEditInterface;
 import no.runsafe.worldgenerator.PlotChunkGenerator;
+import no.runsafe.worldguardbridge.WorldGuardInterface;
+import org.apache.commons.lang.StringUtils;
 
 import java.awt.geom.Rectangle2D;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SyncInteractEvents implements IPlayerRightClickBlock
 {
-	public SyncInteractEvents(PlotChunkGenerator plotGenerator, PlotCalculator calculator, WorldEditInterface worldEdit, PlotManager manager, IOutput output)
+	public SyncInteractEvents(PlotChunkGenerator plotGenerator, PlotCalculator calculator, WorldEditInterface worldEdit, WorldGuardInterface worldGuard, PlotFilter filter, PlotManager manager, IOutput output)
 	{
 		this.plotGenerator = plotGenerator;
 		this.calculator = calculator;
 		this.worldEdit = worldEdit;
+		this.worldGuard = worldGuard;
+		this.filter = filter;
 		this.manager = manager;
 		this.output = output;
 	}
@@ -82,6 +88,8 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 						? "Plot regenerated."
 						: "Could not regenerate plot."
 				);
+				output.logInformation("%s just regenerated plots at [%s].", player.getName(), getRegionNameString(player));
+
 				return false;
 			}
 			finally
@@ -95,6 +103,19 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 			}
 		}
 		return true;
+	}
+
+	private String getRegionNameString(RunsafePlayer player)
+	{
+		RunsafeLocation location = player.getLocation();
+		if (location == null)
+			return "Unknown";
+
+		List<String> candidate = filter.apply(worldGuard.getRegionsAtLocation(location));
+		if (candidate != null && !candidate.isEmpty())
+			return StringUtils.join(candidate, ",");
+
+		return String.format("X: %s, Z: %s", location.getX(), location.getZ());
 	}
 
 	private boolean executeDeletion(RunsafePlayer player, RunsafeLocation location)
@@ -131,6 +152,8 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 	private final PlotChunkGenerator plotGenerator;
 	private final PlotCalculator calculator;
 	private final WorldEditInterface worldEdit;
+	private final WorldGuardInterface worldGuard;
+	private final PlotFilter filter;
 	private final PlotManager manager;
 	private final IOutput output;
 }
