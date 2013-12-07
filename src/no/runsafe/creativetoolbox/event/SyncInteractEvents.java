@@ -82,9 +82,6 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 						? "Plot regenerated."
 						: "Could not regenerate plot."
 				);
-				RunsafeServer.Instance.getLogger().info(String.format(
-					"%s regenerated area: %s, %s", playerName, minPos, maxPos
-				));
 				return false;
 			}
 			finally
