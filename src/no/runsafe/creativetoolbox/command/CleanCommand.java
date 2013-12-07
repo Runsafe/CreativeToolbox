@@ -3,8 +3,8 @@ package no.runsafe.creativetoolbox.command;
 import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.command.argument.OptionalArgument;
 import no.runsafe.framework.api.command.player.PlayerCommand;
+import no.runsafe.framework.api.entity.IEntity;
 import no.runsafe.framework.api.player.IPlayer;
-import no.runsafe.framework.minecraft.entity.RunsafeEntity;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,9 +27,9 @@ public class CleanCommand extends PlayerCommand
 		if (parameters.containsKey("filter"))
 			arguments = parameters.get("filter").split("\\s+");
 		int count = 0;
-		for (RunsafeEntity entity : executor.getWorld().getEntities())
+		for (IEntity entity : executor.getWorld().getEntities())
 		{
-			String name = entity.getRaw().getClass().getSimpleName();
+			String name = entity.getEntityType().getName();
 			boolean clean = true;
 			if (entity instanceof IPlayer)
 				continue;

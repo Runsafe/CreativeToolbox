@@ -1,8 +1,8 @@
 package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.framework.api.command.player.PlayerCommand;
+import no.runsafe.framework.api.entity.IEntity;
 import no.runsafe.framework.api.player.IPlayer;
-import no.runsafe.framework.minecraft.entity.RunsafeEntity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,11 +19,11 @@ public class ScanCommand extends PlayerCommand
 	{
 		HashMap<String, Integer> counts = new HashMap<String, Integer>();
 		int count = 0;
-		for (RunsafeEntity entity : executor.getWorld().getEntities())
+		for (IEntity entity : executor.getWorld().getEntities())
 		{
 			if (entity instanceof IPlayer)
 				continue;
-			String name = entity.getRaw().getClass().getSimpleName();
+			String name = entity.getEntityType().getName();
 			if (!counts.containsKey(name))
 				counts.put(name, 1);
 			else
