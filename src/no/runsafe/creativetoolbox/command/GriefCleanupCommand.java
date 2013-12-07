@@ -4,13 +4,13 @@ import com.google.common.collect.Lists;
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.framework.api.IOutput;
+import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.block.IBlock;
 import no.runsafe.framework.api.command.argument.EnumArgument;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.Item;
 import no.runsafe.framework.minecraft.RunsafeLocation;
-import no.runsafe.framework.minecraft.RunsafeWorld;
 import no.runsafe.worldeditbridge.WorldEditInterface;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.apache.commons.lang.StringUtils;
@@ -92,8 +92,8 @@ public class GriefCleanupCommand extends PlayerCommand
 		List<Integer> removeIds = Lists.newArrayList(remove);
 		RunsafeLocation max = plotCalculator.getMaxPosition(player.getWorld(), area);
 		RunsafeLocation min = plotCalculator.getMinPosition(player.getWorld(), area);
-		RunsafeWorld world = player.getWorld();
-		if(world == null)
+		IWorld world = player.getWorld();
+		if (world == null)
 			return "No world!";
 		int counter = 0;
 		for (int x = min.getBlockX(); x <= max.getBlockX(); ++x)

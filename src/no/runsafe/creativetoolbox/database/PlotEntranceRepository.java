@@ -1,12 +1,12 @@
 package no.runsafe.creativetoolbox.database;
 
 import no.runsafe.framework.api.IConfiguration;
+import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.database.IDatabase;
 import no.runsafe.framework.api.database.Repository;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.RunsafeServer;
-import no.runsafe.framework.minecraft.RunsafeWorld;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -111,5 +111,5 @@ public class PlotEntranceRepository extends Repository implements IConfiguration
 
 	private final IDatabase database;
 	private final HashMap<String, PlotEntrance> cache = new HashMap<String, PlotEntrance>();
-	private RunsafeWorld world;
+	private IWorld world;
 }

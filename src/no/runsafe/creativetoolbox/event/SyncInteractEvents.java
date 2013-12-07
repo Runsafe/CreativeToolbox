@@ -4,12 +4,11 @@ import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.framework.api.IOutput;
+import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.block.IBlock;
 import no.runsafe.framework.api.event.player.IPlayerRightClickBlock;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.RunsafeLocation;
-import no.runsafe.framework.minecraft.RunsafeServer;
-import no.runsafe.framework.minecraft.RunsafeWorld;
 import no.runsafe.framework.minecraft.item.meta.RunsafeMeta;
 import no.runsafe.worldeditbridge.WorldEditInterface;
 import no.runsafe.worldgenerator.PlotChunkGenerator;
@@ -80,7 +79,7 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 					plotGenerator.setMode(mode);
 				}
 
-				RunsafeWorld playerWorld = player.getWorld();
+				IWorld playerWorld = player.getWorld();
 				RunsafeLocation minPos = calculator.getMinPosition(playerWorld, area);
 				RunsafeLocation maxPos = calculator.getMaxPosition(playerWorld, area);
 				player.sendColouredMessage(

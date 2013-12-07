@@ -1,13 +1,13 @@
 package no.runsafe.creativetoolbox;
 
+import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.minecraft.RunsafeLocation;
-import no.runsafe.framework.minecraft.RunsafeWorld;
 
 import java.awt.geom.Rectangle2D;
 
 public class PlotDimension
 {
-	public PlotDimension(PlotCalculator calculator, Rectangle2D area, RunsafeWorld world)
+	public PlotDimension(PlotCalculator calculator, Rectangle2D area, IWorld world)
 	{
 		this.calculator = calculator;
 		this.area = area;
@@ -62,5 +62,5 @@ public class PlotDimension
 
 	private final PlotCalculator calculator;
 	private final Rectangle2D area;
-	private final RunsafeWorld world;
+	private final IWorld world;
 }

@@ -1,9 +1,9 @@
 package no.runsafe.creativetoolbox;
 
 import no.runsafe.framework.api.IConfiguration;
+import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.minecraft.RunsafeServer;
-import no.runsafe.framework.minecraft.RunsafeWorld;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.joda.time.DateTime;
 
@@ -57,7 +57,7 @@ public class PlotFilter implements IConfigurationChanged
 		return filtered;
 	}
 
-	public RunsafeWorld getWorld()
+	public IWorld getWorld()
 	{
 		if (world == null)
 			world = RunsafeServer.Instance.getWorld(worldName);
@@ -68,6 +68,6 @@ public class PlotFilter implements IConfigurationChanged
 	private final WorldGuardInterface worldGuard;
 	private List<String> filtered;
 	private DateTime filterCache;
-	private RunsafeWorld world;
+	private IWorld world;
 	private String worldName;
 }

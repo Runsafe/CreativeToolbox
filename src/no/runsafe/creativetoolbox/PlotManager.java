@@ -5,13 +5,13 @@ import no.runsafe.creativetoolbox.event.PlotApprovedEvent;
 import no.runsafe.creativetoolbox.event.PlotDeletedEvent;
 import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.IDebug;
+import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.api.event.plugin.IPluginEnabled;
 import no.runsafe.framework.api.hook.IPlayerDataProvider;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.RunsafeServer;
-import no.runsafe.framework.minecraft.RunsafeWorld;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.bukkit.craftbukkit.libs.joptsimple.internal.Strings;
 import org.joda.time.DateTime;
@@ -366,7 +366,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		new PlotDeletedEvent(deletor, region).Fire();
 	}
 
-	public RunsafeWorld getWorld()
+	public IWorld getWorld()
 	{
 		return world;
 	}
@@ -525,7 +525,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 	private final HashMap<Long, ArrayList<Long>> takenPlots = new HashMap<Long, ArrayList<Long>>();
 	private final ArrayList<RunsafeLocation> freePlots = new ArrayList<RunsafeLocation>();
 	private final Map<String, List<String>> voteBlacklist = new HashMap<String, List<String>>();
-	private RunsafeWorld world;
+	private IWorld world;
 	private List<String> ignoredRegions;
 	private Duration limit;
 	private int autoApprove;

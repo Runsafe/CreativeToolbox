@@ -4,10 +4,10 @@ import no.runsafe.creativetoolbox.PlayerTeleport;
 import no.runsafe.creativetoolbox.PlotList;
 import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.framework.api.IScheduler;
+import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.command.player.PlayerAsyncCallbackCommand;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.RunsafeLocation;
-import no.runsafe.framework.minecraft.RunsafeWorld;
 
 import java.util.Map;
 
@@ -45,7 +45,7 @@ public class NextCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
 		if (result.location != null)
 		{
 			RunsafeLocation target = result.location;
-			RunsafeWorld world = result.location.getWorld();
+			IWorld world = result.location.getWorld();
 			int air = 0;
 			int y = target.getBlockY();
 			for (; y < 256; ++y)

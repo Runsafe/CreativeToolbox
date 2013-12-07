@@ -5,11 +5,11 @@ import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.creativetoolbox.database.PlotMemberRepository;
+import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.command.argument.PlayerArgument;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.RunsafeServer;
-import no.runsafe.framework.minecraft.RunsafeWorld;
 import no.runsafe.framework.minecraft.player.RunsafeAmbiguousPlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
@@ -45,7 +45,7 @@ public class ClaimCommand extends PlayerCommand
 		if (region == null)
 			return "You need to stand in a plot to use this command.";
 
-		RunsafeWorld world = executor.getWorld();
+		IWorld world = executor.getWorld();
 		IPlayer owner = params.containsKey("player") ? RunsafeServer.Instance.getPlayer(params.get("player")) : null;
 		if (owner instanceof RunsafeAmbiguousPlayer)
 			return owner.toString();

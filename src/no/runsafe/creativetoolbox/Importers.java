@@ -6,8 +6,8 @@ import no.runsafe.creativetoolbox.database.PlotLogRepository;
 import no.runsafe.creativetoolbox.database.PlotMemberRepository;
 import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.IDebug;
+import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
-import no.runsafe.framework.minecraft.RunsafeWorld;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.util.List;
@@ -45,7 +45,7 @@ public class Importers implements IConfigurationChanged
 
 	private void importRegions()
 	{
-		RunsafeWorld world = manager.getWorld();
+		IWorld world = manager.getWorld();
 		List<String> regions = worldGuard.getRegionsInWorld(world);
 		int members = 0;
 		int owners = 0;

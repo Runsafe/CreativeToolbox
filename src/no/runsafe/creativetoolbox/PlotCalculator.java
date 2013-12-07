@@ -1,10 +1,10 @@
 package no.runsafe.creativetoolbox;
 
 import no.runsafe.framework.api.IConfiguration;
+import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.RunsafeServer;
-import no.runsafe.framework.minecraft.RunsafeWorld;
 
 import java.awt.geom.Rectangle2D;
 import java.util.AbstractList;
@@ -105,12 +105,12 @@ public class PlotCalculator implements IConfigurationChanged
 		return new RunsafeLocation(world, x - 0.5, groundLevel, y - 0.5, FACING_MIDDLE, LOOKING_FORWARD);
 	}
 
-	public RunsafeLocation getMinPosition(RunsafeWorld world, Rectangle2D area)
+	public RunsafeLocation getMinPosition(IWorld world, Rectangle2D area)
 	{
 		return new RunsafeLocation(world, area.getMinX(), 0, area.getMinY());
 	}
 
-	public RunsafeLocation getMaxPosition(RunsafeWorld world, Rectangle2D area)
+	public RunsafeLocation getMaxPosition(IWorld world, Rectangle2D area)
 	{
 		return new RunsafeLocation(world, area.getMaxX(), world.getMaxHeight(), area.getMaxY());
 	}
@@ -197,7 +197,7 @@ public class PlotCalculator implements IConfigurationChanged
 	private Rectangle2D prototype;
 	private int roadWidth;
 	private int groundLevel;
-	private RunsafeWorld world;
+	private IWorld world;
 	private static final float FACING_MIDDLE = 137.55f;
 	private static final float LOOKING_FORWARD = -1.65f;
 }
