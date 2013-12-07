@@ -3,6 +3,7 @@ package no.runsafe.creativetoolbox.command;
 import com.google.common.collect.Lists;
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotFilter;
+import no.runsafe.framework.api.IOutput;
 import no.runsafe.framework.api.block.IBlock;
 import no.runsafe.framework.api.command.argument.EnumArgument;
 import no.runsafe.framework.api.command.player.PlayerCommand;
@@ -12,6 +13,7 @@ import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.RunsafeWorld;
 import no.runsafe.worldeditbridge.WorldEditInterface;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
+import org.apache.commons.lang.StringUtils;
 
 import java.awt.geom.Rectangle2D;
 import java.util.List;
@@ -19,7 +21,7 @@ import java.util.Map;
 
 public class GriefCleanupCommand extends PlayerCommand
 {
-	public GriefCleanupCommand(WorldGuardInterface worldGuard, WorldEditInterface worldEdit, PlotCalculator plotCalculator, PlotFilter filter)
+	public GriefCleanupCommand(WorldGuardInterface worldGuard, WorldEditInterface worldEdit, PlotCalculator plotCalculator, PlotFilter filter, IOutput output)
 	{
 		super(
 			"griefcleanup", "Cleans up griefed plots.", "runsafe.creative.degrief",
@@ -29,6 +31,7 @@ public class GriefCleanupCommand extends PlayerCommand
 		this.worldGuard = worldGuard;
 		this.plotCalculator = plotCalculator;
 		this.filter = filter;
+		this.output = output;
 	}
 
 	@Override
@@ -36,6 +39,9 @@ public class GriefCleanupCommand extends PlayerCommand
 	{
 		Rectangle2D area = getArea(executor.getLocation());
 		String what = params.get("what");
+
+		output.logInformation("%s is running clean-up of '%s' at [%s]", executor.getName(), what, getRegionNameString(executor));
+
 		if (what.equals("road"))
 			return regeneratePadding(executor, area);
 
@@ -66,6 +72,19 @@ public class GriefCleanupCommand extends PlayerCommand
 			return plotCalculator.getPlotArea(location, true);
 	}
 
+	private String getRegionNameString(IPlayer player)
+	{
+		RunsafeLocation location = player.getLocation();
+		if (location == null)
+			return "Unknown";
+
+		List<String> candidate = filter.apply(worldGuard.getRegionsAtLocation(location));
+		if (candidate != null && !candidate.isEmpty())
+			return StringUtils.join(candidate, ",");
+
+		return String.format("X: %.2f, Z: %.2f", location.getX(), location.getZ());
+	}
+
 	private String cleanup(IPlayer player, Rectangle2D area, Integer... remove)
 	{
 		if (remove.length == 0)
@@ -78,7 +97,9 @@ public class GriefCleanupCommand extends PlayerCommand
 			return "No world!";
 		int counter = 0;
 		for (int x = min.getBlockX(); x <= max.getBlockX(); ++x)
+		{
 			for (int y = max.getBlockY(); y >= min.getBlockY(); --y)
+			{
 				for (int z = min.getBlockZ(); z <= max.getBlockZ(); ++z)
 				{
 					IBlock block = world.getBlockAt(x, y, z);
@@ -88,6 +109,8 @@ public class GriefCleanupCommand extends PlayerCommand
 						counter++;
 					}
 				}
+			}
+		}
 		return String.format("Removed %d blocks.", counter);
 	}
 
@@ -112,4 +135,5 @@ public class GriefCleanupCommand extends PlayerCommand
 	private final WorldEditInterface worldEdit;
 	private final PlotCalculator plotCalculator;
 	private final PlotFilter filter;
+	private final IOutput output;
 }

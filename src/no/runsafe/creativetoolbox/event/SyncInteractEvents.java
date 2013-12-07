@@ -1,7 +1,9 @@
 package no.runsafe.creativetoolbox.event;
 
 import no.runsafe.creativetoolbox.PlotCalculator;
+import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.PlotManager;
+import no.runsafe.framework.api.IOutput;
 import no.runsafe.framework.api.block.IBlock;
 import no.runsafe.framework.api.event.player.IPlayerRightClickBlock;
 import no.runsafe.framework.api.player.IPlayer;
@@ -11,19 +13,25 @@ import no.runsafe.framework.minecraft.RunsafeWorld;
 import no.runsafe.framework.minecraft.item.meta.RunsafeMeta;
 import no.runsafe.worldeditbridge.WorldEditInterface;
 import no.runsafe.worldgenerator.PlotChunkGenerator;
+import no.runsafe.worldguardbridge.WorldGuardInterface;
+import org.apache.commons.lang.StringUtils;
 
 import java.awt.geom.Rectangle2D;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SyncInteractEvents implements IPlayerRightClickBlock
 {
-	public SyncInteractEvents(PlotChunkGenerator plotGenerator, PlotCalculator calculator, WorldEditInterface worldEdit, PlotManager manager)
+	public SyncInteractEvents(PlotChunkGenerator plotGenerator, PlotCalculator calculator, WorldEditInterface worldEdit, WorldGuardInterface worldGuard, PlotFilter filter, PlotManager manager, IOutput output)
 	{
 		this.plotGenerator = plotGenerator;
 		this.calculator = calculator;
 		this.worldEdit = worldEdit;
+		this.worldGuard = worldGuard;
+		this.filter = filter;
 		this.manager = manager;
+		this.output = output;
 	}
 
 	public void startRegeneration(IPlayer executor, Rectangle2D area, PlotChunkGenerator.Mode mode)
@@ -80,9 +88,8 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 						? "Plot regenerated."
 						: "Could not regenerate plot."
 				);
-				RunsafeServer.Instance.getLogger().info(String.format(
-					"%s regenerated area: %s, %s", playerName, minPos, maxPos
-				));
+				output.logInformation("%s just regenerated plots at [%s].", player.getName(), getRegionNameString(player));
+
 				return false;
 			}
 			finally
@@ -96,6 +103,19 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 			}
 		}
 		return true;
+	}
+
+	private String getRegionNameString(IPlayer player)
+	{
+		RunsafeLocation location = player.getLocation();
+		if (location == null)
+			return "Unknown";
+
+		List<String> candidate = filter.apply(worldGuard.getRegionsAtLocation(location));
+		if (candidate != null && !candidate.isEmpty())
+			return StringUtils.join(candidate, ",");
+
+		return String.format("X: %.2f, Z: %.2f", location.getX(), location.getZ());
 	}
 
 	private boolean executeDeletion(IPlayer player, RunsafeLocation location)
@@ -117,7 +137,7 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 					manager.delete(player, region);
 					worldEdit.regenerate(player, minPos, maxPos, false);
 					results.append(String.format("Deleted plot '%s'.", region));
-					RunsafeServer.Instance.getLogger().info(String.format("%s deleted plot %s", player.getName(), region));
+					output.logInformation(String.format("%s deleted plot %s", player.getName(), region));
 				}
 			}
 			if (!nothing)
@@ -132,5 +152,8 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 	private final PlotChunkGenerator plotGenerator;
 	private final PlotCalculator calculator;
 	private final WorldEditInterface worldEdit;
+	private final WorldGuardInterface worldGuard;
+	private final PlotFilter filter;
 	private final PlotManager manager;
+	private final IOutput output;
 }
