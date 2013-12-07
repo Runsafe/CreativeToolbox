@@ -4,7 +4,7 @@ import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.creativetoolbox.database.PlotTagRepository;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
-import no.runsafe.framework.minecraft.player.RunsafePlayer;
+import no.runsafe.framework.api.player.IPlayer;
 
 import java.util.Map;
 
@@ -18,7 +18,7 @@ public class ClearCommand extends PlayerAsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(RunsafePlayer player, Map<String, String> stringStringHashMap)
+	public String OnAsyncExecute(IPlayer player, Map<String, String> stringStringHashMap)
 	{
 		String plot = manager.getCurrentRegionFiltered(player);
 		if (plot == null)

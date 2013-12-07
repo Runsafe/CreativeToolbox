@@ -1,7 +1,7 @@
 package no.runsafe.creativetoolbox;
 
 import com.google.common.collect.Lists;
-import no.runsafe.framework.minecraft.player.RunsafePlayer;
+import no.runsafe.framework.api.player.IPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,22 +10,22 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class PlotList
 {
-	public void set(RunsafePlayer player, List<String> list)
+	public void set(IPlayer player, List<String> list)
 	{
 		lists.put(player.getName(), list);
 	}
 
-	public int current(RunsafePlayer player)
+	public int current(IPlayer player)
 	{
 		return lists.get(player.getName()).indexOf(pointer.get(player.getName())) + 1;
 	}
 
-	public void wind(RunsafePlayer player, String to)
+	public void wind(IPlayer player, String to)
 	{
 		pointer.put(player.getName(), to);
 	}
 
-	public int count(RunsafePlayer player)
+	public int count(IPlayer player)
 	{
 		return lists.get(player.getName()).size();
 	}
@@ -45,7 +45,7 @@ public class PlotList
 		}
 	}
 
-	public String previous(RunsafePlayer player)
+	public String previous(IPlayer player)
 	{
 		if (lists.containsKey(player.getName()))
 		{
@@ -59,7 +59,7 @@ public class PlotList
 		return null;
 	}
 
-	public String next(RunsafePlayer player)
+	public String next(IPlayer player)
 	{
 		if (lists.containsKey(player.getName()))
 		{

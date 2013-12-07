@@ -6,7 +6,7 @@ import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.AsyncCommand;
 import no.runsafe.framework.api.command.ICommandExecutor;
-import no.runsafe.framework.minecraft.player.RunsafePlayer;
+import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.util.List;
@@ -32,9 +32,9 @@ public class CheckApprovalCommand extends AsyncCommand
 	public String OnAsyncExecute(ICommandExecutor executor, Map<String, String> parameters)
 	{
 		String plot = parameters.get("plotname");
-		if (plot.equals(".") && executor instanceof RunsafePlayer)
+		if (plot.equals(".") && executor instanceof IPlayer)
 		{
-			List<String> here = plotFilter.apply(worldGuardInterface.getRegionsAtLocation(((RunsafePlayer) executor).getLocation()));
+			List<String> here = plotFilter.apply(worldGuardInterface.getRegionsAtLocation(((IPlayer) executor).getLocation()));
 			if (here == null || here.size() == 0)
 				return "No plot here";
 			plot = here.get(0);

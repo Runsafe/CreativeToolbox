@@ -6,8 +6,8 @@ import no.runsafe.creativetoolbox.event.PlotMembershipRevokedEvent;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.argument.PlayerArgument;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
+import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.RunsafeServer;
-import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.bukkit.craftbukkit.libs.joptsimple.internal.Strings;
 
@@ -27,7 +27,7 @@ public class RemoveCommand extends PlayerAsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(RunsafePlayer executor, Map<String, String> parameters)
+	public String OnAsyncExecute(IPlayer executor, Map<String, String> parameters)
 	{
 		List<String> targets = plotFilter.apply(worldGuardInterface.getRegionsAtLocation(executor.getLocation()));
 		if (targets == null || targets.isEmpty())
@@ -43,7 +43,7 @@ public class RemoveCommand extends PlayerAsyncCommand
 				for (String member : members)
 					if (member.toLowerCase().startsWith(parameters.get("player").toLowerCase()))
 					{
-						RunsafePlayer target = RunsafeServer.Instance.getOfflinePlayerExact(member);
+						IPlayer target = RunsafeServer.Instance.getOfflinePlayerExact(member);
 						if (worldGuardInterface.removeMemberFromRegion(plotFilter.getWorld(), region, target))
 						{
 							memberRepository.removeMember(region, member);

@@ -1,15 +1,14 @@
 package no.runsafe.creativetoolbox.command.Member;
 
 import no.runsafe.creativetoolbox.PlotManager;
-import no.runsafe.creativetoolbox.command.PlotArgument;
 import no.runsafe.creativetoolbox.database.PlotMemberBlacklistRepository;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.AsyncCommand;
 import no.runsafe.framework.api.command.ICommandExecutor;
 import no.runsafe.framework.api.command.argument.PlayerArgument;
+import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.player.RunsafeAmbiguousPlayer;
-import no.runsafe.framework.minecraft.player.RunsafePlayer;
 
 import java.util.Map;
 
@@ -25,7 +24,7 @@ public class BlacklistCommand extends AsyncCommand
 	@Override
 	public String OnAsyncExecute(ICommandExecutor executor, Map<String, String> params)
 	{
-		RunsafePlayer player = RunsafeServer.Instance.getPlayer(params.get("player"));
+		IPlayer player = RunsafeServer.Instance.getPlayer(params.get("player"));
 		if (player == null)
 			return "&cUnable to locate player.";
 

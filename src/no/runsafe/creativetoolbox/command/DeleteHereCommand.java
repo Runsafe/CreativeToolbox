@@ -5,10 +5,9 @@ import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.creativetoolbox.event.SyncInteractEvents;
-import no.runsafe.framework.api.IOutput;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
-import no.runsafe.framework.minecraft.player.RunsafePlayer;
+import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.awt.geom.Rectangle2D;
@@ -19,11 +18,11 @@ import java.util.Map;
 public class DeleteHereCommand extends PlayerAsyncCommand
 {
 	public DeleteHereCommand(
-			PlotFilter filter,
-			WorldGuardInterface worldGuard,
-			PlotCalculator plotCalculator,
-			SyncInteractEvents interactEvents,
-			IScheduler scheduler, ApprovedPlotRepository approvedPlotRepository)
+		PlotFilter filter,
+		WorldGuardInterface worldGuard,
+		PlotCalculator plotCalculator,
+		SyncInteractEvents interactEvents,
+		IScheduler scheduler, ApprovedPlotRepository approvedPlotRepository)
 	{
 		super("deletehere", "delete the region you are in.", "runsafe.creative.delete", scheduler);
 		this.filter = filter;
@@ -34,7 +33,7 @@ public class DeleteHereCommand extends PlayerAsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(RunsafePlayer executor, Map<String, String> parameters)
+	public String OnAsyncExecute(IPlayer executor, Map<String, String> parameters)
 	{
 		List<String> delete = filter.apply(worldGuard.getRegionsAtLocation(executor.getLocation()));
 		if (delete == null || delete.size() == 0)

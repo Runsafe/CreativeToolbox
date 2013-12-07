@@ -7,14 +7,13 @@ import no.runsafe.creativetoolbox.event.PlotMembershipGrantedEvent;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.argument.PlayerArgument;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
+import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.player.RunsafeAmbiguousPlayer;
-import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.bukkit.craftbukkit.libs.joptsimple.internal.Strings;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,9 +29,9 @@ public class AddCommand extends PlayerAsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(RunsafePlayer executor, Map<String, String> parameters)
+	public String OnAsyncExecute(IPlayer executor, Map<String, String> parameters)
 	{
-		RunsafePlayer member = RunsafeServer.Instance.getPlayer(parameters.get("player"));
+		IPlayer member = RunsafeServer.Instance.getPlayer(parameters.get("player"));
 
 		if (member == null)
 			return "&cUnable to find player.";

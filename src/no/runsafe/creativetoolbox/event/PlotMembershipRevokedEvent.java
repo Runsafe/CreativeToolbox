@@ -1,11 +1,11 @@
 package no.runsafe.creativetoolbox.event;
 
+import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.event.player.RunsafeCustomEvent;
-import no.runsafe.framework.minecraft.player.RunsafePlayer;
 
 public class PlotMembershipRevokedEvent extends RunsafeCustomEvent
 {
-	public PlotMembershipRevokedEvent(RunsafePlayer player, String plot)
+	public PlotMembershipRevokedEvent(IPlayer player, String plot)
 	{
 		super(player, "region.member.removed");
 		this.plot = plot;

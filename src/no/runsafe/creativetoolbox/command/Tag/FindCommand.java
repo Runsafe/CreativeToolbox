@@ -6,7 +6,7 @@ import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.AsyncCommand;
 import no.runsafe.framework.api.command.ICommandExecutor;
 import no.runsafe.framework.api.command.argument.RequiredArgument;
-import no.runsafe.framework.minecraft.player.RunsafePlayer;
+import no.runsafe.framework.api.player.IPlayer;
 import org.bukkit.craftbukkit.libs.joptsimple.internal.Strings;
 
 import java.util.List;
@@ -27,8 +27,8 @@ public class FindCommand extends AsyncCommand
 		List<String> hits = tagRepository.findPlots(param.get("lookup"));
 		if (hits.isEmpty())
 			return String.format("No plots have been tagged with %s..", param.get("lookup"));
-		if (executor instanceof RunsafePlayer)
-			plotList.set((RunsafePlayer) executor, hits);
+		if (executor instanceof IPlayer)
+			plotList.set((IPlayer) executor, hits);
 		if (hits.size() > 20)
 			return String.format("Found %d plots:Too many hits to list.", hits.size());
 		return String.format("Found %d plots: %s", hits.size(), Strings.join(hits, ", "));

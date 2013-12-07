@@ -6,10 +6,10 @@ import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.framework.api.block.IBlock;
 import no.runsafe.framework.api.command.argument.EnumArgument;
 import no.runsafe.framework.api.command.player.PlayerCommand;
+import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.Item;
 import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.RunsafeWorld;
-import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldeditbridge.WorldEditInterface;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
@@ -32,7 +32,7 @@ public class GriefCleanupCommand extends PlayerCommand
 	}
 
 	@Override
-	public String OnExecute(RunsafePlayer executor, Map<String, String> params)
+	public String OnExecute(IPlayer executor, Map<String, String> params)
 	{
 		Rectangle2D area = getArea(executor.getLocation());
 		String what = params.get("what");
@@ -66,7 +66,7 @@ public class GriefCleanupCommand extends PlayerCommand
 			return plotCalculator.getPlotArea(location, true);
 	}
 
-	private String cleanup(RunsafePlayer player, Rectangle2D area, Integer... remove)
+	private String cleanup(IPlayer player, Rectangle2D area, Integer... remove)
 	{
 		if (remove.length == 0)
 			return "Nothing to clean";
@@ -91,7 +91,7 @@ public class GriefCleanupCommand extends PlayerCommand
 		return String.format("Removed %d blocks.", counter);
 	}
 
-	private String regeneratePadding(RunsafePlayer player, Rectangle2D plotArea)
+	private String regeneratePadding(IPlayer player, Rectangle2D plotArea)
 	{
 		List<Rectangle2D> padding = plotCalculator.getPaddingSelection(plotArea);
 		if (padding == null || padding.isEmpty())

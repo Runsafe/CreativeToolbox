@@ -10,11 +10,11 @@ import no.runsafe.framework.api.event.IAsyncEvent;
 import no.runsafe.framework.api.event.player.IPlayerInteractEntityEvent;
 import no.runsafe.framework.api.event.player.IPlayerRightClickBlock;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
+import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.event.player.RunsafePlayerInteractEntityEvent;
 import no.runsafe.framework.minecraft.item.meta.RunsafeMeta;
-import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.bukkit.craftbukkit.libs.joptsimple.internal.Strings;
 
@@ -38,7 +38,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 	}
 
 	@Override
-	public boolean OnPlayerRightClick(RunsafePlayer player, RunsafeMeta itemInHand, IBlock block)
+	public boolean OnPlayerRightClick(IPlayer player, RunsafeMeta itemInHand, IBlock block)
 	{
 		if (extensions.containsKey(player.getName()))
 		{
@@ -59,11 +59,11 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 	@Override
 	public void OnPlayerInteractEntityEvent(RunsafePlayerInteractEntityEvent event)
 	{
-		if (event.getRightClicked() instanceof RunsafePlayer && event.getPlayer().hasPermission("runsafe.creative.list"))
+		if (event.getRightClicked() instanceof IPlayer && event.getPlayer().hasPermission("runsafe.creative.list"))
 		{
 			if (event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getItemId() == listItem)
 			{
-				this.listPlotsByPlayer((RunsafePlayer) event.getRightClicked(), event.getPlayer());
+				this.listPlotsByPlayer((IPlayer) event.getRightClicked(), event.getPlayer());
 				event.cancel();
 			}
 		}
@@ -75,16 +75,16 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 		listItem = configuration.getConfigValueAsInt("list_item");
 	}
 
-	public void startPlotExtension(RunsafePlayer player, String plot)
+	public void startPlotExtension(IPlayer player, String plot)
 	{
 		extensions.put(player.getName(), plot);
 	}
 
-	private void listPlotsByPlayer(RunsafePlayer checkPlayer, RunsafePlayer triggerPlayer)
+	private void listPlotsByPlayer(IPlayer checkPlayer, IPlayer triggerPlayer)
 	{
 		if (!this.worldGuardInterface.serverHasWorldGuard())
 		{
-			triggerPlayer.sendMessage("Error: No WorldGuard installed.");
+			triggerPlayer.sendColouredMessage("Error: No WorldGuard installed.");
 			return;
 		}
 
@@ -99,11 +99,11 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 			triggerPlayer.sendColouredMessage("%s does not own any plots.", checkPlayer.getPrettyName());
 	}
 
-	private void listPlotsByLocation(RunsafeLocation location, RunsafePlayer player)
+	private void listPlotsByLocation(RunsafeLocation location, IPlayer player)
 	{
 		if (!this.worldGuardInterface.serverHasWorldGuard())
 		{
-			player.sendMessage("Error: No WorldGuard installed.");
+			player.sendColouredMessage("Error: No WorldGuard installed.");
 			return;
 		}
 
@@ -118,10 +118,10 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 				listPlotMembers(player, regionName);
 			}
 		else
-			player.sendMessage("No plots found at this location.");
+			player.sendColouredMessage("No plots found at this location.");
 	}
 
-	private void listClaimInfo(RunsafePlayer player, String regionName)
+	private void listClaimInfo(IPlayer player, String regionName)
 	{
 		if (player.hasPermission("runsafe.creative.claim.log"))
 		{
@@ -133,7 +133,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 		}
 	}
 
-	private void listTags(RunsafePlayer player, String regionName)
+	private void listTags(IPlayer player, String regionName)
 	{
 		if (player.hasPermission("runsafe.creative.tag.read"))
 		{
@@ -143,7 +143,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 		}
 	}
 
-	private void listPlotMembers(RunsafePlayer player, String regionName)
+	private void listPlotMembers(IPlayer player, String regionName)
 	{
 		Set<String> owners = worldGuardInterface.getOwners(manager.getWorld(), regionName);
 		for (String owner : owners)
@@ -154,9 +154,9 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 			listPlotMember(player, "&3Member&r", member, false);
 	}
 
-	private void listPlotMember(RunsafePlayer player, String label, String member, boolean showSeen)
+	private void listPlotMember(IPlayer player, String label, String member, boolean showSeen)
 	{
-		RunsafePlayer plotMember = RunsafeServer.Instance.getPlayer(member);
+		IPlayer plotMember = RunsafeServer.Instance.getPlayer(member);
 		if (plotMember != null)
 		{
 			player.sendColouredMessage("   %s: %s", label, plotMember.getPrettyName());

@@ -6,7 +6,7 @@ import no.runsafe.creativetoolbox.database.PlotEntranceRepository;
 import no.runsafe.framework.api.IDebug;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
-import no.runsafe.framework.minecraft.player.RunsafePlayer;
+import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public class SetEntranceCommand extends PlayerAsyncCommand
 	}
 
 	@Override
-	public String OnExecute(RunsafePlayer executor, Map<String, String> parameters)
+	public String OnExecute(IPlayer executor, Map<String, String> parameters)
 	{
 		String currentRegion = getCurrentRegion(executor);
 		if (currentRegion == null)
@@ -45,7 +45,7 @@ public class SetEntranceCommand extends PlayerAsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(RunsafePlayer executor, Map<String, String> parameters)
+	public String OnAsyncExecute(IPlayer executor, Map<String, String> parameters)
 	{
 		String currentRegion = getCurrentRegion(executor);
 		if (currentRegion == null)
@@ -63,7 +63,7 @@ public class SetEntranceCommand extends PlayerAsyncCommand
 		return String.format("Entrance for %s set.", currentRegion);
 	}
 
-	private String getCurrentRegion(RunsafePlayer player)
+	private String getCurrentRegion(IPlayer player)
 	{
 		List<String> regions = plotFilter.apply(worldGuard.getRegionsAtLocation(player.getLocation()));
 		if (regions == null || regions.size() == 0)

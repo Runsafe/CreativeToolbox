@@ -3,7 +3,7 @@ package no.runsafe.creativetoolbox.command;
 import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.creativetoolbox.event.InteractEvents;
 import no.runsafe.framework.api.command.player.PlayerCommand;
-import no.runsafe.framework.minecraft.player.RunsafePlayer;
+import no.runsafe.framework.api.player.IPlayer;
 
 import java.util.Map;
 
@@ -17,7 +17,7 @@ public class ExtendCommand extends PlayerCommand
 	}
 
 	@Override
-	public String OnExecute(RunsafePlayer player, Map<String, String> stringStringHashMap)
+	public String OnExecute(IPlayer player, Map<String, String> stringStringHashMap)
 	{
 		String target = manager.getCurrentRegionFiltered(player);
 		if (target == null)

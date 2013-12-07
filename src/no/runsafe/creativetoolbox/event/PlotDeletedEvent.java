@@ -1,11 +1,11 @@
 package no.runsafe.creativetoolbox.event;
 
+import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.event.player.RunsafeCustomEvent;
-import no.runsafe.framework.minecraft.player.RunsafePlayer;
 
 public class PlotDeletedEvent extends RunsafeCustomEvent
 {
-	public PlotDeletedEvent(RunsafePlayer player, String plotName)
+	public PlotDeletedEvent(IPlayer player, String plotName)
 	{
 		super(player, "creative.plot.deleted");
 		this.plotName = plotName;

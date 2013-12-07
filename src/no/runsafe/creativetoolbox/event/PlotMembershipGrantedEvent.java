@@ -1,11 +1,11 @@
 package no.runsafe.creativetoolbox.event;
 
+import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.event.player.RunsafeCustomEvent;
-import no.runsafe.framework.minecraft.player.RunsafePlayer;
 
 public class PlotMembershipGrantedEvent extends RunsafeCustomEvent
 {
-	public PlotMembershipGrantedEvent(RunsafePlayer player, String plot)
+	public PlotMembershipGrantedEvent(IPlayer player, String plot)
 	{
 		super(player, "region.member.added");
 		this.plot = plot;

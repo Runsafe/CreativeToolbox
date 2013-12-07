@@ -3,8 +3,8 @@ package no.runsafe.creativetoolbox.command;
 import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.framework.api.command.argument.ITabComplete;
 import no.runsafe.framework.api.command.argument.RequiredArgument;
+import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.RunsafeServer;
-import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.util.List;
@@ -19,11 +19,11 @@ public class PlotArgument extends RequiredArgument implements ITabComplete
 	}
 
 	@Override
-	public List<String> getAlternatives(RunsafePlayer executor, String arg)
+	public List<String> getAlternatives(IPlayer executor, String arg)
 	{
 		if (!arg.contains("_"))
 			return null;
-		RunsafePlayer player = RunsafeServer.Instance.getOfflinePlayerExact(arg.substring(0, arg.lastIndexOf('_')));
+		IPlayer player = RunsafeServer.Instance.getOfflinePlayerExact(arg.substring(0, arg.lastIndexOf('_')));
 		return filter.apply(worldGuard.getOwnedRegions(player, filter.getWorld()));
 	}
 

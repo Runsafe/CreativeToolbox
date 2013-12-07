@@ -3,8 +3,8 @@ package no.runsafe.creativetoolbox.command;
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.framework.api.command.player.PlayerCommand;
+import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.RunsafeLocation;
-import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldeditbridge.WorldEditInterface;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
@@ -24,7 +24,7 @@ public class SelectCommand extends PlayerCommand
 	}
 
 	@Override
-	public String OnExecute(RunsafePlayer executor, Map<String, String> parameters)
+	public String OnExecute(IPlayer executor, Map<String, String> parameters)
 	{
 		List<String> candidate = filter.apply(worldGuard.getRegionsAtLocation(executor.getLocation()));
 		Rectangle2D area;

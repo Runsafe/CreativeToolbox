@@ -5,9 +5,9 @@ import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.player.PlayerAsyncCallbackCommand;
+import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.RunsafeWorld;
-import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.util.Map;
@@ -23,7 +23,7 @@ public class TeleportCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
 	}
 
 	@Override
-	public PlayerTeleport OnAsyncExecute(RunsafePlayer executor, Map<String, String> parameters)
+	public PlayerTeleport OnAsyncExecute(IPlayer executor, Map<String, String> parameters)
 	{
 		PlayerTeleport target = new PlayerTeleport();
 		target.who = executor;

@@ -8,10 +8,10 @@ import no.runsafe.framework.api.IDebug;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.api.event.plugin.IPluginEnabled;
 import no.runsafe.framework.api.hook.IPlayerDataProvider;
+import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.RunsafeWorld;
-import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.bukkit.craftbukkit.libs.joptsimple.internal.Strings;
 import org.joda.time.DateTime;
@@ -50,7 +50,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		this.plotLog = plotLog;
 	}
 
-	public String getCurrentRegionFiltered(RunsafePlayer player)
+	public String getCurrentRegionFiltered(IPlayer player)
 	{
 		List<String> regions = filter.apply(worldGuard.getRegionsAtLocation(player.getLocation()));
 		if (regions == null || regions.size() == 0)
@@ -58,7 +58,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		return regions.get(0);
 	}
 
-	public boolean isCurrentClaimable(RunsafePlayer player)
+	public boolean isCurrentClaimable(IPlayer player)
 	{
 		List<String> regions = worldGuard.getRegionsAtLocation(player.getLocation());
 		return ignoredRegions.containsAll(regions);
@@ -166,7 +166,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		if (lastSeen.containsKey(playerName))
 			return lastSeen.get(playerName);
 
-		RunsafePlayer player = RunsafeServer.Instance.getPlayer(playerName);
+		IPlayer player = RunsafeServer.Instance.getPlayer(playerName);
 		if (player == null)
 			return null;
 		if (player.isOnline())
@@ -184,32 +184,32 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		return lastSeen.get(playerName);
 	}
 
-	public String getOldPlotPointer(RunsafePlayer player)
+	public String getOldPlotPointer(IPlayer player)
 	{
 		if (oldPlotPointers.containsKey(player.getName()))
 			return oldPlotPointers.get(player.getName());
 		return null;
 	}
 
-	public void setOldPlotPointer(RunsafePlayer player, String value)
+	public void setOldPlotPointer(IPlayer player, String value)
 	{
 		oldPlotPointers.put(player.getName(), value);
 	}
 
-	public Map<String, String> getOldPlotWorkList(RunsafePlayer player)
+	public Map<String, String> getOldPlotWorkList(IPlayer player)
 	{
 		if (!oldPlotList.containsKey(player.getName()))
 			oldPlotList.put(player.getName(), getOldPlots());
 		return oldPlotList.get(player.getName());
 	}
 
-	public void clearOldPlotWorkList(RunsafePlayer player)
+	public void clearOldPlotWorkList(IPlayer player)
 	{
 		if (oldPlotList.containsKey(player.getName()))
 			oldPlotList.remove(player.getName());
 	}
 
-	public boolean disallowVote(RunsafePlayer player, String region)
+	public boolean disallowVote(IPlayer player, String region)
 	{
 		return !player.getWorld().equals(world)
 			|| (voteBlacklist.containsKey(region) && voteBlacklist.get(region).contains(player.getName().toLowerCase()))
@@ -217,7 +217,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 			|| worldGuard.getMembers(world, region).contains(player.getName().toLowerCase());
 	}
 
-	public boolean vote(RunsafePlayer player, String region)
+	public boolean vote(IPlayer player, String region)
 	{
 		boolean voted = voteRepository.recordVote(player, region);
 		int score = voteRepository.tally(region, voteRanks);
@@ -230,7 +230,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		return voted;
 	}
 
-	public List<String> tag(RunsafePlayer player, List<String> plotNames)
+	public List<String> tag(IPlayer player, List<String> plotNames)
 	{
 		if (plotNames == null)
 			return null;
@@ -240,7 +240,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		return tagged;
 	}
 
-	public String tag(RunsafePlayer player, String plot)
+	public String tag(IPlayer player, String plot)
 	{
 		List<String> tags = new ArrayList<String>();
 		tags.add(plot);
@@ -282,7 +282,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		return approval;
 	}
 
-	public boolean claim(RunsafePlayer claimer, RunsafePlayer owner, String plotName, Rectangle2D region)
+	public boolean claim(IPlayer claimer, IPlayer owner, String plotName, Rectangle2D region)
 	{
 		if (!claimer.getWorld().equals(world))
 			return false;
@@ -308,7 +308,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		return false;
 	}
 
-	public void extendPlot(RunsafePlayer player, String target, RunsafeLocation location)
+	public void extendPlot(IPlayer player, String target, RunsafeLocation location)
 	{
 		if (!player.getWorld().equals(world))
 			return;
@@ -351,7 +351,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 			player.sendColouredMessage("An error occurred while extending plot.");
 	}
 
-	public void delete(RunsafePlayer deletor, String region)
+	public void delete(IPlayer deletor, String region)
 	{
 		Rectangle2D area = worldGuard.getRectangle(world, region);
 		long col = calculator.getColumn((int) area.getCenterX());
@@ -390,7 +390,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 	}
 
 	@Override
-	public HashMap<String, String> GetPlayerData(RunsafePlayer player)
+	public HashMap<String, String> GetPlayerData(IPlayer player)
 	{
 		HashMap<String, String> data = new HashMap<String, String>();
 		data.put("runsafe.creative.blacklisted", blackList.isBlacklisted(player) ? "true" : "false");
@@ -406,7 +406,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		return data;
 	}
 
-	public void removeMember(RunsafePlayer player)
+	public void removeMember(IPlayer player)
 	{
 		for (String region : worldGuard.getRegionsInWorld(world))
 		{
@@ -451,7 +451,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 
 		int membercleaned = memberRepository.cleanStaleData();
 
-		for (RunsafePlayer player : blackList.getBlacklist())
+		for (IPlayer player : blackList.getBlacklist())
 		{
 			removeMember(player);
 			membercleaned++;

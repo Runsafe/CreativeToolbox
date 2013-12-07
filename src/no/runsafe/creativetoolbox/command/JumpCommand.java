@@ -6,7 +6,9 @@ import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.argument.EnumArgument;
 import no.runsafe.framework.api.command.player.PlayerAsyncCallbackCommand;
-import no.runsafe.framework.minecraft.player.RunsafePlayer;
+import no.runsafe.framework.api.player.IPlayer;
+import no.runsafe.framework.internal.wrapper.ObjectUnwrapper;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +32,7 @@ public class JumpCommand extends PlayerAsyncCallbackCommand<JumpCommand.Sudo>
 	}
 
 	@Override
-	public Sudo OnAsyncExecute(RunsafePlayer executor, Map<String, String> params)
+	public Sudo OnAsyncExecute(IPlayer executor, Map<String, String> params)
 	{
 		List<String> approved = approval.getApprovedPlots();
 		Sudo target = new Sudo();
@@ -59,12 +61,12 @@ public class JumpCommand extends PlayerAsyncCallbackCommand<JumpCommand.Sudo>
 	public void SyncPostExecute(Sudo result)
 	{
 		if (result != null)
-			result.player.getRawPlayer().performCommand(result.command);
+			((Player)ObjectUnwrapper.convert(result.player)).performCommand(result.command);
 	}
 
 	class Sudo
 	{
-		public RunsafePlayer player;
+		public IPlayer player;
 		public String command;
 	}
 

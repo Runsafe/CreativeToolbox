@@ -3,8 +3,8 @@ package no.runsafe.creativetoolbox.command;
 import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.command.argument.OptionalArgument;
 import no.runsafe.framework.api.command.player.PlayerCommand;
+import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.entity.RunsafeEntity;
-import no.runsafe.framework.minecraft.player.RunsafePlayer;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +19,7 @@ public class CleanCommand extends PlayerCommand
 	}
 
 	@Override
-	public String OnExecute(RunsafePlayer executor, Map<String, String> parameters)
+	public String OnExecute(IPlayer executor, Map<String, String> parameters)
 	{
 		HashMap<String, Integer> counts = new HashMap<String, Integer>();
 		List<String> noClean = config.getConfigValueAsList("clean.ignore");
@@ -31,7 +31,7 @@ public class CleanCommand extends PlayerCommand
 		{
 			String name = entity.getRaw().getClass().getSimpleName();
 			boolean clean = true;
-			if (entity instanceof RunsafePlayer)
+			if (entity instanceof IPlayer)
 				continue;
 			if (arguments.length > 0)
 			{

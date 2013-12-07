@@ -2,7 +2,7 @@ package no.runsafe.creativetoolbox.database;
 
 import no.runsafe.framework.api.database.IDatabase;
 import no.runsafe.framework.api.database.Repository;
-import no.runsafe.framework.minecraft.player.RunsafePlayer;
+import no.runsafe.framework.api.player.IPlayer;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ public class PlotVoteRepository extends Repository
 		this.database = database;
 	}
 
-	public boolean recordVote(RunsafePlayer player, String plot)
+	public boolean recordVote(IPlayer player, String plot)
 	{
 		return database.Update(
 			"INSERT INTO creative_plot_vote (`plot`, `player`, `rank`) VALUES (?, ?, ?)" +

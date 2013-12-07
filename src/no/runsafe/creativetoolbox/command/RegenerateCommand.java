@@ -8,8 +8,8 @@ import no.runsafe.creativetoolbox.event.SyncInteractEvents;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.argument.EnumArgument;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
+import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.RunsafeLocation;
-import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldgenerator.PlotChunkGenerator;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
@@ -39,7 +39,7 @@ public class RegenerateCommand extends PlayerAsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(RunsafePlayer executor, Map<String, String> parameters)
+	public String OnAsyncExecute(IPlayer executor, Map<String, String> parameters)
 	{
 		Rectangle2D area = getArea(executor.getLocation());
 		if (area == null)

@@ -5,7 +5,7 @@ import no.runsafe.framework.api.command.ICommandExecutor;
 import no.runsafe.framework.api.database.IDatabase;
 import no.runsafe.framework.api.database.Repository;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
-import no.runsafe.framework.minecraft.player.RunsafePlayer;
+import no.runsafe.framework.api.player.IPlayer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +18,7 @@ public class PlotMemberBlacklistRepository extends Repository implements IConfig
 		this.database = database;
 	}
 
-	public void add(ICommandExecutor player, RunsafePlayer blacklisted)
+	public void add(ICommandExecutor player, IPlayer blacklisted)
 	{
 		database.Execute(
 			"INSERT INTO creative_blacklist (`player`,`by`,`time`) VALUES (?, ?, NOW())",
@@ -27,7 +27,7 @@ public class PlotMemberBlacklistRepository extends Repository implements IConfig
 		blacklist.add(blacklisted.getName().toLowerCase());
 	}
 
-	public void remove(RunsafePlayer blacklisted)
+	public void remove(IPlayer blacklisted)
 	{
 		String playerName = blacklisted.getName().toLowerCase();
 		if (blacklist.contains(playerName))
@@ -36,12 +36,12 @@ public class PlotMemberBlacklistRepository extends Repository implements IConfig
 		database.Execute("DELETE FROM creative_blacklist WHERE `player`=?", playerName);
 	}
 
-	public boolean isBlacklisted(RunsafePlayer player)
+	public boolean isBlacklisted(IPlayer player)
 	{
 		return blacklist.contains(player.getName().toLowerCase());
 	}
 
-	public List<RunsafePlayer> getBlacklist()
+	public List<IPlayer> getBlacklist()
 	{
 		return database.QueryPlayers("SELECT `player` FROM creative_blacklist");
 	}

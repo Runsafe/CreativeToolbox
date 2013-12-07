@@ -6,9 +6,9 @@ import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.argument.PlayerArgument;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
+import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.player.RunsafeAmbiguousPlayer;
-import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.apache.commons.lang.StringUtils;
 
@@ -32,7 +32,7 @@ public class ListCommand extends PlayerAsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(RunsafePlayer executor, Map<String, String> parameters)
+	public String OnAsyncExecute(IPlayer executor, Map<String, String> parameters)
 	{
 		if (!worldGuard.serverHasWorldGuard())
 			return "Unable to find WorldGuard!";
@@ -40,7 +40,7 @@ public class ListCommand extends PlayerAsyncCommand
 		if (filter.getWorld() == null)
 			return "No world defined!";
 
-		RunsafePlayer player = server.getPlayer(parameters.get("player"));
+		IPlayer player = server.getPlayer(parameters.get("player"));
 
 		if (player == null)
 			return "&cNo such player";
