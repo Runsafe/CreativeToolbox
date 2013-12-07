@@ -2,13 +2,11 @@ package no.runsafe.creativetoolbox.event;
 
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotManager;
-import no.runsafe.framework.api.IOutput;
+import no.runsafe.framework.api.block.IBlock;
 import no.runsafe.framework.api.event.player.IPlayerRightClickBlock;
-import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.RunsafeWorld;
-import no.runsafe.framework.minecraft.block.RunsafeBlock;
 import no.runsafe.framework.minecraft.item.meta.RunsafeMeta;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldeditbridge.WorldEditInterface;
@@ -44,7 +42,7 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 	}
 
 	@Override
-	public boolean OnPlayerRightClick(RunsafePlayer player, RunsafeMeta itemInHand, RunsafeBlock block)
+	public boolean OnPlayerRightClick(RunsafePlayer player, RunsafeMeta itemInHand, IBlock block)
 	{
 		return
 			deletions.isEmpty() && regenerations.isEmpty()
@@ -83,7 +81,7 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 						: "Could not regenerate plot."
 				);
 				RunsafeServer.Instance.getLogger().info(String.format(
-						"%s regenerated area: %s, %s", playerName, minPos, maxPos
+					"%s regenerated area: %s, %s", playerName, minPos, maxPos
 				));
 				return false;
 			}

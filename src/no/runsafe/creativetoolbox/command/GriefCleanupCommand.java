@@ -3,11 +3,12 @@ package no.runsafe.creativetoolbox.command;
 import com.google.common.collect.Lists;
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotFilter;
+import no.runsafe.framework.api.block.IBlock;
 import no.runsafe.framework.api.command.argument.EnumArgument;
 import no.runsafe.framework.api.command.player.PlayerCommand;
+import no.runsafe.framework.minecraft.Item;
 import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.RunsafeWorld;
-import no.runsafe.framework.minecraft.block.RunsafeBlock;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import no.runsafe.worldeditbridge.WorldEditInterface;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
@@ -73,15 +74,17 @@ public class GriefCleanupCommand extends PlayerCommand
 		RunsafeLocation max = plotCalculator.getMaxPosition(player.getWorld(), area);
 		RunsafeLocation min = plotCalculator.getMinPosition(player.getWorld(), area);
 		RunsafeWorld world = player.getWorld();
+		if(world == null)
+			return "No world!";
 		int counter = 0;
 		for (int x = min.getBlockX(); x <= max.getBlockX(); ++x)
 			for (int y = max.getBlockY(); y >= min.getBlockY(); --y)
 				for (int z = min.getBlockZ(); z <= max.getBlockZ(); ++z)
 				{
-					RunsafeBlock block = world.getBlockAt(x, y, z);
-					if (removeIds.contains(Integer.valueOf(block.getTypeId())))
+					IBlock block = world.getBlockAt(x, y, z);
+					if (removeIds.contains(Integer.valueOf(block.getMaterial().getTypeID())))
 					{
-						block.setTypeId(0);
+						block.setMaterial(Item.Unavailable.Air);
 						counter++;
 					}
 				}
