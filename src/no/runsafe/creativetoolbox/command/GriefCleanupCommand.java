@@ -82,7 +82,7 @@ public class GriefCleanupCommand extends PlayerCommand
 		if (candidate != null && !candidate.isEmpty())
 			return StringUtils.join(candidate, ",");
 
-		return String.format("X: %s, Z: %s", location.getX(), location.getZ());
+		return String.format("X: %.2f, Z: %.2f", location.getX(), location.getZ());
 	}
 
 	private String cleanup(RunsafePlayer player, Rectangle2D area, Integer... remove)
