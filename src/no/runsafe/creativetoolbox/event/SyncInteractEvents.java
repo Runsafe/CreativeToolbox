@@ -2,6 +2,7 @@ package no.runsafe.creativetoolbox.event;
 
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotManager;
+import no.runsafe.framework.api.IOutput;
 import no.runsafe.framework.api.block.IBlock;
 import no.runsafe.framework.api.event.player.IPlayerRightClickBlock;
 import no.runsafe.framework.minecraft.RunsafeLocation;
@@ -18,12 +19,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class SyncInteractEvents implements IPlayerRightClickBlock
 {
-	public SyncInteractEvents(PlotChunkGenerator plotGenerator, PlotCalculator calculator, WorldEditInterface worldEdit, PlotManager manager)
+	public SyncInteractEvents(PlotChunkGenerator plotGenerator, PlotCalculator calculator, WorldEditInterface worldEdit, PlotManager manager, IOutput output)
 	{
 		this.plotGenerator = plotGenerator;
 		this.calculator = calculator;
 		this.worldEdit = worldEdit;
 		this.manager = manager;
+		this.output = output;
 	}
 
 	public void startRegeneration(RunsafePlayer executor, Rectangle2D area, PlotChunkGenerator.Mode mode)
@@ -117,7 +119,7 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 					manager.delete(player, region);
 					worldEdit.regenerate(player, minPos, maxPos, false);
 					results.append(String.format("Deleted plot '%s'.", region));
-					RunsafeServer.Instance.getLogger().info(String.format("%s deleted plot %s", player.getName(), region));
+					output.logInformation(String.format("%s deleted plot %s", player.getName(), region));
 				}
 			}
 			if (!nothing)
@@ -133,4 +135,5 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 	private final PlotCalculator calculator;
 	private final WorldEditInterface worldEdit;
 	private final PlotManager manager;
+	private final IOutput output;
 }

@@ -12,6 +12,7 @@ import no.runsafe.creativetoolbox.event.CustomEvents;
 import no.runsafe.creativetoolbox.event.InteractEvents;
 import no.runsafe.creativetoolbox.event.SyncInteractEvents;
 import no.runsafe.framework.RunsafeConfigurablePlugin;
+import no.runsafe.framework.api.IOutput;
 import no.runsafe.framework.api.command.Command;
 import no.runsafe.worldeditbridge.WorldEditInterface;
 import no.runsafe.worldgenerator.PlotChunkGenerator;
