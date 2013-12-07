@@ -40,7 +40,7 @@ public class GriefCleanupCommand extends PlayerCommand
 		Rectangle2D area = getArea(executor.getLocation());
 		String what = params.get("what");
 
-		output.logInformation("%s is running clean-up of '%s' at [%s]", executor.getPrettyName(), what, getRegionNameString(executor));
+		output.logInformation("%s is running clean-up of '%s' at [%s]", executor.getName(), what, getRegionNameString(executor));
 
 		if (what.equals("road"))
 			return regeneratePadding(executor, area);
