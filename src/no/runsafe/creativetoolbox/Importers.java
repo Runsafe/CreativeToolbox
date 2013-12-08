@@ -7,12 +7,13 @@ import no.runsafe.creativetoolbox.database.PlotMemberRepository;
 import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.IDebug;
 import no.runsafe.framework.api.IWorld;
+import no.runsafe.framework.api.event.IServerReady;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.util.List;
 
-public class Importers implements IConfigurationChanged
+public class Importers implements IConfigurationChanged, IServerReady
 {
 	public Importers(PlotManager manager, WorldGuardInterface worldGuard, PlotLogRepository logRepository, IDebug console, PlotMemberRepository memberRepository, PlotEntranceRepository plotEntrance, PlotFilter plotFilter)
 	{
@@ -41,6 +42,12 @@ public class Importers implements IConfigurationChanged
 			configuration.setConfigValue("imported.entrances", true);
 		}
 		configuration.save();
+	}
+
+	@Override
+	public void OnServerReady()
+	{
+		importEntrances();
 	}
 
 	private void importRegions()
