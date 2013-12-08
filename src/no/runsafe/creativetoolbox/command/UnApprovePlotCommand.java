@@ -5,6 +5,7 @@ import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.framework.api.IScheduler;
+import no.runsafe.framework.api.IServer;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
@@ -13,9 +14,9 @@ import java.util.Map;
 
 public class UnApprovePlotCommand extends PlayerAsyncCommand
 {
-	public UnApprovePlotCommand(IScheduler scheduler, WorldGuardInterface worldGuard, PlotFilter filter, PlotManager manager, ApprovedPlotRepository approval)
+	public UnApprovePlotCommand(IScheduler scheduler, WorldGuardInterface worldGuard, PlotFilter filter, PlotManager manager, ApprovedPlotRepository approval, IServer server)
 	{
-		super("unapprove", "Removes a previously granted approval.", "runsafe.creative.approval.revoke", scheduler, new PlotArgument(filter, worldGuard));
+		super("unapprove", "Removes a previously granted approval.", "runsafe.creative.approval.revoke", scheduler, new PlotArgument(filter, worldGuard, server));
 		this.manager = manager;
 		plotFilter = filter;
 		this.approval = approval;
