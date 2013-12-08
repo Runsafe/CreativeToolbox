@@ -7,7 +7,7 @@ import no.runsafe.framework.api.command.AsyncCommand;
 import no.runsafe.framework.api.command.ICommandExecutor;
 import no.runsafe.framework.api.command.argument.RequiredArgument;
 import no.runsafe.framework.api.player.IPlayer;
-import org.bukkit.craftbukkit.libs.joptsimple.internal.Strings;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -31,7 +31,7 @@ public class FindCommand extends AsyncCommand
 			plotList.set((IPlayer) executor, hits);
 		if (hits.size() > 20)
 			return String.format("Found %d plots:Too many hits to list.", hits.size());
-		return String.format("Found %d plots: %s", hits.size(), Strings.join(hits, ", "));
+		return String.format("Found %d plots: %s", hits.size(), StringUtils.join(hits, ", "));
 	}
 
 	private final PlotTagRepository tagRepository;

@@ -11,7 +11,7 @@ import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.api.player.IAmbiguousPlayer;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
-import org.bukkit.craftbukkit.libs.joptsimple.internal.Strings;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +66,7 @@ public class AddCommand extends PlayerAsyncCommand
 		}
 		if (results.isEmpty())
 			return null;
-		return Strings.join(results, "\n");
+		return StringUtils.join(results, "\n");
 	}
 
 	private final WorldGuardInterface worldGuardInterface;

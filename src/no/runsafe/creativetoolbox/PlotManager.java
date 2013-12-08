@@ -9,7 +9,7 @@ import no.runsafe.framework.api.event.plugin.IPluginEnabled;
 import no.runsafe.framework.api.hook.IPlayerDataProvider;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
-import org.bukkit.craftbukkit.libs.joptsimple.internal.Strings;
+import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.Period;
@@ -253,7 +253,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 			if (voteCount > 0)
 				tags.add(String.format("&2[&a%d&2 vote%s]&r", voteCount, voteCount > 1 ? "s" : ""));
 		}
-		return Strings.join(tags, " ");
+		return StringUtils.join(tags, " ");
 	}
 
 	public PlotApproval approve(String approver, String plot)

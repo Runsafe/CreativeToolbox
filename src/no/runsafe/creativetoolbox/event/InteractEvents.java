@@ -16,7 +16,7 @@ import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.event.player.RunsafePlayerInteractEntityEvent;
 import no.runsafe.framework.minecraft.item.meta.RunsafeMeta;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
-import org.bukkit.craftbukkit.libs.joptsimple.internal.Strings;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
 import java.util.Set;
@@ -92,7 +92,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 		List<String> regions = plotFilter.apply(worldGuardInterface.getOwnedRegions(checkPlayer, checkPlayer.getWorld()));
 
 		if (!regions.isEmpty())
-			triggerPlayer.sendColouredMessage(Strings.join(
+			triggerPlayer.sendColouredMessage(StringUtils.join(
 				manager.tag(triggerPlayer, regions),
 				"\n"
 			));
@@ -140,7 +140,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 		{
 			List<String> tags = tagRepository.getTags(regionName);
 			if (!tags.isEmpty())
-				player.sendColouredMessage("&7Tags: &o%s&r", Strings.join(tags, " "));
+				player.sendColouredMessage("&7Tags: &o%s&r", StringUtils.join(tags, " "));
 		}
 	}
 

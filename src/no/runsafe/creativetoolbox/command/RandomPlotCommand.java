@@ -6,8 +6,6 @@ import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.argument.OptionalArgument;
 import no.runsafe.framework.api.command.player.PlayerAsyncCallbackCommand;
 import no.runsafe.framework.api.player.IPlayer;
-import no.runsafe.framework.internal.wrapper.ObjectUnwrapper;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.Map;
@@ -52,7 +50,7 @@ public class RandomPlotCommand extends PlayerAsyncCallbackCommand<RandomPlotComm
 	public void SyncPostExecute(Sudo result)
 	{
 		if (result != null)
-			((Player) ObjectUnwrapper.convert(result.player)).performCommand(result.command);
+			result.player.performCommand(result.command);
 	}
 
 	class Sudo
