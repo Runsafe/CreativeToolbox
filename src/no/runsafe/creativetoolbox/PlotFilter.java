@@ -3,7 +3,6 @@ package no.runsafe.creativetoolbox;
 import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
-import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.joda.time.DateTime;
 
@@ -23,9 +22,8 @@ public class PlotFilter implements IConfigurationChanged
 		filter = configuration.getConfigValueAsList("ignored");
 		if (filter == null)
 			filter = new ArrayList<String>();
-		world = RunsafeServer.Instance.getWorld(configuration.getConfigValueAsString("world"));
+		world = configuration.getConfigValueAsWorld("world");
 		filterCache = null;
-		worldName = configuration.getConfigValueAsString("world");
 	}
 
 	public List<String> apply(List<String> unfiltered)
@@ -59,8 +57,6 @@ public class PlotFilter implements IConfigurationChanged
 
 	public IWorld getWorld()
 	{
-		if (world == null)
-			world = RunsafeServer.Instance.getWorld(worldName);
 		return world;
 	}
 
@@ -69,5 +65,4 @@ public class PlotFilter implements IConfigurationChanged
 	private List<String> filtered;
 	private DateTime filterCache;
 	private IWorld world;
-	private String worldName;
 }

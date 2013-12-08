@@ -3,15 +3,11 @@ package no.runsafe.creativetoolbox;
 import no.runsafe.creativetoolbox.database.*;
 import no.runsafe.creativetoolbox.event.PlotApprovedEvent;
 import no.runsafe.creativetoolbox.event.PlotDeletedEvent;
-import no.runsafe.framework.api.IConfiguration;
-import no.runsafe.framework.api.IDebug;
-import no.runsafe.framework.api.ILocation;
-import no.runsafe.framework.api.IWorld;
+import no.runsafe.framework.api.*;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.api.event.plugin.IPluginEnabled;
 import no.runsafe.framework.api.hook.IPlayerDataProvider;
 import no.runsafe.framework.api.player.IPlayer;
-import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.bukkit.craftbukkit.libs.joptsimple.internal.Strings;
 import org.joda.time.DateTime;
@@ -34,7 +30,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		ApprovedPlotRepository approvedPlotRepository,
 		PlotVoteRepository voteRepository, PlotTagRepository tagRepository, PlotMemberRepository memberRepository, PlotCalculator plotCalculator,
 		PlotMemberBlacklistRepository blackList, PlotList plotList, IDebug debugger,
-		PlotLogRepository plotLog)
+		IServer server, PlotLogRepository plotLog)
 	{
 		filter = plotFilter;
 		worldGuard = worldGuardInterface;
@@ -47,6 +43,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		this.blackList = blackList;
 		this.plotList = plotList;
 		console = debugger;
+		this.server = server;
 		this.plotLog = plotLog;
 	}
 
@@ -166,7 +163,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		if (lastSeen.containsKey(playerName))
 			return lastSeen.get(playerName);
 
-		IPlayer player = RunsafeServer.Instance.getPlayer(playerName);
+		IPlayer player = server.getPlayer(playerName);
 		if (player == null)
 			return null;
 		if (player.isOnline())
@@ -272,7 +269,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 			for (String owner : worldGuard.getOwners(world, plot))
 			{
 				int approved = 0;
-				for (String region : worldGuard.getOwnedRegions(RunsafeServer.Instance.getOfflinePlayerExact(owner), world))
+				for (String region : worldGuard.getOwnedRegions(server.getOfflinePlayerExact(owner), world))
 					if (plotApproval.get(region) != null)
 						approved++;
 
@@ -374,7 +371,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 	@Override
 	public void OnConfigurationChanged(IConfiguration config)
 	{
-		world = RunsafeServer.Instance.getWorld(config.getConfigValueAsString("world"));
+		world = config.getConfigValueAsWorld("world");
 		ignoredRegions = config.getConfigValueAsList("free.ignore");
 		limit = new Period(0, 0, 0, config.getConfigValueAsInt("old_after"), 0, 0, 0, 0).toDurationTo(DateTime.now());
 		autoApprove = config.getConfigValueAsInt("vote.approved");
@@ -518,6 +515,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 	private final PlotMemberBlacklistRepository blackList;
 	private final PlotList plotList;
 	private final IDebug console;
+	private final IServer server;
 	private final PlotLogRepository plotLog;
 	private final Map<String, String> oldPlotPointers = new HashMap<String, String>();
 	private final Map<String, Map<String, String>> oldPlotList = new HashMap<String, Map<String, String>>();

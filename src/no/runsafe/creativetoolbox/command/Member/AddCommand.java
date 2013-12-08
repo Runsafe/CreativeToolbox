@@ -5,11 +5,11 @@ import no.runsafe.creativetoolbox.database.PlotMemberBlacklistRepository;
 import no.runsafe.creativetoolbox.database.PlotMemberRepository;
 import no.runsafe.creativetoolbox.event.PlotMembershipGrantedEvent;
 import no.runsafe.framework.api.IScheduler;
+import no.runsafe.framework.api.IServer;
 import no.runsafe.framework.api.command.argument.PlayerArgument;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
+import no.runsafe.framework.api.player.IAmbiguousPlayer;
 import no.runsafe.framework.api.player.IPlayer;
-import no.runsafe.framework.minecraft.RunsafeServer;
-import no.runsafe.framework.minecraft.player.RunsafeAmbiguousPlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.bukkit.craftbukkit.libs.joptsimple.internal.Strings;
 
@@ -19,24 +19,25 @@ import java.util.Map;
 
 public class AddCommand extends PlayerAsyncCommand
 {
-	public AddCommand(IScheduler scheduler, PlotFilter filter, WorldGuardInterface worldGuard, PlotMemberRepository members, PlotMemberBlacklistRepository blacklistRepository)
+	public AddCommand(IScheduler scheduler, PlotFilter filter, WorldGuardInterface worldGuard, PlotMemberRepository members, PlotMemberBlacklistRepository blacklistRepository, IServer server)
 	{
 		super("add", "Add a member to the plot you are standing in", "runsafe.creative.member.add", scheduler, new PlayerArgument());
 		plotFilter = filter;
 		worldGuardInterface = worldGuard;
 		this.members = members;
 		this.blacklistRepository = blacklistRepository;
+		this.server = server;
 	}
 
 	@Override
 	public String OnAsyncExecute(IPlayer executor, Map<String, String> parameters)
 	{
-		IPlayer member = RunsafeServer.Instance.getPlayer(parameters.get("player"));
+		IPlayer member = server.getPlayer(parameters.get("player"));
 
 		if (member == null)
 			return "&cUnable to find player.";
 
-		if (member instanceof RunsafeAmbiguousPlayer)
+		if (member instanceof IAmbiguousPlayer)
 			return member.toString();
 
 		if (blacklistRepository.isBlacklisted(member))
@@ -72,4 +73,5 @@ public class AddCommand extends PlayerAsyncCommand
 	private final PlotFilter plotFilter;
 	private final PlotMemberRepository members;
 	private final PlotMemberBlacklistRepository blacklistRepository;
+	private final IServer server;
 }

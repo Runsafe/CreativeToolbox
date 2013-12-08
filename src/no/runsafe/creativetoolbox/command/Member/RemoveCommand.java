@@ -4,10 +4,10 @@ import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.database.PlotMemberRepository;
 import no.runsafe.creativetoolbox.event.PlotMembershipRevokedEvent;
 import no.runsafe.framework.api.IScheduler;
+import no.runsafe.framework.api.IServer;
 import no.runsafe.framework.api.command.argument.PlayerArgument;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.api.player.IPlayer;
-import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.bukkit.craftbukkit.libs.joptsimple.internal.Strings;
 
@@ -18,12 +18,13 @@ import java.util.Set;
 
 public class RemoveCommand extends PlayerAsyncCommand
 {
-	public RemoveCommand(IScheduler scheduler, PlotFilter filter, WorldGuardInterface worldGuard, PlotMemberRepository memberRepository)
+	public RemoveCommand(IScheduler scheduler, PlotFilter filter, WorldGuardInterface worldGuard, PlotMemberRepository memberRepository, IServer server)
 	{
 		super("remove", "Remove a member from the plot you are standing in.", "runsafe.creative.member.remove", scheduler, new PlayerArgument());
 		plotFilter = filter;
 		worldGuardInterface = worldGuard;
 		this.memberRepository = memberRepository;
+		this.server = server;
 	}
 
 	@Override
@@ -43,7 +44,7 @@ public class RemoveCommand extends PlayerAsyncCommand
 				for (String member : members)
 					if (member.toLowerCase().startsWith(parameters.get("player").toLowerCase()))
 					{
-						IPlayer target = RunsafeServer.Instance.getOfflinePlayerExact(member);
+						IPlayer target = server.getOfflinePlayerExact(member);
 						if (worldGuardInterface.removeMemberFromRegion(plotFilter.getWorld(), region, target))
 						{
 							memberRepository.removeMember(region, member);
@@ -65,4 +66,5 @@ public class RemoveCommand extends PlayerAsyncCommand
 	private final WorldGuardInterface worldGuardInterface;
 	private final PlotFilter plotFilter;
 	private final PlotMemberRepository memberRepository;
+	private final IServer server;
 }

@@ -4,10 +4,10 @@ import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.PlotList;
 import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.framework.api.IScheduler;
+import no.runsafe.framework.api.IServer;
 import no.runsafe.framework.api.command.argument.PlayerArgument;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.api.player.IPlayer;
-import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.player.RunsafeAmbiguousPlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.apache.commons.lang.StringUtils;
@@ -18,7 +18,7 @@ import java.util.Map;
 public class ListCommand extends PlayerAsyncCommand
 {
 	public ListCommand(
-		RunsafeServer server,
+		IServer server,
 		WorldGuardInterface worldGuard,
 		PlotFilter filter,
 		IScheduler scheduler, PlotManager manager, PlotList plotList)
@@ -60,7 +60,7 @@ public class ListCommand extends PlayerAsyncCommand
 		);
 	}
 
-	private final RunsafeServer server;
+	private final IServer server;
 	private final WorldGuardInterface worldGuard;
 	private final PlotFilter filter;
 	private final PlotManager manager;

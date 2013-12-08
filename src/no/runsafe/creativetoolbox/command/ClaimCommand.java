@@ -5,11 +5,11 @@ import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.creativetoolbox.database.PlotMemberRepository;
+import no.runsafe.framework.api.IServer;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.command.argument.PlayerArgument;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.api.player.IPlayer;
-import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.player.RunsafeAmbiguousPlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
@@ -21,7 +21,7 @@ public class ClaimCommand extends PlayerCommand
 {
 	public ClaimCommand(
 		PlotManager manager, PlotCalculator calculator, WorldGuardInterface worldGuard,
-		PlotMemberRepository members, ApprovedPlotRepository approvalRepository)
+		PlotMemberRepository members, ApprovedPlotRepository approvalRepository, IServer server)
 	{
 		super("claim", "Claims a plot", null, new PlayerArgument(false));
 		this.manager = manager;
@@ -29,6 +29,7 @@ public class ClaimCommand extends PlayerCommand
 		this.worldGuard = worldGuard;
 		this.members = members;
 		this.approvalRepository = approvalRepository;
+		this.server = server;
 	}
 
 	@Override
@@ -46,7 +47,7 @@ public class ClaimCommand extends PlayerCommand
 			return "You need to stand in a plot to use this command.";
 
 		IWorld world = executor.getWorld();
-		IPlayer owner = params.containsKey("player") ? RunsafeServer.Instance.getPlayer(params.get("player")) : null;
+		IPlayer owner = params.containsKey("player") ? server.getPlayer(params.get("player")) : null;
 		if (owner instanceof RunsafeAmbiguousPlayer)
 			return owner.toString();
 
@@ -92,4 +93,5 @@ public class ClaimCommand extends PlayerCommand
 	private final WorldGuardInterface worldGuard;
 	private final PlotMemberRepository members;
 	private final ApprovedPlotRepository approvalRepository;
+	private final IServer server;
 }

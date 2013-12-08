@@ -5,7 +5,6 @@ import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.minecraft.RunsafeLocation;
-import no.runsafe.framework.minecraft.RunsafeServer;
 
 import java.awt.geom.Rectangle2D;
 import java.util.AbstractList;
@@ -133,7 +132,7 @@ public class PlotCalculator implements IConfigurationChanged
 		);
 		roadWidth = configuration.getConfigValueAsInt("plot.spacing");
 		groundLevel = configuration.getConfigValueAsInt("plot.groundLevel");
-		world = RunsafeServer.Instance.getWorld(configuration.getConfigValueAsString("world"));
+		world = configuration.getConfigValueAsWorld("world");
 	}
 
 	public long getColumn(long blockX)
