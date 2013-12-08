@@ -5,12 +5,12 @@ import no.runsafe.creativetoolbox.event.PlotApprovedEvent;
 import no.runsafe.creativetoolbox.event.PlotDeletedEvent;
 import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.IDebug;
+import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.api.event.plugin.IPluginEnabled;
 import no.runsafe.framework.api.hook.IPlayerDataProvider;
 import no.runsafe.framework.api.player.IPlayer;
-import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.bukkit.craftbukkit.libs.joptsimple.internal.Strings;
@@ -64,20 +64,20 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		return ignoredRegions.containsAll(regions);
 	}
 
-	public java.util.List<RunsafeLocation> getPlotEntrances()
+	public java.util.List<ILocation> getPlotEntrances()
 	{
-		ArrayList<RunsafeLocation> entrances = new ArrayList<RunsafeLocation>();
+		ArrayList<ILocation> entrances = new ArrayList<ILocation>();
 		for (String plot : filter.getFiltered())
 			entrances.add(plotEntrance.get(plot).getLocation());
 		return entrances;
 	}
 
-	public java.util.List<RunsafeLocation> getFreePlotEntrances()
+	public java.util.List<ILocation> getFreePlotEntrances()
 	{
 		return freePlots;
 	}
 
-	public boolean plotIsTaken(RunsafeLocation location)
+	public boolean plotIsTaken(ILocation location)
 	{
 		List<String> regions = worldGuard.getRegionsAtLocation(location);
 		if (regions == null || regions.isEmpty())
@@ -94,7 +94,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		return !ok;
 	}
 
-	public RunsafeLocation getPlotEntrance(String plot)
+	public ILocation getPlotEntrance(String plot)
 	{
 		if (world == null)
 			return null;
@@ -308,7 +308,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		return false;
 	}
 
-	public void extendPlot(IPlayer player, String target, RunsafeLocation location)
+	public void extendPlot(IPlayer player, String target, ILocation location)
 	{
 		if (!player.getWorld().equals(world))
 			return;
@@ -523,7 +523,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 	private final Map<String, Map<String, String>> oldPlotList = new HashMap<String, Map<String, String>>();
 	private final HashMap<String, Duration> lastSeen = new HashMap<String, Duration>();
 	private final HashMap<Long, ArrayList<Long>> takenPlots = new HashMap<Long, ArrayList<Long>>();
-	private final ArrayList<RunsafeLocation> freePlots = new ArrayList<RunsafeLocation>();
+	private final ArrayList<ILocation> freePlots = new ArrayList<ILocation>();
 	private final Map<String, List<String>> voteBlacklist = new HashMap<String, List<String>>();
 	private IWorld world;
 	private List<String> ignoredRegions;

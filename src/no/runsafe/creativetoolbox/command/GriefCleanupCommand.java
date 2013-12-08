@@ -3,6 +3,7 @@ package no.runsafe.creativetoolbox.command;
 import com.google.common.collect.Lists;
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotFilter;
+import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.IOutput;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.block.IBlock;
@@ -10,7 +11,6 @@ import no.runsafe.framework.api.command.argument.EnumArgument;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.Item;
-import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.worldeditbridge.WorldEditInterface;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.apache.commons.lang.StringUtils;
@@ -63,7 +63,7 @@ public class GriefCleanupCommand extends PlayerCommand
 		return String.format("Unsupported argument \"%s\"", what);
 	}
 
-	private Rectangle2D getArea(RunsafeLocation location)
+	private Rectangle2D getArea(ILocation location)
 	{
 		List<String> candidate = filter.apply(worldGuard.getRegionsAtLocation(location));
 		if (candidate != null && candidate.size() == 1)
@@ -74,7 +74,7 @@ public class GriefCleanupCommand extends PlayerCommand
 
 	private String getRegionNameString(IPlayer player)
 	{
-		RunsafeLocation location = player.getLocation();
+		ILocation location = player.getLocation();
 		if (location == null)
 			return "Unknown";
 
@@ -90,8 +90,8 @@ public class GriefCleanupCommand extends PlayerCommand
 		if (remove.length == 0)
 			return "Nothing to clean";
 		List<Integer> removeIds = Lists.newArrayList(remove);
-		RunsafeLocation max = plotCalculator.getMaxPosition(player.getWorld(), area);
-		RunsafeLocation min = plotCalculator.getMinPosition(player.getWorld(), area);
+		ILocation max = plotCalculator.getMaxPosition(player.getWorld(), area);
+		ILocation min = plotCalculator.getMinPosition(player.getWorld(), area);
 		IWorld world = player.getWorld();
 		if (world == null)
 			return "No world!";

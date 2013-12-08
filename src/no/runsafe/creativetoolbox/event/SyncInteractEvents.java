@@ -3,6 +3,7 @@ package no.runsafe.creativetoolbox.event;
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.PlotManager;
+import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.IOutput;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.block.IBlock;
@@ -56,7 +57,7 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 				|| executeRegenerations(player, block.getLocation()) && executeDeletion(player, block.getLocation());
 	}
 
-	private boolean executeRegenerations(IPlayer player, RunsafeLocation location)
+	private boolean executeRegenerations(IPlayer player, ILocation location)
 	{
 		if (regenerations.containsKey(player.getName()))
 		{
@@ -80,8 +81,8 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 				}
 
 				IWorld playerWorld = player.getWorld();
-				RunsafeLocation minPos = calculator.getMinPosition(playerWorld, area);
-				RunsafeLocation maxPos = calculator.getMaxPosition(playerWorld, area);
+				ILocation minPos = calculator.getMinPosition(playerWorld, area);
+				ILocation maxPos = calculator.getMaxPosition(playerWorld, area);
 				player.sendColouredMessage(
 					worldEdit.regenerate(player, minPos, maxPos, false)
 						? "Plot regenerated."
@@ -106,7 +107,7 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 
 	private String getRegionNameString(IPlayer player)
 	{
-		RunsafeLocation location = player.getLocation();
+		ILocation location = player.getLocation();
 		if (location == null)
 			return "Unknown";
 
@@ -117,7 +118,7 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 		return String.format("X: %.2f, Z: %.2f", location.getX(), location.getZ());
 	}
 
-	private boolean executeDeletion(IPlayer player, RunsafeLocation location)
+	private boolean executeDeletion(IPlayer player, ILocation location)
 	{
 		boolean nothing = true;
 		if (deletions.containsKey(player.getName()))
@@ -131,8 +132,8 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 				if (area.contains(location.getX(), location.getZ()))
 				{
 					nothing = false;
-					RunsafeLocation minPos = calculator.getMinPosition(player.getWorld(), area);
-					RunsafeLocation maxPos = calculator.getMaxPosition(player.getWorld(), area);
+					ILocation minPos = calculator.getMinPosition(player.getWorld(), area);
+					ILocation maxPos = calculator.getMaxPosition(player.getWorld(), area);
 					manager.delete(player, region);
 					worldEdit.regenerate(player, minPos, maxPos, false);
 					results.append(String.format("Deleted plot '%s'.", region));

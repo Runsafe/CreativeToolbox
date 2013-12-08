@@ -2,9 +2,9 @@ package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotFilter;
+import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.api.player.IPlayer;
-import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.worldeditbridge.WorldEditInterface;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
@@ -32,8 +32,8 @@ public class SelectCommand extends PlayerCommand
 			area = worldGuard.getRectangle(executor.getWorld(), candidate.get(0));
 		else
 			area = plotCalculator.getPlotArea(executor.getLocation(), false);
-		RunsafeLocation minPos = plotCalculator.getMinPosition(executor.getWorld(), area);
-		RunsafeLocation maxPos = plotCalculator.getMaxPosition(executor.getWorld(), area);
+		ILocation minPos = plotCalculator.getMinPosition(executor.getWorld(), area);
+		ILocation maxPos = plotCalculator.getMaxPosition(executor.getWorld(), area);
 		worldEdit.select(executor, minPos, maxPos);
 		return null;
 	}

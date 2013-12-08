@@ -1,6 +1,6 @@
 package no.runsafe.creativetoolbox.database;
 
-import no.runsafe.framework.minecraft.RunsafeLocation;
+import no.runsafe.framework.api.ILocation;
 
 public class PlotEntrance
 {
@@ -14,16 +14,16 @@ public class PlotEntrance
 		this.name = name;
 	}
 
-	public RunsafeLocation getLocation()
+	public ILocation getLocation()
 	{
 		return location;
 	}
 
-	public void setLocation(RunsafeLocation location)
+	public void setLocation(ILocation location)
 	{
 		this.location = location;
 	}
 
-	private RunsafeLocation location;
+	private ILocation location;
 	private String name;
 }

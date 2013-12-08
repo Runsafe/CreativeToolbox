@@ -1,6 +1,7 @@
 package no.runsafe.creativetoolbox;
 
 import no.runsafe.framework.api.IConfiguration;
+import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.minecraft.RunsafeLocation;
@@ -13,12 +14,12 @@ import java.util.List;
 
 public class PlotCalculator implements IConfigurationChanged
 {
-	public Rectangle2D getPlotArea(RunsafeLocation location)
+	public Rectangle2D getPlotArea(ILocation location)
 	{
 		return getPlotArea(location, false);
 	}
 
-	public Rectangle2D getPlotArea(RunsafeLocation location, boolean includePadding)
+	public Rectangle2D getPlotArea(ILocation location, boolean includePadding)
 	{
 		if (!fence.contains(location.getBlockX(), location.getBlockZ()))
 			return null;
@@ -86,7 +87,7 @@ public class PlotCalculator implements IConfigurationChanged
 		);
 	}
 
-	public RunsafeLocation getDefaultEntrance(RunsafeLocation location)
+	public ILocation getDefaultEntrance(ILocation location)
 	{
 		if (location == null)
 			return null;
@@ -96,7 +97,7 @@ public class PlotCalculator implements IConfigurationChanged
 		);
 	}
 
-	public RunsafeLocation getDefaultEntrance(long column, long row)
+	public ILocation getDefaultEntrance(long column, long row)
 	{
 		if (world == null)
 			return null;
@@ -105,12 +106,12 @@ public class PlotCalculator implements IConfigurationChanged
 		return new RunsafeLocation(world, x - 0.5, groundLevel, y - 0.5, FACING_MIDDLE, LOOKING_FORWARD);
 	}
 
-	public RunsafeLocation getMinPosition(IWorld world, Rectangle2D area)
+	public ILocation getMinPosition(IWorld world, Rectangle2D area)
 	{
 		return new RunsafeLocation(world, area.getMinX(), 0, area.getMinY());
 	}
 
-	public RunsafeLocation getMaxPosition(IWorld world, Rectangle2D area)
+	public ILocation getMaxPosition(IWorld world, Rectangle2D area)
 	{
 		return new RunsafeLocation(world, area.getMaxX(), world.getMaxHeight(), area.getMaxY());
 	}

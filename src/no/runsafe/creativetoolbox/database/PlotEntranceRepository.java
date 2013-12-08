@@ -1,11 +1,11 @@
 package no.runsafe.creativetoolbox.database;
 
 import no.runsafe.framework.api.IConfiguration;
+import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.database.IDatabase;
 import no.runsafe.framework.api.database.Repository;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
-import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.RunsafeServer;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class PlotEntranceRepository extends Repository implements IConfiguration
 		if (cache.containsKey(regionName.toLowerCase()))
 			return cache.get(regionName.toLowerCase());
 
-		RunsafeLocation entrance = database.QueryLocation(
+		ILocation entrance = database.QueryLocation(
 			"SELECT ? AS world, e.* FROM creativetoolbox_plot_entrance AS e WHERE name=?",
 			world.getName(),
 			regionName

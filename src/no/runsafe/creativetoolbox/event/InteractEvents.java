@@ -5,13 +5,13 @@ import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.creativetoolbox.database.PlotLogRepository;
 import no.runsafe.creativetoolbox.database.PlotTagRepository;
 import no.runsafe.framework.api.IConfiguration;
+import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.block.IBlock;
 import no.runsafe.framework.api.event.IAsyncEvent;
 import no.runsafe.framework.api.event.player.IPlayerInteractEntityEvent;
 import no.runsafe.framework.api.event.player.IPlayerRightClickBlock;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.api.player.IPlayer;
-import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.event.player.RunsafePlayerInteractEntityEvent;
 import no.runsafe.framework.minecraft.item.meta.RunsafeMeta;
@@ -99,7 +99,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 			triggerPlayer.sendColouredMessage("%s does not own any plots.", checkPlayer.getPrettyName());
 	}
 
-	private void listPlotsByLocation(RunsafeLocation location, IPlayer player)
+	private void listPlotsByLocation(ILocation location, IPlayer player)
 	{
 		if (!this.worldGuardInterface.serverHasWorldGuard())
 		{

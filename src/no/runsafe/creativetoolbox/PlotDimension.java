@@ -1,7 +1,7 @@
 package no.runsafe.creativetoolbox;
 
+import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.IWorld;
-import no.runsafe.framework.minecraft.RunsafeLocation;
 
 import java.awt.geom.Rectangle2D;
 
@@ -34,12 +34,12 @@ public class PlotDimension
 		return calculator.getColumn((long) area.getMaxX());
 	}
 
-	public RunsafeLocation getMinPosition()
+	public ILocation getMinPosition()
 	{
 		return calculator.getMinPosition(world, area);
 	}
 
-	public RunsafeLocation getMaxPosition()
+	public ILocation getMaxPosition()
 	{
 		return calculator.getMaxPosition(world, area);
 	}

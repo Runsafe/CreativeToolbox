@@ -2,10 +2,10 @@ package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.creativetoolbox.PlayerTeleport;
 import no.runsafe.creativetoolbox.PlotManager;
+import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.player.PlayerAsyncCallbackCommand;
 import no.runsafe.framework.api.player.IPlayer;
-import no.runsafe.framework.minecraft.RunsafeLocation;
 
 import java.util.List;
 import java.util.Map;
@@ -45,9 +45,9 @@ public class FindFreePlotCommand extends PlayerAsyncCallbackCommand<PlayerTelepo
 		result.who.sendColouredMessage(result.message);
 	}
 
-	private RunsafeLocation getCandidate()
+	private ILocation getCandidate()
 	{
-		List<RunsafeLocation> options = manager.getFreePlotEntrances();
+		List<ILocation> options = manager.getFreePlotEntrances();
 		if (options == null || options.size() < 1)
 			return null;
 		if (options.size() == 1)
