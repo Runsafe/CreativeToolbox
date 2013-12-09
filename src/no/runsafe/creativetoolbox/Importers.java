@@ -8,6 +8,7 @@ import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.event.IServerReady;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
+import no.runsafe.framework.api.log.IConsole;
 import no.runsafe.framework.api.log.IDebug;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
@@ -15,12 +16,13 @@ import java.util.List;
 
 public class Importers implements IConfigurationChanged, IServerReady
 {
-	public Importers(PlotManager manager, WorldGuardInterface worldGuard, PlotLogRepository logRepository, IDebug console, PlotMemberRepository memberRepository, PlotEntranceRepository plotEntrance, PlotFilter plotFilter)
+	public Importers(PlotManager manager, WorldGuardInterface worldGuard, PlotLogRepository logRepository, IConsole console, IDebug debugger, PlotMemberRepository memberRepository, PlotEntranceRepository plotEntrance, PlotFilter plotFilter)
 	{
 		this.manager = manager;
 		this.worldGuard = worldGuard;
 		this.logRepository = logRepository;
 		this.console = console;
+		this.debugger = debugger;
 		this.memberRepository = memberRepository;
 		this.plotEntrance = plotEntrance;
 		this.plotFilter = plotFilter;
@@ -87,14 +89,14 @@ public class Importers implements IConfigurationChanged, IServerReady
 		{
 			if (skip.contains(plot))
 			{
-				console.debugFiner("Plot %s entrance is already stored", plot);
+				debugger.debugFiner("Plot %s entrance is already stored", plot);
 				continue;
 			}
 
 			PlotEntrance entrance = plotEntrance.get(plot);
 			if (entrance != null && entrance.getLocation() != null)
 			{
-				console.debugFine("Plot %s entrance is not stored, but exists?!", plot);
+				debugger.debugFine("Plot %s entrance is not stored, but exists?!", plot);
 				continue;
 			}
 
@@ -115,7 +117,8 @@ public class Importers implements IConfigurationChanged, IServerReady
 	private final PlotManager manager;
 	private final WorldGuardInterface worldGuard;
 	private final PlotLogRepository logRepository;
-	private final IDebug console;
+	private final IConsole console;
+	private final IDebug debugger;
 	private final PlotMemberRepository memberRepository;
 	private final PlotEntranceRepository plotEntrance;
 	private final PlotFilter plotFilter;

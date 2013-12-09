@@ -10,6 +10,7 @@ import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.api.event.plugin.IPluginEnabled;
 import no.runsafe.framework.api.hook.IPlayerDataProvider;
+import no.runsafe.framework.api.log.IConsole;
 import no.runsafe.framework.api.log.IDebug;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
@@ -33,8 +34,8 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		PlotEntranceRepository plotEntranceRepository,
 		ApprovedPlotRepository approvedPlotRepository,
 		PlotVoteRepository voteRepository, PlotTagRepository tagRepository, PlotMemberRepository memberRepository, PlotCalculator plotCalculator,
-		PlotMemberBlacklistRepository blackList, PlotList plotList, IDebug debugger,
-		IServer server, PlotLogRepository plotLog)
+		PlotMemberBlacklistRepository blackList, PlotList plotList, IConsole console,
+		IConsole console1, IDebug debugger, IServer server, PlotLogRepository plotLog)
 	{
 		filter = plotFilter;
 		worldGuard = worldGuardInterface;
@@ -46,7 +47,8 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		calculator = plotCalculator;
 		this.blackList = blackList;
 		this.plotList = plotList;
-		console = debugger;
+		this.console = console1;
+		this.debugger = debugger;
 		this.server = server;
 		this.plotLog = plotLog;
 	}
@@ -324,7 +326,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 		long lastRow = currentSize.getMaximumRow();
 		long targetCol = targetSize.getMaximumColumn();
 		long targetRow = targetSize.getMaximumRow();
-		console.debugFine("Extending plot %s to %s", currentSize, targetSize);
+		debugger.debugFine("Extending plot %s to %s", currentSize, targetSize);
 		for (long column = targetSize.getMinimumColumn(); column <= targetCol; ++column)
 		{
 			for (long row = targetSize.getMinimumRow(); row <= targetRow; ++row)
@@ -334,7 +336,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 
 				if (isTaken(column, row))
 				{
-					console.debugFine("Plot (%d,%d) is taken!", column, row);
+					debugger.debugFine("Plot (%d,%d) is taken!", column, row);
 					player.sendColouredMessage("Unable to extend plot here, overlap detected!");
 					return;
 				}
@@ -414,7 +416,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 			Set<String> members = worldGuard.getMembers(world, region);
 			if (members != null && members.contains(player.getName().toLowerCase()))
 			{
-				console.debugFiner("Removing member %s from %s.", player.getPrettyName(), region);
+				debugger.debugFiner("Removing member %s from %s.", player.getPrettyName(), region);
 				worldGuard.removeMemberFromRegion(world, region, player);
 				memberRepository.removeMember(region, player.getName().toLowerCase());
 			}
@@ -518,7 +520,8 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 	private final PlotCalculator calculator;
 	private final PlotMemberBlacklistRepository blackList;
 	private final PlotList plotList;
-	private final IDebug console;
+	private final IConsole console;
+	private final IDebug debugger;
 	private final IServer server;
 	private final PlotLogRepository plotLog;
 	private final Map<String, String> oldPlotPointers = new HashMap<String, String>();
