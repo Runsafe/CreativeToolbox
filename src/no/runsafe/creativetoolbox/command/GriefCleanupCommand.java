@@ -4,11 +4,11 @@ import com.google.common.collect.Lists;
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.framework.api.ILocation;
-import no.runsafe.framework.api.IOutput;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.block.IBlock;
 import no.runsafe.framework.api.command.argument.EnumArgument;
 import no.runsafe.framework.api.command.player.PlayerCommand;
+import no.runsafe.framework.api.log.IConsole;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.Item;
 import no.runsafe.worldeditbridge.WorldEditInterface;
@@ -21,7 +21,7 @@ import java.util.Map;
 
 public class GriefCleanupCommand extends PlayerCommand
 {
-	public GriefCleanupCommand(WorldGuardInterface worldGuard, WorldEditInterface worldEdit, PlotCalculator plotCalculator, PlotFilter filter, IOutput output)
+	public GriefCleanupCommand(WorldGuardInterface worldGuard, WorldEditInterface worldEdit, PlotCalculator plotCalculator, PlotFilter filter, IConsole output)
 	{
 		super(
 			"griefcleanup", "Cleans up griefed plots.", "runsafe.creative.degrief",
@@ -135,5 +135,5 @@ public class GriefCleanupCommand extends PlayerCommand
 	private final WorldEditInterface worldEdit;
 	private final PlotCalculator plotCalculator;
 	private final PlotFilter filter;
-	private final IOutput output;
+	private final IConsole output;
 }

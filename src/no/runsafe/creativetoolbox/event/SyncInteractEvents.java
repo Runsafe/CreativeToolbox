@@ -4,10 +4,10 @@ import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.framework.api.ILocation;
-import no.runsafe.framework.api.IOutput;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.block.IBlock;
 import no.runsafe.framework.api.event.player.IPlayerRightClickBlock;
+import no.runsafe.framework.api.log.IConsole;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.item.meta.RunsafeMeta;
 import no.runsafe.worldeditbridge.WorldEditInterface;
@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class SyncInteractEvents implements IPlayerRightClickBlock
 {
-	public SyncInteractEvents(PlotChunkGenerator plotGenerator, PlotCalculator calculator, WorldEditInterface worldEdit, WorldGuardInterface worldGuard, PlotFilter filter, PlotManager manager, IOutput output)
+	public SyncInteractEvents(PlotChunkGenerator plotGenerator, PlotCalculator calculator, WorldEditInterface worldEdit, WorldGuardInterface worldGuard, PlotFilter filter, PlotManager manager, IConsole output)
 	{
 		this.plotGenerator = plotGenerator;
 		this.calculator = calculator;
@@ -30,7 +30,7 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 		this.worldGuard = worldGuard;
 		this.filter = filter;
 		this.manager = manager;
-		this.output = output;
+		this.console = output;
 	}
 
 	public void startRegeneration(IPlayer executor, Rectangle2D area, PlotChunkGenerator.Mode mode)
@@ -87,7 +87,7 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 						? "Plot regenerated."
 						: "Could not regenerate plot."
 				);
-				output.logInformation("%s just regenerated plots at [%s].", player.getName(), getRegionNameString(player));
+				console.logInformation("%s just regenerated plots at [%s].", player.getName(), getRegionNameString(player));
 
 				return false;
 			}
@@ -136,7 +136,7 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 					manager.delete(player, region);
 					worldEdit.regenerate(player, minPos, maxPos, false);
 					results.append(String.format("Deleted plot '%s'.", region));
-					output.logInformation(String.format("%s deleted plot %s", player.getName(), region));
+					console.logInformation(String.format("%s deleted plot %s", player.getName(), region));
 				}
 			}
 			if (!nothing)
@@ -154,5 +154,5 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 	private final WorldGuardInterface worldGuard;
 	private final PlotFilter filter;
 	private final PlotManager manager;
-	private final IOutput output;
+	private final IConsole console;
 }
