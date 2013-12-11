@@ -1,28 +1,25 @@
 package no.runsafe.creativetoolbox.command;
 
-import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.command.argument.OptionalArgument;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.api.entity.IEntity;
 import no.runsafe.framework.api.player.IPlayer;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class CleanCommand extends PlayerCommand
 {
-	public CleanCommand(IConfiguration configuration)
+	public CleanCommand(ConfigurationManager config)
 	{
 		super("clean", "Remove items and mobs from the world", "runsafe.creative.clean", new OptionalArgument("filter"));
-		config = configuration;
+		this.config = config;
 	}
 
 	@Override
 	public String OnExecute(IPlayer executor, Map<String, String> parameters)
 	{
 		HashMap<String, Integer> counts = new HashMap<String, Integer>();
-		List<String> noClean = config.getConfigValueAsList("clean.ignore");
 		String[] arguments = new String[0];
 		if (parameters.containsKey("filter"))
 			arguments = parameters.get("filter").split("\\s+");
@@ -47,7 +44,7 @@ public class CleanCommand extends PlayerCommand
 			}
 			else
 			{
-				for (String filter : noClean)
+				for (String filter : config.getCleanFilter())
 				{
 					if (name.contains(filter))
 					{
@@ -71,5 +68,5 @@ public class CleanCommand extends PlayerCommand
 		return results.toString();
 	}
 
-	private final IConfiguration config;
+	private final ConfigurationManager config;
 }

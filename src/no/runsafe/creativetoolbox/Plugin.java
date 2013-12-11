@@ -22,6 +22,7 @@ public class Plugin extends RunsafeConfigurablePlugin
 	@Override
 	protected void PluginSetup()
 	{
+		addComponent(ConfigurationManager.class);
 		addComponent(getFirstPluginAPI(WorldGuardInterface.class));
 		addComponent(getFirstPluginAPI(WorldEditInterface.class));
 		addComponent(getFirstPluginAPI(PlotChunkGenerator.class));

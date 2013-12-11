@@ -6,24 +6,24 @@ import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
+import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.api.player.IPlayer;
 
 import java.util.Map;
 
 public class OldPlotsCommand extends PlayerAsyncCommand
 {
-	public OldPlotsCommand(PlotManager manager, IScheduler scheduler, IConfiguration config, PlotList plotList)
+	public OldPlotsCommand(PlotManager manager, IScheduler scheduler, PlotList plotList, ConfigurationManager config)
 	{
 		super("oldplots", "list old plots that may be removed.", "runsafe.creative.scan.old-plots", scheduler);
 		this.manager = manager;
-		this.config = config;
 		this.plotList = plotList;
+		this.config = config;
 	}
 
 	@Override
 	public String OnAsyncExecute(IPlayer executor, Map<String, String> parameters)
 	{
-		int max_listed = config.getConfigValueAsInt("max_listed");
 		if (executor != null)
 		{
 			manager.clearOldPlotWorkList(executor);
@@ -34,7 +34,7 @@ public class OldPlotsCommand extends PlayerAsyncCommand
 		StringBuilder result = new StringBuilder();
 		for (Map.Entry<String, String> item : hits.entrySet())
 		{
-			if (executor == null || n < max_listed)
+			if (executor == null || n < config.getOldPlotsListLimit())
 			{
 				result.append(String.format("%s - %s\n", item.getKey(), item.getValue()));
 				n++;
@@ -51,6 +51,6 @@ public class OldPlotsCommand extends PlayerAsyncCommand
 	}
 
 	private final PlotManager manager;
-	private final IConfiguration config;
 	private final PlotList plotList;
+	private final ConfigurationManager config;
 }
