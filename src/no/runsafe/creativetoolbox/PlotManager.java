@@ -432,7 +432,13 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 
 	private void CleanStaleData()
 	{
-		Set<String> current = worldGuard.getRegionRectanglesInWorld(filter.getWorld()).keySet();
+		IWorld world = filter.getWorld();
+		if(world == null)
+			debugger.debugFine("No world defined!");
+		Map<String, Rectangle2D> regions = worldGuard.getRegionRectanglesInWorld(world);
+		if(regions == null)
+			debugger.debugFine("No regions in world!");
+		Set<String> current = regions.keySet();
 
 		List<String> loggedPlots = plotLog.getPlots();
 		int deleted = 0;
