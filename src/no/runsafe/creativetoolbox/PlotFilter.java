@@ -23,6 +23,7 @@ public class PlotFilter implements IConfigurationChanged
 		if (filter == null)
 			filter = new ArrayList<String>();
 		world = configuration.getConfigValueAsWorld("world");
+
 		filterCache = null;
 	}
 

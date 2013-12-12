@@ -378,6 +378,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 	public void OnConfigurationChanged(IConfiguration config)
 	{
 		world = config.getConfigValueAsWorld("world");
+		debugger.debugFine("World %s is %s", config.getConfigValueAsString("world"), world);
 		ignoredRegions = config.getConfigValueAsList("free.ignore");
 		limit = new Period(0, 0, 0, config.getConfigValueAsInt("old_after"), 0, 0, 0, 0).toDurationTo(DateTime.now());
 		autoApprove = config.getConfigValueAsInt("vote.approved");
