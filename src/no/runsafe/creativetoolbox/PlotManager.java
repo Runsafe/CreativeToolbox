@@ -7,8 +7,8 @@ import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.IServer;
 import no.runsafe.framework.api.IWorld;
+import no.runsafe.framework.api.event.IServerReady;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
-import no.runsafe.framework.api.event.plugin.IPluginEnabled;
 import no.runsafe.framework.api.hook.IPlayerDataProvider;
 import no.runsafe.framework.api.log.IConsole;
 import no.runsafe.framework.api.log.IDebug;
@@ -26,7 +26,7 @@ import org.joda.time.format.PeriodFormat;
 import java.awt.geom.Rectangle2D;
 import java.util.*;
 
-public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlayerDataProvider
+public class PlotManager implements IConfigurationChanged, IServerReady, IPlayerDataProvider
 {
 	public PlotManager(
 		PlotFilter plotFilter,
@@ -385,7 +385,7 @@ public class PlotManager implements IConfigurationChanged, IPluginEnabled, IPlay
 	}
 
 	@Override
-	public void OnPluginEnabled()
+	public void OnServerReady()
 	{
 		ScanTakenPlots();
 		ScanFreePlots();
