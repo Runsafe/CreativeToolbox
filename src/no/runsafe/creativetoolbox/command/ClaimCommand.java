@@ -7,10 +7,9 @@ import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.creativetoolbox.database.PlotMemberRepository;
 import no.runsafe.framework.api.IServer;
 import no.runsafe.framework.api.IWorld;
-import no.runsafe.framework.api.command.argument.PlayerArgument;
+import no.runsafe.framework.api.command.argument.OnlinePlayerArgument;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.api.player.IPlayer;
-import no.runsafe.framework.minecraft.player.RunsafeAmbiguousPlayer;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.awt.geom.Rectangle2D;
@@ -23,7 +22,7 @@ public class ClaimCommand extends PlayerCommand
 		PlotManager manager, PlotCalculator calculator, WorldGuardInterface worldGuard,
 		PlotMemberRepository members, ApprovedPlotRepository approvalRepository, IServer server)
 	{
-		super("claim", "Claims a plot", null, new PlayerArgument(false));
+		super("claim", "Claims a plot", null, new OnlinePlayerArgument(false));
 		this.manager = manager;
 		this.calculator = calculator;
 		this.worldGuard = worldGuard;
@@ -47,9 +46,7 @@ public class ClaimCommand extends PlayerCommand
 			return "You need to stand in a plot to use this command.";
 
 		IWorld world = executor.getWorld();
-		IPlayer owner = params.containsKey("player") ? server.getPlayer(params.get("player")) : null;
-		if (owner instanceof RunsafeAmbiguousPlayer)
-			return owner.toString();
+		IPlayer owner = params.containsKey("player") ? server.getOfflinePlayerExact(params.get("player")) : null;
 
 		if (owner != null && !executor.hasPermission("runsafe.creative.claim"))
 			return "You can only claim plots for yourself.";
