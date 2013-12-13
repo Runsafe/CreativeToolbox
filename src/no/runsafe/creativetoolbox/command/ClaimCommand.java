@@ -32,8 +32,12 @@ public class ClaimCommand extends PlayerCommand
 	}
 
 	@Override
-	public String OnExecute(IPlayer executor, Map<String, String> params) //, String[] args)
+	public String OnExecute(IPlayer executor, Map<String, String> params)
 	{
+		// Short circuit if executor wrote an invalid playername.
+		if (params.containsKey("player") && params.get("player").equals(OnlinePlayerArgument.Invalid))
+			return null;
+
 		String current = manager.getCurrentRegionFiltered(executor);
 		if (current != null)
 			return String.format("This plot is already claimed as %s!", current);
@@ -47,6 +51,7 @@ public class ClaimCommand extends PlayerCommand
 
 		IWorld world = executor.getWorld();
 		IPlayer owner = params.containsKey("player") ? server.getOfflinePlayerExact(params.get("player")) : null;
+
 
 		if (owner != null && !executor.hasPermission("runsafe.creative.claim"))
 			return "You can only claim plots for yourself.";
