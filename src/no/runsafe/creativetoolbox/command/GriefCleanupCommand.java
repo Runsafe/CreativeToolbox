@@ -46,19 +46,24 @@ public class GriefCleanupCommand extends PlayerCommand
 			return regeneratePadding(executor, area);
 
 		if (what.equals("lava"))
-			return cleanup(executor, area, 10, 11);
+			return cleanup(executor, area, Item.Unavailable.Lava, Item.Unavailable.StationaryLava);
 
 		if (what.equals("water"))
-			return cleanup(executor, area, 8, 9);
+			return cleanup(executor, area, Item.Unavailable.Water, Item.Unavailable.StationaryWater);
 
 		if (what.equals("cobblestone"))
-			return cleanup(executor, area, 4);
+			return cleanup(executor, area, Item.BuildingBlock.Cobblestone);
 
 		if (what.equals("obsidian"))
-			return cleanup(executor, area, 49);
+			return cleanup(executor, area, Item.BuildingBlock.Obsidian);
 
 		if (what.equals("all"))
-			return cleanup(executor, area, 4, 8, 9, 10, 11, 49);
+			return cleanup(executor, area,
+				Item.Unavailable.Lava, Item.Unavailable.StationaryLava,
+				Item.Unavailable.Water, Item.Unavailable.StationaryWater,
+				Item.BuildingBlock.Cobblestone,
+				Item.BuildingBlock.Obsidian
+			);
 
 		return String.format("Unsupported argument \"%s\"", what);
 	}
@@ -85,11 +90,10 @@ public class GriefCleanupCommand extends PlayerCommand
 		return String.format("X: %.2f, Z: %.2f", location.getX(), location.getZ());
 	}
 
-	private String cleanup(IPlayer player, Rectangle2D area, Integer... remove)
+	private String cleanup(IPlayer player, Rectangle2D area, Item... remove)
 	{
 		if (remove.length == 0)
 			return "Nothing to clean";
-		List<Integer> removeIds = Lists.newArrayList(remove);
 		ILocation max = plotCalculator.getMaxPosition(player.getWorld(), area);
 		ILocation min = plotCalculator.getMinPosition(player.getWorld(), area);
 		IWorld world = player.getWorld();
@@ -103,7 +107,7 @@ public class GriefCleanupCommand extends PlayerCommand
 				for (int z = min.getBlockZ(); z <= max.getBlockZ(); ++z)
 				{
 					IBlock block = world.getBlockAt(x, y, z);
-					if (removeIds.contains(Integer.valueOf(block.getMaterial().getTypeID())))
+					if (block.isAny(remove))
 					{
 						block.setMaterial(Item.Unavailable.Air);
 						counter++;
