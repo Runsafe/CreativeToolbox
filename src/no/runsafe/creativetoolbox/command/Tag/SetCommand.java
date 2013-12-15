@@ -7,6 +7,7 @@ import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.argument.TrailingArgument;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.api.player.IPlayer;
+import no.runsafe.framework.text.ChatColour;
 
 import java.util.Map;
 
@@ -26,7 +27,7 @@ public class SetCommand extends PlayerAsyncCommand
 		if (plot == null)
 			return "There is no plot here.";
 
-		String[] tags = param.get("tags").split("\\s+");
+		String[] tags = ChatColour.Strip(param.get("tags")).split("\\s+");
 		return String.format(
 			tagRepository.setTags(plot, Lists.newArrayList(tags))
 				? "Changed tags for plot %s."
