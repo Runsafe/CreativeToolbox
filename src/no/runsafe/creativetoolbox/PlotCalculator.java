@@ -26,7 +26,7 @@ public class PlotCalculator implements IConfigurationChanged
 		Rectangle2D area = getPlotArea(getColumn(location.getBlockX()), getRow(location.getBlockZ()), includePadding);
 
 		// Location is in the padding between plots
-		if (!area.contains(location.getBlockX(), location.getBlockZ()))
+		if (area == null || !area.contains(location.getBlockX(), location.getBlockZ()))
 			return null;
 
 		return area;
