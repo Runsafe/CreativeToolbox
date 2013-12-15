@@ -8,13 +8,14 @@ import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.command.player.PlayerAsyncCallbackCommand;
 import no.runsafe.framework.api.player.IPlayer;
+import no.runsafe.worldguardbridge.IRegionControl;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.util.Map;
 
 public class TeleportCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
 {
-	public TeleportCommand(IScheduler scheduler, PlotManager manager, PlotFilter filter, WorldGuardInterface worldGuard, PlotArgument plotName)
+	public TeleportCommand(IScheduler scheduler, PlotManager manager, PlotFilter filter, IRegionControl worldGuard, PlotArgument plotName)
 	{
 		super("teleport", "teleport to a plot.", "runsafe.creative.teleport.plot", scheduler, plotName);
 		this.manager = manager;
@@ -67,5 +68,5 @@ public class TeleportCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
 
 	private final PlotManager manager;
 	private final PlotFilter filter;
-	private final WorldGuardInterface worldGuard;
+	private final IRegionControl worldGuard;
 }

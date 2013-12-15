@@ -2,7 +2,6 @@ package no.runsafe.creativetoolbox.event;
 
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotFilter;
-import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.block.IBlock;
@@ -11,8 +10,9 @@ import no.runsafe.framework.api.log.IConsole;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.item.meta.RunsafeMeta;
 import no.runsafe.worldeditbridge.WorldEditInterface;
+import no.runsafe.worldgenerator.IPlotGenerator;
 import no.runsafe.worldgenerator.PlotChunkGenerator;
-import no.runsafe.worldguardbridge.WorldGuardInterface;
+import no.runsafe.worldguardbridge.IRegionControl;
 import org.apache.commons.lang.StringUtils;
 
 import java.awt.geom.Rectangle2D;
@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class SyncInteractEvents implements IPlayerRightClickBlock
 {
-	public SyncInteractEvents(PlotChunkGenerator plotGenerator, PlotCalculator calculator, WorldEditInterface worldEdit, WorldGuardInterface worldGuard, PlotFilter filter, PlotManager manager, IConsole output)
+	public SyncInteractEvents(IPlotGenerator plotGenerator, PlotCalculator calculator, WorldEditInterface worldEdit, IRegionControl worldGuard, PlotFilter filter, PlotManager manager, IConsole output)
 	{
 		this.plotGenerator = plotGenerator;
 		this.calculator = calculator;
@@ -148,10 +148,10 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 	private final ConcurrentHashMap<String, Map<String, Rectangle2D>> deletions = new ConcurrentHashMap<String, Map<String, Rectangle2D>>();
 	private final ConcurrentHashMap<String, Rectangle2D> regenerations = new ConcurrentHashMap<String, Rectangle2D>();
 	private final ConcurrentHashMap<String, PlotChunkGenerator.Mode> generator = new ConcurrentHashMap<String, PlotChunkGenerator.Mode>();
-	private final PlotChunkGenerator plotGenerator;
+	private final IPlotGenerator plotGenerator;
 	private final PlotCalculator calculator;
 	private final WorldEditInterface worldEdit;
-	private final WorldGuardInterface worldGuard;
+	private final IRegionControl worldGuard;
 	private final PlotFilter filter;
 	private final PlotManager manager;
 	private final IConsole console;

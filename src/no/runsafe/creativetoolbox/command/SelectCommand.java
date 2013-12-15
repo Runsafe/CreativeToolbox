@@ -6,6 +6,7 @@ import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.worldeditbridge.WorldEditInterface;
+import no.runsafe.worldguardbridge.IRegionControl;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.awt.geom.Rectangle2D;
@@ -14,7 +15,7 @@ import java.util.Map;
 
 public class SelectCommand extends PlayerCommand
 {
-	public SelectCommand(WorldEditInterface worldEdit, WorldGuardInterface worldGuard, PlotCalculator calculator, PlotFilter filter)
+	public SelectCommand(WorldEditInterface worldEdit, IRegionControl worldGuard, PlotCalculator calculator, PlotFilter filter)
 	{
 		super("select", "Sets your WorldEdit region to the plot you are in", "runsafe.creative.select");
 		this.worldEdit = worldEdit;
@@ -39,7 +40,7 @@ public class SelectCommand extends PlayerCommand
 	}
 
 	private final WorldEditInterface worldEdit;
-	private final WorldGuardInterface worldGuard;
+	private final IRegionControl worldGuard;
 	private final PlotCalculator plotCalculator;
 	private final PlotFilter filter;
 }

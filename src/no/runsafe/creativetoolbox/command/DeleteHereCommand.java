@@ -8,6 +8,7 @@ import no.runsafe.creativetoolbox.event.SyncInteractEvents;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.api.player.IPlayer;
+import no.runsafe.worldguardbridge.IRegionControl;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.awt.geom.Rectangle2D;
@@ -19,7 +20,7 @@ public class DeleteHereCommand extends PlayerAsyncCommand
 {
 	public DeleteHereCommand(
 		PlotFilter filter,
-		WorldGuardInterface worldGuard,
+		IRegionControl worldGuard,
 		PlotCalculator plotCalculator,
 		SyncInteractEvents interactEvents,
 		IScheduler scheduler, ApprovedPlotRepository approvedPlotRepository)
@@ -53,7 +54,7 @@ public class DeleteHereCommand extends PlayerAsyncCommand
 	}
 
 	private final PlotFilter filter;
-	private final WorldGuardInterface worldGuard;
+	private final IRegionControl worldGuard;
 	private final PlotCalculator plotCalculator;
 	private final SyncInteractEvents interactEvents;
 	private final ApprovedPlotRepository approvedPlotRepository;

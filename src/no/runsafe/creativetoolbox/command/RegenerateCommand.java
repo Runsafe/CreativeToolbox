@@ -11,6 +11,7 @@ import no.runsafe.framework.api.command.argument.EnumArgument;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.worldgenerator.PlotChunkGenerator;
+import no.runsafe.worldguardbridge.IRegionControl;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.awt.geom.Rectangle2D;
@@ -20,7 +21,7 @@ import java.util.Map;
 public class RegenerateCommand extends PlayerAsyncCommand
 {
 	public RegenerateCommand(
-		WorldGuardInterface worldGuard,
+		IRegionControl worldGuard,
 		PlotCalculator calculator,
 		PlotFilter filter,
 		SyncInteractEvents interactEvents,
@@ -80,7 +81,7 @@ public class RegenerateCommand extends PlayerAsyncCommand
 		return null;
 	}
 
-	private final WorldGuardInterface worldGuard;
+	private final IRegionControl worldGuard;
 	private final PlotCalculator plotCalculator;
 	private final PlotFilter filter;
 	private final SyncInteractEvents interactEvents;

@@ -7,6 +7,7 @@ import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.api.log.IDebug;
 import no.runsafe.framework.api.player.IPlayer;
+import no.runsafe.worldguardbridge.IRegionControl;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class SetEntranceCommand extends PlayerAsyncCommand
 		IDebug output,
 		PlotFilter filter,
 		IScheduler scheduler,
-		WorldGuardInterface worldGuard
+		IRegionControl worldGuard
 	)
 	{
 		super("setentrance", "define where users teleport to in a plot.", null, scheduler);
@@ -74,5 +75,5 @@ public class SetEntranceCommand extends PlayerAsyncCommand
 	private final PlotEntranceRepository repository;
 	private final IDebug debugger;
 	private final PlotFilter plotFilter;
-	private final WorldGuardInterface worldGuard;
+	private final IRegionControl worldGuard;
 }

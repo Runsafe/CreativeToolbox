@@ -13,6 +13,7 @@ import no.runsafe.framework.api.hook.IPlayerDataProvider;
 import no.runsafe.framework.api.log.IConsole;
 import no.runsafe.framework.api.log.IDebug;
 import no.runsafe.framework.api.player.IPlayer;
+import no.runsafe.worldguardbridge.IRegionControl;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
@@ -30,7 +31,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 {
 	public PlotManager(
 		PlotFilter plotFilter,
-		WorldGuardInterface worldGuardInterface,
+		IRegionControl worldGuardInterface,
 		PlotEntranceRepository plotEntranceRepository,
 		ApprovedPlotRepository approvedPlotRepository,
 		PlotVoteRepository voteRepository, PlotTagRepository tagRepository, PlotMemberRepository memberRepository, PlotCalculator plotCalculator,
@@ -518,7 +519,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 
 	private static final Duration BANNED = new Duration(Long.MAX_VALUE);
 	private final PlotFilter filter;
-	private final WorldGuardInterface worldGuard;
+	private final IRegionControl worldGuard;
 	private final PlotEntranceRepository plotEntrance;
 	private final ApprovedPlotRepository plotApproval;
 	private final PlotVoteRepository voteRepository;

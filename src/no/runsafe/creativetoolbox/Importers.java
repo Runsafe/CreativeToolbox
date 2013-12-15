@@ -10,13 +10,14 @@ import no.runsafe.framework.api.event.IServerReady;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.api.log.IConsole;
 import no.runsafe.framework.api.log.IDebug;
+import no.runsafe.worldguardbridge.IRegionControl;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.util.List;
 
 public class Importers implements IConfigurationChanged, IServerReady
 {
-	public Importers(PlotManager manager, WorldGuardInterface worldGuard, PlotLogRepository logRepository, IConsole console, IDebug debugger, PlotMemberRepository memberRepository, PlotEntranceRepository plotEntrance, PlotFilter plotFilter)
+	public Importers(PlotManager manager, IRegionControl worldGuard, PlotLogRepository logRepository, IConsole console, IDebug debugger, PlotMemberRepository memberRepository, PlotEntranceRepository plotEntrance, PlotFilter plotFilter)
 	{
 		this.manager = manager;
 		this.worldGuard = worldGuard;
@@ -115,7 +116,7 @@ public class Importers implements IConfigurationChanged, IServerReady
 	}
 
 	private final PlotManager manager;
-	private final WorldGuardInterface worldGuard;
+	private final IRegionControl worldGuard;
 	private final PlotLogRepository logRepository;
 	private final IConsole console;
 	private final IDebug debugger;

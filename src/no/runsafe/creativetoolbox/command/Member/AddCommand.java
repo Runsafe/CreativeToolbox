@@ -10,6 +10,7 @@ import no.runsafe.framework.api.command.argument.PlayerArgument;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.api.player.IAmbiguousPlayer;
 import no.runsafe.framework.api.player.IPlayer;
+import no.runsafe.worldguardbridge.IRegionControl;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.apache.commons.lang.StringUtils;
 
@@ -19,7 +20,7 @@ import java.util.Map;
 
 public class AddCommand extends PlayerAsyncCommand
 {
-	public AddCommand(IScheduler scheduler, PlotFilter filter, WorldGuardInterface worldGuard, PlotMemberRepository members, PlotMemberBlacklistRepository blacklistRepository, IServer server)
+	public AddCommand(IScheduler scheduler, PlotFilter filter, IRegionControl worldGuard, PlotMemberRepository members, PlotMemberBlacklistRepository blacklistRepository, IServer server)
 	{
 		super("add", "Add a member to the plot you are standing in", "runsafe.creative.member.add", scheduler, new PlayerArgument());
 		plotFilter = filter;
@@ -69,7 +70,7 @@ public class AddCommand extends PlayerAsyncCommand
 		return StringUtils.join(results, "\n");
 	}
 
-	private final WorldGuardInterface worldGuardInterface;
+	private final IRegionControl worldGuardInterface;
 	private final PlotFilter plotFilter;
 	private final PlotMemberRepository members;
 	private final PlotMemberBlacklistRepository blacklistRepository;

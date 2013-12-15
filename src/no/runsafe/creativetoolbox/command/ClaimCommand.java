@@ -10,6 +10,7 @@ import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.command.argument.OnlinePlayerArgument;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.api.player.IPlayer;
+import no.runsafe.worldguardbridge.IRegionControl;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.awt.geom.Rectangle2D;
@@ -19,7 +20,7 @@ import java.util.Map;
 public class ClaimCommand extends PlayerCommand
 {
 	public ClaimCommand(
-		PlotManager manager, PlotCalculator calculator, WorldGuardInterface worldGuard,
+		PlotManager manager, PlotCalculator calculator, IRegionControl worldGuard,
 		PlotMemberRepository members, ApprovedPlotRepository approvalRepository, IServer server)
 	{
 		super("claim", "Claims a plot", null, new OnlinePlayerArgument(false));
@@ -92,7 +93,7 @@ public class ClaimCommand extends PlayerCommand
 
 	private final PlotManager manager;
 	private final PlotCalculator calculator;
-	private final WorldGuardInterface worldGuard;
+	private final IRegionControl worldGuard;
 	private final PlotMemberRepository members;
 	private final ApprovedPlotRepository approvalRepository;
 	private final IServer server;

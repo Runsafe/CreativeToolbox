@@ -5,13 +5,14 @@ import no.runsafe.framework.api.IServer;
 import no.runsafe.framework.api.command.argument.ITabComplete;
 import no.runsafe.framework.api.command.argument.RequiredArgument;
 import no.runsafe.framework.api.player.IPlayer;
+import no.runsafe.worldguardbridge.IRegionControl;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.util.List;
 
 public class PlotArgument extends RequiredArgument implements ITabComplete
 {
-	public PlotArgument(PlotFilter filter, WorldGuardInterface worldGuard, IServer server)
+	public PlotArgument(PlotFilter filter, IRegionControl worldGuard, IServer server)
 	{
 		super("plotname");
 		this.filter = filter;
@@ -29,6 +30,6 @@ public class PlotArgument extends RequiredArgument implements ITabComplete
 	}
 
 	private final PlotFilter filter;
-	private final WorldGuardInterface worldGuard;
+	private final IRegionControl worldGuard;
 	private final IServer server;
 }

@@ -3,6 +3,7 @@ package no.runsafe.creativetoolbox;
 import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
+import no.runsafe.worldguardbridge.IRegionControl;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.joda.time.DateTime;
 
@@ -11,7 +12,7 @@ import java.util.List;
 
 public class PlotFilter implements IConfigurationChanged
 {
-	public PlotFilter(WorldGuardInterface worldGuard)
+	public PlotFilter(IRegionControl worldGuard)
 	{
 		this.worldGuard = worldGuard;
 	}
@@ -62,7 +63,7 @@ public class PlotFilter implements IConfigurationChanged
 	}
 
 	private List<String> filter;
-	private final WorldGuardInterface worldGuard;
+	private final IRegionControl worldGuard;
 	private List<String> filtered;
 	private DateTime filterCache;
 	private IWorld world;

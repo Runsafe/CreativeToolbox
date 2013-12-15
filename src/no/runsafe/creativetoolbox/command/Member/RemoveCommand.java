@@ -8,6 +8,7 @@ import no.runsafe.framework.api.IServer;
 import no.runsafe.framework.api.command.argument.PlayerArgument;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.api.player.IPlayer;
+import no.runsafe.worldguardbridge.IRegionControl;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.apache.commons.lang.StringUtils;
 
@@ -18,7 +19,7 @@ import java.util.Set;
 
 public class RemoveCommand extends PlayerAsyncCommand
 {
-	public RemoveCommand(IScheduler scheduler, PlotFilter filter, WorldGuardInterface worldGuard, PlotMemberRepository memberRepository, IServer server)
+	public RemoveCommand(IScheduler scheduler, PlotFilter filter, IRegionControl worldGuard, PlotMemberRepository memberRepository, IServer server)
 	{
 		super("remove", "Remove a member from the plot you are standing in.", "runsafe.creative.member.remove", scheduler, new PlayerArgument());
 		plotFilter = filter;
@@ -63,7 +64,7 @@ public class RemoveCommand extends PlayerAsyncCommand
 		return StringUtils.join(results, "\n");
 	}
 
-	private final WorldGuardInterface worldGuardInterface;
+	private final IRegionControl worldGuardInterface;
 	private final PlotFilter plotFilter;
 	private final PlotMemberRepository memberRepository;
 	private final IServer server;

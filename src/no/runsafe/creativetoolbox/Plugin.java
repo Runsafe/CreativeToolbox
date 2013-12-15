@@ -13,6 +13,9 @@ import no.runsafe.creativetoolbox.event.InteractEvents;
 import no.runsafe.creativetoolbox.event.SyncInteractEvents;
 import no.runsafe.framework.RunsafeConfigurablePlugin;
 import no.runsafe.framework.api.command.Command;
+import no.runsafe.framework.features.Commands;
+import no.runsafe.framework.features.Database;
+import no.runsafe.framework.features.Events;
 import no.runsafe.worldeditbridge.WorldEditInterface;
 import no.runsafe.worldgenerator.PlotChunkGenerator;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
@@ -22,10 +25,13 @@ public class Plugin extends RunsafeConfigurablePlugin
 	@Override
 	protected void PluginSetup()
 	{
+		// Framework features
+		addComponent(Commands.class);
+		addComponent(Database.class);
+		addComponent(Events.class);
+
+		// Plugin components
 		addComponent(ConfigurationManager.class);
-		addComponent(getFirstPluginAPI(WorldGuardInterface.class));
-		addComponent(getFirstPluginAPI(WorldEditInterface.class));
-		addComponent(getFirstPluginAPI(PlotChunkGenerator.class));
 		addComponent(PlotMemberRepository.class);
 		addComponent(PlotLogRepository.class);
 		addComponent(PlotFilter.class);
@@ -43,6 +49,7 @@ public class Plugin extends RunsafeConfigurablePlugin
 		addComponent(PlotArgument.class);
 		addComponent(CustomEvents.class);
 
+		// Commands
 		Command toolbox = new Command("creativetoolbox", "A collection of tools for use in a minecraft creative world.", null);
 		addComponent(toolbox);
 

@@ -15,6 +15,7 @@ import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.event.player.RunsafePlayerInteractEntityEvent;
 import no.runsafe.framework.minecraft.item.meta.RunsafeMeta;
+import no.runsafe.worldguardbridge.IRegionControl;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.apache.commons.lang.StringUtils;
 
@@ -26,7 +27,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 {
 	public InteractEvents(
 		PlotFilter plotFilter,
-		WorldGuardInterface worldGuard,
+		IRegionControl worldGuard,
 		PlotManager manager,
 		PlotTagRepository tagRepository, PlotLogRepository logRepository, IServer server)
 	{
@@ -170,7 +171,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 		}
 	}
 
-	private final WorldGuardInterface worldGuardInterface;
+	private final IRegionControl worldGuardInterface;
 	private int listItem;
 	private final PlotManager manager;
 	private final PlotFilter plotFilter;

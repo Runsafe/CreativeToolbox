@@ -7,6 +7,7 @@ import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.AsyncCommand;
 import no.runsafe.framework.api.command.ICommandExecutor;
 import no.runsafe.framework.api.player.IPlayer;
+import no.runsafe.worldguardbridge.IRegionControl;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class CheckApprovalCommand extends AsyncCommand
 	public CheckApprovalCommand(
 		ApprovedPlotRepository approvalRepository,
 		PlotFilter filter,
-		WorldGuardInterface worldGuard,
+		IRegionControl worldGuard,
 		IScheduler scheduler,
 		PlotArgument plotName
 	)
@@ -48,5 +49,5 @@ public class CheckApprovalCommand extends AsyncCommand
 
 	private final ApprovedPlotRepository repository;
 	private final PlotFilter plotFilter;
-	private final WorldGuardInterface worldGuardInterface;
+	private final IRegionControl worldGuardInterface;
 }

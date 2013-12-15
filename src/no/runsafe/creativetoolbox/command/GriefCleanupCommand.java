@@ -12,6 +12,7 @@ import no.runsafe.framework.api.log.IConsole;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.Item;
 import no.runsafe.worldeditbridge.WorldEditInterface;
+import no.runsafe.worldguardbridge.IRegionControl;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.apache.commons.lang.StringUtils;
 
@@ -21,7 +22,7 @@ import java.util.Map;
 
 public class GriefCleanupCommand extends PlayerCommand
 {
-	public GriefCleanupCommand(WorldGuardInterface worldGuard, WorldEditInterface worldEdit, PlotCalculator plotCalculator, PlotFilter filter, IConsole output)
+	public GriefCleanupCommand(IRegionControl worldGuard, WorldEditInterface worldEdit, PlotCalculator plotCalculator, PlotFilter filter, IConsole output)
 	{
 		super(
 			"griefcleanup", "Cleans up griefed plots.", "runsafe.creative.degrief",
@@ -135,7 +136,7 @@ public class GriefCleanupCommand extends PlayerCommand
 		return "Regenerated roads.";
 	}
 
-	private final WorldGuardInterface worldGuard;
+	private final IRegionControl worldGuard;
 	private final WorldEditInterface worldEdit;
 	private final PlotCalculator plotCalculator;
 	private final PlotFilter filter;
