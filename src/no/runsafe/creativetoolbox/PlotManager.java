@@ -55,6 +55,8 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 
 	public String getCurrentRegionFiltered(IPlayer player)
 	{
+		if (!world.equals(player.getWorld()))
+			return null;
 		List<String> regions = filter.apply(worldGuard.getRegionsAtLocation(player.getLocation()));
 		if (regions == null || regions.size() == 0)
 			return null;
