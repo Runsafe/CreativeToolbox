@@ -110,7 +110,7 @@ public class GriefCleanupCommand extends PlayerCommand
 					IBlock block = world.getBlockAt(x, y, z);
 					if (block.isAny(remove))
 					{
-						block.setMaterial(Item.Unavailable.Air);
+						block.set(Item.Unavailable.Air);
 						counter++;
 					}
 				}
