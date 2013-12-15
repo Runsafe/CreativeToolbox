@@ -14,7 +14,6 @@ import no.runsafe.framework.api.log.IConsole;
 import no.runsafe.framework.api.log.IDebug;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.worldguardbridge.IRegionControl;
-import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
@@ -435,10 +434,10 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 	private void CleanStaleData()
 	{
 		IWorld world = filter.getWorld();
-		if(world == null)
+		if (world == null)
 			debugger.debugFine("No world defined!");
 		Map<String, Rectangle2D> regions = worldGuard.getRegionRectanglesInWorld(world);
-		if(regions == null)
+		if (regions == null)
 			debugger.debugFine("No regions in world!");
 		Set<String> current = regions.keySet();
 
