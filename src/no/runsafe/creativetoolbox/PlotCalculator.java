@@ -107,11 +107,15 @@ public class PlotCalculator implements IConfigurationChanged
 
 	public ILocation getMinPosition(IWorld world, Rectangle2D area)
 	{
+		if (area == null)
+			return null;
 		return new RunsafeLocation(world, area.getMinX(), 0, area.getMinY());
 	}
 
 	public ILocation getMaxPosition(IWorld world, Rectangle2D area)
 	{
+		if (area == null)
+			return null;
 		return new RunsafeLocation(world, area.getMaxX(), world.getMaxHeight(), area.getMaxY());
 	}
 

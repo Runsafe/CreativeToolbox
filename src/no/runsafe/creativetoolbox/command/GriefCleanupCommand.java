@@ -13,7 +13,6 @@ import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.Item;
 import no.runsafe.worldeditbridge.WorldEditInterface;
 import no.runsafe.worldguardbridge.IRegionControl;
-import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.apache.commons.lang.StringUtils;
 
 import java.awt.geom.Rectangle2D;
@@ -39,6 +38,10 @@ public class GriefCleanupCommand extends PlayerCommand
 	public String OnExecute(IPlayer executor, Map<String, String> params)
 	{
 		Rectangle2D area = getArea(executor.getLocation());
+
+		if (area == null)
+			return "This does not appear to be a valid plot.";
+
 		String what = params.get("what");
 
 		output.logInformation("%s is running clean-up of '%s' at [%s]", executor.getName(), what, getRegionNameString(executor));
