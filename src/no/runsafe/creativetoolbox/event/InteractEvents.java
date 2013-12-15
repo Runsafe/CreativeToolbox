@@ -16,7 +16,6 @@ import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.event.player.RunsafePlayerInteractEntityEvent;
 import no.runsafe.framework.minecraft.item.meta.RunsafeMeta;
 import no.runsafe.worldguardbridge.IRegionControl;
-import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
@@ -42,6 +41,8 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 	@Override
 	public boolean OnPlayerRightClick(IPlayer player, RunsafeMeta itemInHand, IBlock block)
 	{
+		if (manager.isInWrongWorld(player))
+			return true;
 		if (extensions.containsKey(player.getName()))
 		{
 			String target = extensions.get(player.getName());
@@ -61,6 +62,8 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 	@Override
 	public void OnPlayerInteractEntityEvent(RunsafePlayerInteractEntityEvent event)
 	{
+		if (manager.isInWrongWorld(event.getPlayer()))
+			return;
 		if (event.getRightClicked() instanceof IPlayer && event.getPlayer().hasPermission("runsafe.creative.list"))
 		{
 			if (event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getItemId() == listItem)
