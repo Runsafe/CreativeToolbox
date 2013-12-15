@@ -16,6 +16,7 @@ import no.runsafe.framework.api.command.Command;
 import no.runsafe.framework.features.Commands;
 import no.runsafe.framework.features.Database;
 import no.runsafe.framework.features.Events;
+import no.runsafe.framework.features.FrameworkHooks;
 import no.runsafe.worldeditbridge.WorldEditInterface;
 import no.runsafe.worldgenerator.PlotChunkGenerator;
 import no.runsafe.worldguardbridge.WorldGuardInterface;
@@ -29,6 +30,7 @@ public class Plugin extends RunsafeConfigurablePlugin
 		addComponent(Commands.class);
 		addComponent(Database.class);
 		addComponent(Events.class);
+		addComponent(FrameworkHooks.class);
 
 		// Plugin components
 		addComponent(ConfigurationManager.class);
