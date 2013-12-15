@@ -35,6 +35,9 @@ public class ClaimCommand extends PlayerCommand
 	@Override
 	public String OnExecute(IPlayer executor, Map<String, String> params)
 	{
+		if (manager.isInWrongWorld(executor))
+			return "You cannot use that here.";
+
 		// Short circuit if executor wrote an invalid playername.
 		if (params.containsKey("player") && params.get("player").equals(OnlinePlayerArgument.Invalid))
 			return null;

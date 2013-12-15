@@ -21,6 +21,9 @@ public class ApprovePlotCommand extends PlayerAsyncCommand
 	@Override
 	public String OnAsyncExecute(IPlayer executor, Map<String, String> parameters)
 	{
+		if (manager.isInWrongWorld(executor))
+			return "You cannot use that here.";
+
 		String plot;
 		if (parameters.get("plotname").equals("."))
 			plot = manager.getCurrentRegionFiltered(executor);

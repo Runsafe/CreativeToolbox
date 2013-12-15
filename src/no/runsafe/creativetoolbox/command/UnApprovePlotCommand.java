@@ -9,7 +9,6 @@ import no.runsafe.framework.api.IServer;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.worldguardbridge.IRegionControl;
-import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.util.Map;
 
@@ -28,7 +27,12 @@ public class UnApprovePlotCommand extends PlayerAsyncCommand
 	{
 		String plot;
 		if (parameters.get("plotname").equals("."))
+		{
+			if (manager.isInWrongWorld(executor))
+				return "You cannot use that here.";
+
 			plot = manager.getCurrentRegionFiltered(executor);
+		}
 		else
 			plot = plotFilter.apply(parameters.get("plotname"));
 		if (plot == null)

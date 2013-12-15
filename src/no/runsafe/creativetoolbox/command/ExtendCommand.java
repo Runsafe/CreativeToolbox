@@ -19,6 +19,9 @@ public class ExtendCommand extends PlayerCommand
 	@Override
 	public String OnExecute(IPlayer player, Map<String, String> stringStringHashMap)
 	{
+		if (manager.isInWrongWorld(player))
+			return "You cannot use that here.";
+
 		String target = manager.getCurrentRegionFiltered(player);
 		if (target == null)
 			return "There is no plot defined here.";

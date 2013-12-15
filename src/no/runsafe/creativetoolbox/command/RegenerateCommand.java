@@ -2,6 +2,7 @@ package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotFilter;
+import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.creativetoolbox.event.SyncInteractEvents;
@@ -12,7 +13,6 @@ import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.worldgenerator.PlotChunkGenerator;
 import no.runsafe.worldguardbridge.IRegionControl;
-import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.awt.geom.Rectangle2D;
 import java.util.List;
@@ -26,7 +26,7 @@ public class RegenerateCommand extends PlayerAsyncCommand
 		PlotFilter filter,
 		SyncInteractEvents interactEvents,
 		IScheduler scheduler,
-		ApprovedPlotRepository approvedPlotRepository)
+		ApprovedPlotRepository approvedPlotRepository, PlotManager manager)
 	{
 		super(
 			"regenerate", "Regenerates the plot you are currently in.", "runsafe.creative.regenerate", scheduler,
@@ -37,11 +37,15 @@ public class RegenerateCommand extends PlayerAsyncCommand
 		plotCalculator = calculator;
 		this.interactEvents = interactEvents;
 		this.approvedPlotRepository = approvedPlotRepository;
+		this.manager = manager;
 	}
 
 	@Override
 	public String OnAsyncExecute(IPlayer executor, Map<String, String> parameters)
 	{
+		if (manager.isInWrongWorld(executor))
+			return "You cannot use that here.";
+
 		Rectangle2D area = getArea(executor.getLocation());
 		if (area == null)
 			return "No plot at this point.";
@@ -86,4 +90,5 @@ public class RegenerateCommand extends PlayerAsyncCommand
 	private final PlotFilter filter;
 	private final SyncInteractEvents interactEvents;
 	private final ApprovedPlotRepository approvedPlotRepository;
+	private final PlotManager manager;
 }

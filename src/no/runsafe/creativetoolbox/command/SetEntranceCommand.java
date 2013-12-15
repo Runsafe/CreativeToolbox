@@ -1,6 +1,7 @@
 package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.creativetoolbox.PlotFilter;
+import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.creativetoolbox.database.PlotEntrance;
 import no.runsafe.creativetoolbox.database.PlotEntranceRepository;
 import no.runsafe.framework.api.IScheduler;
@@ -8,7 +9,6 @@ import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.api.log.IDebug;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.worldguardbridge.IRegionControl;
-import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.util.List;
 import java.util.Map;
@@ -20,19 +20,23 @@ public class SetEntranceCommand extends PlayerAsyncCommand
 		IDebug output,
 		PlotFilter filter,
 		IScheduler scheduler,
-		IRegionControl worldGuard
-	)
+		IRegionControl worldGuard,
+		PlotManager manager)
 	{
 		super("setentrance", "define where users teleport to in a plot.", null, scheduler);
 		this.repository = repository;
 		this.debugger = output;
 		this.plotFilter = filter;
 		this.worldGuard = worldGuard;
+		this.manager = manager;
 	}
 
 	@Override
 	public String OnExecute(IPlayer executor, Map<String, String> parameters)
 	{
+		if (manager.isInWrongWorld(executor))
+			return "You cannot use that here.";
+
 		String currentRegion = getCurrentRegion(executor);
 		if (currentRegion == null)
 			return "No plot at your current location.";
@@ -76,4 +80,5 @@ public class SetEntranceCommand extends PlayerAsyncCommand
 	private final IDebug debugger;
 	private final PlotFilter plotFilter;
 	private final IRegionControl worldGuard;
+	private final PlotManager manager;
 }

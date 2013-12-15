@@ -1,5 +1,6 @@
 package no.runsafe.creativetoolbox.command;
 
+import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.api.entity.IEntity;
 import no.runsafe.framework.api.player.IPlayer;
@@ -19,7 +20,7 @@ public class ScanCommand extends PlayerCommand
 	{
 		HashMap<String, Integer> counts = new HashMap<String, Integer>();
 		int count = 0;
-		for (IEntity entity : executor.getWorld().getEntities())
+		for (IEntity entity : manager.getWorld().getEntities())
 		{
 			if (entity instanceof IPlayer)
 				continue;
@@ -35,4 +36,6 @@ public class ScanCommand extends PlayerCommand
 			results.append(String.format("  %s: %d.\n", name, counts.get(name)));
 		return results.toString();
 	}
+
+	private PlotManager manager;
 }

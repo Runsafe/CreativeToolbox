@@ -22,6 +22,8 @@ public class AddCommand extends PlayerAsyncCommand
 	@Override
 	public String OnAsyncExecute(IPlayer player, Map<String, String> params)
 	{
+		if (manager.isInWrongWorld(player))
+			return "You cannot use that here.";
 		String plot = manager.getCurrentRegionFiltered(player);
 		if (plot == null)
 			return "There is no plot here.";

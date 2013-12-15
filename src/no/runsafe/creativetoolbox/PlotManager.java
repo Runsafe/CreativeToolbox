@@ -378,6 +378,11 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		return world;
 	}
 
+	public boolean isInWrongWorld(IPlayer player)
+	{
+		return !world.equals(player.getWorld());
+	}
+
 	@Override
 	public void OnConfigurationChanged(IConfiguration config)
 	{

@@ -1,5 +1,6 @@
 package no.runsafe.creativetoolbox.command;
 
+import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.framework.api.command.argument.OptionalArgument;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.api.entity.IEntity;
@@ -10,10 +11,11 @@ import java.util.Map;
 
 public class CleanCommand extends PlayerCommand
 {
-	public CleanCommand(ConfigurationManager config)
+	public CleanCommand(ConfigurationManager config, PlotManager manager)
 	{
 		super("clean", "Remove items and mobs from the world", "runsafe.creative.clean", new OptionalArgument("filter"));
 		this.config = config;
+		this.manager = manager;
 	}
 
 	@Override
@@ -24,7 +26,7 @@ public class CleanCommand extends PlayerCommand
 		if (parameters.containsKey("filter"))
 			arguments = parameters.get("filter").split("\\s+");
 		int count = 0;
-		for (IEntity entity : executor.getWorld().getEntities())
+		for (IEntity entity : manager.getWorld().getEntities())
 		{
 			String name = entity.getEntityType().getName();
 			boolean clean = true;
@@ -69,4 +71,5 @@ public class CleanCommand extends PlayerCommand
 	}
 
 	private final ConfigurationManager config;
+	private final PlotManager manager;
 }

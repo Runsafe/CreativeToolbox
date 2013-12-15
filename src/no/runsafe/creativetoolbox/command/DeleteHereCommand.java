@@ -2,6 +2,7 @@ package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotFilter;
+import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.creativetoolbox.event.SyncInteractEvents;
@@ -19,13 +20,14 @@ import java.util.Map;
 public class DeleteHereCommand extends PlayerAsyncCommand
 {
 	public DeleteHereCommand(
-		PlotFilter filter,
+		PlotManager manager, PlotFilter filter,
 		IRegionControl worldGuard,
 		PlotCalculator plotCalculator,
 		SyncInteractEvents interactEvents,
 		IScheduler scheduler, ApprovedPlotRepository approvedPlotRepository)
 	{
 		super("deletehere", "delete the region you are in.", "runsafe.creative.delete", scheduler);
+		this.manager = manager;
 		this.filter = filter;
 		this.worldGuard = worldGuard;
 		this.plotCalculator = plotCalculator;
@@ -36,6 +38,8 @@ public class DeleteHereCommand extends PlayerAsyncCommand
 	@Override
 	public String OnAsyncExecute(IPlayer executor, Map<String, String> parameters)
 	{
+		if (manager.isInWrongWorld(executor))
+			return "You cannot use that here.";
 		List<String> delete = filter.apply(worldGuard.getRegionsAtLocation(executor.getLocation()));
 		if (delete == null || delete.size() == 0)
 			return "No regions to delete!";
@@ -53,6 +57,7 @@ public class DeleteHereCommand extends PlayerAsyncCommand
 		return String.format("Right click ground to confirm deletion of %d region%s.", regions.size(), regions.size() > 1 ? "s" : "");
 	}
 
+	private final PlotManager manager;
 	private final PlotFilter filter;
 	private final IRegionControl worldGuard;
 	private final PlotCalculator plotCalculator;

@@ -3,6 +3,7 @@ package no.runsafe.creativetoolbox.command;
 import com.google.common.collect.Lists;
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotFilter;
+import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.block.IBlock;
@@ -21,7 +22,7 @@ import java.util.Map;
 
 public class GriefCleanupCommand extends PlayerCommand
 {
-	public GriefCleanupCommand(IRegionControl worldGuard, WorldEditInterface worldEdit, PlotCalculator plotCalculator, PlotFilter filter, IConsole output)
+	public GriefCleanupCommand(IRegionControl worldGuard, WorldEditInterface worldEdit, PlotCalculator plotCalculator, PlotFilter filter, IConsole output, PlotManager manager)
 	{
 		super(
 			"griefcleanup", "Cleans up griefed plots.", "runsafe.creative.degrief",
@@ -32,11 +33,15 @@ public class GriefCleanupCommand extends PlayerCommand
 		this.plotCalculator = plotCalculator;
 		this.filter = filter;
 		this.output = output;
+		this.manager = manager;
 	}
 
 	@Override
 	public String OnExecute(IPlayer executor, Map<String, String> params)
 	{
+		if (manager.isInWrongWorld(executor))
+			return "You cannot use that here.";
+
 		Rectangle2D area = getArea(executor.getLocation());
 
 		if (area == null)
@@ -144,4 +149,5 @@ public class GriefCleanupCommand extends PlayerCommand
 	private final PlotCalculator plotCalculator;
 	private final PlotFilter filter;
 	private final IConsole output;
+	private final PlotManager manager;
 }
