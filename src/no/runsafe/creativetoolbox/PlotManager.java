@@ -63,8 +63,10 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 
 	public boolean isCurrentClaimable(IPlayer player)
 	{
+		if (!world.equals(player.getWorld()))
+			return false;
 		List<String> regions = worldGuard.getRegionsAtLocation(player.getLocation());
-		return ignoredRegions.containsAll(regions);
+		return regions == null || ignoredRegions.containsAll(regions);
 	}
 
 	public java.util.List<ILocation> getPlotEntrances()
