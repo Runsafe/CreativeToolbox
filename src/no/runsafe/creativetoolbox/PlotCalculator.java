@@ -4,7 +4,6 @@ import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
-import no.runsafe.framework.minecraft.RunsafeLocation;
 
 import java.awt.geom.Rectangle2D;
 import java.util.AbstractList;
@@ -102,21 +101,21 @@ public class PlotCalculator implements IConfigurationChanged
 			return null;
 		long x = (long) (getOriginX(column) + prototype.getWidth());
 		long y = (long) (getOriginY(row) + prototype.getHeight());
-		return new RunsafeLocation(world, x - 0.5, groundLevel, y - 0.5, FACING_MIDDLE, LOOKING_FORWARD);
+		return world.getLocation(x - 0.5, (double) groundLevel, y - 0.5, FACING_MIDDLE, LOOKING_FORWARD);
 	}
 
 	public ILocation getMinPosition(IWorld world, Rectangle2D area)
 	{
 		if (area == null)
 			return null;
-		return new RunsafeLocation(world, area.getMinX(), 0, area.getMinY());
+		return world.getLocation(area.getMinX(), 0.0, area.getMinY());
 	}
 
 	public ILocation getMaxPosition(IWorld world, Rectangle2D area)
 	{
 		if (area == null)
 			return null;
-		return new RunsafeLocation(world, area.getMaxX(), world.getMaxHeight(), area.getMaxY());
+		return world.getLocation(area.getMaxX(), (double) world.getMaxHeight(), area.getMaxY());
 	}
 
 	@Override
