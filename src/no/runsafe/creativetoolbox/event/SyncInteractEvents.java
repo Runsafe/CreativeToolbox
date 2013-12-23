@@ -135,6 +135,7 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 					ILocation minPos = calculator.getMinPosition(player.getWorld(), area);
 					ILocation maxPos = calculator.getMaxPosition(player.getWorld(), area);
 					manager.delete(player, region);
+					plotGenerator.setMode(PlotChunkGenerator.Mode.NORMAL);
 					worldEdit.regenerate(player, minPos, maxPos, false);
 					results.append(String.format("Deleted plot '%s'.", region));
 					console.logInformation(String.format("%s deleted plot %s", player.getName(), region));
