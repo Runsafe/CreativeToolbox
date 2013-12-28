@@ -11,9 +11,10 @@ import java.util.Map;
 
 public class ScanCommand extends PlayerCommand
 {
-	public ScanCommand()
+	public ScanCommand(PlotManager manager)
 	{
 		super("scan", "list number of items and mobs in world.", "runsafe.creative.scan.items");
+		this.manager = manager;
 	}
 
 	@Override
