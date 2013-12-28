@@ -34,8 +34,8 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		PlotEntranceRepository plotEntranceRepository,
 		ApprovedPlotRepository approvedPlotRepository,
 		PlotVoteRepository voteRepository, PlotTagRepository tagRepository, PlotMemberRepository memberRepository, PlotCalculator plotCalculator,
-		PlotMemberBlacklistRepository blackList, PlotList plotList, IConsole console,
-		IConsole console1, IDebug debugger, IServer server, PlotLogRepository plotLog)
+		PlotMemberBlacklistRepository blackList, PlotList plotList,
+		IConsole console, IDebug debugger, IServer server, PlotLogRepository plotLog)
 	{
 		filter = plotFilter;
 		worldGuard = worldGuardInterface;
@@ -47,7 +47,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		calculator = plotCalculator;
 		this.blackList = blackList;
 		this.plotList = plotList;
-		this.console = console1;
+		this.console = console;
 		this.debugger = debugger;
 		this.server = server;
 		this.plotLog = plotLog;
@@ -191,34 +191,9 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		return lastSeen.get(playerName);
 	}
 
-	public String getOldPlotPointer(IPlayer player)
-	{
-		if (oldPlotPointers.containsKey(player.getName()))
-			return oldPlotPointers.get(player.getName());
-		return null;
-	}
-
-	public void setOldPlotPointer(IPlayer player, String value)
-	{
-		oldPlotPointers.put(player.getName(), value);
-	}
-
-	public Map<String, String> getOldPlotWorkList(IPlayer player)
-	{
-		if (!oldPlotList.containsKey(player.getName()))
-			oldPlotList.put(player.getName(), getOldPlots());
-		return oldPlotList.get(player.getName());
-	}
-
-	public void clearOldPlotWorkList(IPlayer player)
-	{
-		if (oldPlotList.containsKey(player.getName()))
-			oldPlotList.remove(player.getName());
-	}
-
 	public boolean disallowVote(IPlayer player, String region)
 	{
-		return !player.getWorld().equals(world)
+		return !world.equals(player.getWorld())
 			|| (voteBlacklist.containsKey(region) && voteBlacklist.get(region).contains(player.getName().toLowerCase()))
 			|| worldGuard.getOwners(world, region).contains(player.getName().toLowerCase())
 			|| worldGuard.getMembers(world, region).contains(player.getName().toLowerCase());
@@ -291,7 +266,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 
 	public boolean claim(IPlayer claimer, IPlayer owner, String plotName, Rectangle2D region)
 	{
-		if (!claimer.getWorld().equals(world))
+		if (!world.equals(claimer.getWorld()))
 			return false;
 		if (worldGuard.createRegion(
 			owner, world, plotName,
@@ -317,7 +292,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 
 	public void extendPlot(IPlayer player, String target, ILocation location)
 	{
-		if (!player.getWorld().equals(world))
+		if (!world.equals(player.getWorld()))
 			return;
 
 		Rectangle2D area = worldGuard.getRectangle(world, target);
@@ -447,7 +422,10 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 			debugger.debugFine("No world defined!");
 		Map<String, Rectangle2D> regions = worldGuard.getRegionRectanglesInWorld(world);
 		if (regions == null)
+		{
 			debugger.debugFine("No regions in world!");
+			return;
+		}
 		Set<String> current = regions.keySet();
 
 		List<String> loggedPlots = plotLog.getPlots();
@@ -468,17 +446,17 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 				cleared++;
 			}
 
-		int membercleaned = memberRepository.cleanStaleData();
+		int cleaned = memberRepository.cleanStaleData();
 
 		for (IPlayer player : blackList.getBlacklist())
 		{
 			removeMember(player);
-			membercleaned++;
+			cleaned++;
 		}
 
 		console.logInformation(
 			"Deleted &a%d&r plots, cleared tags from &a%d&r deleted plots and &a%d&r members.",
-			deleted, cleared, membercleaned
+			deleted, cleared, cleaned
 		);
 	}
 

@@ -9,7 +9,6 @@ import no.runsafe.framework.api.command.argument.PlayerArgument;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.worldguardbridge.IRegionControl;
-import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
@@ -46,6 +45,7 @@ public class RemoveCommand extends PlayerAsyncCommand
 					if (member.toLowerCase().startsWith(parameters.get("player").toLowerCase()))
 					{
 						IPlayer target = server.getOfflinePlayerExact(member);
+						assert (target != null);
 						if (worldGuardInterface.removeMemberFromRegion(plotFilter.getWorld(), region, target))
 						{
 							memberRepository.removeMember(region, member);

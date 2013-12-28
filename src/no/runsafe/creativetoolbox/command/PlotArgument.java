@@ -6,7 +6,6 @@ import no.runsafe.framework.api.command.argument.ITabComplete;
 import no.runsafe.framework.api.command.argument.RequiredArgument;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.worldguardbridge.IRegionControl;
-import no.runsafe.worldguardbridge.WorldGuardInterface;
 
 import java.util.List;
 

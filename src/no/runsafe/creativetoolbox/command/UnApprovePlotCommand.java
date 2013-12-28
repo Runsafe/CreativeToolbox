@@ -46,7 +46,7 @@ public class UnApprovePlotCommand extends PlayerAsyncCommand
 		return String.format("The plot '%s' previously approved by %s has been unapproved.", plot, approved.getApprovedBy());
 	}
 
-	private PlotManager manager;
-	private PlotFilter plotFilter;
-	private ApprovedPlotRepository approval;
+	private final PlotManager manager;
+	private final PlotFilter plotFilter;
+	private final ApprovedPlotRepository approval;
 }

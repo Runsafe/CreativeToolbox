@@ -1,7 +1,6 @@
 package no.runsafe.creativetoolbox.command.Tag;
 
 import no.runsafe.creativetoolbox.PlotList;
-import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.creativetoolbox.database.PlotTagRepository;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.AsyncCommand;

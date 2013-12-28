@@ -24,6 +24,6 @@ public class ConfigurationManager implements IConfigurationChanged
 		return noClean;
 	}
 
-	int max_listed;
-	List<String> noClean;
+	private int max_listed;
+	private List<String> noClean;
 }

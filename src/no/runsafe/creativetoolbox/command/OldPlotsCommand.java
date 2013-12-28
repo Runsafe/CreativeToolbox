@@ -3,10 +3,8 @@ package no.runsafe.creativetoolbox.command;
 import com.google.common.collect.Lists;
 import no.runsafe.creativetoolbox.PlotList;
 import no.runsafe.creativetoolbox.PlotManager;
-import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
-import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.api.player.IPlayer;
 
 import java.util.Map;
@@ -24,11 +22,6 @@ public class OldPlotsCommand extends PlayerAsyncCommand
 	@Override
 	public String OnAsyncExecute(IPlayer executor, Map<String, String> parameters)
 	{
-		if (executor != null)
-		{
-			manager.clearOldPlotWorkList(executor);
-			manager.setOldPlotPointer(executor, null);
-		}
 		Map<String, String> hits = manager.getOldPlots();
 		int n = 0;
 		StringBuilder result = new StringBuilder();

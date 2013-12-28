@@ -43,5 +43,5 @@ public class ScanCommand extends PlayerCommand
 		return results.toString();
 	}
 
-	private PlotManager manager;
+	private final PlotManager manager;
 }

@@ -36,11 +36,11 @@ public class PlotList
 		{
 			if (list.getValue().contains(plot))
 			{
-				ArrayList<String> tmplist = Lists.newArrayList(list.getValue());
-				int i = tmplist.indexOf(plot);
-				tmplist.remove(plot);
-				lists.put(list.getKey(), tmplist);
-				pointer.put(list.getKey(), tmplist.get(i));
+				ArrayList<String> plots = Lists.newArrayList(list.getValue());
+				int i = plots.indexOf(plot);
+				plots.remove(plot);
+				lists.put(list.getKey(), plots);
+				pointer.put(list.getKey(), plots.get(i));
 			}
 		}
 	}

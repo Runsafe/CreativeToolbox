@@ -4,7 +4,6 @@ import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.worldguardbridge.IRegionControl;
-import no.runsafe.worldguardbridge.WorldGuardInterface;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;

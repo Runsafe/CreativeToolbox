@@ -68,8 +68,8 @@ public class JumpCommand extends PlayerAsyncCallbackCommand<JumpCommand.Sudo>
 		public String command;
 	}
 
-	private PlotFilter plotFilter;
-	private ApprovedPlotRepository approval;
-	private Random rng = new Random();
-	private PlotList plotList;
+	private final PlotFilter plotFilter;
+	private final ApprovedPlotRepository approval;
+	private final Random rng = new Random();
+	private final PlotList plotList;
 }
