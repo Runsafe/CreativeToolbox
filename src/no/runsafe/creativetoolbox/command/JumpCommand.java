@@ -36,7 +36,7 @@ public class JumpCommand extends PlayerAsyncCallbackCommand<JumpCommand.Sudo>
 		List<String> approved = approval.getApprovedPlots();
 		Sudo target = new Sudo();
 		target.player = executor;
-		if (params.get("kind").equals(JumpKinds.Approved.name().toLowerCase()))
+		if (JumpKinds.valueOf(params.get("kind")) == JumpKinds.Approved)
 		{
 			int r = rng.nextInt(approved.size());
 			plotList.set(executor, approved);
