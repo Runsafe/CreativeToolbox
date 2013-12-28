@@ -32,6 +32,7 @@ public class JumpCommand extends PlayerAsyncCallbackCommand<JumpCommand.Sudo>
 	@Override
 	public Sudo OnAsyncExecute(IPlayer executor, Map<String, String> params)
 	{
+		console.debugFine("Jumping to an %s plot", params.get("kind"));
 		List<String> approved = approval.getApprovedPlots();
 		Sudo target = new Sudo();
 		target.player = executor;
