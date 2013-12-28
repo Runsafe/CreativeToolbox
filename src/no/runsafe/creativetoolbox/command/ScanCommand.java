@@ -1,6 +1,7 @@
 package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.creativetoolbox.PlotManager;
+import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.api.entity.IEntity;
 import no.runsafe.framework.api.player.IPlayer;
@@ -19,8 +20,12 @@ public class ScanCommand extends PlayerCommand
 	public String OnExecute(IPlayer executor, Map<String, String> parameters)
 	{
 		HashMap<String, Integer> counts = new HashMap<String, Integer>();
+		IWorld world = manager.getWorld();
+		if (world == null)
+			return "Creative world not found!";
+
 		int count = 0;
-		for (IEntity entity : manager.getWorld().getEntities())
+		for (IEntity entity : world.getEntities())
 		{
 			if (entity instanceof IPlayer)
 				continue;
