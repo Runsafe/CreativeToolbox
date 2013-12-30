@@ -7,9 +7,10 @@ import no.runsafe.framework.minecraft.event.player.RunsafeCustomEvent;
 
 public class CustomEvents implements IPlayerCustomEvent
 {
-	public CustomEvents(IOutput output)
+	public CustomEvents(IOutput output, PlotManager manager)
 	{
 		this.output = output;
+		this.manager = manager;
 	}
 
 	@Override
