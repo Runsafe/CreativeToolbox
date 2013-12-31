@@ -20,7 +20,7 @@ public class PlotMemberBlacklistRepository extends Repository implements IConfig
 
 	public void add(ICommandExecutor player, IPlayer blacklisted)
 	{
-		database.Execute(
+		database.execute(
 			"INSERT INTO creative_blacklist (`player`,`by`,`time`) VALUES (?, ?, NOW())",
 			blacklisted.getName().toLowerCase(), player.getName()
 		);
@@ -33,7 +33,7 @@ public class PlotMemberBlacklistRepository extends Repository implements IConfig
 		if (blacklist.contains(playerName))
 			blacklist.remove(playerName);
 
-		database.Execute("DELETE FROM creative_blacklist WHERE `player`=?", playerName);
+		database.execute("DELETE FROM creative_blacklist WHERE `player`=?", playerName);
 	}
 
 	public boolean isBlacklisted(IPlayer player)
@@ -43,14 +43,14 @@ public class PlotMemberBlacklistRepository extends Repository implements IConfig
 
 	public List<IPlayer> getBlacklist()
 	{
-		return database.QueryPlayers("SELECT `player` FROM creative_blacklist");
+		return database.queryPlayers("SELECT `player` FROM creative_blacklist");
 	}
 
 	@Override
 	public void OnConfigurationChanged(IConfiguration iConfiguration)
 	{
 		blacklist.clear();
-		blacklist.addAll(database.QueryStrings("SELECT `player` FROM creative_blacklist"));
+		blacklist.addAll(database.queryStrings("SELECT `player` FROM creative_blacklist"));
 	}
 
 	@Override

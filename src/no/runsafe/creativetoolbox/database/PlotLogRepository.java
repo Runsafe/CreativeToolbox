@@ -18,24 +18,24 @@ public class PlotLogRepository extends Repository
 	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	public boolean log(String plot, String claimer)
 	{
-		return database.Execute("INSERT INTO `creative_plot_log` (`plot`,`claimer`,`claimed`) VALUES (?, ?, NOW())" +
+		return database.execute("INSERT INTO `creative_plot_log` (`plot`,`claimer`,`claimed`) VALUES (?, ?, NOW())" +
 			"ON DUPLICATE KEY UPDATE `claimer`=VALUES(`claimer`), `claimed`=VALUES(`claimed`)",
 			plot, claimer);
 	}
 
 	public void delete(String plot)
 	{
-		database.Execute("DELETE FROM `creative_plot_log` WHERE `plot`=?", plot);
+		database.execute("DELETE FROM `creative_plot_log` WHERE `plot`=?", plot);
 	}
 
 	public List<String> getPlots()
 	{
-		return database.QueryStrings("SELECT `plot` FROM `creative_plot_log`");
+		return database.queryStrings("SELECT `plot` FROM `creative_plot_log`");
 	}
 
 	public String getClaim(String plot)
 	{
-		IRow data = database.QueryRow("SELECT * FROM creative_plot_log WHERE `plot`=?", plot);
+		IRow data = database.queryRow("SELECT * FROM creative_plot_log WHERE `plot`=?", plot);
 		if (data.isEmpty())
 			return null;
 		return String.format("%s by %s", data.DateTime("claimed").toString("dd.MM.yyyy"), data.String("claimer"));

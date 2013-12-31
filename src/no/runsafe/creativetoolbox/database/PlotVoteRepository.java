@@ -19,7 +19,7 @@ public class PlotVoteRepository extends Repository
 
 	public boolean recordVote(IPlayer player, String plot)
 	{
-		return database.Update(
+		return database.update(
 			"INSERT INTO creative_plot_vote (`plot`, `player`, `rank`) VALUES (?, ?, ?)" +
 				"ON DUPLICATE KEY UPDATE rank=VALUES(`rank`)",
 			plot, player.getName(), StringUtils.join(player.getGroups(), ",")
@@ -28,12 +28,12 @@ public class PlotVoteRepository extends Repository
 
 	public void clear(String region)
 	{
-		database.Execute("DELETE FROM creative_plot_vote WHERE `plot`=?", region);
+		database.execute("DELETE FROM creative_plot_vote WHERE `plot`=?", region);
 	}
 
 	public int tally(String regionName)
 	{
-		Integer answer = database.QueryInteger("SELECT COUNT(*) AS tally FROM creative_plot_vote WHERE `plot`=?", regionName);
+		Integer answer = database.queryInteger("SELECT COUNT(*) AS tally FROM creative_plot_vote WHERE `plot`=?", regionName);
 		if (answer == null)
 			return 0;
 		return answer;
@@ -41,7 +41,7 @@ public class PlotVoteRepository extends Repository
 
 	public int tally(String region, Map<String, Integer> voteRanks)
 	{
-		List<String> votes = database.QueryStrings("SELECT `rank` FROM creative_plot_vote WHERE `plot`=?", region);
+		List<String> votes = database.queryStrings("SELECT `rank` FROM creative_plot_vote WHERE `plot`=?", region);
 		int tally = 0;
 		for (String vote : votes)
 			if (voteRanks.containsKey(vote.toLowerCase()))

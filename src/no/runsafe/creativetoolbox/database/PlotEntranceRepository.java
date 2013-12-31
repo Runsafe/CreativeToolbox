@@ -23,7 +23,7 @@ public class PlotEntranceRepository extends Repository implements IConfiguration
 		if (cache.containsKey(regionName.toLowerCase()))
 			return cache.get(regionName.toLowerCase());
 
-		ILocation entrance = database.QueryLocation(
+		ILocation entrance = database.queryLocation(
 			"SELECT ? AS world, e.* FROM creativetoolbox_plot_entrance AS e WHERE name=?",
 			world.getName(),
 			regionName
@@ -46,7 +46,7 @@ public class PlotEntranceRepository extends Repository implements IConfiguration
 	{
 		if (entrance.getLocation() == null || entrance.getName() == null)
 			return;
-		database.Update(
+		database.update(
 			"INSERT INTO creativetoolbox_plot_entrance (name, x, y, z, yaw, pitch) VALUES (?, ?, ?, ?, ?, ?)" +
 				"ON DUPLICATE KEY UPDATE x=VALUES(x), y=VALUES(y), z=VALUES(z), yaw=VALUES(yaw), pitch=VALUES(pitch)",
 			entrance.getName(),
@@ -66,14 +66,14 @@ public class PlotEntranceRepository extends Repository implements IConfiguration
 
 	public void delete(String region)
 	{
-		database.Execute("DELETE FROM creativetoolbox_plot_entrance WHERE name=?", region);
+		database.execute("DELETE FROM creativetoolbox_plot_entrance WHERE name=?", region);
 		if (cache.containsKey(region))
 			cache.remove(region);
 	}
 
 	public List<String> getPlots()
 	{
-		return database.QueryStrings("SELECT name FROM creativetoolbox_plot_entrance");
+		return database.queryStrings("SELECT name FROM creativetoolbox_plot_entrance");
 	}
 
 	@Override

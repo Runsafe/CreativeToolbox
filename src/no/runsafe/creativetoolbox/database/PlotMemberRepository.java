@@ -22,7 +22,7 @@ public class PlotMemberRepository extends Repository
 
 	public void addMember(String plot, String player, boolean isOwner)
 	{
-		database.Execute(
+		database.execute(
 			"INSERT INTO creative_plot_member (`plot`,`player`,`owner`) VALUES (?,?,?)" +
 				"ON DUPLICATE KEY UPDATE owner=VALUES(owner)",
 			plot, player, isOwner ? 1 : 0
@@ -31,7 +31,7 @@ public class PlotMemberRepository extends Repository
 
 	public void removeMember(String region, String member)
 	{
-		database.Execute("DELETE FROM creative_plot_member WHERE `plot`=? AND `player`=?", region, member);
+		database.execute("DELETE FROM creative_plot_member WHERE `plot`=? AND `player`=?", region, member);
 	}
 
 	public List<String> getMembers(String plot, boolean owners, boolean members)
@@ -40,9 +40,9 @@ public class PlotMemberRepository extends Repository
 			return null;
 
 		if (owners && members)
-			return database.QueryStrings("SELECT `player` FROM creative_plot_member WHERE plot=?", plot);
+			return database.queryStrings("SELECT `player` FROM creative_plot_member WHERE plot=?", plot);
 		else
-			return database.QueryStrings("SELECT `player` FROM creative_plot_member WHERE plot=? AND owner=?", plot, owners ? 1 : 0);
+			return database.queryStrings("SELECT `player` FROM creative_plot_member WHERE plot=? AND owner=?", plot, owners ? 1 : 0);
 	}
 
 	public List<String> getPlots(String player, boolean owner, boolean member)
@@ -51,14 +51,14 @@ public class PlotMemberRepository extends Repository
 			return null;
 
 		if (owner && member)
-			return database.QueryStrings("SELECT DISTINCT `plot` FROM creative_plot_member WHERE player=?", player);
+			return database.queryStrings("SELECT DISTINCT `plot` FROM creative_plot_member WHERE player=?", player);
 		else
-			return database.QueryStrings("SELECT DISTINCT `plot` FROM creative_plot_member WHERE player=? AND owner=?", player, owner ? 1 : 0);
+			return database.queryStrings("SELECT DISTINCT `plot` FROM creative_plot_member WHERE player=? AND owner=?", player, owner ? 1 : 0);
 	}
 
 	public int cleanStaleData()
 	{
-		return database.Update("DELETE FROM creative_plot_member WHERE `plot` NOT IN (SELECT `plot` FROM creative_plot_log)");
+		return database.update("DELETE FROM creative_plot_member WHERE `plot` NOT IN (SELECT `plot` FROM creative_plot_log)");
 	}
 
 	@Override

@@ -17,7 +17,7 @@ public class ApprovedPlotRepository extends Repository
 
 	public PlotApproval get(String plotName)
 	{
-		IRow data = database.QueryRow("SELECT name, approved, approved_by FROM creativetoolbox_plot_approval WHERE name=?", plotName);
+		IRow data = database.queryRow("SELECT name, approved, approved_by FROM creativetoolbox_plot_approval WHERE name=?", plotName);
 		if (data.isEmpty())
 			return null;
 
@@ -30,7 +30,7 @@ public class ApprovedPlotRepository extends Repository
 
 	public void persist(PlotApproval plotApproval)
 	{
-		database.Update(
+		database.update(
 			"INSERT INTO creativetoolbox_plot_approval (name, approved, approved_by) VALUES (?, ?, ?)" +
 				"ON DUPLICATE KEY UPDATE approved=VALUES(approved), approved_by=VALUES(approved_by)",
 			plotApproval.getName(), plotApproval.getApproved(), plotApproval.getApprovedBy()
@@ -39,12 +39,12 @@ public class ApprovedPlotRepository extends Repository
 
 	public void delete(PlotApproval plotApproval)
 	{
-		database.Execute("DELETE FROM creativetoolbox_plot_approval WHERE name=?", plotApproval.getName());
+		database.execute("DELETE FROM creativetoolbox_plot_approval WHERE name=?", plotApproval.getName());
 	}
 
 	public List<String> getApprovedPlots()
 	{
-		return database.QueryStrings("SELECT name FROM creativetoolbox_plot_approval");
+		return database.queryStrings("SELECT name FROM creativetoolbox_plot_approval");
 	}
 
 	@Override
