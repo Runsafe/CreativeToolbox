@@ -1,11 +1,10 @@
 package no.runsafe.creativetoolbox.database;
 
 import no.runsafe.framework.api.database.IDatabase;
+import no.runsafe.framework.api.database.ISchemaUpdate;
 import no.runsafe.framework.api.database.Repository;
+import no.runsafe.framework.api.database.SchemaUpdate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 public class PlotMemberRepository extends Repository
@@ -63,20 +62,20 @@ public class PlotMemberRepository extends Repository
 	}
 
 	@Override
-	public HashMap<Integer, List<String>> getSchemaUpdateQueries()
+	public ISchemaUpdate getSchemaUpdateQueries()
 	{
-		HashMap<Integer, List<String>> revisions = new LinkedHashMap<Integer, List<String>>(1);
-		List<String> sql = new ArrayList<String>();
-		sql.add(
+		ISchemaUpdate update = new SchemaUpdate();
+
+		update.addQueries(
 			"CREATE TABLE creative_plot_member (" +
 				"`plot` VARCHAR(250)," +
 				"`player` VARCHAR(250)," +
 				"`owner` INT," +
 				"PRIMARY KEY(`plot`,`player`)" +
-				");"
+			");"
 		);
-		revisions.put(1, sql);
-		return revisions;
+
+		return update;
 	}
 
 	private final IDatabase database;

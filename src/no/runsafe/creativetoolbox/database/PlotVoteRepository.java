@@ -1,7 +1,9 @@
 package no.runsafe.creativetoolbox.database;
 
 import no.runsafe.framework.api.database.IDatabase;
+import no.runsafe.framework.api.database.ISchemaUpdate;
 import no.runsafe.framework.api.database.Repository;
+import no.runsafe.framework.api.database.SchemaUpdate;
 import no.runsafe.framework.api.player.IPlayer;
 import org.apache.commons.lang.StringUtils;
 
@@ -53,20 +55,20 @@ public class PlotVoteRepository extends Repository
 	}
 
 	@Override
-	public HashMap<Integer, List<String>> getSchemaUpdateQueries()
+	public ISchemaUpdate getSchemaUpdateQueries()
 	{
-		HashMap<Integer, List<String>> revisions = new LinkedHashMap<Integer, List<String>>(1);
-		List<String> sql = new ArrayList<String>();
-		sql.add(
+		ISchemaUpdate update = new SchemaUpdate();
+
+		update.addQueries(
 			"CREATE TABLE creative_plot_vote (" +
 				"`plot` varchar(255) NOT NULL," +
 				"`player` varchar(255) NOT NULL," +
 				"`rank` varchar(255) NOT NULL," +
 				"PRIMARY KEY(`plot`,`player`)" +
-				")"
+			")"
 		);
-		revisions.put(1, sql);
-		return revisions;
+
+		return update;
 	}
 
 	private final IDatabase database;

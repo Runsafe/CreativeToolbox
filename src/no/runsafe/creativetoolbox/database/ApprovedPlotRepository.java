@@ -1,12 +1,7 @@
 package no.runsafe.creativetoolbox.database;
 
-import no.runsafe.framework.api.database.IDatabase;
-import no.runsafe.framework.api.database.IRow;
-import no.runsafe.framework.api.database.Repository;
+import no.runsafe.framework.api.database.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 public class ApprovedPlotRepository extends Repository
@@ -55,20 +50,20 @@ public class ApprovedPlotRepository extends Repository
 	}
 
 	@Override
-	public HashMap<Integer, List<String>> getSchemaUpdateQueries()
+	public ISchemaUpdate getSchemaUpdateQueries()
 	{
-		HashMap<Integer, List<String>> queries = new LinkedHashMap<Integer, List<String>>(1);
-		List<String> sql = new ArrayList<String>();
-		sql.add(
+		ISchemaUpdate update = new SchemaUpdate();
+
+		update.addQueries(
 			"CREATE TABLE creativetoolbox_plot_approval (" +
 				"`name` varchar(255) NOT NULL," +
 				"`approved` datetime NOT NULL," +
 				"`approved_by` varchar(255) NOT NULL," +
 				"PRIMARY KEY(`name`)" +
-				")"
+			")"
 		);
-		queries.put(1, sql);
-		return queries;
+
+		return update;
 	}
 
 	private final IDatabase database;
