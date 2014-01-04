@@ -65,7 +65,7 @@ public class PlotMemberRepository extends Repository
 	@Override
 	public HashMap<Integer, List<String>> getSchemaUpdateQueries()
 	{
-		HashMap<Integer, List<String>> revisions = new LinkedHashMap<Integer, List<String>>();
+		HashMap<Integer, List<String>> revisions = new LinkedHashMap<Integer, List<String>>(1);
 		List<String> sql = new ArrayList<String>();
 		sql.add(
 			"CREATE TABLE creative_plot_member (" +
