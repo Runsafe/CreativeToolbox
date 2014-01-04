@@ -5,6 +5,7 @@ import no.runsafe.framework.api.database.Repository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class PlotTagRepository extends Repository
@@ -58,7 +59,7 @@ public class PlotTagRepository extends Repository
 	@Override
 	public HashMap<Integer, List<String>> getSchemaUpdateQueries()
 	{
-		HashMap<Integer, List<String>> revisions = new HashMap<Integer, List<String>>();
+		HashMap<Integer, List<String>> revisions = new LinkedHashMap<Integer, List<String>>();
 		List<String> sql = new ArrayList<String>();
 		sql.add(
 			"CREATE TABLE creative_plot_tags (" +

@@ -9,6 +9,7 @@ import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class PlotEntranceRepository extends Repository implements IConfigurationChanged
@@ -91,7 +92,7 @@ public class PlotEntranceRepository extends Repository implements IConfiguration
 	@Override
 	public HashMap<Integer, List<String>> getSchemaUpdateQueries()
 	{
-		HashMap<Integer, List<String>> queries = new HashMap<Integer, List<String>>();
+		HashMap<Integer, List<String>> queries = new LinkedHashMap<Integer, List<String>>();
 		List<String> sql = new ArrayList<String>();
 		sql.add(
 			"CREATE TABLE creativetoolbox_plot_entrance (" +
