@@ -5,6 +5,7 @@ import no.runsafe.creativetoolbox.PlotList;
 import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.IServer;
+import no.runsafe.framework.api.command.argument.IArgumentList;
 import no.runsafe.framework.api.command.argument.PlayerArgument;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.api.player.IAmbiguousPlayer;
@@ -13,7 +14,6 @@ import no.runsafe.worldguardbridge.IRegionControl;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
-import java.util.Map;
 
 public class ListCommand extends PlayerAsyncCommand
 {
@@ -32,7 +32,7 @@ public class ListCommand extends PlayerAsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(IPlayer executor, Map<String, String> parameters)
+	public String OnAsyncExecute(IPlayer executor, IArgumentList parameters)
 	{
 		if (!worldGuard.serverHasWorldGuard())
 			return "Unable to find WorldGuard!";

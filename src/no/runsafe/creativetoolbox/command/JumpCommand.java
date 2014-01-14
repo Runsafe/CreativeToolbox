@@ -5,12 +5,12 @@ import no.runsafe.creativetoolbox.PlotList;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.argument.EnumArgument;
+import no.runsafe.framework.api.command.argument.IArgumentList;
 import no.runsafe.framework.api.command.player.PlayerAsyncCallbackCommand;
 import no.runsafe.framework.api.player.IPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 public class JumpCommand extends PlayerAsyncCallbackCommand<JumpCommand.Sudo>
@@ -30,7 +30,7 @@ public class JumpCommand extends PlayerAsyncCallbackCommand<JumpCommand.Sudo>
 	}
 
 	@Override
-	public Sudo OnAsyncExecute(IPlayer executor, Map<String, String> params)
+	public Sudo OnAsyncExecute(IPlayer executor, IArgumentList params)
 	{
 		console.debugFine("Jumping to an %s plot", params.get("kind"));
 		List<String> approved = approval.getApprovedPlots();

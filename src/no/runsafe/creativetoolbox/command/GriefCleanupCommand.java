@@ -8,6 +8,7 @@ import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.block.IBlock;
 import no.runsafe.framework.api.command.argument.EnumArgument;
+import no.runsafe.framework.api.command.argument.IArgumentList;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.api.log.IConsole;
 import no.runsafe.framework.api.player.IPlayer;
@@ -18,7 +19,6 @@ import org.apache.commons.lang.StringUtils;
 
 import java.awt.geom.Rectangle2D;
 import java.util.List;
-import java.util.Map;
 
 public class GriefCleanupCommand extends PlayerCommand
 {
@@ -37,7 +37,7 @@ public class GriefCleanupCommand extends PlayerCommand
 	}
 
 	@Override
-	public String OnExecute(IPlayer executor, Map<String, String> params)
+	public String OnExecute(IPlayer executor, IArgumentList params)
 	{
 		if (manager.isInWrongWorld(executor))
 			return "You cannot use that here.";

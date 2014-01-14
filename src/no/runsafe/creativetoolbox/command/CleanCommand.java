@@ -1,13 +1,13 @@
 package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.creativetoolbox.PlotManager;
+import no.runsafe.framework.api.command.argument.IArgumentList;
 import no.runsafe.framework.api.command.argument.OptionalArgument;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.api.entity.IEntity;
 import no.runsafe.framework.api.player.IPlayer;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class CleanCommand extends PlayerCommand
 {
@@ -19,7 +19,7 @@ public class CleanCommand extends PlayerCommand
 	}
 
 	@Override
-	public String OnExecute(IPlayer executor, Map<String, String> parameters)
+	public String OnExecute(IPlayer executor, IArgumentList parameters)
 	{
 		HashMap<String, Integer> counts = new HashMap<String, Integer>();
 		String[] arguments = new String[0];

@@ -6,26 +6,24 @@ import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.IServer;
 import no.runsafe.framework.api.command.AsyncCommand;
 import no.runsafe.framework.api.command.ICommandExecutor;
+import no.runsafe.framework.api.command.argument.IArgumentList;
 import no.runsafe.framework.api.command.argument.PlayerArgument;
 import no.runsafe.framework.api.player.IAmbiguousPlayer;
 import no.runsafe.framework.api.player.IPlayer;
 
-import java.util.Map;
-
 public class BlacklistCommand extends AsyncCommand
 {
-	public BlacklistCommand(PlotMemberBlacklistRepository blacklistRepository, PlotManager manager, IScheduler scheduler, IServer server)
+	public BlacklistCommand(PlotMemberBlacklistRepository blacklistRepository, PlotManager manager, IScheduler scheduler)
 	{
 		super("blacklist", "Blocks a certain player from being added to any additional creative plots", "runsafe.creative.blacklist", scheduler, new PlayerArgument());
 		this.blacklistRepository = blacklistRepository;
 		this.manager = manager;
-		this.server = server;
 	}
 
 	@Override
-	public String OnAsyncExecute(ICommandExecutor executor, Map<String, String> params)
+	public String OnAsyncExecute(ICommandExecutor executor, IArgumentList params)
 	{
-		IPlayer player = server.getPlayer(params.get("player"));
+		IPlayer player = params.getPlayer("player");
 		if (player == null)
 			return "&cUnable to locate player.";
 
@@ -42,5 +40,4 @@ public class BlacklistCommand extends AsyncCommand
 
 	private final PlotMemberBlacklistRepository blacklistRepository;
 	private final PlotManager manager;
-	private final IServer server;
 }

@@ -4,6 +4,7 @@ import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.framework.api.ILocation;
+import no.runsafe.framework.api.command.argument.IArgumentList;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.worldeditbridge.WorldEditInterface;
@@ -11,7 +12,6 @@ import no.runsafe.worldguardbridge.IRegionControl;
 
 import java.awt.geom.Rectangle2D;
 import java.util.List;
-import java.util.Map;
 
 public class SelectCommand extends PlayerCommand
 {
@@ -26,7 +26,7 @@ public class SelectCommand extends PlayerCommand
 	}
 
 	@Override
-	public String OnExecute(IPlayer executor, Map<String, String> parameters)
+	public String OnExecute(IPlayer executor, IArgumentList parameters)
 	{
 		if (manager.isInWrongWorld(executor))
 			return "You cannot use that here.";

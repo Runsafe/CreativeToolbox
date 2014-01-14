@@ -4,11 +4,11 @@ import no.runsafe.creativetoolbox.PlayerTeleport;
 import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.IScheduler;
+import no.runsafe.framework.api.command.argument.IArgumentList;
 import no.runsafe.framework.api.command.player.PlayerAsyncCallbackCommand;
 import no.runsafe.framework.api.player.IPlayer;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 public class FindFreePlotCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
@@ -23,7 +23,7 @@ public class FindFreePlotCommand extends PlayerAsyncCallbackCommand<PlayerTelepo
 	}
 
 	@Override
-	public PlayerTeleport OnAsyncExecute(IPlayer executor, Map<String, String> parameters)
+	public PlayerTeleport OnAsyncExecute(IPlayer executor, IArgumentList parameters)
 	{
 		PlayerTeleport target = new PlayerTeleport();
 		target.who = executor;

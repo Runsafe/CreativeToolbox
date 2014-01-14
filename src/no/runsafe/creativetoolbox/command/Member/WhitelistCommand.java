@@ -4,25 +4,23 @@ import no.runsafe.creativetoolbox.database.PlotMemberBlacklistRepository;
 import no.runsafe.framework.api.IServer;
 import no.runsafe.framework.api.command.ExecutableCommand;
 import no.runsafe.framework.api.command.ICommandExecutor;
+import no.runsafe.framework.api.command.argument.IArgumentList;
 import no.runsafe.framework.api.command.argument.PlayerArgument;
 import no.runsafe.framework.api.player.IAmbiguousPlayer;
 import no.runsafe.framework.api.player.IPlayer;
 
-import java.util.Map;
-
 public class WhitelistCommand extends ExecutableCommand
 {
-	public WhitelistCommand(PlotMemberBlacklistRepository blacklistRepository, IServer server)
+	public WhitelistCommand(PlotMemberBlacklistRepository blacklistRepository)
 	{
 		super("whitelist", "Removes a player from the membership blacklist.", "runsafe.creative.whitelist", new PlayerArgument());
 		this.blacklistRepository = blacklistRepository;
-		this.server = server;
 	}
 
 	@Override
-	public String OnExecute(ICommandExecutor executor, Map<String, String> params)
+	public String OnExecute(ICommandExecutor executor, IArgumentList params)
 	{
-		IPlayer player = server.getPlayer(params.get("player"));
+		IPlayer player = params.getPlayer("player");
 		if (player == null)
 			return "&cUnable to locate player.";
 
@@ -37,5 +35,4 @@ public class WhitelistCommand extends ExecutableCommand
 	}
 
 	private final PlotMemberBlacklistRepository blacklistRepository;
-	private final IServer server;
 }

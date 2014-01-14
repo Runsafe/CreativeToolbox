@@ -5,6 +5,7 @@ import no.runsafe.creativetoolbox.database.PlotMemberRepository;
 import no.runsafe.creativetoolbox.event.PlotMembershipRevokedEvent;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.IServer;
+import no.runsafe.framework.api.command.argument.IArgumentList;
 import no.runsafe.framework.api.command.argument.PlayerArgument;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.api.player.IPlayer;
@@ -13,7 +14,6 @@ import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class RemoveCommand extends PlayerAsyncCommand
@@ -28,7 +28,7 @@ public class RemoveCommand extends PlayerAsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(IPlayer executor, Map<String, String> parameters)
+	public String OnAsyncExecute(IPlayer executor, IArgumentList parameters)
 	{
 		List<String> targets = plotFilter.apply(worldGuardInterface.getRegionsAtLocation(executor.getLocation()));
 		if (targets == null || targets.isEmpty())

@@ -6,10 +6,9 @@ import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.IWorld;
+import no.runsafe.framework.api.command.argument.IArgumentList;
 import no.runsafe.framework.api.command.player.PlayerAsyncCallbackCommand;
 import no.runsafe.framework.api.player.IPlayer;
-
-import java.util.Map;
 
 public class PreviousCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
 {
@@ -21,7 +20,7 @@ public class PreviousCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
 	}
 
 	@Override
-	public PlayerTeleport OnAsyncExecute(IPlayer executor, Map<String, String> parameters)
+	public PlayerTeleport OnAsyncExecute(IPlayer executor, IArgumentList parameters)
 	{
 		PlayerTeleport target = new PlayerTeleport();
 		target.who = executor;

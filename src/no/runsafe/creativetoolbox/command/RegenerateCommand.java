@@ -9,6 +9,7 @@ import no.runsafe.creativetoolbox.event.SyncInteractEvents;
 import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.argument.EnumArgument;
+import no.runsafe.framework.api.command.argument.IArgumentList;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.worldgenerator.PlotChunkGenerator;
@@ -16,7 +17,6 @@ import no.runsafe.worldguardbridge.IRegionControl;
 
 import java.awt.geom.Rectangle2D;
 import java.util.List;
-import java.util.Map;
 
 public class RegenerateCommand extends PlayerAsyncCommand
 {
@@ -41,7 +41,7 @@ public class RegenerateCommand extends PlayerAsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(IPlayer executor, Map<String, String> parameters)
+	public String OnAsyncExecute(IPlayer executor, IArgumentList parameters)
 	{
 		if (manager.isInWrongWorld(executor))
 			return "You cannot use that here.";

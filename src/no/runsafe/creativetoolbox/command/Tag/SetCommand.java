@@ -4,12 +4,11 @@ import com.google.common.collect.Lists;
 import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.creativetoolbox.database.PlotTagRepository;
 import no.runsafe.framework.api.IScheduler;
+import no.runsafe.framework.api.command.argument.IArgumentList;
 import no.runsafe.framework.api.command.argument.TrailingArgument;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.text.ChatColour;
-
-import java.util.Map;
 
 public class SetCommand extends PlayerAsyncCommand
 {
@@ -21,7 +20,7 @@ public class SetCommand extends PlayerAsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(IPlayer player, Map<String, String> param)
+	public String OnAsyncExecute(IPlayer player, IArgumentList param)
 	{
 		if (manager.isInWrongWorld(player))
 			return "You cannot use that here.";

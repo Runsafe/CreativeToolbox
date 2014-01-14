@@ -3,12 +3,12 @@ package no.runsafe.creativetoolbox.command;
 import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.database.PlotTagRepository;
 import no.runsafe.framework.api.IScheduler;
+import no.runsafe.framework.api.command.argument.IArgumentList;
 import no.runsafe.framework.api.command.argument.OptionalArgument;
 import no.runsafe.framework.api.command.player.PlayerAsyncCallbackCommand;
 import no.runsafe.framework.api.player.IPlayer;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 public class RandomPlotCommand extends PlayerAsyncCallbackCommand<RandomPlotCommand.Sudo>
@@ -22,7 +22,7 @@ public class RandomPlotCommand extends PlayerAsyncCallbackCommand<RandomPlotComm
 	}
 
 	@Override
-	public Sudo OnAsyncExecute(IPlayer executor, Map<String, String> parameters)
+	public Sudo OnAsyncExecute(IPlayer executor, IArgumentList parameters)
 	{
 		if (plotFilter.getWorld() == null)
 			return null;

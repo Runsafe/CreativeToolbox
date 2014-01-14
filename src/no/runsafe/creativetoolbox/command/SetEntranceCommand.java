@@ -5,13 +5,13 @@ import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.creativetoolbox.database.PlotEntrance;
 import no.runsafe.creativetoolbox.database.PlotEntranceRepository;
 import no.runsafe.framework.api.IScheduler;
+import no.runsafe.framework.api.command.argument.IArgumentList;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.api.log.IDebug;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.worldguardbridge.IRegionControl;
 
 import java.util.List;
-import java.util.Map;
 
 public class SetEntranceCommand extends PlayerAsyncCommand
 {
@@ -32,7 +32,7 @@ public class SetEntranceCommand extends PlayerAsyncCommand
 	}
 
 	@Override
-	public String OnExecute(IPlayer executor, Map<String, String> parameters)
+	public String OnExecute(IPlayer executor, IArgumentList parameters)
 	{
 		if (manager.isInWrongWorld(executor))
 			return "You cannot use that here.";
@@ -50,7 +50,7 @@ public class SetEntranceCommand extends PlayerAsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(IPlayer executor, Map<String, String> parameters)
+	public String OnAsyncExecute(IPlayer executor, IArgumentList parameters)
 	{
 		String currentRegion = getCurrentRegion(executor);
 		if (currentRegion == null)

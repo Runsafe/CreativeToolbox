@@ -6,11 +6,10 @@ import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.IServer;
+import no.runsafe.framework.api.command.argument.IArgumentList;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.worldguardbridge.IRegionControl;
-
-import java.util.Map;
 
 public class UnApprovePlotCommand extends PlayerAsyncCommand
 {
@@ -23,7 +22,7 @@ public class UnApprovePlotCommand extends PlayerAsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(IPlayer executor, Map<String, String> parameters)
+	public String OnAsyncExecute(IPlayer executor, IArgumentList parameters)
 	{
 		String plot;
 		if (parameters.get("plotname").equals("."))

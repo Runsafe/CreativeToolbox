@@ -5,12 +5,12 @@ import no.runsafe.creativetoolbox.database.PlotTagRepository;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.AsyncCommand;
 import no.runsafe.framework.api.command.ICommandExecutor;
+import no.runsafe.framework.api.command.argument.IArgumentList;
 import no.runsafe.framework.api.command.argument.RequiredArgument;
 import no.runsafe.framework.api.player.IPlayer;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
-import java.util.Map;
 
 public class FindCommand extends AsyncCommand
 {
@@ -22,7 +22,7 @@ public class FindCommand extends AsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(ICommandExecutor executor, Map<String, String> param)
+	public String OnAsyncExecute(ICommandExecutor executor, IArgumentList param)
 	{
 		List<String> hits = tagRepository.findPlots(param.get("lookup"));
 		if (hits.isEmpty())

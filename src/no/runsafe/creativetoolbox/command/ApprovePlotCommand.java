@@ -4,10 +4,9 @@ import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.framework.api.IScheduler;
+import no.runsafe.framework.api.command.argument.IArgumentList;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.api.player.IPlayer;
-
-import java.util.Map;
 
 public class ApprovePlotCommand extends PlayerAsyncCommand
 {
@@ -19,7 +18,7 @@ public class ApprovePlotCommand extends PlayerAsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(IPlayer executor, Map<String, String> parameters)
+	public String OnAsyncExecute(IPlayer executor, IArgumentList parameters)
 	{
 		if (manager.isInWrongWorld(executor))
 			return "You cannot use that here.";

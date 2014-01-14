@@ -6,11 +6,11 @@ import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.AsyncCommand;
 import no.runsafe.framework.api.command.ICommandExecutor;
+import no.runsafe.framework.api.command.argument.IArgumentList;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.worldguardbridge.IRegionControl;
 
 import java.util.List;
-import java.util.Map;
 
 public class CheckApprovalCommand extends AsyncCommand
 {
@@ -29,7 +29,7 @@ public class CheckApprovalCommand extends AsyncCommand
 	}
 
 	@Override
-	public String OnAsyncExecute(ICommandExecutor executor, Map<String, String> parameters)
+	public String OnAsyncExecute(ICommandExecutor executor, IArgumentList parameters)
 	{
 		String plot = parameters.get("plotname");
 		if (plot.equals(".") && executor instanceof IPlayer)
