@@ -3,11 +3,10 @@ package no.runsafe.creativetoolbox.command.Member;
 import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.creativetoolbox.database.PlotMemberBlacklistRepository;
 import no.runsafe.framework.api.IScheduler;
-import no.runsafe.framework.api.IServer;
 import no.runsafe.framework.api.command.AsyncCommand;
 import no.runsafe.framework.api.command.ICommandExecutor;
+import no.runsafe.framework.api.command.argument.AnyPlayerRequired;
 import no.runsafe.framework.api.command.argument.IArgumentList;
-import no.runsafe.framework.api.command.argument.PlayerArgument;
 import no.runsafe.framework.api.player.IAmbiguousPlayer;
 import no.runsafe.framework.api.player.IPlayer;
 
@@ -15,7 +14,7 @@ public class BlacklistCommand extends AsyncCommand
 {
 	public BlacklistCommand(PlotMemberBlacklistRepository blacklistRepository, PlotManager manager, IScheduler scheduler)
 	{
-		super("blacklist", "Blocks a certain player from being added to any additional creative plots", "runsafe.creative.blacklist", scheduler, new PlayerArgument());
+		super("blacklist", "Blocks a certain player from being added to any additional creative plots", "runsafe.creative.blacklist", scheduler, new AnyPlayerRequired());
 		this.blacklistRepository = blacklistRepository;
 		this.manager = manager;
 	}

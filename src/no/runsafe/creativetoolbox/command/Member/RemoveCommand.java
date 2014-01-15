@@ -5,8 +5,8 @@ import no.runsafe.creativetoolbox.database.PlotMemberRepository;
 import no.runsafe.creativetoolbox.event.PlotMembershipRevokedEvent;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.IServer;
+import no.runsafe.framework.api.command.argument.AnyPlayerRequired;
 import no.runsafe.framework.api.command.argument.IArgumentList;
-import no.runsafe.framework.api.command.argument.PlayerArgument;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.worldguardbridge.IRegionControl;
@@ -20,7 +20,7 @@ public class RemoveCommand extends PlayerAsyncCommand
 {
 	public RemoveCommand(IScheduler scheduler, PlotFilter filter, IRegionControl worldGuard, PlotMemberRepository memberRepository, IServer server)
 	{
-		super("remove", "Remove a member from the plot you are standing in.", "runsafe.creative.member.remove", scheduler, new PlayerArgument());
+		super("remove", "Remove a member from the plot you are standing in.", "runsafe.creative.member.remove", scheduler, new AnyPlayerRequired());
 		plotFilter = filter;
 		worldGuardInterface = worldGuard;
 		this.memberRepository = memberRepository;

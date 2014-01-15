@@ -6,7 +6,7 @@ import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.IServer;
 import no.runsafe.framework.api.command.argument.IArgumentList;
-import no.runsafe.framework.api.command.argument.PlayerArgument;
+import no.runsafe.framework.api.command.argument.SelfOrAnyPlayer;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.api.player.IAmbiguousPlayer;
 import no.runsafe.framework.api.player.IPlayer;
@@ -23,7 +23,7 @@ public class ListCommand extends PlayerAsyncCommand
 		PlotFilter filter,
 		IScheduler scheduler, PlotManager manager, PlotList plotList)
 	{
-		super("list", "lists plots owned by a player.", "runsafe.creative.list", scheduler, new PlayerArgument());
+		super("list", "lists plots owned by a player.", "runsafe.creative.list", scheduler, new SelfOrAnyPlayer());
 		this.server = server;
 		this.worldGuard = worldGuard;
 		this.filter = filter;
