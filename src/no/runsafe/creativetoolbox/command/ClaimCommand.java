@@ -8,7 +8,7 @@ import no.runsafe.creativetoolbox.database.PlotMemberRepository;
 import no.runsafe.framework.api.IServer;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.command.argument.IArgumentList;
-import no.runsafe.framework.api.command.argument.OnlinePlayerOptional;
+import no.runsafe.framework.api.command.argument.SelfOrOnlinePlayer;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.worldguardbridge.IRegionControl;
@@ -22,7 +22,7 @@ public class ClaimCommand extends PlayerCommand
 		PlotManager manager, PlotCalculator calculator, IRegionControl worldGuard,
 		PlotMemberRepository members, ApprovedPlotRepository approvalRepository, IServer server)
 	{
-		super("claim", "Claims a plot", null, new OnlinePlayerOptional());
+		super("claim", "Claims a plot", null, new SelfOrOnlinePlayer());
 		this.manager = manager;
 		this.calculator = calculator;
 		this.worldGuard = worldGuard;
@@ -49,18 +49,16 @@ public class ClaimCommand extends PlayerCommand
 			return "You need to stand in a plot to use this command.";
 
 		IWorld world = executor.getWorld();
-		IPlayer owner = params.containsKey("player") ? server.getOfflinePlayerExact(params.get("player")) : null;
-
-
-		if (owner != null && !executor.hasPermission("runsafe.creative.claim"))
-			return "You can only claim plots for yourself.";
-
+		IPlayer owner = params.getPlayer("player");
 		if (owner == null)
-			owner = executor;
+			return null;
+		boolean selfClaim = owner.getName().equals(executor.getName());
+		if (!(executor.hasPermission("runsafe.creative.claim") || selfClaim))
+			return "You can only claim plots for yourself.";
 
 		List<String> existing = worldGuard.getOwnedRegions(owner, world);
 		console.debugFine("%s has %d plots.", owner, existing.size());
-		if (!existing.isEmpty() && executor.getName().equals(owner.getName()))
+		if (!existing.isEmpty() && selfClaim)
 		{
 			for (String plot : existing)
 			{
