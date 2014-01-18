@@ -8,7 +8,7 @@ import no.runsafe.creativetoolbox.database.PlotMemberRepository;
 import no.runsafe.framework.api.IServer;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.command.argument.IArgumentList;
-import no.runsafe.framework.api.command.argument.OnlinePlayerArgument;
+import no.runsafe.framework.api.command.argument.OnlinePlayerOptional;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.worldguardbridge.IRegionControl;
@@ -22,7 +22,7 @@ public class ClaimCommand extends PlayerCommand
 		PlotManager manager, PlotCalculator calculator, IRegionControl worldGuard,
 		PlotMemberRepository members, ApprovedPlotRepository approvalRepository, IServer server)
 	{
-		super("claim", "Claims a plot", null, new OnlinePlayerArgument(false));
+		super("claim", "Claims a plot", null, new OnlinePlayerOptional());
 		this.manager = manager;
 		this.calculator = calculator;
 		this.worldGuard = worldGuard;
@@ -36,10 +36,6 @@ public class ClaimCommand extends PlayerCommand
 	{
 		if (manager.isInWrongWorld(executor))
 			return "You cannot use that here.";
-
-		// Short circuit if executor wrote an invalid playername.
-		if (params.containsKey("player") && params.get("player").equals(OnlinePlayerArgument.Invalid))
-			return null;
 
 		String current = manager.getCurrentRegionFiltered(executor);
 		if (current != null)

@@ -1,6 +1,5 @@
 package no.runsafe.creativetoolbox.command;
 
-import com.google.common.collect.Lists;
 import no.runsafe.creativetoolbox.PlotCalculator;
 import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.PlotManager;
@@ -26,7 +25,7 @@ public class GriefCleanupCommand extends PlayerCommand
 	{
 		super(
 			"griefcleanup", "Cleans up griefed plots.", "runsafe.creative.degrief",
-			new EnumArgument("what", Lists.newArrayList("road", "lava", "water", "cobblestone", "obsidian", "all"), true)
+			new EnumArgument("what", Target.values(), true)
 		);
 		this.worldEdit = worldEdit;
 		this.worldGuard = worldGuard;
@@ -34,6 +33,11 @@ public class GriefCleanupCommand extends PlayerCommand
 		this.filter = filter;
 		this.output = output;
 		this.manager = manager;
+	}
+
+	public enum Target
+	{
+		Road, Lava, Water, Cobblestone, Obsidian, All
 	}
 
 	@Override
@@ -47,34 +51,31 @@ public class GriefCleanupCommand extends PlayerCommand
 		if (area == null)
 			return "This does not appear to be a valid plot.";
 
-		String what = params.get("what");
-
+		Target what = (Target) params.getEnum("what");
 		output.logInformation("%s is running clean-up of '%s' at [%s]", executor.getName(), what, getRegionNameString(executor));
 
-		if (what.equals("road"))
-			return regeneratePadding(executor, area);
-
-		if (what.equals("lava"))
-			return cleanup(executor, area, Item.Unavailable.Lava, Item.Unavailable.StationaryLava);
-
-		if (what.equals("water"))
-			return cleanup(executor, area, Item.Unavailable.Water, Item.Unavailable.StationaryWater);
-
-		if (what.equals("cobblestone"))
-			return cleanup(executor, area, Item.BuildingBlock.Cobblestone);
-
-		if (what.equals("obsidian"))
-			return cleanup(executor, area, Item.BuildingBlock.Obsidian);
-
-		if (what.equals("all"))
-			return cleanup(executor, area,
-				Item.Unavailable.Lava, Item.Unavailable.StationaryLava,
-				Item.Unavailable.Water, Item.Unavailable.StationaryWater,
-				Item.BuildingBlock.Cobblestone,
-				Item.BuildingBlock.Obsidian
-			);
-
-		return String.format("Unsupported argument \"%s\"", what);
+		if (what != null)
+			switch (what)
+			{
+				case Road:
+					return regeneratePadding(executor, area);
+				case Lava:
+					return cleanup(executor, area, Item.Unavailable.Lava, Item.Unavailable.StationaryLava);
+				case Water:
+					return cleanup(executor, area, Item.Unavailable.Water, Item.Unavailable.StationaryWater);
+				case Cobblestone:
+					return cleanup(executor, area, Item.BuildingBlock.Cobblestone);
+				case Obsidian:
+					return cleanup(executor, area, Item.BuildingBlock.Obsidian);
+				case All:
+					return cleanup(executor, area,
+						Item.Unavailable.Lava, Item.Unavailable.StationaryLava,
+						Item.Unavailable.Water, Item.Unavailable.StationaryWater,
+						Item.BuildingBlock.Cobblestone,
+						Item.BuildingBlock.Obsidian
+					);
+			}
+		return null;
 	}
 
 	private Rectangle2D getArea(ILocation location)
