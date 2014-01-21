@@ -22,7 +22,7 @@ public class ClaimCommand extends PlayerCommand
 		PlotManager manager, PlotCalculator calculator, IRegionControl worldGuard,
 		PlotMemberRepository members, ApprovedPlotRepository approvalRepository, IServer server)
 	{
-		super("claim", "Claims a plot", null, new SelfOrOnlinePlayer());
+		super("claim", "Claims a plot", "runsafe.creative.claim.self", new SelfOrOnlinePlayer());
 		this.manager = manager;
 		this.calculator = calculator;
 		this.worldGuard = worldGuard;
@@ -53,7 +53,7 @@ public class ClaimCommand extends PlayerCommand
 		if (owner == null)
 			return null;
 		boolean selfClaim = owner.getName().equals(executor.getName());
-		if (!(executor.hasPermission("runsafe.creative.claim") || selfClaim))
+		if (!(executor.hasPermission("runsafe.creative.claim.others") || selfClaim))
 			return "You can only claim plots for yourself.";
 
 		List<String> existing = worldGuard.getOwnedRegions(owner, world);

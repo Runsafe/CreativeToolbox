@@ -32,8 +32,18 @@ public class PlotClaimResponder implements IChatResponseTrigger
 	public String getResponse(String playerName, Matcher message)
 	{
 		IPlayer player = server.getPlayerExact(playerName);
-		if (player == null || player.hasPermission("runsafe.creative.claim"))
+		if (player == null || player.hasPermission("runsafe.creative.claim.others"))
 			return null;
+
+		if (!player.hasPermission("runsafe.creative.claim.self"))
+		{
+			List<IPlayer> onlineStaff = server.getPlayersWithPermission("runsafe.creative.claim.others");
+			for (IPlayer staff : onlineStaff)
+				if (!player.shouldNotSee(staff))
+					return String.format("First you will need permission to build, %s - I am sure %s would help you out!", playerName, staff.getName());
+
+			return String.format("Sorry, %s, but there are no staff online now to give you permission. Please come back a little later!", playerName);
+		}
 
 		List<String> existing = worldGuard.getOwnedRegions(player, manager.getWorld());
 		debug.debugFine("%s has %d plots.", playerName, existing.size());
