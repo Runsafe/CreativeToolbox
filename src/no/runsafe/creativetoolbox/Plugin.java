@@ -1,5 +1,6 @@
 package no.runsafe.creativetoolbox;
 
+import no.runsafe.creativetoolbox.ai.PlotClaimResponder;
 import no.runsafe.creativetoolbox.command.*;
 import no.runsafe.creativetoolbox.command.Member.BlacklistCommand;
 import no.runsafe.creativetoolbox.command.Member.RemoveCommand;
@@ -47,6 +48,9 @@ public class Plugin extends RunsafeConfigurablePlugin
 		addComponent(Importers.class);
 		addComponent(PlotArgument.class);
 		addComponent(CustomEvents.class);
+
+		// Chat responder
+		addComponent(PlotClaimResponder.class);
 
 		// Commands
 		Command toolbox = new Command("creativetoolbox", "A collection of tools for use in a minecraft creative world.", null);
