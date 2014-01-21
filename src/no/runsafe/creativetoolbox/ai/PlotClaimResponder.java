@@ -36,7 +36,7 @@ public class PlotClaimResponder implements IChatResponseTrigger
 			return null;
 
 		List<String> existing = worldGuard.getOwnedRegions(player, manager.getWorld());
-		debug.debugFine("%s has %d plots.", player, existing.size());
+		debug.debugFine("%s has %d plots.", playerName, existing.size());
 		if (!existing.isEmpty())
 		{
 			for (String plot : existing)
@@ -44,16 +44,16 @@ public class PlotClaimResponder implements IChatResponseTrigger
 				PlotApproval approved = approvalRepository.get(plot);
 				debug.debugFine("Plot %s is %s.", plot, approved != null ? "approved" : "unapproved");
 				if (approved == null)
-					return String.format("You must either get all your plots approved, or ask a member of staff to grant you a plot, %s.", player);
+					return String.format("You must either get all your plots approved, or ask a member of staff to grant you a plot, %s.", playerName);
 			}
 		}
 
 		boolean claimable = manager.isCurrentClaimable(player);
 		Rectangle2D region = calculator.getPlotArea(player.getLocation());
 		if (!claimable || region  == null)
-			return String.format("First you need a free plot, %s, use /ct f to find one! Once there, please use /ct claim.", player);
+			return String.format("First you need a free plot, %s, use /ct f to find one! Once there, please use /ct claim.", playerName);
 
-		return String.format("You can claim the plot you are in now, %s; just type /ct claim!", player);
+		return String.format("You can claim the plot you are in now, %s; just type /ct claim!", playerName);
 	}
 
 	@Override
