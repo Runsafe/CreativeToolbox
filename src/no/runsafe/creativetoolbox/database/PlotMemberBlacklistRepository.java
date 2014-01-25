@@ -14,11 +14,6 @@ import java.util.List;
 
 public class PlotMemberBlacklistRepository extends Repository implements IConfigurationChanged
 {
-	public PlotMemberBlacklistRepository(IDatabase database)
-	{
-		this.database = database;
-	}
-
 	public void add(ICommandExecutor player, IPlayer blacklisted)
 	{
 		database.execute(
@@ -77,6 +72,5 @@ public class PlotMemberBlacklistRepository extends Repository implements IConfig
 		return update;
 	}
 
-	private final IDatabase database;
 	private final List<String> blacklist = new ArrayList<String>();
 }

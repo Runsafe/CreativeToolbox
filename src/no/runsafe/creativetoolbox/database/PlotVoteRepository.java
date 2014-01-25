@@ -1,21 +1,16 @@
 package no.runsafe.creativetoolbox.database;
 
-import no.runsafe.framework.api.database.IDatabase;
 import no.runsafe.framework.api.database.ISchemaUpdate;
 import no.runsafe.framework.api.database.Repository;
 import no.runsafe.framework.api.database.SchemaUpdate;
 import no.runsafe.framework.api.player.IPlayer;
 import org.apache.commons.lang.StringUtils;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 public class PlotVoteRepository extends Repository
 {
-	public PlotVoteRepository(IDatabase database)
-	{
-		this.database = database;
-	}
-
 	public boolean recordVote(IPlayer player, String plot)
 	{
 		return database.update(
@@ -65,11 +60,9 @@ public class PlotVoteRepository extends Repository
 				"`player` varchar(255) NOT NULL," +
 				"`rank` varchar(255) NOT NULL," +
 				"PRIMARY KEY(`plot`,`player`)" +
-			")"
+				")"
 		);
 
 		return update;
 	}
-
-	private final IDatabase database;
 }

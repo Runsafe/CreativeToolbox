@@ -6,11 +6,6 @@ import java.util.List;
 
 public class PlotLogRepository extends Repository
 {
-	public PlotLogRepository(IDatabase database)
-	{
-		this.database = database;
-	}
-
 	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	public boolean log(String plot, String claimer)
 	{
@@ -59,6 +54,4 @@ public class PlotLogRepository extends Repository
 
 		return update;
 	}
-
-	private final IDatabase database;
 }

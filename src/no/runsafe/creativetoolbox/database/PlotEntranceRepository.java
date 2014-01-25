@@ -14,11 +14,6 @@ import java.util.List;
 
 public class PlotEntranceRepository extends Repository implements IConfigurationChanged
 {
-	public PlotEntranceRepository(IDatabase database)
-	{
-		this.database = database;
-	}
-
 	public PlotEntrance get(String regionName)
 	{
 		if (cache.containsKey(regionName.toLowerCase()))
@@ -109,7 +104,6 @@ public class PlotEntranceRepository extends Repository implements IConfiguration
 		return update;
 	}
 
-	private final IDatabase database;
 	private final HashMap<String, PlotEntrance> cache = new HashMap<String, PlotEntrance>();
 	private IWorld world;
 }

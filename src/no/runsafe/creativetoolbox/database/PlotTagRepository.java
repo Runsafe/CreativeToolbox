@@ -9,11 +9,6 @@ import java.util.List;
 
 public class PlotTagRepository extends Repository
 {
-	public PlotTagRepository(IDatabase database)
-	{
-		this.database = database;
-	}
-
 	public List<String> getTags(String plot)
 	{
 		return database.queryStrings(
@@ -79,6 +74,4 @@ public class PlotTagRepository extends Repository
 			plot, tag
 		) > 0;
 	}
-
-	private final IDatabase database;
 }

@@ -6,11 +6,6 @@ import java.util.List;
 
 public class ApprovedPlotRepository extends Repository
 {
-	public ApprovedPlotRepository(IDatabase db)
-	{
-		database = db;
-	}
-
 	public PlotApproval get(String plotName)
 	{
 		IRow data = database.queryRow("SELECT name, approved, approved_by FROM creativetoolbox_plot_approval WHERE name=?", plotName);
@@ -65,6 +60,4 @@ public class ApprovedPlotRepository extends Repository
 
 		return update;
 	}
-
-	private final IDatabase database;
 }

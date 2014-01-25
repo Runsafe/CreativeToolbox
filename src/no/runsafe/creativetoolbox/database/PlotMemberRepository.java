@@ -1,6 +1,5 @@
 package no.runsafe.creativetoolbox.database;
 
-import no.runsafe.framework.api.database.IDatabase;
 import no.runsafe.framework.api.database.ISchemaUpdate;
 import no.runsafe.framework.api.database.Repository;
 import no.runsafe.framework.api.database.SchemaUpdate;
@@ -9,11 +8,6 @@ import java.util.List;
 
 public class PlotMemberRepository extends Repository
 {
-	public PlotMemberRepository(IDatabase database)
-	{
-		this.database = database;
-	}
-
 	@Override
 	public String getTableName()
 	{
@@ -72,11 +66,9 @@ public class PlotMemberRepository extends Repository
 				"`player` VARCHAR(250)," +
 				"`owner` INT," +
 				"PRIMARY KEY(`plot`,`player`)" +
-			");"
+				");"
 		);
 
 		return update;
 	}
-
-	private final IDatabase database;
 }
