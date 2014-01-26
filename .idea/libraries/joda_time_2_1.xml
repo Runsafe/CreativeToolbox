@@ -4,6 +4,8 @@
       <root url="jar://$PROJECT_DIR$/../Framework/lib/joda-time-2.1.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../Framework/lib/joda-time-2.1-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>
