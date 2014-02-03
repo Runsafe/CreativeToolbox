@@ -101,9 +101,10 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		return !ok;
 	}
 
-	public ILocation getPlotEntrance(String plot)
+	public ILocation getPlotEntrance(String plotName)
 	{
-		if (world == null)
+		String plot = filter.apply(plotName);
+		if (world == null || plot == null)
 			return null;
 		PlotEntrance entrance = plotEntrance.get(plot);
 		Rectangle2D rect = worldGuard.getRectangle(world, plot);
