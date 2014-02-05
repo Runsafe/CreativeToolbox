@@ -18,6 +18,7 @@ public class PaintbrushManager implements IPlayerLeftClickBlockEvent, IPlayerRig
 		{
 			IBlock block = event.getBlock();
 			setPaintbrushBlock(event.getPlayer(),  block == null ? Item.Unavailable.Air : block.getMaterial());
+			event.cancel();
 		}
 	}
 
@@ -26,8 +27,10 @@ public class PaintbrushManager implements IPlayerLeftClickBlockEvent, IPlayerRig
 	{
 		Item blockType = getPaintbrushBlock(player);
 		if (blockType != null)
+		{
 			targetBlock.set(blockType);
-
+			return false;
+		}
 		return true;
 	}
 
