@@ -14,8 +14,11 @@ public class PaintbrushManager implements IPlayerLeftClickBlockEvent, IPlayerRig
 	@Override
 	public void OnPlayerLeftClick(RunsafePlayerClickEvent event)
 	{
-		IBlock block = event.getBlock();
-		setPaintbrushBlock(event.getPlayer(),  block == null ? Item.Unavailable.Air : block.getMaterial());
+		if (isPaintbrush(event.getPlayer().getItemInHand()))
+		{
+			IBlock block = event.getBlock();
+			setPaintbrushBlock(event.getPlayer(),  block == null ? Item.Unavailable.Air : block.getMaterial());
+		}
 	}
 
 	@Override
@@ -28,14 +31,18 @@ public class PaintbrushManager implements IPlayerLeftClickBlockEvent, IPlayerRig
 		return true;
 	}
 
+	private boolean isPaintbrush(RunsafeMeta item)
+	{
+		return item != null && item.getTagCompound().hasKey("cbox.paintbrush");
+	}
+
 	private Item getPaintbrushBlock(IPlayer player)
 	{
 		RunsafeMeta item = player.getItemInHand();
-		if (item != null)
+		if (item != null && isPaintbrush(item))
 		{
 			NBTTagCompound tag = item.getTagCompound();
-			if (tag.getByte("cbox.paintbrush") == (byte) 1)
-				return Item.get(tag.getString("cbox.paintbrush.block"));
+			return Item.get(tag.getString("cbox.paintbrush.block"));
 		}
 		return null;
 	}
