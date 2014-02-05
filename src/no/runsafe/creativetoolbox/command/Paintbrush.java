@@ -23,6 +23,9 @@ public class Paintbrush extends PlayerCommand
 		brush.setDisplayName("Paintbrush");
 
 		NBTTagCompound tag = brush.getTagCompound();
+		if (tag == null)
+			tag = new NBTTagCompound();
+
 		tag.set("ench", new NBTTagList());
 		tag.set("cbox.paintbrush", new NBTTagByte((byte) 1));
 		brush.setTagCompound(tag);
