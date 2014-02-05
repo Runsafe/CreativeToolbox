@@ -24,15 +24,16 @@ public class Paintbrush extends PlayerCommand
 
 		NBTTagCompound tag = brush.getTagCompound();
 
-		if (tag != null)
-			executor.sendColouredMessage(tag.getClass().getName());
-
 		if (tag == null)
 			tag = new NBTTagCompound();
 
 		tag.set("ench", new NBTTagList());
 		tag.set("cbox.paintbrush", new NBTTagByte((byte) 1));
 		brush.setTagCompound(tag);
+
+		NBTTagCompound newTag = brush.getTagCompound();
+		if (newTag == null)
+			executor.sendColouredMessage("It's null..");
 
 		executor.give(brush);
 		return "&aConjured a paintbrush! Left click to select a paint block, right click to paint with it!";
