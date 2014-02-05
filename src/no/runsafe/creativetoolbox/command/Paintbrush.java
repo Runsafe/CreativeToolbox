@@ -23,6 +23,10 @@ public class Paintbrush extends PlayerCommand
 		brush.setDisplayName("Paintbrush");
 
 		NBTTagCompound tag = brush.getTagCompound();
+
+		if (tag != null)
+			executor.sendColouredMessage(tag.getClass().getName());
+
 		if (tag == null)
 			tag = new NBTTagCompound();
 
