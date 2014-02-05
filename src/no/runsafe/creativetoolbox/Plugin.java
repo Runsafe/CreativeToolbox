@@ -48,6 +48,7 @@ public class Plugin extends RunsafeConfigurablePlugin
 		addComponent(Importers.class);
 		addComponent(PlotArgument.class);
 		addComponent(CustomEvents.class);
+		addComponent(PaintbrushManager.class);
 
 		// Chat responder
 		addComponent(PlotClaimResponder.class);
@@ -55,6 +56,8 @@ public class Plugin extends RunsafeConfigurablePlugin
 		// Commands
 		Command toolbox = new Command("creativetoolbox", "A collection of tools for use in a minecraft creative world.", null);
 		addComponent(toolbox);
+
+		toolbox.addSubCommand(getInstance(Paintbrush.class));
 
 		Command member = new Command("member", "Tools to handle plot membership", null);
 		member.addSubCommand(getInstance(no.runsafe.creativetoolbox.command.Member.AddCommand.class));
