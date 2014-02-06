@@ -27,7 +27,7 @@ public class PaintbrushManager implements IPlayerLeftClickBlockEvent, IPlayerRig
 	public boolean OnPlayerRightClick(IPlayer player, RunsafeMeta usingItem, IBlock targetBlock)
 	{
 		Item blockType = getPaintbrushBlock(player);
-		if (blockType != null)
+		if (blockType != null && usingItem != null && isPaintbrush(usingItem))
 		{
 			targetBlock.set(blockType);
 			return false;
