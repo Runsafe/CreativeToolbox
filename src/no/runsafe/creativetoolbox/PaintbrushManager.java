@@ -27,7 +27,6 @@ public class PaintbrushManager implements IPlayerLeftClickBlockEvent, IPlayerRig
 		if (isPaintbrush(event.getPlayer().getItemInHand()))
 		{
 			IBlock block = event.getBlock();
-			event.getPlayer().sendColouredMessage("Debug: " + block.getData());
 			setPaintbrushBlock(event.getPlayer(),  block == null ? Item.Unavailable.Air : block.getMaterial());
 			event.cancel();
 		}
