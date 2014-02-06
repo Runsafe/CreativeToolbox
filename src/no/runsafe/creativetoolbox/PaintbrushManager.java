@@ -1,8 +1,10 @@
 package no.runsafe.creativetoolbox;
 
+import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.block.IBlock;
 import no.runsafe.framework.api.event.player.IPlayerLeftClickBlockEvent;
 import no.runsafe.framework.api.event.player.IPlayerRightClickBlock;
+import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.Item;
 import no.runsafe.framework.minecraft.event.player.RunsafePlayerClickEvent;
@@ -12,7 +14,7 @@ import no.runsafe.worldguardbridge.IRegionControl;
 import java.util.HashMap;
 import java.util.List;
 
-public class PaintbrushManager implements IPlayerLeftClickBlockEvent, IPlayerRightClickBlock
+public class PaintbrushManager implements IPlayerLeftClickBlockEvent, IPlayerRightClickBlock, IConfigurationChanged
 {
 	public PaintbrushManager(IRegionControl regionControl)
 	{
@@ -33,6 +35,9 @@ public class PaintbrushManager implements IPlayerLeftClickBlockEvent, IPlayerRig
 	@Override
 	public boolean OnPlayerRightClick(IPlayer player, RunsafeMeta usingItem, IBlock targetBlock)
 	{
+		if (!player.getWorldName().equals(creativeWorldName))
+			return true;
+
 		Item blockType = getPaintbrushBlock(player);
 		if (blockType != null && usingItem != null && isPaintbrush(usingItem))
 		{
@@ -67,6 +72,13 @@ public class PaintbrushManager implements IPlayerLeftClickBlockEvent, IPlayerRig
 		player.sendColouredMessage("&ePaintbrush block changed: " + setItem.getName());
 	}
 
+	@Override
+	public void OnConfigurationChanged(IConfiguration configuration)
+	{
+		creativeWorldName = configuration.getConfigValueAsString("world");
+	}
+
 	private final HashMap<String, Item> paintbrushes = new HashMap<String, Item>(0);
 	private final IRegionControl regionControl;
+	private String creativeWorldName;
 }
