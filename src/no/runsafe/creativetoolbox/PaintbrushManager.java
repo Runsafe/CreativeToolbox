@@ -7,12 +7,19 @@ import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.Item;
 import no.runsafe.framework.minecraft.event.player.RunsafePlayerClickEvent;
 import no.runsafe.framework.minecraft.item.meta.RunsafeMeta;
+import no.runsafe.worldguardbridge.IRegionControl;
 
 import java.util.HashMap;
 import java.util.List;
 
 public class PaintbrushManager implements IPlayerLeftClickBlockEvent, IPlayerRightClickBlock
 {
+	public PaintbrushManager(IRegionControl regionControl)
+	{
+		this.regionControl = regionControl;
+	}
+
+
 	@Override
 	public void OnPlayerLeftClick(RunsafePlayerClickEvent event)
 	{
@@ -30,8 +37,12 @@ public class PaintbrushManager implements IPlayerLeftClickBlockEvent, IPlayerRig
 		Item blockType = getPaintbrushBlock(player);
 		if (blockType != null && usingItem != null && isPaintbrush(usingItem))
 		{
-			targetBlock.set(blockType);
-			return false;
+			if (regionControl.playerCanBuildHere(player, targetBlock.getLocation()))
+			{
+				targetBlock.set(blockType);
+				return false;
+			}
+			player.sendColouredMessage("&cYou do not have permission to paint here.");
 		}
 		return true;
 	}
@@ -58,4 +69,5 @@ public class PaintbrushManager implements IPlayerLeftClickBlockEvent, IPlayerRig
 	}
 
 	private final HashMap<String, Item> paintbrushes = new HashMap<String, Item>(0);
+	private final IRegionControl regionControl;
 }
