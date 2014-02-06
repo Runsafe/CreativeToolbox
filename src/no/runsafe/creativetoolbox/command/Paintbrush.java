@@ -19,6 +19,7 @@ public class Paintbrush extends PlayerCommand
 		RunsafeMeta brush = Item.Materials.BlazeRod.getItem();
 		brush.setDisplayName("§bPaintbrush");
 		brush.addLore("Tool: Paintbrush");
+		executor.give(brush);
 		return "&aConjured a paintbrush! Left click to select a paint block, right click to paint with it!";
 	}
 }
