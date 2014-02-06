@@ -69,7 +69,7 @@ public class PaintbrushManager implements IPlayerLeftClickBlockEvent, IPlayerRig
 	private void setPaintbrushBlock(IPlayer player, Item setItem)
 	{
 		paintbrushes.put(player.getName(), setItem);
-		player.sendColouredMessage("&ePaintbrush block changed: " + setItem.getName());
+		player.sendColouredMessage("&ePaintbrush block changed: " + setItem.getName() + " [" + setItem.getData() + "]");
 	}
 
 	@Override
