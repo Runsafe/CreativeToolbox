@@ -1,11 +1,14 @@
 package no.runsafe.creativetoolbox.command;
 
 import net.minecraft.server.v1_7_R1.ItemStack;
+import net.minecraft.server.v1_7_R1.NBTTagByte;
+import net.minecraft.server.v1_7_R1.NBTTagCompound;
+import net.minecraft.server.v1_7_R1.NBTTagList;
 import no.runsafe.framework.api.command.argument.IArgumentList;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.internal.wrapper.ObjectUnwrapper;
-import no.runsafe.framework.minecraft.Enchant;
+import no.runsafe.framework.internal.wrapper.ObjectWrapper;
 import no.runsafe.framework.minecraft.Item;
 import no.runsafe.framework.minecraft.item.meta.RunsafeMeta;
 
@@ -23,26 +26,18 @@ public class Paintbrush extends PlayerCommand
 		brush.setDisplayName("Paintbrush");
 
 		ItemStack raw = ObjectUnwrapper.getMinecraft(brush);
+
 		if (raw == null)
-			executor.sendColouredMessage("It's null..");
-		else
-			executor.sendColouredMessage(raw.getClass().getName());
+			return "&cError trying to do that!";
 
-
-		/*NBTTagCompound tag = brush.getTagCompound();
-
-		if (tag == null)
-			tag = new NBTTagCompound();
+		NBTTagCompound tag = raw.getTag();
+		if (tag == null) tag = new NBTTagCompound();
 
 		tag.set("ench", new NBTTagList());
 		tag.set("cbox.paintbrush", new NBTTagByte((byte) 1));
-		brush.setTagCompound(tag);
+		raw.setTag(tag);
 
-		NBTTagCompound newTag = brush.getTagCompound();
-		if (newTag == null)
-			executor.sendColouredMessage("It's null..");*/
-
-		executor.give(brush);
+		executor.give(ObjectWrapper.convert(raw));
 		return "&aConjured a paintbrush! Left click to select a paint block, right click to paint with it!";
 	}
 }
