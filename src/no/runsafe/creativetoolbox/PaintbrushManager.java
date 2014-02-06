@@ -19,7 +19,6 @@ public class PaintbrushManager implements IPlayerLeftClickBlockEvent, IPlayerRig
 		this.regionControl = regionControl;
 	}
 
-
 	@Override
 	public void OnPlayerLeftClick(RunsafePlayerClickEvent event)
 	{
