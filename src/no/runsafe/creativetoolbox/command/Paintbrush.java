@@ -17,7 +17,7 @@ public class Paintbrush extends PlayerCommand
 	public String OnExecute(IPlayer executor, IArgumentList parameters)
 	{
 		RunsafeMeta brush = Item.Materials.BlazeRod.getItem();
-		brush.setDisplayName("§bPaintbrush");
+		brush.setDisplayName("§bMagical Paintbrush");
 		brush.addLore("Tool: Paintbrush");
 		executor.give(brush);
 		return "&aConjured a paintbrush! Left click to select a paint block, right click to paint with it!";
