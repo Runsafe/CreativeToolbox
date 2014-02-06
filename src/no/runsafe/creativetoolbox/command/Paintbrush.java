@@ -1,8 +1,5 @@
 package no.runsafe.creativetoolbox.command;
 
-import net.minecraft.server.v1_7_R1.NBTTagByte;
-import net.minecraft.server.v1_7_R1.NBTTagCompound;
-import net.minecraft.server.v1_7_R1.NBTTagList;
 import no.runsafe.framework.api.command.argument.IArgumentList;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.api.player.IPlayer;
@@ -20,14 +17,8 @@ public class Paintbrush extends PlayerCommand
 	public String OnExecute(IPlayer executor, IArgumentList parameters)
 	{
 		RunsafeMeta brush = Item.Materials.BlazeRod.getItem();
-		brush.setDisplayName("Paintbrush");
-
-		NBTTagCompound tag = new NBTTagCompound();
-		tag.set("ench", new NBTTagList());
-		tag.set("cbox.paintbrush", new NBTTagByte((byte) 1));
-		tag.setString("cbox.paintbrush", "AIR"); // Default air.
-
-		executor.give(brush.cloneWithNewCompound(tag));
+		brush.setDisplayName("§bPaintbrush");
+		brush.addLore("Tool: Paintbrush");
 		return "&aConjured a paintbrush! Left click to select a paint block, right click to paint with it!";
 	}
 }

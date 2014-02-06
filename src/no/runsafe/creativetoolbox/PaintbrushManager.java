@@ -9,6 +9,7 @@ import no.runsafe.framework.minecraft.event.player.RunsafePlayerClickEvent;
 import no.runsafe.framework.minecraft.item.meta.RunsafeMeta;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class PaintbrushManager implements IPlayerLeftClickBlockEvent, IPlayerRightClickBlock
 {
@@ -37,7 +38,11 @@ public class PaintbrushManager implements IPlayerLeftClickBlockEvent, IPlayerRig
 
 	private boolean isPaintbrush(RunsafeMeta item)
 	{
-		return item != null && item.getTagCompound().hasKey("cbox.paintbrush");
+		if (item == null)
+			return false;
+
+		List<String> lore = item.getLore();
+		return lore != null && lore.size() > 0 && lore.get(0).equals("Tool: Paintbrush");
 	}
 
 	private Item getPaintbrushBlock(IPlayer player)
