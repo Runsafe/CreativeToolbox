@@ -1,6 +1,5 @@
 package no.runsafe.creativetoolbox;
 
-import net.minecraft.server.v1_7_R1.NBTTagCompound;
 import no.runsafe.framework.api.block.IBlock;
 import no.runsafe.framework.api.event.player.IPlayerLeftClickBlockEvent;
 import no.runsafe.framework.api.event.player.IPlayerRightClickBlock;
@@ -8,6 +7,8 @@ import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.Item;
 import no.runsafe.framework.minecraft.event.player.RunsafePlayerClickEvent;
 import no.runsafe.framework.minecraft.item.meta.RunsafeMeta;
+
+import java.util.HashMap;
 
 public class PaintbrushManager implements IPlayerLeftClickBlockEvent, IPlayerRightClickBlock
 {
@@ -41,25 +42,15 @@ public class PaintbrushManager implements IPlayerLeftClickBlockEvent, IPlayerRig
 
 	private Item getPaintbrushBlock(IPlayer player)
 	{
-		RunsafeMeta item = player.getItemInHand();
-		if (item != null && isPaintbrush(item))
-		{
-			NBTTagCompound tag = item.getTagCompound();
-			return Item.get(tag.getString("cbox.paintbrush.block"));
-		}
-		return null;
+		String playerName = player.getName();
+		return paintbrushes.containsKey(playerName) ? paintbrushes.get(playerName) : Item.Unavailable.Air;
 	}
 
 	private void setPaintbrushBlock(IPlayer player, Item setItem)
 	{
-		RunsafeMeta item = player.getItemInHand();
-		if (item != null)
-		{
-			NBTTagCompound tag = item.getTagCompound();
-			tag.setString("cbox.paintbrush.block", setItem.getName());
-			item.setTagCompound(tag);
-		}
-
+		paintbrushes.put(player.getName(), setItem);
 		player.sendColouredMessage("&ePaintbrush block changed: " + setItem.getName());
 	}
+
+	private final HashMap<String, Item> paintbrushes = new HashMap<String, Item>(0);
 }
