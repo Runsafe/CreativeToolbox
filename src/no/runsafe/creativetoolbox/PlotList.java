@@ -39,11 +39,19 @@ public class PlotList
 				ArrayList<String> plots = Lists.newArrayList(list.getValue());
 				int i = plots.indexOf(plot);
 				plots.remove(plot);
-				lists.put(list.getKey(), plots);
-				if (plots.size() > i)
-					pointer.put(list.getKey(), plots.get(i));
+				if (plots.isEmpty())
+				{
+					pointer.remove(list.getKey());
+					lists.remove(list.getKey());
+				}
 				else
-					pointer.put(list.getKey(), plots.get(0));
+				{
+					lists.put(list.getKey(), plots);
+					if (plots.size() > i)
+						pointer.put(list.getKey(), plots.get(i));
+					else
+						pointer.put(list.getKey(), plots.get(0));
+				}
 			}
 		}
 	}
