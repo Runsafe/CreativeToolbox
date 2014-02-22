@@ -40,7 +40,10 @@ public class PlotList
 				int i = plots.indexOf(plot);
 				plots.remove(plot);
 				lists.put(list.getKey(), plots);
-				pointer.put(list.getKey(), plots.get(i));
+				if (plots.size() > i)
+					pointer.put(list.getKey(), plots.get(i));
+				else
+					pointer.put(list.getKey(), plots.get(0));
 			}
 		}
 	}
