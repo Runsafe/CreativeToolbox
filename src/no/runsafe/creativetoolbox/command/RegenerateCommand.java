@@ -8,7 +8,7 @@ import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.creativetoolbox.event.SyncInteractEvents;
 import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.IScheduler;
-import no.runsafe.framework.api.command.argument.EnumArgument;
+import no.runsafe.framework.api.command.argument.Enumeration;
 import no.runsafe.framework.api.command.argument.IArgumentList;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.api.player.IPlayer;
@@ -30,7 +30,7 @@ public class RegenerateCommand extends PlayerAsyncCommand
 	{
 		super(
 			"regenerate", "Regenerates the plot you are currently in.", "runsafe.creative.regenerate", scheduler,
-			new EnumArgument("mode", PlotChunkGenerator.Mode.values(), false)
+			new Enumeration.Optional("mode", PlotChunkGenerator.Mode.values())
 		);
 		this.worldGuard = worldGuard;
 		this.filter = filter;
@@ -59,7 +59,7 @@ public class RegenerateCommand extends PlayerAsyncCommand
 					return "You may not regenerate an approved plot!";
 			}
 
-		PlotChunkGenerator.Mode mode = parameters.containsKey("mode") ? getMode(parameters.get("mode")) : null;
+		PlotChunkGenerator.Mode mode = parameters.getValue("mode");
 		interactEvents.startRegeneration(executor, area, mode);
 
 		return "Right click the ground to confirm regeneration.";

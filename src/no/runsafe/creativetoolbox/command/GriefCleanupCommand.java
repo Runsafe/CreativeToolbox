@@ -6,7 +6,7 @@ import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.block.IBlock;
-import no.runsafe.framework.api.command.argument.EnumArgument;
+import no.runsafe.framework.api.command.argument.Enumeration;
 import no.runsafe.framework.api.command.argument.IArgumentList;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.api.log.IConsole;
@@ -25,7 +25,7 @@ public class GriefCleanupCommand extends PlayerCommand
 	{
 		super(
 			"griefcleanup", "Cleans up griefed plots.", "runsafe.creative.degrief",
-			new EnumArgument("what", Target.values(), true)
+			new Enumeration.Required("what", Target.values())
 		);
 		this.worldEdit = worldEdit;
 		this.worldGuard = worldGuard;
@@ -51,7 +51,7 @@ public class GriefCleanupCommand extends PlayerCommand
 		if (area == null)
 			return "This does not appear to be a valid plot.";
 
-		Target what = (Target) params.getEnum("what");
+		Target what = params.getValue("what");
 		output.logInformation("%s is running clean-up of '%s' at [%s]", executor.getName(), what, getRegionNameString(executor));
 
 		if (what != null)

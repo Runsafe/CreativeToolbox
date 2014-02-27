@@ -4,7 +4,7 @@ import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.PlotList;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.framework.api.IScheduler;
-import no.runsafe.framework.api.command.argument.EnumArgument;
+import no.runsafe.framework.api.command.argument.Enumeration;
 import no.runsafe.framework.api.command.argument.IArgumentList;
 import no.runsafe.framework.api.command.player.PlayerAsyncCallbackCommand;
 import no.runsafe.framework.api.player.IPlayer;
@@ -23,7 +23,7 @@ public class JumpCommand extends PlayerAsyncCallbackCommand<JumpCommand.Sudo>
 
 	public JumpCommand(IScheduler scheduler, PlotFilter plotFilter, ApprovedPlotRepository approval, PlotList plotList)
 	{
-		super("jump", "Find a random plot of a given kind", "runsafe.creative.teleport.random", scheduler, new EnumArgument("kind", JumpKinds.values(), true));
+		super("jump", "Find a random plot of a given kind", "runsafe.creative.teleport.random", scheduler, new Enumeration.Required("kind", JumpKinds.values()));
 		this.plotFilter = plotFilter;
 		this.approval = approval;
 		this.plotList = plotList;
@@ -32,11 +32,14 @@ public class JumpCommand extends PlayerAsyncCallbackCommand<JumpCommand.Sudo>
 	@Override
 	public Sudo OnAsyncExecute(IPlayer executor, IArgumentList params)
 	{
-		console.debugFine("Jumping to an %s plot", params.get("kind"));
+		JumpKinds kind = params.getValue("kind");
+		if (kind == null)
+			return null;
+		console.debugFine("Jumping to an %s plot", kind.name());
 		List<String> approved = approval.getApprovedPlots();
 		Sudo target = new Sudo();
 		target.player = executor;
-		if (JumpKinds.valueOf(params.get("kind")) == JumpKinds.Approved)
+		if (kind == JumpKinds.Approved)
 		{
 			int r = rng.nextInt(approved.size());
 			plotList.set(executor, approved);
