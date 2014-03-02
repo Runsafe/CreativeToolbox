@@ -25,7 +25,7 @@ public class GriefCleanupCommand extends PlayerCommand
 	{
 		super(
 			"griefcleanup", "Cleans up griefed plots.", "runsafe.creative.degrief",
-			new Enumeration.Required("what", Target.values())
+			new Enumeration("what", Target.values()).require()
 		);
 		this.worldEdit = worldEdit;
 		this.worldGuard = worldGuard;

@@ -5,8 +5,8 @@ import no.runsafe.creativetoolbox.database.PlotMemberRepository;
 import no.runsafe.creativetoolbox.event.PlotMembershipRevokedEvent;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.IServer;
-import no.runsafe.framework.api.command.argument.AnyPlayerRequired;
 import no.runsafe.framework.api.command.argument.IArgumentList;
+import no.runsafe.framework.api.command.argument.Player;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.worldguardbridge.IRegionControl;
@@ -20,7 +20,7 @@ public class RemoveCommand extends PlayerAsyncCommand
 {
 	public RemoveCommand(IScheduler scheduler, PlotFilter filter, IRegionControl worldGuard, PlotMemberRepository memberRepository, IServer server)
 	{
-		super("remove", "Remove a member from the plot you are standing in.", "runsafe.creative.member.remove", scheduler, new AnyPlayerRequired());
+		super("remove", "Remove a member from the plot you are standing in.", "runsafe.creative.member.remove", scheduler, new Player.Any().require());
 		plotFilter = filter;
 		worldGuardInterface = worldGuard;
 		this.memberRepository = memberRepository;
@@ -36,13 +36,14 @@ public class RemoveCommand extends PlayerAsyncCommand
 
 		List<String> ownedRegions = worldGuardInterface.getOwnedRegions(executor, plotFilter.getWorld());
 		List<String> results = new ArrayList<String>();
+		String filter = parameters.get("player").toLowerCase();
 		for (String region : targets)
 		{
 			if (ownedRegions.contains(region) || executor.hasPermission("runsafe.creative.member.override"))
 			{
 				Set<String> members = worldGuardInterface.getMembers(executor.getWorld(), region);
 				for (String member : members)
-					if (member.toLowerCase().startsWith(parameters.get("player").toLowerCase()))
+					if (member.toLowerCase().startsWith(filter))
 					{
 						IPlayer target = server.getOfflinePlayerExact(member);
 						assert (target != null);

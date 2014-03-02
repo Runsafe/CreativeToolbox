@@ -8,7 +8,7 @@ import no.runsafe.creativetoolbox.database.PlotMemberRepository;
 import no.runsafe.framework.api.IServer;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.command.argument.IArgumentList;
-import no.runsafe.framework.api.command.argument.SelfOrOnlinePlayer;
+import no.runsafe.framework.api.command.argument.Player;
 import no.runsafe.framework.api.command.player.PlayerCommand;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.worldguardbridge.IRegionControl;
@@ -20,15 +20,14 @@ public class ClaimCommand extends PlayerCommand
 {
 	public ClaimCommand(
 		PlotManager manager, PlotCalculator calculator, IRegionControl worldGuard,
-		PlotMemberRepository members, ApprovedPlotRepository approvalRepository, IServer server)
+		PlotMemberRepository members, ApprovedPlotRepository approvalRepository)
 	{
-		super("claim", "Claims a plot", "runsafe.creative.claim.self", new SelfOrOnlinePlayer());
+		super("claim", "Claims a plot", "runsafe.creative.claim.self", new Player.Online("player", false, true));
 		this.manager = manager;
 		this.calculator = calculator;
 		this.worldGuard = worldGuard;
 		this.members = members;
 		this.approvalRepository = approvalRepository;
-		this.server = server;
 	}
 
 	@Override
@@ -49,7 +48,7 @@ public class ClaimCommand extends PlayerCommand
 			return "You need to stand in a plot to use this command.";
 
 		IWorld world = executor.getWorld();
-		IPlayer owner = params.getPlayer("player");
+		IPlayer owner = params.getValue("player");
 		if (owner == null)
 			return null;
 		boolean selfClaim = owner.getName().equals(executor.getName());
@@ -92,5 +91,4 @@ public class ClaimCommand extends PlayerCommand
 	private final IRegionControl worldGuard;
 	private final PlotMemberRepository members;
 	private final ApprovedPlotRepository approvalRepository;
-	private final IServer server;
 }

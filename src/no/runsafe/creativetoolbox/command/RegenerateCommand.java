@@ -30,7 +30,7 @@ public class RegenerateCommand extends PlayerAsyncCommand
 	{
 		super(
 			"regenerate", "Regenerates the plot you are currently in.", "runsafe.creative.regenerate", scheduler,
-			new Enumeration.Optional("mode", PlotChunkGenerator.Mode.values())
+			new Enumeration("mode", PlotChunkGenerator.Mode.values()).withDefault(PlotChunkGenerator.Mode.NORMAL)
 		);
 		this.worldGuard = worldGuard;
 		this.filter = filter;
@@ -72,19 +72,6 @@ public class RegenerateCommand extends PlayerAsyncCommand
 			return worldGuard.getRectangle(location.getWorld(), candidate.get(0));
 		else
 			return plotCalculator.getPlotArea(location, false);
-	}
-
-	private PlotChunkGenerator.Mode getMode(String value)
-	{
-		if (value.equalsIgnoreCase("flat"))
-			return PlotChunkGenerator.Mode.FLAT;
-		if (value.equalsIgnoreCase("normal"))
-			return PlotChunkGenerator.Mode.NORMAL;
-		if (value.equalsIgnoreCase("void"))
-			return PlotChunkGenerator.Mode.VOID;
-		if (value.equalsIgnoreCase("grid"))
-			return PlotChunkGenerator.Mode.GRID;
-		return null;
 	}
 
 	private final IRegionControl worldGuard;

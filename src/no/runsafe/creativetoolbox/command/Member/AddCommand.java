@@ -5,7 +5,7 @@ import no.runsafe.creativetoolbox.database.PlotMemberBlacklistRepository;
 import no.runsafe.creativetoolbox.database.PlotMemberRepository;
 import no.runsafe.creativetoolbox.event.PlotMembershipGrantedEvent;
 import no.runsafe.framework.api.IScheduler;
-import no.runsafe.framework.api.command.argument.AnyPlayerRequired;
+import no.runsafe.framework.api.command.argument.Player;
 import no.runsafe.framework.api.command.argument.IArgumentList;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.api.player.IAmbiguousPlayer;
@@ -20,7 +20,7 @@ public class AddCommand extends PlayerAsyncCommand
 {
 	public AddCommand(IScheduler scheduler, PlotFilter filter, IRegionControl worldGuard, PlotMemberRepository members, PlotMemberBlacklistRepository blacklistRepository)
 	{
-		super("add", "Add a member to the plot you are standing in", "runsafe.creative.member.add", scheduler, new AnyPlayerRequired());
+		super("add", "Add a member to the plot you are standing in", "runsafe.creative.member.add", scheduler, new Player.Any().require());
 		plotFilter = filter;
 		worldGuardInterface = worldGuard;
 		this.members = members;
@@ -30,13 +30,10 @@ public class AddCommand extends PlayerAsyncCommand
 	@Override
 	public String OnAsyncExecute(IPlayer executor, IArgumentList parameters)
 	{
-		IPlayer member = parameters.getPlayer("player");
+		IPlayer member = parameters.getValue("player");
 
 		if (member == null)
-			return "&cUnable to find player.";
-
-		if (member instanceof IAmbiguousPlayer)
-			return member.toString();
+			return null;
 
 		if (blacklistRepository.isBlacklisted(member))
 			return String.format("The player %s has been blacklisted from being added as a member.", member.getPrettyName());

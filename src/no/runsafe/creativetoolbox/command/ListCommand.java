@@ -6,7 +6,7 @@ import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.IServer;
 import no.runsafe.framework.api.command.argument.IArgumentList;
-import no.runsafe.framework.api.command.argument.SelfOrAnyPlayer;
+import no.runsafe.framework.api.command.argument.Player;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
 import no.runsafe.framework.api.player.IAmbiguousPlayer;
 import no.runsafe.framework.api.player.IPlayer;
@@ -18,13 +18,11 @@ import java.util.List;
 public class ListCommand extends PlayerAsyncCommand
 {
 	public ListCommand(
-		IServer server,
 		IRegionControl worldGuard,
 		PlotFilter filter,
 		IScheduler scheduler, PlotManager manager, PlotList plotList)
 	{
-		super("list", "lists plots owned by a player.", "runsafe.creative.list", scheduler, new SelfOrAnyPlayer());
-		this.server = server;
+		super("list", "lists plots owned by a player.", "runsafe.creative.list", scheduler, new Player.Any("player", false, true));
 		this.worldGuard = worldGuard;
 		this.filter = filter;
 		this.manager = manager;
@@ -40,13 +38,9 @@ public class ListCommand extends PlayerAsyncCommand
 		if (filter.getWorld() == null)
 			return "No world defined!";
 
-		IPlayer player = server.getPlayer(parameters.get("player"));
-
+		IPlayer player = parameters.getValue("player");
 		if (player == null)
-			return "&cNo such player";
-
-		if (player instanceof IAmbiguousPlayer)
-			return player.toString();
+			return null;
 
 		List<String> plots = filter.apply(worldGuard.getOwnedRegions(player, filter.getWorld()));
 		List<String> property = manager.tag(executor, plots);
@@ -60,7 +54,6 @@ public class ListCommand extends PlayerAsyncCommand
 		);
 	}
 
-	private final IServer server;
 	private final IRegionControl worldGuard;
 	private final PlotFilter filter;
 	private final PlotManager manager;
