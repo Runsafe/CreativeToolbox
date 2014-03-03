@@ -27,7 +27,7 @@ public class RandomPlotCommand extends PlayerAsyncCallbackCommand<RandomPlotComm
 		if (plotFilter.getWorld() == null)
 			return null;
 		List<String> plots;
-		if (parameters.containsKey("tag"))
+		if (parameters.get("tag") != null)
 		{
 			console.debugFine("Optional argument tag detected: %s", parameters.get("tag"));
 			plots = tagRepository.findPlots(parameters.get("tag"));

@@ -5,7 +5,6 @@ import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.creativetoolbox.database.PlotMemberRepository;
-import no.runsafe.framework.api.IServer;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.command.argument.IArgumentList;
 import no.runsafe.framework.api.command.argument.Player;
@@ -22,7 +21,7 @@ public class ClaimCommand extends PlayerCommand
 		PlotManager manager, PlotCalculator calculator, IRegionControl worldGuard,
 		PlotMemberRepository members, ApprovedPlotRepository approvalRepository)
 	{
-		super("claim", "Claims a plot", "runsafe.creative.claim.self", new Player.Online("player", false, true));
+		super("claim", "Claims a plot", "runsafe.creative.claim.self", new Player.Online("player", true));
 		this.manager = manager;
 		this.calculator = calculator;
 		this.worldGuard = worldGuard;
