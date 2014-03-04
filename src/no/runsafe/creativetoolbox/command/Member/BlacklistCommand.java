@@ -14,7 +14,7 @@ public class BlacklistCommand extends AsyncCommand
 {
 	public BlacklistCommand(PlotMemberBlacklistRepository blacklistRepository, PlotManager manager, IScheduler scheduler)
 	{
-		super("blacklist", "Blocks a certain player from being added to any additional creative plots", "runsafe.creative.blacklist", scheduler, new Player.Any().require());
+		super("blacklist", "Blocks a certain player from being added to any additional creative plots", "runsafe.creative.blacklist", scheduler, new Player().require());
 		this.blacklistRepository = blacklistRepository;
 		this.manager = manager;
 	}

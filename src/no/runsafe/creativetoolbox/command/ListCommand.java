@@ -20,7 +20,7 @@ public class ListCommand extends PlayerAsyncCommand
 		PlotFilter filter,
 		IScheduler scheduler, PlotManager manager, PlotList plotList)
 	{
-		super("list", "lists plots owned by a player.", "runsafe.creative.list", scheduler, new Player.Any("player", true));
+		super("list", "lists plots owned by a player.", "runsafe.creative.list", scheduler, new Player().defaultToExecutor());
 		this.worldGuard = worldGuard;
 		this.filter = filter;
 		this.manager = manager;

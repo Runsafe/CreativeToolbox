@@ -11,7 +11,7 @@ public class WhitelistCommand extends ExecutableCommand
 {
 	public WhitelistCommand(PlotMemberBlacklistRepository blacklistRepository)
 	{
-		super("whitelist", "Removes a player from the membership blacklist.", "runsafe.creative.whitelist", new Player.Any().require());
+		super("whitelist", "Removes a player from the membership blacklist.", "runsafe.creative.whitelist", new Player().require());
 		this.blacklistRepository = blacklistRepository;
 	}
 

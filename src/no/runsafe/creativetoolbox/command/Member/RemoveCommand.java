@@ -20,7 +20,7 @@ public class RemoveCommand extends PlayerAsyncCommand
 {
 	public RemoveCommand(IScheduler scheduler, PlotFilter filter, IRegionControl worldGuard, PlotMemberRepository memberRepository, IServer server)
 	{
-		super("remove", "Remove a member from the plot you are standing in.", "runsafe.creative.member.remove", scheduler, new Player.Any().require());
+		super("remove", "Remove a member from the plot you are standing in.", "runsafe.creative.member.remove", scheduler, new Player().require());
 		plotFilter = filter;
 		worldGuardInterface = worldGuard;
 		this.memberRepository = memberRepository;

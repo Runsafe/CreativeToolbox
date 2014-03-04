@@ -21,7 +21,7 @@ public class ClaimCommand extends PlayerCommand
 		PlotManager manager, PlotCalculator calculator, IRegionControl worldGuard,
 		PlotMemberRepository members, ApprovedPlotRepository approvalRepository)
 	{
-		super("claim", "Claims a plot", "runsafe.creative.claim.self", new Player.Online("player", true));
+		super("claim", "Claims a plot", "runsafe.creative.claim.self", new Player().onlineOnly().defaultToExecutor());
 		this.manager = manager;
 		this.calculator = calculator;
 		this.worldGuard = worldGuard;

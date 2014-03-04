@@ -20,7 +20,7 @@ public class AddCommand extends PlayerAsyncCommand
 {
 	public AddCommand(IScheduler scheduler, PlotFilter filter, IRegionControl worldGuard, PlotMemberRepository members, PlotMemberBlacklistRepository blacklistRepository)
 	{
-		super("add", "Add a member to the plot you are standing in", "runsafe.creative.member.add", scheduler, new Player.Any().require());
+		super("add", "Add a member to the plot you are standing in", "runsafe.creative.member.add", scheduler, new Player().require());
 		plotFilter = filter;
 		worldGuardInterface = worldGuard;
 		this.members = members;
