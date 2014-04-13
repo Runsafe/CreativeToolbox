@@ -1,6 +1,7 @@
 package no.runsafe.creativetoolbox.fence;
 
 import no.runsafe.framework.api.IConfiguration;
+import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 
 public class FenceConfig implements IConfigurationChanged
@@ -14,6 +15,7 @@ public class FenceConfig implements IConfigurationChanged
 		highZ = lowZ + configuration.getConfigValueAsInt("fence.h");
 		lowY = configuration.getConfigValueAsInt("fence.b");
 		highY = configuration.getConfigValueAsInt("fence.t");
+		world = configuration.getConfigValueAsWorld("world");
 	}
 
 	public int getLowX()
@@ -46,10 +48,16 @@ public class FenceConfig implements IConfigurationChanged
 		return highY;
 	}
 
+	public IWorld getWorld()
+	{
+		return world;
+	}
+
 	private int lowX;
 	private int lowZ;
 	private int highX;
 	private int highZ;
 	private int lowY;
 	private int highY;
+	private IWorld world;
 }

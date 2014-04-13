@@ -1,6 +1,7 @@
 package no.runsafe.creativetoolbox.fence;
 
 import no.runsafe.framework.api.ILocation;
+import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.event.player.IPlayerMove;
 import no.runsafe.framework.api.player.IPlayer;
 
@@ -14,7 +15,8 @@ public class FenceHandler implements IPlayerMove
 	@Override
 	public boolean OnPlayerMove(IPlayer player, ILocation from, ILocation to)
 	{
-		return isWithinFence(to);
+		IWorld playerWorld = player.getWorld();
+		return playerWorld == null || !playerWorld.isWorld(config.getWorld()) || isWithinFence(to);
 	}
 
 	private boolean isWithinFence(ILocation location)
