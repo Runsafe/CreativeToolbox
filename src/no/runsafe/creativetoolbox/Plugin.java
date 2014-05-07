@@ -12,6 +12,8 @@ import no.runsafe.creativetoolbox.database.*;
 import no.runsafe.creativetoolbox.event.CustomEvents;
 import no.runsafe.creativetoolbox.event.InteractEvents;
 import no.runsafe.creativetoolbox.event.SyncInteractEvents;
+import no.runsafe.creativetoolbox.fence.FenceConfig;
+import no.runsafe.creativetoolbox.fence.FenceHandler;
 import no.runsafe.framework.RunsafeConfigurablePlugin;
 import no.runsafe.framework.api.command.Command;
 import no.runsafe.framework.features.Commands;
@@ -49,6 +51,9 @@ public class Plugin extends RunsafeConfigurablePlugin
 		addComponent(PlotArgument.class);
 		addComponent(CustomEvents.class);
 		addComponent(PaintbrushManager.class);
+
+		addComponent(FenceConfig.class);
+		addComponent(FenceHandler.class);
 
 		// Chat responder
 		addComponent(PlotClaimResponder.class);

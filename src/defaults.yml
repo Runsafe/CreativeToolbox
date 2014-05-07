@@ -18,6 +18,8 @@ fence:
   y: -1622
   w: 2879
   h: 2975
+  b: 0
+  t: 260
 plot:
   groundLevel: 67
   w: 45
