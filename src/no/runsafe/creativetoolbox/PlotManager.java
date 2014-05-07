@@ -447,6 +447,15 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 				cleared++;
 			}
 
+		List<String> approvedPlots = plotApproval.getApprovedPlots();
+		int nuked = 0;
+		for (String plot : approvedPlots)
+			if (!current.contains(plot))
+			{
+				plotApproval.delete(plotApproval.get(plot));
+				nuked++;
+			}
+
 		int cleaned = memberRepository.cleanStaleData();
 
 		for (IPlayer player : blackList.getBlacklist())
@@ -456,8 +465,8 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		}
 
 		console.logInformation(
-			"Deleted &a%d&r plots, cleared tags from &a%d&r deleted plots and &a%d&r members.",
-			deleted, cleared, cleaned
+			"Deleted &a%d&r plots, unapproved &a%d&r non-existing plots, cleared tags from &a%d&r deleted plots and &a%d&r members.",
+			deleted, nuked, cleared, cleaned
 		);
 	}
 
