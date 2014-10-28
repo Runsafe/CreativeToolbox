@@ -1,7 +1,6 @@
 package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.creativetoolbox.PlayerTeleport;
-import no.runsafe.creativetoolbox.PlotFilter;
 import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.IScheduler;
@@ -9,16 +8,13 @@ import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.command.argument.IArgumentList;
 import no.runsafe.framework.api.command.player.PlayerAsyncCallbackCommand;
 import no.runsafe.framework.api.player.IPlayer;
-import no.runsafe.worldguardbridge.IRegionControl;
 
 public class TeleportCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
 {
-	public TeleportCommand(IScheduler scheduler, PlotManager manager, PlotFilter filter, IRegionControl worldGuard, PlotArgument plotName)
+	public TeleportCommand(IScheduler scheduler, PlotManager manager, OptionalPlotArgument plotName)
 	{
 		super("teleport", "teleport to a plot.", "runsafe.creative.teleport.plot", scheduler, plotName);
 		this.manager = manager;
-		this.filter = filter;
-		this.worldGuard = worldGuard;
 	}
 
 	@Override
@@ -26,7 +22,16 @@ public class TeleportCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
 	{
 		PlayerTeleport target = new PlayerTeleport();
 		target.who = executor;
-		String plot = parameters.get("plotname");
+		String plot = parameters.getValue("plotname");
+		if (plot == null)
+		{
+			plot = manager.getLatestPlot(executor);
+			if (plot == null)
+			{
+				target.message = String.format("You do not appear to own any plots.");
+				return target;
+			}
+		}
 		target.location = manager.getPlotEntrance(plot);
 		if (target.location == null)
 		{
@@ -65,6 +70,4 @@ public class TeleportCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
 	}
 
 	private final PlotManager manager;
-	private final PlotFilter filter;
-	private final IRegionControl worldGuard;
 }

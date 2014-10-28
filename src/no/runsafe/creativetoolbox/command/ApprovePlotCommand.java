@@ -10,7 +10,7 @@ import no.runsafe.framework.api.player.IPlayer;
 
 public class ApprovePlotCommand extends PlayerAsyncCommand
 {
-	public ApprovePlotCommand(PlotFilter filter, PlotManager plotManager, IScheduler scheduler, PlotArgument plotName)
+	public ApprovePlotCommand(PlotFilter filter, PlotManager plotManager, IScheduler scheduler)
 	{
 		super("approve", "exempts a plot from the old plots command.", "runsafe.creative.approval.set", scheduler, plotName);
 		plotFilter = filter;

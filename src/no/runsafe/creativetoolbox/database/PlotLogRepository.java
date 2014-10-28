@@ -1,6 +1,7 @@
 package no.runsafe.creativetoolbox.database;
 
 import no.runsafe.framework.api.database.*;
+import no.runsafe.framework.api.player.IPlayer;
 
 import java.util.List;
 
@@ -53,5 +54,16 @@ public class PlotLogRepository extends Repository
 		);
 
 		return update;
+	}
+
+	public String getLatest(IPlayer player)
+	{
+		return database.queryString(
+			"SELECT `plot` " +
+				"FROM `creative_plot_member` AS pm " +
+				"JOIN `creative_plot_log` AS pl ON (pm.`plot` = pl.`plot` AND pm.`owner`=1) " +
+				"WHERE pm.`player`=?",
+			player.getName()
+		);
 	}
 }

@@ -49,6 +49,7 @@ public class Plugin extends RunsafeConfigurablePlugin
 		addComponent(PlotCalculator.class);
 		addComponent(Importers.class);
 		addComponent(PlotArgument.class);
+		addComponent(OptionalPlotArgument.class);
 		addComponent(CustomEvents.class);
 		addComponent(PaintbrushManager.class);
 

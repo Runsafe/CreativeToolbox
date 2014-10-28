@@ -53,6 +53,11 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		this.plotLog = plotLog;
 	}
 
+	public String getLatestPlot(IPlayer player)
+	{
+		return plotLog.getLatest(player);
+	}
+
 	public String getCurrentRegionFiltered(IPlayer player)
 	{
 		if (!world.equals(player.getWorld()))
