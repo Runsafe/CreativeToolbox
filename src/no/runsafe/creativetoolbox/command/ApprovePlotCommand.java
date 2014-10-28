@@ -10,7 +10,7 @@ import no.runsafe.framework.api.player.IPlayer;
 
 public class ApprovePlotCommand extends PlayerAsyncCommand
 {
-	public ApprovePlotCommand(PlotFilter filter, PlotManager plotManager, IScheduler scheduler)
+	public ApprovePlotCommand(PlotFilter filter, PlotManager plotManager, IScheduler scheduler, PlotArgument plotName)
 	{
 		super("approve", "exempts a plot from the old plots command.", "runsafe.creative.approval.set", scheduler, plotName);
 		plotFilter = filter;
@@ -24,7 +24,7 @@ public class ApprovePlotCommand extends PlayerAsyncCommand
 			return "You cannot use that here.";
 
 		String plot;
-		if (parameters.get("plotname").equals("."))
+		if (parameters.getValue("plotname").equals("."))
 			plot = manager.getCurrentRegionFiltered(executor);
 		else
 			plot = plotFilter.apply(parameters.get("plotname"));
