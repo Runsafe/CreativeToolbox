@@ -59,7 +59,7 @@ public class PlotLogRepository extends Repository
 	public String getLatest(IPlayer player)
 	{
 		return database.queryString(
-			"SELECT `plot` " +
+			"SELECT pl.`plot` " +
 				"FROM `creative_plot_member` AS pm " +
 				"JOIN `creative_plot_log` AS pl ON (pm.`plot` = pl.`plot` AND pm.`owner`=1) " +
 				"WHERE pm.`player`=?",
