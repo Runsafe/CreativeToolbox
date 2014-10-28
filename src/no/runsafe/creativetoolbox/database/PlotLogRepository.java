@@ -62,7 +62,9 @@ public class PlotLogRepository extends Repository
 			"SELECT pl.`plot` " +
 				"FROM `creative_plot_member` AS pm " +
 				"JOIN `creative_plot_log` AS pl ON (pm.`plot` = pl.`plot` AND pm.`owner`=1) " +
-				"WHERE pm.`player`=?",
+				"WHERE pm.`player`=? " +
+				"ORDER BY pl.`claimed` DESC " +
+				"LIMIT 1",
 			player.getName()
 		);
 	}
