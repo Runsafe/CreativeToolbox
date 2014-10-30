@@ -66,7 +66,7 @@ public class PaintbrushManager implements IPlayerLeftClickBlockEvent, IPlayerRig
 		return paintbrushes.containsKey(playerName) ? paintbrushes.get(playerName) : Item.Unavailable.Air;
 	}
 
-	private void setPaintbrushBlock(IPlayer player, Item setItem)
+	public void setPaintbrushBlock(IPlayer player, Item setItem)
 	{
 		paintbrushes.put(player.getName(), setItem);
 		player.sendColouredMessage("&ePaintbrush block changed: " + setItem.getName() + " [" + setItem.getData() + "]");
