@@ -31,7 +31,7 @@ public class CheckApprovalCommand extends AsyncCommand
 	@Override
 	public String OnAsyncExecute(ICommandExecutor executor, IArgumentList parameters)
 	{
-		String plot = parameters.get("plotname");
+		String plot = parameters.getValue("plotname");
 		if (plot.equals(".") && executor instanceof IPlayer)
 		{
 			List<String> here = plotFilter.apply(worldGuardInterface.getRegionsAtLocation(((IPlayer) executor).getLocation()));

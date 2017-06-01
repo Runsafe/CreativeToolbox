@@ -29,7 +29,7 @@ public class SetCommand extends PlayerAsyncCommand
 		if (plot == null)
 			return "There is no plot here.";
 
-		String[] tags = ChatColour.Strip(param.get("tags")).split("\\s+");
+		String[] tags = ChatColour.Strip(param.getValue("tags")).split("\\s+");
 		return String.format(
 			tagRepository.setTags(plot, Lists.newArrayList(tags))
 				? "Changed tags for plot %s."

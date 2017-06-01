@@ -25,7 +25,7 @@ public class UnApprovePlotCommand extends PlayerAsyncCommand
 	public String OnAsyncExecute(IPlayer executor, IArgumentList parameters)
 	{
 		String plot;
-		if (parameters.get("plotname").equals("."))
+		if (parameters.getValue("plotname").equals("."))
 		{
 			if (manager.isInWrongWorld(executor))
 				return "You cannot use that here.";

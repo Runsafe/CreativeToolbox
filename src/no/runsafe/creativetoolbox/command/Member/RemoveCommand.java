@@ -36,7 +36,7 @@ public class RemoveCommand extends PlayerAsyncCommand
 
 		List<String> ownedRegions = worldGuardInterface.getOwnedRegions(executor, plotFilter.getWorld());
 		List<String> results = new ArrayList<String>();
-		String filter = parameters.get("player").toLowerCase();
+		String filter = ((IPlayer) parameters.getValue("player")).getName().toLowerCase();
 		for (String region : targets)
 		{
 			if (ownedRegions.contains(region) || executor.hasPermission("runsafe.creative.member.override"))
