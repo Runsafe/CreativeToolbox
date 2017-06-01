@@ -17,7 +17,7 @@ public class PlotVoteRepository extends Repository
 		return database.update(
 			"INSERT INTO creative_plot_vote (`plot`, `player`, `rank`) VALUES (?, ?, ?)" +
 				"ON DUPLICATE KEY UPDATE rank=VALUES(`rank`)",
-			plot, player.getName(), StringUtils.join(player.getGroups(), ",")
+			plot, player.getUniqueId().toString(), StringUtils.join(player.getGroups(), ",")
 		) > 0;
 	}
 
@@ -64,6 +64,15 @@ public class PlotVoteRepository extends Repository
 				"`rank` varchar(255) NOT NULL," +
 				"PRIMARY KEY(`plot`,`player`)" +
 				")"
+		);
+
+		update.addQueries(
+			String.format( // Player names -> Unique IDs
+				"UPDATE IGNORE `%s` SET `player` = " +
+					"COALESCE((SELECT `uuid` FROM player_db WHERE `name`=`%s`.`player`), `player`) " +
+					"WHERE length(`player`) != 36",
+				getTableName(), getTableName()
+			)
 		);
 
 		return update;
