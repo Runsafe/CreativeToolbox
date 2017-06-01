@@ -4,10 +4,12 @@ import no.runsafe.framework.api.database.ISchemaUpdate;
 import no.runsafe.framework.api.database.Repository;
 import no.runsafe.framework.api.database.SchemaUpdate;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public class PlotMemberRepository extends Repository
 {
+	@Nonnull
 	@Override
 	public String getTableName()
 	{
@@ -55,6 +57,7 @@ public class PlotMemberRepository extends Repository
 		return database.update("DELETE FROM creative_plot_member WHERE `plot` NOT IN (SELECT `plot` FROM creative_plot_log)");
 	}
 
+	@Nonnull
 	@Override
 	public ISchemaUpdate getSchemaUpdateQueries()
 	{

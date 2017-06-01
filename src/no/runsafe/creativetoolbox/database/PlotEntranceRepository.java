@@ -9,6 +9,7 @@ import no.runsafe.framework.api.database.Repository;
 import no.runsafe.framework.api.database.SchemaUpdate;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.List;
 
@@ -78,12 +79,14 @@ public class PlotEntranceRepository extends Repository implements IConfiguration
 		world = configuration.getConfigValueAsWorld("world");
 	}
 
+	@Nonnull
 	@Override
 	public String getTableName()
 	{
 		return "creativetoolbox_plot_entrance";
 	}
 
+	@Nonnull
 	@Override
 	public ISchemaUpdate getSchemaUpdateQueries()
 	{

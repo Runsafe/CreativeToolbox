@@ -9,6 +9,7 @@ import no.runsafe.framework.api.database.SchemaUpdate;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.api.player.IPlayer;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,12 +50,14 @@ public class PlotMemberBlacklistRepository extends Repository implements IConfig
 		blacklist.addAll(database.queryStrings("SELECT `player` FROM creative_blacklist"));
 	}
 
+	@Nonnull
 	@Override
 	public String getTableName()
 	{
 		return "creative_blacklist";
 	}
 
+	@Nonnull
 	@Override
 	public ISchemaUpdate getSchemaUpdateQueries()
 	{

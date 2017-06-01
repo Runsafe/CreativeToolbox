@@ -6,6 +6,7 @@ import no.runsafe.framework.api.database.SchemaUpdate;
 import no.runsafe.framework.api.player.IPlayer;
 import org.apache.commons.lang.StringUtils;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
 
@@ -43,12 +44,14 @@ public class PlotVoteRepository extends Repository
 		return tally;
 	}
 
+	@Nonnull
 	@Override
 	public String getTableName()
 	{
 		return "creative_plot_vote";
 	}
 
+	@Nonnull
 	@Override
 	public ISchemaUpdate getSchemaUpdateQueries()
 	{

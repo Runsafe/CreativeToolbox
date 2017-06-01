@@ -5,6 +5,7 @@ import no.runsafe.framework.api.database.ISchemaUpdate;
 import no.runsafe.framework.api.database.Repository;
 import no.runsafe.framework.api.database.SchemaUpdate;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public class PlotTagRepository extends Repository
@@ -44,12 +45,14 @@ public class PlotTagRepository extends Repository
 		return database.queryStrings("SELECT DISTINCT `name` FROM creative_plot_tags");
 	}
 
+	@Nonnull
 	@Override
 	public String getTableName()
 	{
 		return "creative_plot_tags";
 	}
 
+	@Nonnull
 	@Override
 	public ISchemaUpdate getSchemaUpdateQueries()
 	{

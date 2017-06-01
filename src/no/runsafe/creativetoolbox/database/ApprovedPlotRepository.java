@@ -2,6 +2,7 @@ package no.runsafe.creativetoolbox.database;
 
 import no.runsafe.framework.api.database.*;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public class ApprovedPlotRepository extends Repository
@@ -38,12 +39,14 @@ public class ApprovedPlotRepository extends Repository
 		return database.queryStrings("SELECT name FROM creativetoolbox_plot_approval");
 	}
 
+	@Nonnull
 	@Override
 	public String getTableName()
 	{
 		return "creativetoolbox_plot_approval";
 	}
 
+	@Nonnull
 	@Override
 	public ISchemaUpdate getSchemaUpdateQueries()
 	{
