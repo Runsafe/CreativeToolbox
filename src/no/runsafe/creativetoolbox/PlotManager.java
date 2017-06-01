@@ -533,8 +533,6 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 	private final IDebug debugger;
 	private final IServer server;
 	private final PlotLogRepository plotLog;
-	private final Map<String, String> oldPlotPointers = new HashMap<String, String>();
-	private final Map<String, Map<String, String>> oldPlotList = new HashMap<String, Map<String, String>>();
 	private final HashMap<String, Duration> lastSeen = new HashMap<String, Duration>();
 	private final HashMap<Long, ArrayList<Long>> takenPlots = new HashMap<Long, ArrayList<Long>>();
 	private final ArrayList<ILocation> freePlots = new ArrayList<ILocation>();
