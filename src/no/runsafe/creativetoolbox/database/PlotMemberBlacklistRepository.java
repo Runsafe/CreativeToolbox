@@ -20,21 +20,20 @@ public class PlotMemberBlacklistRepository extends Repository implements IConfig
 			"INSERT INTO creative_blacklist (`player`,`by`,`time`) VALUES (?, ?, NOW())",
 			blacklisted.getName().toLowerCase(), player.getName()
 		);
-		blacklist.add(blacklisted.getName().toLowerCase());
+		blacklist.add(blacklisted);
 	}
 
 	public void remove(IPlayer blacklisted)
 	{
-		String playerName = blacklisted.getName().toLowerCase();
-		if (blacklist.contains(playerName))
-			blacklist.remove(playerName);
+		if (blacklist.contains(blacklisted))
+			blacklist.remove(blacklisted);
 
-		database.execute("DELETE FROM creative_blacklist WHERE `player`=?", playerName);
+		database.execute("DELETE FROM creative_blacklist WHERE `player`=?", blacklisted.getName().toLowerCase());
 	}
 
 	public boolean isBlacklisted(IPlayer player)
 	{
-		return blacklist.contains(player.getName().toLowerCase());
+		return blacklist.contains(player);
 	}
 
 	public List<IPlayer> getBlacklist()
@@ -46,7 +45,7 @@ public class PlotMemberBlacklistRepository extends Repository implements IConfig
 	public void OnConfigurationChanged(IConfiguration iConfiguration)
 	{
 		blacklist.clear();
-		blacklist.addAll(database.queryStrings("SELECT `player` FROM creative_blacklist"));
+		blacklist.addAll(database.queryPlayers("SELECT `player` FROM creative_blacklist"));
 	}
 
 	@Nonnull
@@ -74,5 +73,5 @@ public class PlotMemberBlacklistRepository extends Repository implements IConfig
 		return update;
 	}
 
-	private final List<String> blacklist = new ArrayList<String>();
+	private final List<IPlayer> blacklist = new ArrayList<>();
 }
