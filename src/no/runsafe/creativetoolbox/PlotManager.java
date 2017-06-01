@@ -389,11 +389,11 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		HashMap<String, String> data = new HashMap<String, String>();
 		data.put("runsafe.creative.blacklisted", blackList.isBlacklisted(player) ? "true" : "false");
 
-		List<String> plots = memberRepository.getPlots(player.getName(), true, false);
+		List<String> plots = memberRepository.getPlots(player, true, false);
 		if (!plots.isEmpty())
 			data.put("runsafe.creative.owner", plots.toString());
 
-		plots = memberRepository.getPlots(player.getName(), false, true);
+		plots = memberRepository.getPlots(player, false, true);
 		if (!plots.isEmpty())
 			data.put("runsafe.creative.member", plots.toString());
 
@@ -409,7 +409,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 			{
 				debugger.debugFiner("Removing member %s from %s.", player.getPrettyName(), region);
 				worldGuard.removeMemberFromRegion(world, region, player);
-				memberRepository.removeMember(region, player.getName().toLowerCase());
+				memberRepository.removeMember(region, player);
 			}
 		}
 	}

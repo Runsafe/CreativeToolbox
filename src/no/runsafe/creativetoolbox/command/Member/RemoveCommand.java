@@ -43,7 +43,7 @@ public class RemoveCommand extends PlayerAsyncCommand
 			{
 				if (worldGuardInterface.removeMemberFromRegion(plotFilter.getWorld(), region, member))
 				{
-					memberRepository.removeMember(region, member.getName());
+					memberRepository.removeMember(region, member);
 					results.add(String.format("%s was successfully removed from the plot %s.", member.getPrettyName(), region));
 					new PlotMembershipRevokedEvent(member, region).Fire();
 				}

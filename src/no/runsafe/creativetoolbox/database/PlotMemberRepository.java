@@ -3,6 +3,7 @@ package no.runsafe.creativetoolbox.database;
 import no.runsafe.framework.api.database.ISchemaUpdate;
 import no.runsafe.framework.api.database.Repository;
 import no.runsafe.framework.api.database.SchemaUpdate;
+import no.runsafe.framework.api.player.IPlayer;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -16,40 +17,40 @@ public class PlotMemberRepository extends Repository
 		return "creative_plot_member";
 	}
 
-	public void addMember(String plot, String player, boolean isOwner)
+	public void addMember(String plot, IPlayer player, boolean isOwner)
 	{
 		database.execute(
 			"INSERT INTO creative_plot_member (`plot`,`player`,`owner`) VALUES (?,?,?)" +
 				"ON DUPLICATE KEY UPDATE owner=VALUES(owner)",
-			plot, player, isOwner ? 1 : 0
+			plot, player.getName(), isOwner ? 1 : 0
 		);
 	}
 
-	public void removeMember(String region, String member)
+	public void removeMember(String region, IPlayer member)
 	{
-		database.execute("DELETE FROM creative_plot_member WHERE `plot`=? AND `player`=?", region, member);
+		database.execute("DELETE FROM creative_plot_member WHERE `plot`=? AND `player`=?", region, member.getName());
 	}
 
-	public List<String> getMembers(String plot, boolean owners, boolean members)
+	public List<IPlayer> getMembers(String plot, boolean owners, boolean members)
 	{
 		if (!owners && !members)
 			return null;
 
 		if (owners && members)
-			return database.queryStrings("SELECT `player` FROM creative_plot_member WHERE plot=?", plot);
+			return database.queryPlayers("SELECT `player` FROM creative_plot_member WHERE plot=?", plot);
 		else
-			return database.queryStrings("SELECT `player` FROM creative_plot_member WHERE plot=? AND owner=?", plot, owners ? 1 : 0);
+			return database.queryPlayers("SELECT `player` FROM creative_plot_member WHERE plot=? AND owner=?", plot, owners ? 1 : 0);
 	}
 
-	public List<String> getPlots(String player, boolean owner, boolean member)
+	public List<String> getPlots(IPlayer player, boolean owner, boolean member)
 	{
 		if (!owner && !member)
 			return null;
 
 		if (owner && member)
-			return database.queryStrings("SELECT DISTINCT `plot` FROM creative_plot_member WHERE player=?", player);
+			return database.queryStrings("SELECT DISTINCT `plot` FROM creative_plot_member WHERE player=?", player.getName());
 		else
-			return database.queryStrings("SELECT DISTINCT `plot` FROM creative_plot_member WHERE player=? AND owner=?", player, owner ? 1 : 0);
+			return database.queryStrings("SELECT DISTINCT `plot` FROM creative_plot_member WHERE player=? AND owner=?", player.getName(), owner ? 1 : 0);
 	}
 
 	public int cleanStaleData()
