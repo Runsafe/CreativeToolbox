@@ -13,6 +13,7 @@ import no.runsafe.framework.api.event.player.IPlayerInteractEntityEvent;
 import no.runsafe.framework.api.event.player.IPlayerRightClickBlock;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.api.player.IPlayer;
+import no.runsafe.framework.api.server.IPlayerProvider;
 import no.runsafe.framework.minecraft.event.player.RunsafePlayerInteractEntityEvent;
 import no.runsafe.framework.minecraft.item.meta.RunsafeMeta;
 import no.runsafe.worldguardbridge.IRegionControl;
@@ -28,14 +29,14 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 		PlotFilter plotFilter,
 		IRegionControl worldGuard,
 		PlotManager manager,
-		PlotTagRepository tagRepository, PlotLogRepository logRepository, IServer server)
+		PlotTagRepository tagRepository, PlotLogRepository logRepository, IPlayerProvider playerProvider)
 	{
 		this.worldGuardInterface = worldGuard;
 		this.plotFilter = plotFilter;
 		this.manager = manager;
 		this.tagRepository = tagRepository;
 		this.logRepository = logRepository;
-		this.server = server;
+		this.playerProvider = playerProvider;
 	}
 
 	@Override
@@ -161,7 +162,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 
 	private void listPlotMember(IPlayer player, String label, String member, boolean showSeen)
 	{
-		IPlayer plotMember = server.getPlayer(member);
+		IPlayer plotMember = playerProvider.getPlayer(member);
 		if (plotMember != null)
 		{
 			player.sendColouredMessage("   %s: %s", label, plotMember.getPrettyName());
@@ -180,6 +181,6 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 	private final PlotFilter plotFilter;
 	private final PlotTagRepository tagRepository;
 	private final PlotLogRepository logRepository;
-	private final IServer server;
+	private final IPlayerProvider playerProvider;
 	private final ConcurrentHashMap<IPlayer, String> extensions = new ConcurrentHashMap<>();
 }

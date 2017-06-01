@@ -5,7 +5,6 @@ import no.runsafe.creativetoolbox.event.PlotApprovedEvent;
 import no.runsafe.creativetoolbox.event.PlotDeletedEvent;
 import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.ILocation;
-import no.runsafe.framework.api.IServer;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.event.IServerReady;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
@@ -13,6 +12,7 @@ import no.runsafe.framework.api.hook.IPlayerDataProvider;
 import no.runsafe.framework.api.log.IConsole;
 import no.runsafe.framework.api.log.IDebug;
 import no.runsafe.framework.api.player.IPlayer;
+import no.runsafe.framework.api.server.IPlayerProvider;
 import no.runsafe.worldguardbridge.IRegionControl;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
@@ -35,7 +35,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		ApprovedPlotRepository approvedPlotRepository,
 		PlotVoteRepository voteRepository, PlotTagRepository tagRepository, PlotMemberRepository memberRepository, PlotCalculator plotCalculator,
 		PlotMemberBlacklistRepository blackList, PlotList plotList,
-		IConsole console, IDebug debugger, IServer server, PlotLogRepository plotLog)
+		IConsole console, IDebug debugger, IPlayerProvider playerProvider, PlotLogRepository plotLog)
 	{
 		filter = plotFilter;
 		worldGuard = worldGuardInterface;
@@ -49,7 +49,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		this.plotList = plotList;
 		this.console = console;
 		this.debugger = debugger;
-		this.server = server;
+		this.playerProvider = playerProvider;
 		this.plotLog = plotLog;
 	}
 
@@ -179,7 +179,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		if (lastSeen.containsKey(playerName))
 			return lastSeen.get(playerName);
 
-		IPlayer player = server.getPlayer(playerName);
+		IPlayer player = playerProvider.getPlayer(playerName);
 		if (player == null)
 			return null;
 		if (player.isOnline())
@@ -260,7 +260,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 			for (String owner : worldGuard.getOwners(world, plot))
 			{
 				int approved = 0;
-				for (String region : worldGuard.getOwnedRegions(server.getOfflinePlayerExact(owner), world))
+				for (String region : worldGuard.getOwnedRegions(playerProvider.getOfflinePlayerExact(owner), world))
 					if (plotApproval.get(region) != null)
 						approved++;
 
@@ -531,7 +531,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 	private final PlotList plotList;
 	private final IConsole console;
 	private final IDebug debugger;
-	private final IServer server;
+	private final IPlayerProvider playerProvider;
 	private final PlotLogRepository plotLog;
 	private final HashMap<String, Duration> lastSeen = new HashMap<String, Duration>();
 	private final HashMap<Long, ArrayList<Long>> takenPlots = new HashMap<Long, ArrayList<Long>>();

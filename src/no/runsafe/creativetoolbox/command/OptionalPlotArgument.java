@@ -1,22 +1,22 @@
 package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.creativetoolbox.PlotFilter;
-import no.runsafe.framework.api.IServer;
 import no.runsafe.framework.api.command.argument.ITabComplete;
 import no.runsafe.framework.api.command.argument.OptionalArgument;
 import no.runsafe.framework.api.player.IPlayer;
+import no.runsafe.framework.api.server.IPlayerProvider;
 import no.runsafe.worldguardbridge.IRegionControl;
 
 import java.util.List;
 
 public class OptionalPlotArgument extends OptionalArgument implements ITabComplete
 {
-	public OptionalPlotArgument(PlotFilter filter, IRegionControl worldGuard, IServer server)
+	public OptionalPlotArgument(PlotFilter filter, IRegionControl worldGuard, IPlayerProvider playerProvider)
 	{
 		super("plotname");
 		this.filter = filter;
 		this.worldGuard = worldGuard;
-		this.server = server;
+		this.playerProvider = playerProvider;
 	}
 
 	@Override
@@ -24,12 +24,12 @@ public class OptionalPlotArgument extends OptionalArgument implements ITabComple
 	{
 		if (!arg.contains("_"))
 			return null;
-		IPlayer player = server.getOfflinePlayerExact(arg.substring(0, arg.lastIndexOf('_')));
+		IPlayer player = playerProvider.getOfflinePlayerExact(arg.substring(0, arg.lastIndexOf('_')));
 		return filter.apply(worldGuard.getOwnedRegions(player, filter.getWorld()));
 	}
 
 	private final PlotFilter filter;
 	private final IRegionControl worldGuard;
-	private final IServer server;
+	private final IPlayerProvider playerProvider;
 }
 
