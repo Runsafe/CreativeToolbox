@@ -131,7 +131,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 			return null;
 
 		List<String> approvedPlots = plotApproval.getApprovedPlots();
-		Map<String, Set<String>> checkList = worldGuard.getAllRegionsWithOwnersInWorld(getWorld());
+		Map<String, Set<IPlayer>> checkList = worldGuard.getAllRegionsWithOwnersInWorld(getWorld());
 		Map<String, String> hits = new HashMap<String, String>();
 		for (String region : filter.apply(new ArrayList<String>(checkList.keySet())))
 		{
@@ -157,12 +157,12 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		return PeriodFormat.getDefault().print(new Period(status, DateTime.now(), PeriodType.yearMonthDay()));
 	}
 
-	private Duration getPlotStatus(Set<String> owners)
+	private Duration getPlotStatus(Set<IPlayer> owners)
 	{
 		Duration result = null;
-		for (String owner : owners)
+		for (IPlayer owner : owners)
 		{
-			Duration ownerSeen = getSeen(owner);
+			Duration ownerSeen = getSeen(owner.getName());
 			if (ownerSeen == null)
 				return null;
 			if (ownerSeen.isEqual(Duration.ZERO))
