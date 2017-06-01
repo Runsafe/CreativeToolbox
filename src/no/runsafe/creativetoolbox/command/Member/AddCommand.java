@@ -8,7 +8,6 @@ import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.argument.Player;
 import no.runsafe.framework.api.command.argument.IArgumentList;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
-import no.runsafe.framework.api.player.IAmbiguousPlayer;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.worldguardbridge.IRegionControl;
 import org.apache.commons.lang.StringUtils;
