@@ -6,14 +6,12 @@ import no.runsafe.creativetoolbox.database.PlotLogRepository;
 import no.runsafe.creativetoolbox.database.PlotTagRepository;
 import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.ILocation;
-import no.runsafe.framework.api.IServer;
 import no.runsafe.framework.api.block.IBlock;
 import no.runsafe.framework.api.event.IAsyncEvent;
 import no.runsafe.framework.api.event.player.IPlayerInteractEntityEvent;
 import no.runsafe.framework.api.event.player.IPlayerRightClickBlock;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.api.player.IPlayer;
-import no.runsafe.framework.api.server.IPlayerProvider;
 import no.runsafe.framework.minecraft.event.player.RunsafePlayerInteractEntityEvent;
 import no.runsafe.framework.minecraft.item.meta.RunsafeMeta;
 import no.runsafe.worldguardbridge.IRegionControl;
@@ -29,14 +27,13 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 		PlotFilter plotFilter,
 		IRegionControl worldGuard,
 		PlotManager manager,
-		PlotTagRepository tagRepository, PlotLogRepository logRepository, IPlayerProvider playerProvider)
+		PlotTagRepository tagRepository, PlotLogRepository logRepository)
 	{
 		this.worldGuardInterface = worldGuard;
 		this.plotFilter = plotFilter;
 		this.manager = manager;
 		this.tagRepository = tagRepository;
 		this.logRepository = logRepository;
-		this.playerProvider = playerProvider;
 	}
 
 	@Override
@@ -151,25 +148,24 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 
 	private void listPlotMembers(IPlayer player, String regionName)
 	{
-		Set<String> owners = worldGuardInterface.getOwners(manager.getWorld(), regionName);
-		for (String owner : owners)
+		Set<IPlayer> owners = worldGuardInterface.getOwnerPlayers(manager.getWorld(), regionName);
+		for (IPlayer owner : owners)
 			listPlotMember(player, "&2Owner&r", owner, true);
 
-		Set<String> members = worldGuardInterface.getMembers(manager.getWorld(), regionName);
-		for (String member : members)
+		Set<IPlayer> members = worldGuardInterface.getMemberPlayers(manager.getWorld(), regionName);
+		for (IPlayer member : members)
 			listPlotMember(player, "&3Member&r", member, false);
 	}
 
-	private void listPlotMember(IPlayer player, String label, String member, boolean showSeen)
+	private void listPlotMember(IPlayer player, String label, IPlayer member, boolean showSeen)
 	{
-		IPlayer plotMember = playerProvider.getPlayer(member);
-		if (plotMember != null)
+		if (member != null)
 		{
-			player.sendColouredMessage("   %s: %s", label, plotMember.getPrettyName());
+			player.sendColouredMessage("   %s: %s", label, member.getPrettyName());
 
 			if (showSeen && player.hasPermission("runsafe.creative.list.seen"))
 			{
-				String seen = plotMember.getLastSeen(player);
+				String seen = member.getLastSeen(player);
 				player.sendColouredMessage("     %s&r", (seen == null ? "Player never seen" : seen));
 			}
 		}
@@ -181,6 +177,5 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 	private final PlotFilter plotFilter;
 	private final PlotTagRepository tagRepository;
 	private final PlotLogRepository logRepository;
-	private final IPlayerProvider playerProvider;
 	private final ConcurrentHashMap<IPlayer, String> extensions = new ConcurrentHashMap<>();
 }

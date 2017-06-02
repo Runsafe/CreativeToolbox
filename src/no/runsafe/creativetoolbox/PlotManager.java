@@ -35,7 +35,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		ApprovedPlotRepository approvedPlotRepository,
 		PlotVoteRepository voteRepository, PlotTagRepository tagRepository, PlotMemberRepository memberRepository, PlotCalculator plotCalculator,
 		PlotMemberBlacklistRepository blackList, PlotList plotList,
-		IConsole console, IDebug debugger, IPlayerProvider playerProvider, PlotLogRepository plotLog)
+		IConsole console, IDebug debugger, PlotLogRepository plotLog)
 	{
 		filter = plotFilter;
 		worldGuard = worldGuardInterface;
@@ -49,7 +49,6 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		this.plotList = plotList;
 		this.console = console;
 		this.debugger = debugger;
-		this.playerProvider = playerProvider;
 		this.plotLog = plotLog;
 	}
 
@@ -162,7 +161,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		Duration result = null;
 		for (IPlayer owner : owners)
 		{
-			Duration ownerSeen = getSeen(owner.getName());
+			Duration ownerSeen = getSeen(owner);
 			if (ownerSeen == null)
 				return null;
 			if (ownerSeen.isEqual(Duration.ZERO))
@@ -173,34 +172,27 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		return result;
 	}
 
-	private Duration getSeen(String playerName)
+	private Duration getSeen(IPlayer player)
 	{
-		playerName = playerName.toLowerCase();
-		if (lastSeen.containsKey(playerName))
-			return lastSeen.get(playerName);
+		if (player == null) return null;
 
-		IPlayer player = playerProvider.getPlayer(playerName);
-		if (player == null)
-			return null;
-		if (player.isOnline())
-			lastSeen.put(playerName, Duration.ZERO);
-		else if (!player.isNotBanned())
-			lastSeen.put(playerName, BANNED);
+		if (lastSeen.containsKey(player)) return lastSeen.get(player);
+
+		if (player.isOnline()) lastSeen.put(player, Duration.ZERO);
+		else if (!player.isNotBanned()) lastSeen.put(player, BANNED);
 		else
 		{
 			DateTime logout = player.lastLogout();
-			if (logout == null)
-				lastSeen.put(playerName, null);
-			else
-				lastSeen.put(playerName, new Duration(player.lastLogout(), DateTime.now()));
+			if (logout == null) lastSeen.put(player, null);
+			else lastSeen.put(player, new Duration(player.lastLogout(), DateTime.now()));
 		}
-		return lastSeen.get(playerName);
+		return lastSeen.get(player);
 	}
 
 	public boolean disallowVote(IPlayer player, String region)
 	{
 		return !world.equals(player.getWorld())
-			|| (voteBlacklist.containsKey(region) && voteBlacklist.get(region).contains(player.getName().toLowerCase()))
+			|| (voteBlacklist.containsKey(region) && voteBlacklist.get(region).contains(player))
 			|| worldGuard.getOwners(world, region).contains(player.getName().toLowerCase())
 			|| worldGuard.getMembers(world, region).contains(player.getName().toLowerCase());
 	}
@@ -257,10 +249,10 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		approval = plotApproval.get(plot);
 		if (approval != null)
 		{
-			for (String owner : worldGuard.getOwners(world, plot))
+			for (IPlayer owner : worldGuard.getOwnerPlayers(world, plot))
 			{
 				int approved = 0;
-				for (String region : worldGuard.getOwnedRegions(playerProvider.getOfflinePlayerExact(owner), world))
+				for (String region : worldGuard.getOwnedRegions(owner, world))
 					if (plotApproval.get(region) != null)
 						approved++;
 
@@ -414,11 +406,11 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		}
 	}
 
-	public void memberRemoved(String plot, String name)
+	public void memberRemoved(String plot, IPlayer player)
 	{
 		if (!voteBlacklist.containsKey(plot))
-			voteBlacklist.put(plot, new ArrayList<String>());
-		voteBlacklist.get(plot).add(name.toLowerCase());
+			voteBlacklist.put(plot, new ArrayList<>());
+		voteBlacklist.get(plot).add(player);
 	}
 
 	private void CleanStaleData()
@@ -531,12 +523,11 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 	private final PlotList plotList;
 	private final IConsole console;
 	private final IDebug debugger;
-	private final IPlayerProvider playerProvider;
 	private final PlotLogRepository plotLog;
-	private final HashMap<String, Duration> lastSeen = new HashMap<String, Duration>();
+	private final HashMap<IPlayer, Duration> lastSeen = new HashMap<>();
 	private final HashMap<Long, ArrayList<Long>> takenPlots = new HashMap<Long, ArrayList<Long>>();
 	private final ArrayList<ILocation> freePlots = new ArrayList<ILocation>();
-	private final Map<String, List<String>> voteBlacklist = new HashMap<String, List<String>>();
+	private final Map<String, List<IPlayer>> voteBlacklist = new HashMap<>();
 	private IWorld world;
 	private List<String> ignoredRegions;
 	private Duration limit;
