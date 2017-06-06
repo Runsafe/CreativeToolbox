@@ -4,6 +4,8 @@
       <root url="jar://$PROJECT_DIR$/../out/worldeditbridge.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../WorldEditBridge/src" />
+    </SOURCES>
   </library>
 </component>
