@@ -193,8 +193,8 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 	{
 		return !world.equals(player.getWorld())
 			|| (voteBlacklist.containsKey(region) && voteBlacklist.get(region).contains(player))
-			|| worldGuard.getOwners(world, region).contains(player.getName().toLowerCase())
-			|| worldGuard.getMembers(world, region).contains(player.getName().toLowerCase());
+			|| worldGuard.getOwnerPlayers(world, region).contains(player)
+			|| worldGuard.getMemberPlayers(world, region).contains(player);
 	}
 
 	public boolean vote(IPlayer player, String region)
@@ -396,8 +396,8 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 	{
 		for (String region : worldGuard.getRegionsInWorld(world))
 		{
-			Set<String> members = worldGuard.getMembers(world, region);
-			if (members != null && members.contains(player.getName().toLowerCase()))
+			Set<IPlayer> members = worldGuard.getMemberPlayers(world, region);
+			if (members != null && members.contains(player))
 			{
 				debugger.debugFiner("Removing member %s from %s.", player.getPrettyName(), region);
 				worldGuard.removeMemberFromRegion(world, region, player);
