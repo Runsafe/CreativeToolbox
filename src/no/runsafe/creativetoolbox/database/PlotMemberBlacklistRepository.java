@@ -18,7 +18,7 @@ public class PlotMemberBlacklistRepository extends Repository implements IConfig
 	{
 		database.execute(
 			"INSERT INTO creative_blacklist (`player`,`by`,`time`) VALUES (?, ?, NOW())",
-			blacklisted.getName().toLowerCase(), player.getUniqueId().toString()
+			blacklisted.getName().toLowerCase(), player
 		);
 		blacklist.add(blacklisted);
 	}
@@ -28,7 +28,7 @@ public class PlotMemberBlacklistRepository extends Repository implements IConfig
 		if (blacklist.contains(blacklisted))
 			blacklist.remove(blacklisted);
 
-		database.execute("DELETE FROM creative_blacklist WHERE `player`=?", blacklisted.getUniqueId().toString());
+		database.execute("DELETE FROM creative_blacklist WHERE `player`=?", blacklisted);
 	}
 
 	public boolean isBlacklisted(IPlayer player)

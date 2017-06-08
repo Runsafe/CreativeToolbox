@@ -17,7 +17,7 @@ public class PlotVoteRepository extends Repository
 		return database.update(
 			"INSERT INTO creative_plot_vote (`plot`, `player`, `rank`) VALUES (?, ?, ?)" +
 				"ON DUPLICATE KEY UPDATE rank=VALUES(`rank`)",
-			plot, player.getUniqueId().toString(), StringUtils.join(player.getGroups(), ",")
+			plot, player, StringUtils.join(player.getGroups(), ",")
 		) > 0;
 	}
 
