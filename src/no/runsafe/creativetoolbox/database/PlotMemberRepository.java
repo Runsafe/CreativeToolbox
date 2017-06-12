@@ -22,13 +22,13 @@ public class PlotMemberRepository extends Repository
 		database.execute(
 			"INSERT INTO creative_plot_member (`plot`,`player`,`owner`) VALUES (?,?,?)" +
 				"ON DUPLICATE KEY UPDATE owner=VALUES(owner)",
-			plot, player.getName(), isOwner ? 1 : 0
+			plot, player, isOwner ? 1 : 0
 		);
 	}
 
 	public void removeMember(String region, IPlayer member)
 	{
-		database.execute("DELETE FROM creative_plot_member WHERE `plot`=? AND `player`=?", region, member.getName());
+		database.execute("DELETE FROM creative_plot_member WHERE `plot`=? AND `player`=?", region, member);
 	}
 
 	public List<IPlayer> getMembers(String plot, boolean owners, boolean members)
@@ -48,9 +48,9 @@ public class PlotMemberRepository extends Repository
 			return null;
 
 		if (owner && member)
-			return database.queryStrings("SELECT DISTINCT `plot` FROM creative_plot_member WHERE player=?", player.getName());
+			return database.queryStrings("SELECT DISTINCT `plot` FROM creative_plot_member WHERE player=?", player);
 		else
-			return database.queryStrings("SELECT DISTINCT `plot` FROM creative_plot_member WHERE player=? AND owner=?", player.getName(), owner ? 1 : 0);
+			return database.queryStrings("SELECT DISTINCT `plot` FROM creative_plot_member WHERE player=? AND owner=?", player, owner ? 1 : 0);
 	}
 
 	public int cleanStaleData()
@@ -71,6 +71,16 @@ public class PlotMemberRepository extends Repository
 				"`owner` INT," +
 				"PRIMARY KEY(`plot`,`player`)" +
 				");"
+		);
+
+		update.addQueries(
+			String.format("ALTER TABLE `%s` MODIFY COLUMN `player` VARCHAR(36)", getTableName()),
+			String.format( // Player names -> Unique IDs
+				"UPDATE IGNORE `%s` SET `player` = " +
+					"COALESCE((SELECT `uuid` FROM player_db WHERE `name`=`%s`.`player`), `player`) " +
+					"WHERE length(`player`) != 36",
+				getTableName(), getTableName()
+			)
 		);
 
 		return update;

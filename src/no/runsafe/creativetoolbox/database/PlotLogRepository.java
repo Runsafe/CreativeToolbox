@@ -68,7 +68,7 @@ public class PlotLogRepository extends Repository
 				"WHERE pm.`player`=? " +
 				"ORDER BY pl.`claimed` DESC " +
 				"LIMIT 1",
-			player.getName()
+			player
 		);
 	}
 }
