@@ -180,18 +180,25 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 			return lastSeen.get(player);
 
 		if (player.isOnline())
+		{
 			lastSeen.put(player, Duration.ZERO);
-		else
-			if (!player.isNotBanned())
-				lastSeen.put(player, BANNED);
-			else
-			{
-				DateTime logout = player.lastLogout();
-				if (logout == null)
-					lastSeen.put(player, null);
-				else
-					lastSeen.put(player, new Duration(player.lastLogout(), DateTime.now()));
-			}
+			return Duration.ZERO;
+		}
+
+		if (!player.isNotBanned())
+		{
+			lastSeen.put(player, BANNED);
+			return BANNED;
+		}
+
+		DateTime logout = player.lastLogout();
+		if (logout == null)
+		{
+			lastSeen.put(player, null);
+			return null;
+		}
+
+		lastSeen.put(player, new Duration(logout, DateTime.now()));
 		return lastSeen.get(player);
 	}
 
