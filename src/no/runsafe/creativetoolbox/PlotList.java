@@ -12,27 +12,27 @@ public class PlotList
 {
 	public void set(IPlayer player, List<String> list)
 	{
-		lists.put(player.getName(), list);
+		lists.put(player, list);
 	}
 
 	public int current(IPlayer player)
 	{
-		return lists.get(player.getName()).indexOf(pointer.get(player.getName())) + 1;
+		return lists.get(player).indexOf(pointer.get(player) + 1);
 	}
 
 	public void wind(IPlayer player, String to)
 	{
-		pointer.put(player.getName(), to);
+		pointer.put(player, to);
 	}
 
 	public int count(IPlayer player)
 	{
-		return lists.get(player.getName()).size();
+		return lists.get(player).size();
 	}
 
 	public void remove(String plot)
 	{
-		for (Map.Entry<String, List<String>> list : lists.entrySet())
+		for (Map.Entry<IPlayer, List<String>> list : lists.entrySet())
 		{
 			if (list.getValue().contains(plot))
 			{
@@ -58,32 +58,32 @@ public class PlotList
 
 	public String previous(IPlayer player)
 	{
-		if (lists.containsKey(player.getName()))
+		if (lists.containsKey(player))
 		{
-			List<String> list = lists.get(player.getName());
+			List<String> list = lists.get(player);
 			if (list == null || list.isEmpty())
 				return null;
-			int i = list.indexOf(pointer.get(player.getName()));
-			pointer.put(player.getName(), list.get(i > 0 ? i - 1 : list.size() - 1));
-			return pointer.get(player.getName());
+			int i = list.indexOf(pointer.get(player));
+			pointer.put(player, list.get(i > 0 ? i - 1 : list.size() - 1));
+			return pointer.get(player);
 		}
 		return null;
 	}
 
 	public String next(IPlayer player)
 	{
-		if (lists.containsKey(player.getName()))
+		if (lists.containsKey(player))
 		{
-			List<String> list = lists.get(player.getName());
+			List<String> list = lists.get(player);
 			if (list == null || list.isEmpty())
 				return null;
-			int i = list.indexOf(pointer.get(player.getName()));
-			pointer.put(player.getName(), list.get(i + 1 >= list.size() ? 0 : i + 1));
-			return pointer.get(player.getName());
+			int i = list.indexOf(pointer.get(player));
+			pointer.put(player, list.get(i + 1 >= list.size() ? 0 : i + 1));
+			return pointer.get(player);
 		}
 		return null;
 	}
 
-	private final ConcurrentHashMap<String, String> pointer = new ConcurrentHashMap<String, String>();
-	private final ConcurrentHashMap<String, List<String>> lists = new ConcurrentHashMap<String, List<String>>();
+	private final ConcurrentHashMap<IPlayer, String> pointer = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<IPlayer, List<String>> lists = new ConcurrentHashMap<>();
 }

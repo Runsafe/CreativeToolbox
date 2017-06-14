@@ -8,7 +8,6 @@ import no.runsafe.framework.api.IScheduler;
 import no.runsafe.framework.api.command.argument.Player;
 import no.runsafe.framework.api.command.argument.IArgumentList;
 import no.runsafe.framework.api.command.player.PlayerAsyncCommand;
-import no.runsafe.framework.api.player.IAmbiguousPlayer;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.worldguardbridge.IRegionControl;
 import org.apache.commons.lang.StringUtils;
@@ -42,14 +41,14 @@ public class AddCommand extends PlayerAsyncCommand
 		List<String> ownedRegions = worldGuardInterface.getOwnedRegions(executor, plotFilter.getWorld());
 		if (target == null || target.size() == 0)
 			return "No region defined at your location!";
-		List<String> results = new ArrayList<String>();
+		List<String> results = new ArrayList<>();
 		for (String region : target)
 		{
 			if (ownedRegions.contains(region) || executor.hasPermission("runsafe.creative.member.override"))
 			{
 				if (worldGuardInterface.addMemberToRegion(plotFilter.getWorld(), region, member))
 				{
-					members.addMember(region, member.getName(), false);
+					members.addMember(region, member, false);
 					results.add(String.format("%s was successfully added to the plot %s.", member.getPrettyName(), region));
 					new PlotMembershipGrantedEvent(member, region).Fire();
 				}

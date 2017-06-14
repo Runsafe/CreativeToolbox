@@ -5,7 +5,6 @@ import no.runsafe.creativetoolbox.PlotManager;
 import no.runsafe.creativetoolbox.database.ApprovedPlotRepository;
 import no.runsafe.creativetoolbox.database.PlotApproval;
 import no.runsafe.framework.api.IServer;
-import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.ai.IChatResponseTrigger;
 import no.runsafe.framework.api.log.IDebug;
 import no.runsafe.framework.api.player.IPlayer;

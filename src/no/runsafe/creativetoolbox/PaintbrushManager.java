@@ -62,13 +62,12 @@ public class PaintbrushManager implements IPlayerLeftClickBlockEvent, IPlayerRig
 
 	private Item getPaintbrushBlock(IPlayer player)
 	{
-		String playerName = player.getName();
-		return paintbrushes.containsKey(playerName) ? paintbrushes.get(playerName) : Item.Unavailable.Air;
+		return paintbrushes.getOrDefault(player, Item.Unavailable.Air);
 	}
 
 	public void setPaintbrushBlock(IPlayer player, Item setItem)
 	{
-		paintbrushes.put(player.getName(), setItem);
+		paintbrushes.put(player, setItem);
 		player.sendColouredMessage("&ePaintbrush block changed: " + setItem.getName() + " [" + setItem.getData() + "]");
 	}
 
@@ -78,7 +77,7 @@ public class PaintbrushManager implements IPlayerLeftClickBlockEvent, IPlayerRig
 		creativeWorldName = configuration.getConfigValueAsString("world");
 	}
 
-	private final HashMap<String, Item> paintbrushes = new HashMap<String, Item>(0);
+	private final HashMap<IPlayer, Item> paintbrushes = new HashMap<>(0);
 	private final IRegionControl regionControl;
 	private String creativeWorldName;
 }

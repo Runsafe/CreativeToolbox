@@ -10,6 +10,7 @@ import no.runsafe.framework.api.event.IServerReady;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.api.log.IConsole;
 import no.runsafe.framework.api.log.IDebug;
+import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.worldguardbridge.IRegionControl;
 
 import java.util.List;
@@ -65,13 +66,13 @@ public class Importers implements IConfigurationChanged, IServerReady
 				if (!logRepository.log(region, "unknown"))
 					console.logWarning("Unable to import region &c%s&r to claim repository!", region);
 
-			for (String member : worldGuard.getMembers(world, region))
+			for (IPlayer member : worldGuard.getMemberPlayers(world, region))
 			{
 				memberRepository.addMember(region, member, false);
 				members++;
 			}
 
-			for (String member : worldGuard.getOwners(world, region))
+			for (IPlayer member : worldGuard.getOwnerPlayers(world, region))
 			{
 				memberRepository.addMember(region, member, true);
 				owners++;

@@ -27,7 +27,7 @@ public class AddCommand extends PlayerAsyncCommand
 		if (plot == null)
 			return "There is no plot here.";
 
-		String[] tags = ChatColour.Strip(params.get("tag")).split("\\s+");
+		String[] tags = ChatColour.Strip(params.getValue("tag")).split("\\s+");
 		boolean success = true;
 		for (String tag : tags)
 			success = success && tagRepository.addTag(plot, tag);

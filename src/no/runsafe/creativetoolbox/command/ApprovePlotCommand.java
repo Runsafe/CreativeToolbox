@@ -27,7 +27,7 @@ public class ApprovePlotCommand extends PlayerAsyncCommand
 		if (parameters.getValue("plotname").equals("."))
 			plot = manager.getCurrentRegionFiltered(executor);
 		else
-			plot = plotFilter.apply(parameters.get("plotname"));
+			plot = plotFilter.apply((String) parameters.getValue("plotname"));
 		if (plot == null)
 			return "You cannot approve that plot.";
 

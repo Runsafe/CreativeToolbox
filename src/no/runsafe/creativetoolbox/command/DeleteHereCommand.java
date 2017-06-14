@@ -43,7 +43,7 @@ public class DeleteHereCommand extends PlayerAsyncCommand
 		List<String> delete = filter.apply(worldGuard.getRegionsAtLocation(executor.getLocation()));
 		if (delete == null || delete.size() == 0)
 			return "No regions to delete!";
-		Map<String, Rectangle2D> regions = new HashMap<String, Rectangle2D>();
+		Map<String, Rectangle2D> regions = new HashMap<>();
 		for (String region : delete)
 		{
 			PlotApproval approval = approvedPlotRepository.get(region);

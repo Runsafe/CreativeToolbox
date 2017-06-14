@@ -6,6 +6,7 @@ import no.runsafe.framework.api.database.SchemaUpdate;
 import no.runsafe.framework.api.player.IPlayer;
 import org.apache.commons.lang.StringUtils;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +17,7 @@ public class PlotVoteRepository extends Repository
 		return database.update(
 			"INSERT INTO creative_plot_vote (`plot`, `player`, `rank`) VALUES (?, ?, ?)" +
 				"ON DUPLICATE KEY UPDATE rank=VALUES(`rank`)",
-			plot, player.getName(), StringUtils.join(player.getGroups(), ",")
+			plot, player, StringUtils.join(player.getGroups(), ",")
 		) > 0;
 	}
 
@@ -43,12 +44,14 @@ public class PlotVoteRepository extends Repository
 		return tally;
 	}
 
+	@Nonnull
 	@Override
 	public String getTableName()
 	{
 		return "creative_plot_vote";
 	}
 
+	@Nonnull
 	@Override
 	public ISchemaUpdate getSchemaUpdateQueries()
 	{
@@ -60,7 +63,16 @@ public class PlotVoteRepository extends Repository
 				"`player` varchar(255) NOT NULL," +
 				"`rank` varchar(255) NOT NULL," +
 				"PRIMARY KEY(`plot`,`player`)" +
-				")"
+			")"
+		);
+
+		update.addQueries(
+			String.format( // Player names -> Unique IDs
+				"UPDATE IGNORE `%s` SET `player` = " +
+					"COALESCE((SELECT `uuid` FROM player_db WHERE `name`=`%s`.`player`), `player`) " +
+					"WHERE length(`player`) != 36",
+				getTableName(), getTableName()
+			)
 		);
 
 		return update;

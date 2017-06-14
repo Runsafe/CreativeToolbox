@@ -18,8 +18,8 @@ public class CreativePlot
 		this.created = created;
 		this.claimedBy = claimedBy;
 		this.name = name;
-		members = new ArrayList<String>();
-		owners = new ArrayList<String>();
+		members = new ArrayList<>();
+		owners = new ArrayList<>();
 	}
 
 	public String getName()

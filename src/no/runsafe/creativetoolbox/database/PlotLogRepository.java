@@ -3,6 +3,7 @@ package no.runsafe.creativetoolbox.database;
 import no.runsafe.framework.api.database.*;
 import no.runsafe.framework.api.player.IPlayer;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public class PlotLogRepository extends Repository
@@ -33,12 +34,14 @@ public class PlotLogRepository extends Repository
 		return String.format("%s by %s", data.DateTime("claimed").toString("dd.MM.yyyy"), data.String("claimer"));
 	}
 
+	@Nonnull
 	@Override
 	public String getTableName()
 	{
 		return "creative_plot_log";
 	}
 
+	@Nonnull
 	@Override
 	public ISchemaUpdate getSchemaUpdateQueries()
 	{
@@ -65,7 +68,7 @@ public class PlotLogRepository extends Repository
 				"WHERE pm.`player`=? " +
 				"ORDER BY pl.`claimed` DESC " +
 				"LIMIT 1",
-			player.getName()
+			player
 		);
 	}
 }

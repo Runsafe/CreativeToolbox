@@ -3,12 +3,12 @@ package no.runsafe.creativetoolbox.database;
 import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.IWorld;
-import no.runsafe.framework.api.database.IDatabase;
 import no.runsafe.framework.api.database.ISchemaUpdate;
 import no.runsafe.framework.api.database.Repository;
 import no.runsafe.framework.api.database.SchemaUpdate;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.List;
 
@@ -78,12 +78,14 @@ public class PlotEntranceRepository extends Repository implements IConfiguration
 		world = configuration.getConfigValueAsWorld("world");
 	}
 
+	@Nonnull
 	@Override
 	public String getTableName()
 	{
 		return "creativetoolbox_plot_entrance";
 	}
 
+	@Nonnull
 	@Override
 	public ISchemaUpdate getSchemaUpdateQueries()
 	{
@@ -104,6 +106,6 @@ public class PlotEntranceRepository extends Repository implements IConfiguration
 		return update;
 	}
 
-	private final HashMap<String, PlotEntrance> cache = new HashMap<String, PlotEntrance>();
+	private final HashMap<String, PlotEntrance> cache = new HashMap<>();
 	private IWorld world;
 }

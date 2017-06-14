@@ -75,7 +75,7 @@ public class ClaimCommand extends PlayerCommand
 
 		if (manager.claim(executor, owner, plotName, region))
 		{
-			members.addMember(plotName, owner.getName(), true);
+			members.addMember(plotName, owner, true);
 			if (owner == executor)
 				return String.format("New plot \"%s\" created - use /ct teleport %d to get back to it!", plotName, n);
 

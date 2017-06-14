@@ -22,7 +22,7 @@ public class CustomEvents implements IPlayerCustomEvent
 		if (event instanceof PlotMembershipRevokedEvent)
 		{
 			String plot = (String) event.getData();
-			manager.memberRemoved(plot, event.getPlayer().getName());
+			manager.memberRemoved(plot, event.getPlayer());
 		}
 	}
 

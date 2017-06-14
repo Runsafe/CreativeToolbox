@@ -36,17 +36,17 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 
 	public void startRegeneration(IPlayer executor, Rectangle2D area, PlotChunkGenerator.Mode mode)
 	{
-		regenerations.put(executor.getName(), area);
+		regenerations.put(executor, area);
 
 		if (mode != null)
-			generator.put(executor.getName(), mode);
-		else if (generator.containsKey(executor.getName()))
-			generator.remove(executor.getName());
+			generator.put(executor, mode);
+		else if (generator.containsKey(executor))
+			generator.remove(executor);
 	}
 
 	public void startDeletion(IPlayer executor, Map<String, Rectangle2D> regions)
 	{
-		deletions.put(executor.getName(), regions);
+		deletions.put(executor, regions);
 	}
 
 	@Override
@@ -59,24 +59,23 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 
 	private boolean executeRegenerations(IPlayer player, ILocation location)
 	{
-		if (regenerations.containsKey(player.getName()))
+		if (regenerations.containsKey(player))
 		{
-			boolean changeMode = generator.containsKey(player.getName())
-				&& generator.get(player.getName()) != PlotChunkGenerator.Mode.NORMAL;
+			boolean changeMode = generator.containsKey(player)
+				&& generator.get(player) != PlotChunkGenerator.Mode.NORMAL;
 			try
 			{
-				String playerName = player.getName();
-				Rectangle2D area = regenerations.get(playerName);
+				Rectangle2D area = regenerations.get(player);
 				if (!area.contains(location.getX(), location.getZ()))
 				{
-					regenerations.remove(playerName);
+					regenerations.remove(player);
 					if (changeMode)
-						generator.remove(playerName);
+						generator.remove(player);
 					return true;
 				}
 				if (changeMode)
 				{
-					PlotChunkGenerator.Mode mode = generator.get(playerName);
+					PlotChunkGenerator.Mode mode = generator.get(player);
 					plotGenerator.setMode(mode);
 				}
 
@@ -97,9 +96,9 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 				if (changeMode)
 				{
 					plotGenerator.setMode(PlotChunkGenerator.Mode.NORMAL);
-					generator.remove(player.getName());
+					generator.remove(player);
 				}
-				regenerations.remove(player.getName());
+				regenerations.remove(player);
 			}
 		}
 		return true;
@@ -121,11 +120,11 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 	private boolean executeDeletion(IPlayer player, ILocation location)
 	{
 		boolean nothing = true;
-		if (deletions.containsKey(player.getName()))
+		if (deletions.containsKey(player))
 		{
 			StringBuilder results = new StringBuilder();
-			Map<String, Rectangle2D> process = deletions.get(player.getName());
-			deletions.remove(player.getName());
+			Map<String, Rectangle2D> process = deletions.get(player);
+			deletions.remove(player);
 			for (String region : process.keySet())
 			{
 				Rectangle2D area = process.get(region);
@@ -147,9 +146,9 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 		return nothing;
 	}
 
-	private final ConcurrentHashMap<String, Map<String, Rectangle2D>> deletions = new ConcurrentHashMap<String, Map<String, Rectangle2D>>();
-	private final ConcurrentHashMap<String, Rectangle2D> regenerations = new ConcurrentHashMap<String, Rectangle2D>();
-	private final ConcurrentHashMap<String, PlotChunkGenerator.Mode> generator = new ConcurrentHashMap<String, PlotChunkGenerator.Mode>();
+	private final ConcurrentHashMap<IPlayer, Map<String, Rectangle2D>> deletions = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<IPlayer, Rectangle2D> regenerations = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<IPlayer, PlotChunkGenerator.Mode> generator = new ConcurrentHashMap<>();
 	private final IPlotGenerator plotGenerator;
 	private final PlotCalculator calculator;
 	private final WorldEditInterface worldEdit;

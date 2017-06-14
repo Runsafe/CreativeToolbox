@@ -4,6 +4,8 @@
       <root url="jar://$PROJECT_DIR$/../out/PlotGenerator.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../PlotGenerator/src" />
+    </SOURCES>
   </library>
 </component>
