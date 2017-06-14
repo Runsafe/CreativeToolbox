@@ -48,7 +48,7 @@ public class JumpCommand extends PlayerAsyncCallbackCommand<JumpCommand.Sudo>
 			return target;
 		}
 		List<String> plots = plotFilter.getFiltered();
-		ArrayList<String> result = new ArrayList<String>();
+		ArrayList<String> result = new ArrayList<>();
 		for (String value : plots)
 			if (!approved.contains(value))
 				result.add(value);

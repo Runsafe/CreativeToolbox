@@ -41,7 +41,7 @@ public class AddCommand extends PlayerAsyncCommand
 		List<String> ownedRegions = worldGuardInterface.getOwnedRegions(executor, plotFilter.getWorld());
 		if (target == null || target.size() == 0)
 			return "No region defined at your location!";
-		List<String> results = new ArrayList<String>();
+		List<String> results = new ArrayList<>();
 		for (String region : target)
 		{
 			if (ownedRegions.contains(region) || executor.hasPermission("runsafe.creative.member.override"))

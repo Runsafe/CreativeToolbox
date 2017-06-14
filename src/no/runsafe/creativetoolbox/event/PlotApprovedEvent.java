@@ -35,7 +35,7 @@ public class PlotApprovedEvent extends RunsafeCustomEvent
 	@Override
 	public Map<String, String> getData()
 	{
-		Map<String, String> data = new HashMap<String, String>();
+		Map<String, String> data = new HashMap<>();
 		data.put("plot", approval.getName());
 		data.put("approved_by", approval.getApprovedBy());
 		data.put("owner", owner.getName());

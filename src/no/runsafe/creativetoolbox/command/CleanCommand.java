@@ -21,7 +21,7 @@ public class CleanCommand extends PlayerCommand
 	@Override
 	public String OnExecute(IPlayer executor, IArgumentList parameters)
 	{
-		HashMap<String, Integer> counts = new HashMap<String, Integer>();
+		HashMap<String, Integer> counts = new HashMap<>();
 		String[] arguments = new String[0];
 		if (parameters.getValue("filter") != null)
 			arguments = ((String) parameters.getValue("filter")).split("\\s+");

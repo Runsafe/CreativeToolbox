@@ -106,6 +106,6 @@ public class PlotEntranceRepository extends Repository implements IConfiguration
 		return update;
 	}
 
-	private final HashMap<String, PlotEntrance> cache = new HashMap<String, PlotEntrance>();
+	private final HashMap<String, PlotEntrance> cache = new HashMap<>();
 	private IWorld world;
 }

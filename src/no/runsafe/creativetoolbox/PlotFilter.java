@@ -21,7 +21,7 @@ public class PlotFilter implements IConfigurationChanged
 	{
 		filter = configuration.getConfigValueAsList("ignored");
 		if (filter == null)
-			filter = new ArrayList<String>();
+			filter = new ArrayList<>();
 		world = configuration.getConfigValueAsWorld("world");
 
 		filterCache = null;
@@ -31,7 +31,7 @@ public class PlotFilter implements IConfigurationChanged
 	{
 		if (unfiltered == null)
 			return null;
-		ArrayList<String> result = new ArrayList<String>();
+		ArrayList<String> result = new ArrayList<>();
 		for (String value : unfiltered)
 			if (!filter.contains(value))
 				result.add(value);

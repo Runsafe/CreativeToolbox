@@ -46,7 +46,7 @@ public class PlotCalculator implements IConfigurationChanged
 
 	public List<Rectangle2D> getPaddingSelection(Rectangle2D plotArea)
 	{
-		List<Rectangle2D> regions = new ArrayList<Rectangle2D>();
+		List<Rectangle2D> regions = new ArrayList<>();
 		regions.add(
 			new Rectangle2D.Double(
 				plotArea.getMinX(), plotArea.getMinY(),

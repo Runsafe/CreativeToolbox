@@ -77,7 +77,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 
 	public java.util.List<ILocation> getPlotEntrances()
 	{
-		ArrayList<ILocation> entrances = new ArrayList<ILocation>();
+		ArrayList<ILocation> entrances = new ArrayList<>();
 		for (String plot : filter.getFiltered())
 			entrances.add(plotEntrance.get(plot).getLocation());
 		return entrances;
@@ -131,8 +131,8 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 
 		List<String> approvedPlots = plotApproval.getApprovedPlots();
 		Map<String, Set<IPlayer>> checkList = worldGuard.getAllRegionsWithOwnersInWorld(getWorld());
-		Map<String, String> hits = new HashMap<String, String>();
-		for (String region : filter.apply(new ArrayList<String>(checkList.keySet())))
+		Map<String, String> hits = new HashMap<>();
+		for (String region : filter.apply(new ArrayList<>(checkList.keySet())))
 		{
 			if (approvedPlots.contains(region))
 				continue;
@@ -214,7 +214,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 	{
 		if (plotNames == null)
 			return null;
-		List<String> tagged = new ArrayList<String>();
+		List<String> tagged = new ArrayList<>();
 		for (String plot : plotNames)
 			tagged.add(tag(player, plot));
 		return tagged;
@@ -222,7 +222,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 
 	public String tag(IPlayer player, String plot)
 	{
-		List<String> tags = new ArrayList<String>();
+		List<String> tags = new ArrayList<>();
 		tags.add(plot);
 		if (player.hasPermission("runsafe.creative.approval.read"))
 		{
@@ -378,7 +378,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 	@Override
 	public HashMap<String, String> GetPlayerData(IPlayer player)
 	{
-		HashMap<String, String> data = new HashMap<String, String>();
+		HashMap<String, String> data = new HashMap<>();
 		data.put("runsafe.creative.blacklisted", blackList.isBlacklisted(player) ? "true" : "false");
 
 		List<String> plots = memberRepository.getPlots(player, true, false);
@@ -496,7 +496,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 	private void setTaken(long col, long row)
 	{
 		if (!takenPlots.containsKey(col))
-			takenPlots.put(col, new ArrayList<Long>());
+			takenPlots.put(col, new ArrayList<>());
 		if (!takenPlots.get(col).contains(row))
 			takenPlots.get(col).add(row);
 	}
@@ -525,8 +525,8 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 	private final IDebug debugger;
 	private final PlotLogRepository plotLog;
 	private final HashMap<IPlayer, Duration> lastSeen = new HashMap<>();
-	private final HashMap<Long, ArrayList<Long>> takenPlots = new HashMap<Long, ArrayList<Long>>();
-	private final ArrayList<ILocation> freePlots = new ArrayList<ILocation>();
+	private final HashMap<Long, ArrayList<Long>> takenPlots = new HashMap<>();
+	private final ArrayList<ILocation> freePlots = new ArrayList<>();
 	private final Map<String, List<IPlayer>> voteBlacklist = new HashMap<>();
 	private IWorld world;
 	private List<String> ignoredRegions;

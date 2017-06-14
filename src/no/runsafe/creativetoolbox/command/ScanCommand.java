@@ -20,7 +20,7 @@ public class ScanCommand extends PlayerCommand
 	@Override
 	public String OnExecute(IPlayer executor, IArgumentList parameters)
 	{
-		HashMap<String, Integer> counts = new HashMap<String, Integer>();
+		HashMap<String, Integer> counts = new HashMap<>();
 		IWorld world = manager.getWorld();
 		if (world == null)
 			return "Creative world not found!";
