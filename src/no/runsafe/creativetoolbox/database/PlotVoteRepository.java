@@ -63,7 +63,7 @@ public class PlotVoteRepository extends Repository
 				"`player` varchar(255) NOT NULL," +
 				"`rank` varchar(255) NOT NULL," +
 				"PRIMARY KEY(`plot`,`player`)" +
-				")"
+			")"
 		);
 
 		update.addQueries(

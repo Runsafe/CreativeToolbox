@@ -173,18 +173,25 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 
 	private Duration getSeen(IPlayer player)
 	{
-		if (player == null) return null;
+		if (player == null)
+			return null;
 
-		if (lastSeen.containsKey(player)) return lastSeen.get(player);
+		if (lastSeen.containsKey(player))
+			return lastSeen.get(player);
 
-		if (player.isOnline()) lastSeen.put(player, Duration.ZERO);
-		else if (!player.isNotBanned()) lastSeen.put(player, BANNED);
+		if (player.isOnline())
+			lastSeen.put(player, Duration.ZERO);
 		else
-		{
-			DateTime logout = player.lastLogout();
-			if (logout == null) lastSeen.put(player, null);
-			else lastSeen.put(player, new Duration(player.lastLogout(), DateTime.now()));
-		}
+			if (!player.isNotBanned())
+				lastSeen.put(player, BANNED);
+			else
+			{
+				DateTime logout = player.lastLogout();
+				if (logout == null)
+					lastSeen.put(player, null);
+				else
+					lastSeen.put(player, new Duration(player.lastLogout(), DateTime.now()));
+			}
 		return lastSeen.get(player);
 	}
 

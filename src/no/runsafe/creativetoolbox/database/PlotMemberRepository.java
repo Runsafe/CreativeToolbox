@@ -70,7 +70,7 @@ public class PlotMemberRepository extends Repository
 				"`player` VARCHAR(250)," +
 				"`owner` INT," +
 				"PRIMARY KEY(`plot`,`player`)" +
-				");"
+			");"
 		);
 
 		update.addQueries(
