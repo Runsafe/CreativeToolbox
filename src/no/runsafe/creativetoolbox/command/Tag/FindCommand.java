@@ -26,7 +26,7 @@ public class FindCommand extends AsyncCommand
 	{
 		List<String> hits = tagRepository.findPlots(param.getValue("lookup"));
 		if (hits.isEmpty())
-			return String.format("No plots have been tagged with %s..", param.getValue("lookup"));
+			return "&cNo plots have that tag.";
 		if (executor instanceof IPlayer)
 			plotList.set((IPlayer) executor, hits);
 		if (hits.size() > 20)
