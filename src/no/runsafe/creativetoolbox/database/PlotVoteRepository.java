@@ -44,6 +44,11 @@ public class PlotVoteRepository extends Repository
 		return tally;
 	}
 
+	public void renamePlot(String oldName, String newName)
+	{
+		database.update("UPDATE `" + getTableName() + "` SET plot=? WHERE plot=?;", newName, oldName);
+	}
+
 	@Nonnull
 	@Override
 	public String getTableName()
