@@ -21,6 +21,11 @@ public class PlotLogRepository extends Repository
 		database.execute("DELETE FROM `creative_plot_log` WHERE `plot`=?", plot);
 	}
 
+	public void renamePlot(String oldName, String newName)
+	{
+		database.update("UPDATE `" + getTableName() + "` SET plot=? WHERE plot=?;", newName, oldName);
+	}
+
 	public List<String> getPlots()
 	{
 		return database.queryStrings("SELECT `plot` FROM `creative_plot_log`");

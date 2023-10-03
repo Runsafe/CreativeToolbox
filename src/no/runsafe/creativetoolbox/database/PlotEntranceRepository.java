@@ -67,6 +67,11 @@ public class PlotEntranceRepository extends Repository implements IConfiguration
 			cache.remove(region);
 	}
 
+	public void renamePlot(String oldName, String newName)
+	{
+		database.update("UPDATE `" + getTableName() + "` SET name=? WHERE name=?;", newName, oldName);
+	}
+
 	public List<String> getPlots()
 	{
 		return database.queryStrings("SELECT name FROM creativetoolbox_plot_entrance");

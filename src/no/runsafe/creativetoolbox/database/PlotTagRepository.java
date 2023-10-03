@@ -44,6 +44,11 @@ public class PlotTagRepository extends Repository
 		return database.queryStrings("SELECT DISTINCT `name` FROM creative_plot_tags");
 	}
 
+	public void renamePlot(String oldName, String newName)
+	{
+		database.update("UPDATE `" + getTableName() + "` SET name=? WHERE name=?;", newName, oldName);
+	}
+
 	@Nonnull
 	@Override
 	public String getTableName()

@@ -53,6 +53,11 @@ public class PlotMemberRepository extends Repository
 			return database.queryStrings("SELECT DISTINCT `plot` FROM creative_plot_member WHERE player=? AND owner=?", player, owner ? 1 : 0);
 	}
 
+	public void renamePlot(String oldName, String newName)
+	{
+		database.update("UPDATE `" + getTableName() + "` SET plot=? WHERE plot=?;", newName, oldName);
+	}
+
 	public int cleanStaleData()
 	{
 		return database.update("DELETE FROM creative_plot_member WHERE `plot` NOT IN (SELECT `plot` FROM creative_plot_log)");

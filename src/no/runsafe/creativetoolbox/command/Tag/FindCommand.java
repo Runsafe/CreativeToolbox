@@ -24,9 +24,10 @@ public class FindCommand extends AsyncCommand
 	@Override
 	public String OnAsyncExecute(ICommandExecutor executor, IArgumentList param)
 	{
-		List<String> hits = tagRepository.findPlots(param.getValue("lookup"));
+		String lookup = param.getRequired("lookup");
+		List<String> hits = tagRepository.findPlots(lookup);
 		if (hits.isEmpty())
-			return String.format("No plots have been tagged with %s..", param.getValue("lookup"));
+			return String.format("&cNo plots have been tagged with %s..", lookup);
 		if (executor instanceof IPlayer)
 			plotList.set((IPlayer) executor, hits);
 		if (hits.size() > 20)

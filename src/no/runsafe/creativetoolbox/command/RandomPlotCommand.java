@@ -27,13 +27,14 @@ public class RandomPlotCommand extends PlayerAsyncCallbackCommand<RandomPlotComm
 		if (plotFilter.getWorld() == null)
 			return null;
 		List<String> plots;
-		if (parameters.getValue("tag") != null)
+		String tag = parameters.getValue("tag");
+		if (tag != null)
 		{
-			console.debugFine("Optional argument tag detected: %s", parameters.getValue("tag"));
-			plots = tagRepository.findPlots(parameters.getValue("tag"));
+			console.debugFine("Optional argument tag detected: %s", tag);
+			plots = tagRepository.findPlots(tag);
 			if (plots.isEmpty())
 			{
-				executor.sendColouredMessage("&cSorry, found no plots tagged \"%s\".", parameters.getValue("tag"));
+				executor.sendColouredMessage("&cSorry, found no plots tagged \"%s\".", tag);
 				return null;
 			}
 		}
