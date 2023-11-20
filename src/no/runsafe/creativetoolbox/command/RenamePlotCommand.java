@@ -11,7 +11,7 @@ public class RenamePlotCommand extends ExecutableCommand
 	public RenamePlotCommand(PlotManager manager)
 	{
 		super(
-			"renamePlot", "Renames a plot in creative.", "runsafe.creative.renameplot",
+			"renameplot", "Renames a plot in creative.", "runsafe.creative.renameplot",
 			new RequiredArgument("CurrentPlotName"), new RequiredArgument("NewPlotName")
 		);
 		this.manager = manager;
