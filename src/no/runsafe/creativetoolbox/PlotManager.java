@@ -71,7 +71,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		if (!world.equals(player.getWorld()))
 			return false;
 		List<String> regions = worldGuard.getRegionsAtLocation(player.getLocation());
-		return regions == null || ignoredRegions.containsAll(regions);
+		return regions == null || new HashSet<>(ignoredRegions).containsAll(regions);
 	}
 
 	public java.util.List<ILocation> getPlotEntrances()
