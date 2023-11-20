@@ -22,6 +22,8 @@ jobs:
       - shell: bash
         run: |
           mkdir -p /home/runner/work/Framework/lastStable/archive/build/jar
+          mkdir -p /home/runner/work/WorldGuardBridge/lastStable/archive/build/jar
+          mkdir -p /home/runner/work/WorldEditBridge/lastStable/archive/build/jar
           curl https://jenkins.runsafe.no/job/Framework/lastSuccessfulBuild/artifact/build/jar/framework.jar -o ../../Framework/lastStable/archive/build/jar/framework.jar
           curl https://jenkins.runsafe.no/job/WorldGuardBridge/lastSuccessfulBuild/artifact/build/jar/RunsafeWorldGuardBridge.jar -o ../../WorldGuardBridge/lastStable/archive/build/jar/RunsafeWorldGuardBridge.jar
           curl https://jenkins.runsafe.no/job/WorldEditBridge/lastSuccessfulBuild/artifact/build/jar/RunsafeWorldEditBridge.jar -o ../../WorldEditBridge/lastStable/archive/build/jar/RunsafeWorldEditBridge.jar
