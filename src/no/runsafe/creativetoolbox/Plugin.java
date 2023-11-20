@@ -16,6 +16,7 @@ import no.runsafe.creativetoolbox.fence.FenceConfig;
 import no.runsafe.creativetoolbox.fence.FenceHandler;
 import no.runsafe.framework.RunsafeConfigurablePlugin;
 import no.runsafe.framework.api.command.Command;
+import no.runsafe.framework.api.log.IConsole;
 import no.runsafe.framework.features.Commands;
 import no.runsafe.framework.features.Database;
 import no.runsafe.framework.features.Events;
@@ -23,9 +24,13 @@ import no.runsafe.framework.features.FrameworkHooks;
 
 public class Plugin extends RunsafeConfigurablePlugin
 {
+	public static IConsole console;
+
 	@Override
 	protected void pluginSetup()
 	{
+		console = getComponent(IConsole.class);
+
 		// Framework features
 		addComponent(Commands.class);
 		addComponent(Database.class);
