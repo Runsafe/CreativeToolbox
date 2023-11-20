@@ -29,7 +29,7 @@ public class SelectCommand extends PlayerCommand
 	public String OnExecute(IPlayer executor, IArgumentList parameters)
 	{
 		if (manager.isInWrongWorld(executor))
-			return "You cannot use that here.";
+			return "&cYou cannot use that here.";
 
 		ILocation executorLocation = executor.getLocation();
 		if (executorLocation == null)

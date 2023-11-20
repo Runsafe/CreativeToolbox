@@ -26,7 +26,7 @@ public class WhitelistCommand extends ExecutableCommand
 			return "&cThat player is not blacklisted.";
 
 		blacklistRepository.remove(player);
-		return String.format("The player %s has been removed from the blacklist.", player.getPrettyName());
+		return String.format("&aThe player &r%s &ahas been removed from the blacklist.", player.getPrettyName());
 	}
 
 	private final PlotMemberBlacklistRepository blacklistRepository;

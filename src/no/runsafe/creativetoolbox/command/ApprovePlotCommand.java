@@ -21,18 +21,18 @@ public class ApprovePlotCommand extends PlayerAsyncCommand
 	public String OnAsyncExecute(IPlayer executor, IArgumentList parameters)
 	{
 		if (manager.isInWrongWorld(executor))
-			return "You cannot use that here.";
+			return "&cYou cannot use that here.";
 		String plot = parameters.getValue("plotname");
 		if (plot == null || plot.equals("."))
 			plot = manager.getCurrentRegionFiltered(executor);
 		else
 			plot = plotFilter.apply(plot);
 		if (plot == null)
-			return "You cannot approve that plot.";
+			return "&cYou cannot approve that plot.";
 
 		PlotApproval approval = manager.approve(executor.getName(), plot);
 		if (approval == null)
-			return String.format("Failed approving plot %s!", plot);
+			return String.format("&cFailed approving plot %s!", plot);
 
 		return null;
 	}

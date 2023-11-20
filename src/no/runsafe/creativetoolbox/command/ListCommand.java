@@ -31,10 +31,10 @@ public class ListCommand extends PlayerAsyncCommand
 	public String OnAsyncExecute(IPlayer executor, IArgumentList parameters)
 	{
 		if (!worldGuard.serverHasWorldGuard())
-			return "Unable to find WorldGuard!";
+			return "&cUnable to find WorldGuard!";
 
 		if (filter.getWorld() == null)
-			return "No world defined!";
+			return "&cNo world defined!";
 
 		IPlayer player = parameters.getValue("player");
 		if (player == null)

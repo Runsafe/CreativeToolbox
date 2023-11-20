@@ -17,18 +17,18 @@ public class VoteCommand extends PlayerCommand
 	public String OnExecute(IPlayer player, IArgumentList stringStringHashMap)
 	{
 		if (manager.isInWrongWorld(player))
-			return "You cannot use that here.";
+			return "&cYou cannot use that here.";
 
 		String region = manager.getCurrentRegionFiltered(player);
 		if (region == null)
-			return "There is no plot here.";
+			return "&cThere is no plot here.";
 
 		if (manager.disallowVote(player, region))
-			return "You are not allowed to vote for this plot.";
+			return "&cYou are not allowed to vote for this plot.";
 
 		return manager.vote(player, region)
-			? String.format("Thank you for voting for the plot \"%s\".", region)
-			: "An error occurred while casting ballot!";
+			? String.format("&aThank you for voting for the plot \"%s\".", region)
+			: "&cAn error occurred while casting ballot!";
 	}
 
 	private final PlotManager manager;

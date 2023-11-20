@@ -65,7 +65,7 @@ public class CleanCommand extends PlayerCommand
 			count++;
 			entity.remove();
 		}
-		StringBuilder results = new StringBuilder(String.format("%d items cleaned:\n", count));
+		StringBuilder results = new StringBuilder(String.format("&a%d items cleaned:\n", count));
 		for (String name : counts.keySet())
 			results.append(String.format("  %s: %d.\n", name, counts.get(name)));
 		return results.toString();

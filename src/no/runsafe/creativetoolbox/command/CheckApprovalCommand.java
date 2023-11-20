@@ -36,14 +36,14 @@ public class CheckApprovalCommand extends AsyncCommand
 		{
 			List<String> here = plotFilter.apply(worldGuardInterface.getRegionsAtLocation(((IPlayer) executor).getLocation()));
 			if (here == null || here.isEmpty())
-				return "No plot here";
+				return "&cNo plot here";
 			plot = here.get(0);
 		}
 		PlotApproval approval = repository.get(plot);
 		if (approval == null)
-			return String.format("Plot %s has not been approved.", plot);
+			return String.format("&cPlot %s has not been approved.", plot);
 
-		return String.format("Plot %s was approved by %s at %s", plot, approval.getApprovedBy(), approval.getApproved());
+		return String.format("&aPlot %s was approved by %s at %s", plot, approval.getApprovedBy(), approval.getApproved());
 	}
 
 	private final ApprovedPlotRepository repository;

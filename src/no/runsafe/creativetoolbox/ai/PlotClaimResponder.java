@@ -53,7 +53,7 @@ public class PlotClaimResponder implements IChatResponseTrigger
 				PlotApproval approved = approvalRepository.get(plot);
 				debug.debugFine("Plot %s is %s.", plot, approved != null ? "approved" : "unapproved");
 				if (approved == null)
-					return String.format("You must either get all your plots approved, or ask a member of staff to grant you a plot, %s.", playerName);
+					return String.format("&cYou must either get all your plots approved, or ask a member of staff to grant you a plot, %s.", playerName);
 			}
 		}
 
@@ -62,7 +62,7 @@ public class PlotClaimResponder implements IChatResponseTrigger
 		if (!claimable || region  == null)
 			return String.format("First you need a free plot, %s, use /ct f to find one! Once there, please use /ct claim.", playerName);
 
-		return String.format("You can claim the plot you are in now, %s; just type /ct claim!", playerName);
+		return String.format("&aYou can claim the plot you are in now, %s; just type /ct claim!", playerName);
 	}
 
 	@Override

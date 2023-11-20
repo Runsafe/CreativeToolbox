@@ -23,17 +23,17 @@ public class SetCommand extends PlayerAsyncCommand
 	public String OnAsyncExecute(IPlayer player, IArgumentList param)
 	{
 		if (manager.isInWrongWorld(player))
-			return "You cannot use that here.";
+			return "&cYou cannot use that here.";
 
 		String plot = manager.getCurrentRegionFiltered(player);
 		if (plot == null)
-			return "There is no plot here.";
+			return "&cThere is no plot here.";
 
 		String[] tags = ChatColour.Strip(param.getValue("tags")).split("\\s+");
 		return String.format(
 			tagRepository.setTags(plot, Lists.newArrayList(tags))
-				? "Changed tags for plot %s."
-				: "Unable to save tags for plot %s.",
+				? "&aChanged tags for plot %s."
+				: "&cUnable to save tags for plot %s.",
 			plot
 		);
 	}

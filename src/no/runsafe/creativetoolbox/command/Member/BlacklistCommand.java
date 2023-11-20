@@ -34,7 +34,7 @@ public class BlacklistCommand extends AsyncCommand
 
 		blacklistRepository.add(executor, player);
 		manager.removeMember(player);
-		return String.format("The player %s has been blacklisted.", player.getPrettyName());
+		return String.format("&aThe player &r%s &ahas been blacklisted.", player.getPrettyName());
 	}
 
 	private final PlotMemberBlacklistRepository blacklistRepository;

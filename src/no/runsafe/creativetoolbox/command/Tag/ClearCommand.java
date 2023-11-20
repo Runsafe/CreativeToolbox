@@ -20,15 +20,15 @@ public class ClearCommand extends PlayerAsyncCommand
 	public String OnAsyncExecute(IPlayer player, IArgumentList stringStringHashMap)
 	{
 		if (manager.isInWrongWorld(player))
-			return "You cannot use that here.";
+			return "&cYou cannot use that here.";
 
 		String plot = manager.getCurrentRegionFiltered(player);
 		if (plot == null)
-			return "There is no plot here.";
+			return "&cThere is no plot here.";
 
 		return tagRepository.setTags(plot, null) ?
-			String.format("Cleared tags for %s.", plot) :
-			String.format("Could not clear tags for %s.", plot);
+			String.format("&aCleared tags for %s.", plot) :
+			String.format("&cCould not clear tags for %s.", plot);
 	}
 
 	private final PlotManager manager;

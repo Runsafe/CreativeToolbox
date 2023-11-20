@@ -31,8 +31,8 @@ public class FindCommand extends AsyncCommand
 		if (executor instanceof IPlayer)
 			plotList.set((IPlayer) executor, hits);
 		if (hits.size() > 20)
-			return String.format("Found %d plots:Too many hits to list.", hits.size());
-		return String.format("Found %d plots: %s", hits.size(), StringUtils.join(hits, ", "));
+			return String.format("&aFound %d plots:Too many hits to list.", hits.size());
+		return String.format("&aFound %d plots: %s", hits.size(), StringUtils.join(hits, ", "));
 	}
 
 	private final PlotTagRepository tagRepository;

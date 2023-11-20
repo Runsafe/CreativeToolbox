@@ -39,16 +39,16 @@ public class DeleteHereCommand extends PlayerAsyncCommand
 	public String OnAsyncExecute(IPlayer executor, IArgumentList parameters)
 	{
 		if (manager.isInWrongWorld(executor))
-			return "You cannot use that here.";
+			return "&cYou cannot use that here.";
 		List<String> delete = filter.apply(worldGuard.getRegionsAtLocation(executor.getLocation()));
 		if (delete == null || delete.isEmpty())
-			return "No regions to delete!";
+			return "&cNo regions to delete!";
 		Map<String, Rectangle2D> regions = new HashMap<>();
 		for (String region : delete)
 		{
 			PlotApproval approval = approvedPlotRepository.get(region);
 			if (approval != null && approval.getApproved() != null)
-				return "You may not delete an approved plot!";
+				return "&cYou may not delete an approved plot!";
 
 			Rectangle2D area = plotCalculator.pad(worldGuard.getRectangle(executor.getWorld(), region));
 			regions.put(region, area);

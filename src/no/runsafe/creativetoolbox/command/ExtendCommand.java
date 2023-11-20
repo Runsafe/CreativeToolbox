@@ -19,11 +19,11 @@ public class ExtendCommand extends PlayerCommand
 	public String OnExecute(IPlayer player, IArgumentList stringStringHashMap)
 	{
 		if (manager.isInWrongWorld(player))
-			return "You cannot use that here.";
+			return "&cYou cannot use that here.";
 
 		String target = manager.getCurrentRegionFiltered(player);
 		if (target == null)
-			return "There is no plot defined here.";
+			return "&cThere is no plot defined here.";
 		interactEvents.startPlotExtension(player, target);
 		return String.format("Now right click the ground in the plot you wish to extend to include in %s.", target);
 	}

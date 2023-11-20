@@ -23,7 +23,7 @@ public class ScanCommand extends PlayerCommand
 		HashMap<String, Integer> counts = new HashMap<>();
 		IWorld world = manager.getWorld();
 		if (world == null)
-			return "Creative world not found!";
+			return "&cCreative world not found!";
 
 		int count = 0;
 		for (IEntity entity : world.getEntities())

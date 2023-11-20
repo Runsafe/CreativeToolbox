@@ -44,11 +44,11 @@ public class RegenerateCommand extends PlayerAsyncCommand
 	public String OnAsyncExecute(IPlayer executor, IArgumentList parameters)
 	{
 		if (manager.isInWrongWorld(executor))
-			return "You cannot use that here.";
+			return "&cYou cannot use that here.";
 
 		Rectangle2D area = getArea(executor.getLocation());
 		if (area == null)
-			return "No plot at this point.";
+			return "&cNo plot at this point.";
 
 		List<String> candidate = filter.apply(worldGuard.getRegionsAtLocation(executor.getLocation()));
 		if (candidate != null && !candidate.isEmpty())
@@ -56,7 +56,7 @@ public class RegenerateCommand extends PlayerAsyncCommand
 			{
 				PlotApproval approval = approvedPlotRepository.get(plot);
 				if (approval != null && approval.getApproved() != null)
-					return "You may not regenerate an approved plot!";
+					return "&cYou may not regenerate an approved plot!";
 			}
 
 		PlotChunkGenerator.Mode mode = parameters.getValue("mode");
