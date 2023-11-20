@@ -28,7 +28,7 @@ public class TeleportCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
 			plot = manager.getLatestPlot(executor);
 			if (plot == null)
 			{
-				target.message = String.format("You do not appear to own any plots.");
+				target.message = "&cYou do not appear to own any plots.";
 				return target;
 			}
 		}
@@ -40,9 +40,9 @@ public class TeleportCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
 				plot = String.format("%s_%s", executor.getName(), plot);
 		}
 		if (target.location == null)
-			target.message = String.format("Plot '%s' not found.", plot);
+			target.message = String.format("&cPlot '%s' not found.", plot);
 		else
-			target.message = String.format("Teleported to '%s'", plot);
+			target.message = String.format("&aTeleported to '%s'", plot);
 
 		return target;
 	}

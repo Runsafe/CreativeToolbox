@@ -35,16 +35,16 @@ public class SetEntranceCommand extends PlayerAsyncCommand
 	public String OnExecute(IPlayer executor, IArgumentList parameters)
 	{
 		if (manager.isInWrongWorld(executor))
-			return "You cannot use that here.";
+			return "&cYou cannot use that here.";
 
 		String currentRegion = getCurrentRegion(executor);
 		if (currentRegion == null)
-			return "No plot at your current location.";
+			return "&cNo plot at your current location.";
 
 		debugger.debugFine(String.format("Player is in region %s", currentRegion));
 		if (!(executor.hasPermission("runsafe.creative.entrance.set")
 			|| worldGuard.getOwnerPlayers(executor.getWorld(), currentRegion).contains(executor)))
-			return String.format("You are not allowed to set the entrance for the region %s", currentRegion);
+			return String.format("&cYou are not allowed to set the entrance for the region %s", currentRegion);
 
 		return super.OnExecute(executor, parameters);
 	}
@@ -65,13 +65,13 @@ public class SetEntranceCommand extends PlayerAsyncCommand
 		entrance.setName(currentRegion);
 		entrance.setLocation(executor.getLocation());
 		repository.persist(entrance);
-		return String.format("Entrance for %s set.", currentRegion);
+		return String.format("&aEntrance for %s set.", currentRegion);
 	}
 
 	private String getCurrentRegion(IPlayer player)
 	{
 		List<String> regions = plotFilter.apply(worldGuard.getRegionsAtLocation(player.getLocation()));
-		if (regions == null || regions.size() == 0)
+		if (regions == null || regions.isEmpty())
 			return null;
 		return regions.get(0);
 	}

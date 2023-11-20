@@ -44,12 +44,12 @@ public class GriefCleanupCommand extends PlayerCommand
 	public String OnExecute(IPlayer executor, IArgumentList params)
 	{
 		if (manager.isInWrongWorld(executor))
-			return "You cannot use that here.";
+			return "&cYou cannot use that here.";
 
 		Rectangle2D area = getArea(executor.getLocation());
 
 		if (area == null)
-			return "This does not appear to be a valid plot.";
+			return "&cThis does not appear to be a valid plot.";
 
 		Target what = params.getValue("what");
 		output.logInformation("%s is running clean-up of '%s' at [%s]", executor.getName(), what, getRegionNameString(executor));
@@ -103,12 +103,12 @@ public class GriefCleanupCommand extends PlayerCommand
 	private String cleanup(IPlayer player, Rectangle2D area, Item... remove)
 	{
 		if (remove.length == 0)
-			return "Nothing to clean";
+			return "&cNothing to clean";
 		ILocation max = plotCalculator.getMaxPosition(player.getWorld(), area);
 		ILocation min = plotCalculator.getMinPosition(player.getWorld(), area);
 		IWorld world = player.getWorld();
 		if (world == null)
-			return "No world!";
+			return "&cNo world!";
 		int counter = 0;
 		for (int x = min.getBlockX(); x <= max.getBlockX(); ++x)
 		{
@@ -132,7 +132,7 @@ public class GriefCleanupCommand extends PlayerCommand
 	{
 		List<Rectangle2D> padding = plotCalculator.getPaddingSelection(plotArea);
 		if (padding == null || padding.isEmpty())
-			return "Unable to regenerate roads!";
+			return "&cUnable to regenerate roads!";
 		for (Rectangle2D area : padding)
 		{
 			worldEdit.regenerate(
@@ -142,7 +142,7 @@ public class GriefCleanupCommand extends PlayerCommand
 				false
 			);
 		}
-		return "Regenerated roads.";
+		return "&aRegenerated roads.";
 	}
 
 	private final IRegionControl worldGuard;

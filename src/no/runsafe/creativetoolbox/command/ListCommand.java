@@ -31,10 +31,10 @@ public class ListCommand extends PlayerAsyncCommand
 	public String OnAsyncExecute(IPlayer executor, IArgumentList parameters)
 	{
 		if (!worldGuard.serverHasWorldGuard())
-			return "Unable to find WorldGuard!";
+			return "&cUnable to find WorldGuard!";
 
 		if (filter.getWorld() == null)
-			return "No world defined!";
+			return "&cNo world defined!";
 
 		IPlayer player = parameters.getValue("player");
 		if (player == null)
@@ -42,7 +42,7 @@ public class ListCommand extends PlayerAsyncCommand
 
 		List<String> plots = filter.apply(worldGuard.getOwnedRegions(player, filter.getWorld()));
 		List<String> property = manager.tag(executor, plots);
-		if (plots.size() > 0)
+		if (!plots.isEmpty())
 			plotList.set(executor, plots);
 		return String.format(
 			"%d plots owned by %s:\n  %s",

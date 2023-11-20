@@ -22,9 +22,24 @@ jobs:
       - shell: bash
         run: |
           mkdir -p /home/runner/work/Framework/lastStable/archive/build/jar
+          mkdir -p /home/runner/work/WorldGuardBridge/lastStable/archive/build/jar
+          mkdir -p /home/runner/work/WorldEditBridge/lastStable/archive/build/jar
+          mkdir -p /home/runner/work/PlotGenerator/lastStable/archive/build/jar
           curl https://jenkins.runsafe.no/job/Framework/lastSuccessfulBuild/artifact/build/jar/framework.jar -o ../../Framework/lastStable/archive/build/jar/framework.jar
+          curl https://jenkins.runsafe.no/job/WorldGuardBridge/lastSuccessfulBuild/artifact/build/jar/RunsafeWorldGuardBridge.jar -o ../../WorldGuardBridge/lastStable/archive/build/jar/RunsafeWorldGuardBridge.jar
+          curl https://jenkins.runsafe.no/job/WorldEditBridge/lastSuccessfulBuild/artifact/build/jar/RunsafeWorldEditBridge.jar -o ../../WorldEditBridge/lastStable/archive/build/jar/RunsafeWorldEditBridge.jar
+          curl https://jenkins.runsafe.no/job/PlotGenerator/lastSuccessfulBuild/artifact/build/jar/PlotGenerator.jar -o ../../PlotGenerator/lastStable/archive/build/jar/PlotGenerator.jar
           cd /home/runner/work/Framework
           git clone https://github.com/Runsafe/Framework.git
           mv Framework workspace
+          cd /home/runner/work/WorldGuardBridge
+          git clone https://github.com/Runsafe/WorldGuardBridge.git
+          mv WorldGuardBridge workspace
+          cd /home/runner/work/WorldEditBridge
+          git clone https://github.com/Runsafe/WorldEditBridge.git
+          mv WorldEditBridge workspace
+          cd /home/runner/work/PlotGenerator
+          git clone https://github.com/Runsafe/PlotGenerator.git
+          mv PlotGenerator workspace
       - name: Build with Ant
         run: ant -noinput -buildfile ant.xml

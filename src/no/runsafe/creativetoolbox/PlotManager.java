@@ -61,7 +61,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		if (!world.equals(player.getWorld()))
 			return null;
 		List<String> regions = filter.apply(worldGuard.getRegionsAtLocation(player.getLocation()));
-		if (regions == null || regions.size() == 0)
+		if (regions == null || regions.isEmpty())
 			return null;
 		return regions.get(0);
 	}
@@ -71,7 +71,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		if (!world.equals(player.getWorld()))
 			return false;
 		List<String> regions = worldGuard.getRegionsAtLocation(player.getLocation());
-		return regions == null || ignoredRegions.containsAll(regions);
+		return regions == null || new HashSet<>(ignoredRegions).containsAll(regions);
 	}
 
 	public java.util.List<ILocation> getPlotEntrances()
@@ -95,7 +95,10 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		boolean ok = true;
 		for (String region : regions)
 			if (!ignoredRegions.contains(region))
+			{
 				ok = false;
+				break;
+			}
 		if (!ok)
 		{
 			setTaken(calculator.getColumn(location.getBlockX()), calculator.getRow(location.getBlockZ()));
@@ -357,6 +360,31 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		plotLog.delete(region);
 		plotList.remove(region);
 		new PlotDeletedEvent(deletor, region).Fire();
+	}
+
+	public boolean renamePlot(String oldName, String newName)
+	{
+		// Make sure the plot exists.
+		if (worldGuard.getRegionLocation(world, oldName) == null)
+			return false;
+
+		// Make sure there isn't already a plot with the new name.
+		if (worldGuard.getRegionLocation(world, newName) != null)
+			return false;
+
+		worldGuard.renameRegion(world, oldName, newName);
+		changeRepositoryPlotName(oldName, newName);
+		return true;
+	}
+
+	public void changeRepositoryPlotName(String oldName, String newName)
+	{
+		plotApproval.renamePlot(oldName, newName);
+		plotEntrance.renamePlot(oldName, newName);
+		plotLog.renamePlot(oldName, newName);
+		memberRepository.renamePlot(oldName, newName);
+		tagRepository.renamePlot(oldName, newName);
+		voteRepository.renamePlot(oldName, newName);
 	}
 
 	public IWorld getWorld()

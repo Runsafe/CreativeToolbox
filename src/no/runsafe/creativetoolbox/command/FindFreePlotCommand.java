@@ -34,7 +34,7 @@ public class FindFreePlotCommand extends PlayerAsyncCallbackCommand<PlayerTelepo
 		while (target.location != null && manager.plotIsTaken(target.location));
 
 		if (target.location == null)
-			target.message = "Sorry, no free plots could be located.";
+			target.message = "&cSorry, no free plots could be located.";
 		return target;
 	}
 
@@ -48,7 +48,7 @@ public class FindFreePlotCommand extends PlayerAsyncCallbackCommand<PlayerTelepo
 	private ILocation getCandidate()
 	{
 		List<ILocation> options = manager.getFreePlotEntrances();
-		if (options == null || options.size() < 1)
+		if (options == null || options.isEmpty())
 			return null;
 		if (options.size() == 1)
 			return options.get(0);

@@ -28,21 +28,21 @@ public class UnApprovePlotCommand extends PlayerAsyncCommand
 		if (parameters.getValue("plotname").equals("."))
 		{
 			if (manager.isInWrongWorld(executor))
-				return "You cannot use that here.";
+				return "&cYou cannot use that here.";
 
 			plot = manager.getCurrentRegionFiltered(executor);
 		}
 		else
 			plot = plotFilter.apply(parameters.get("plotname"));
 		if (plot == null)
-			return "You cannot unapprove that plot.";
+			return "&cYou cannot unapprove that plot.";
 
 		PlotApproval approved = approval.get(plot);
 		if (approved == null)
-			return String.format("The plot %s was not approved.", plot);
+			return String.format("&cThe plot %s was not approved.", plot);
 
 		approval.delete(approved);
-		return String.format("The plot '%s' previously approved by %s has been unapproved.", plot, approved.getApprovedBy());
+		return String.format("&aThe plot '%s' previously approved by %s has been unapproved.", plot, approved.getApprovedBy());
 	}
 
 	private final PlotManager manager;

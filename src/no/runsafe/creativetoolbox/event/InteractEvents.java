@@ -54,7 +54,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 			return false;
 		}
 
-		if (itemInHand != null && itemInHand.getItemId() == listItem)
+		if (isListItem(itemInHand))
 		{
 			registerStickTimer(player);
 			this.listPlotsByLocation(block.getLocation(), player);
@@ -71,7 +71,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 			return;
 		if (event.getRightClicked() instanceof IPlayer && player.hasPermission("runsafe.creative.list"))
 		{
-			if (player.getItemInHand() != null && player.getItemInHand().getItemId() == listItem)
+			if (isListItem(player.getItemInMainHand()))
 			{
 				registerStickTimer(player);
 				this.listPlotsByPlayer((IPlayer) event.getRightClicked(), player);
@@ -80,10 +80,18 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 		}
 	}
 
+	private boolean isListItem(RunsafeMeta item)
+	{
+		if (item == null)
+			return false;
+
+		return item.getNormalName().equals(listItem);
+	}
+
 	@Override
 	public void OnConfigurationChanged(IConfiguration configuration)
 	{
-		listItem = configuration.getConfigValueAsInt("list_item");
+		listItem = configuration.getConfigValueAsString("list_item_name");
 	}
 
 	public void startPlotExtension(IPlayer player, String plot)
@@ -97,17 +105,14 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 			scheduler.cancelTask(stickTimer.get(player));
 
 		stickTimer.put(player, scheduler.startSyncTask(() ->
-		{
-			if (stickTimer.containsKey(player))
-				stickTimer.remove(player);
-		}, 1));
+			stickTimer.remove(player), 1));
 	}
 
 	private void listPlotsByPlayer(IPlayer checkPlayer, IPlayer triggerPlayer)
 	{
 		if (!this.worldGuardInterface.serverHasWorldGuard())
 		{
-			triggerPlayer.sendColouredMessage("Error: No WorldGuard installed.");
+			triggerPlayer.sendColouredMessage("&cError: No WorldGuard installed.");
 			return;
 		}
 
@@ -119,14 +124,14 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 				"\n"
 			));
 		else
-			triggerPlayer.sendColouredMessage("%s does not own any plots.", checkPlayer.getPrettyName());
+			triggerPlayer.sendColouredMessage("&c%s does not own any plots.", checkPlayer.getPrettyName());
 	}
 
 	private void listPlotsByLocation(ILocation location, IPlayer player)
 	{
 		if (!this.worldGuardInterface.serverHasWorldGuard())
 		{
-			player.sendColouredMessage("Error: No WorldGuard installed.");
+			player.sendColouredMessage("&cError: No WorldGuard installed.");
 			return;
 		}
 
@@ -141,7 +146,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 				listPlotMembers(player, regionName);
 			}
 		else
-			player.sendColouredMessage("No plots found at this location.");
+			player.sendColouredMessage("&cNo plots found at this location.");
 	}
 
 	private void listClaimInfo(IPlayer player, String regionName)
@@ -186,13 +191,13 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 			if (showSeen && player.hasPermission("runsafe.creative.list.seen"))
 			{
 				String seen = member.getLastSeen(player);
-				player.sendColouredMessage("     %s&r", (seen == null ? "Player never seen" : seen));
+				player.sendColouredMessage("     %s&r", (seen == null ? "&cPlayer never seen" : seen));
 			}
 		}
 	}
 
 	private final IRegionControl worldGuardInterface;
-	private int listItem;
+	private String listItem;
 	private final PlotManager manager;
 	private final PlotFilter plotFilter;
 	private final PlotTagRepository tagRepository;

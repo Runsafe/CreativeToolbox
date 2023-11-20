@@ -4,7 +4,7 @@ imported:
 old_after: 14
 max_listed: 20
 world: Creative
-list_item: 280
+list_item_name: stick
 ignored:
 - __global__
 - creative_world

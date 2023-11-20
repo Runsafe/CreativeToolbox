@@ -32,18 +32,18 @@ public class CheckApprovalCommand extends AsyncCommand
 	public String OnAsyncExecute(ICommandExecutor executor, IArgumentList parameters)
 	{
 		String plot = parameters.getValue("plotname");
-		if (plot.equals(".") && executor instanceof IPlayer)
+		if (plot == null || plot.equals(".") && executor instanceof IPlayer)
 		{
 			List<String> here = plotFilter.apply(worldGuardInterface.getRegionsAtLocation(((IPlayer) executor).getLocation()));
-			if (here == null || here.size() == 0)
-				return "No plot here";
+			if (here == null || here.isEmpty())
+				return "&cNo plot here";
 			plot = here.get(0);
 		}
 		PlotApproval approval = repository.get(plot);
 		if (approval == null)
-			return String.format("Plot %s has not been approved.", plot);
+			return String.format("&cPlot %s has not been approved.", plot);
 
-		return String.format("Plot %s was approved by %s at %s", plot, approval.getApprovedBy(), approval.getApproved());
+		return String.format("&aPlot %s was approved by %s at %s", plot, approval.getApprovedBy(), approval.getApproved());
 	}
 
 	private final ApprovedPlotRepository repository;

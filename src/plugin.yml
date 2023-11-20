@@ -43,3 +43,6 @@ permissions:
   runsafe.creative.teleport.plot:
     description: Teleport to named plots
     default: false
+  runsafe.creative.renameplot:
+    description: Rename a plot
+    default: false

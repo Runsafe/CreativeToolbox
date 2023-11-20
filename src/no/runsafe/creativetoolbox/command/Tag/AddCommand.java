@@ -22,10 +22,10 @@ public class AddCommand extends PlayerAsyncCommand
 	public String OnAsyncExecute(IPlayer player, IArgumentList params)
 	{
 		if (manager.isInWrongWorld(player))
-			return "You cannot use that here.";
+			return "&cYou cannot use that here.";
 		String plot = manager.getCurrentRegionFiltered(player);
 		if (plot == null)
-			return "There is no plot here.";
+			return "&cThere is no plot here.";
 
 		String[] tags = ChatColour.Strip(params.getValue("tag")).split("\\s+");
 		boolean success = true;
@@ -33,7 +33,7 @@ public class AddCommand extends PlayerAsyncCommand
 			success = success && tagRepository.addTag(plot, tag);
 
 		return String.format(
-			success ? "Successfully updated tags for plot %s." : "Could not update %s with tag.",
+			success ? "&aSuccessfully updated tags for plot %s." : "&cCould not update %s with tag.",
 			plot
 		);
 	}

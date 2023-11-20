@@ -33,18 +33,18 @@ public class ClaimCommand extends PlayerCommand
 	public String OnExecute(IPlayer executor, IArgumentList params)
 	{
 		if (manager.isInWrongWorld(executor))
-			return "You cannot use that here.";
+			return "&cYou cannot use that here.";
 
 		String current = manager.getCurrentRegionFiltered(executor);
 		if (current != null)
-			return String.format("This plot is already claimed as %s!", current);
+			return String.format("&cThis plot is already claimed as %s!", current);
 
 		if (!manager.isCurrentClaimable(executor))
-			return "You may not claim a plot here.";
+			return "&cYou may not claim a plot here.";
 
 		Rectangle2D region = calculator.getPlotArea(executor.getLocation());
 		if (region == null)
-			return "You need to stand in a plot to use this command.";
+			return "&cYou need to stand in a plot to use this command.";
 
 		IWorld world = executor.getWorld();
 		IPlayer owner = params.getValue("player");
@@ -52,7 +52,7 @@ public class ClaimCommand extends PlayerCommand
 			return null;
 		boolean selfClaim = owner.getName().equals(executor.getName());
 		if (!(executor.hasPermission("runsafe.creative.claim.others") || selfClaim))
-			return "You can only claim plots for yourself.";
+			return "&cYou can only claim plots for yourself.";
 
 		List<String> existing = worldGuard.getOwnedRegions(owner, world);
 		console.debugFine("%s has %d plots.", owner, existing.size());
@@ -63,7 +63,7 @@ public class ClaimCommand extends PlayerCommand
 				PlotApproval approved = approvalRepository.get(plot);
 				console.debugFine("Plot %s is %s.", plot, approved != null ? "approved" : "unapproved");
 				if (approved == null)
-					return "You may not claim another plot before all your current ones have been approved.";
+					return "&cYou may not claim another plot before all your current ones have been approved.";
 			}
 		}
 
@@ -77,12 +77,12 @@ public class ClaimCommand extends PlayerCommand
 		{
 			members.addMember(plotName, owner, true);
 			if (owner == executor)
-				return String.format("New plot \"%s\" created - use /ct teleport %d to get back to it!", plotName, n);
+				return String.format("&aNew plot \"%s\" created - use /ct teleport %d to get back to it!", plotName, n);
 
-			return String.format("Successfully claimed the plot \"%s\" for %s!", plotName, owner.getPrettyName());
+			return String.format("&aSuccessfully claimed the plot \"%s\" for &r%s&a!", plotName, owner.getPrettyName());
 		}
 
-		return String.format("Unable to claim a new plot for %s :(", owner.getPrettyName());
+		return String.format("&cUnable to claim a new plot for &r%s &c:(", owner.getPrettyName());
 	}
 
 	private final PlotManager manager;

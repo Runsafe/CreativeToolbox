@@ -23,8 +23,9 @@ public class CleanCommand extends PlayerCommand
 	{
 		HashMap<String, Integer> counts = new HashMap<>();
 		String[] arguments = new String[0];
-		if (parameters.getValue("filter") != null)
-			arguments = ((String) parameters.getValue("filter")).split("\\s+");
+		String filterArgument = parameters.getValue("filter");
+		if (filterArgument != null)
+			arguments = filterArgument.split("\\s+");
 		int count = 0;
 		for (IEntity entity : manager.getWorld().getEntities())
 		{
@@ -64,7 +65,7 @@ public class CleanCommand extends PlayerCommand
 			count++;
 			entity.remove();
 		}
-		StringBuilder results = new StringBuilder(String.format("%d items cleaned:\n", count));
+		StringBuilder results = new StringBuilder(String.format("&a%d items cleaned:\n", count));
 		for (String name : counts.keySet())
 			results.append(String.format("  %s: %d.\n", name, counts.get(name)));
 		return results.toString();

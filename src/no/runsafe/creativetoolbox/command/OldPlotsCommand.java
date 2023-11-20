@@ -35,10 +35,10 @@ public class OldPlotsCommand extends PlayerAsyncCommand
 			}
 		}
 		if (result.length() == 0)
-			return "No old plots found.";
+			return "&cNo old plots found.";
 		plotList.set(executor, Lists.newArrayList(hits.keySet()));
 		if (executor == null || n == hits.size())
-			result.append(String.format("%d plots found", hits.size()));
+			result.append(String.format("&a%d plots found", hits.size()));
 		else
 			result.append(String.format("Showing %d of %d plots found", n, hits.size()));
 		return result.toString();
