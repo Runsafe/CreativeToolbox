@@ -54,7 +54,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 			return false;
 		}
 
-		if (itemInHand != null && itemInHand.getItemId() == listItem)
+		if (isListItem(itemInHand))
 		{
 			registerStickTimer(player);
 			this.listPlotsByLocation(block.getLocation(), player);
@@ -71,7 +71,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 			return;
 		if (event.getRightClicked() instanceof IPlayer && player.hasPermission("runsafe.creative.list"))
 		{
-			if (player.getItemInMainHand() != null && player.getItemInMainHand().getItemId() == listItem)
+			if (isListItem(player.getItemInMainHand()))
 			{
 				registerStickTimer(player);
 				this.listPlotsByPlayer((IPlayer) event.getRightClicked(), player);
@@ -80,10 +80,18 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 		}
 	}
 
+	private boolean isListItem(RunsafeMeta item)
+	{
+		if (item == null)
+			return false;
+
+		return item.getNormalName().equals(listItem);
+	}
+
 	@Override
 	public void OnConfigurationChanged(IConfiguration configuration)
 	{
-		listItem = configuration.getConfigValueAsInt("list_item");
+		listItem = configuration.getConfigValueAsString("list_item_name");
 	}
 
 	public void startPlotExtension(IPlayer player, String plot)
@@ -189,7 +197,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 	}
 
 	private final IRegionControl worldGuardInterface;
-	private int listItem;
+	private String listItem;
 	private final PlotManager manager;
 	private final PlotFilter plotFilter;
 	private final PlotTagRepository tagRepository;
