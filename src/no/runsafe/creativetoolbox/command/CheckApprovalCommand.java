@@ -32,10 +32,10 @@ public class CheckApprovalCommand extends AsyncCommand
 	public String OnAsyncExecute(ICommandExecutor executor, IArgumentList parameters)
 	{
 		String plot = parameters.getValue("plotname");
-		if (plot.equals(".") && executor instanceof IPlayer)
+		if (plot == null || plot.equals(".") && executor instanceof IPlayer)
 		{
 			List<String> here = plotFilter.apply(worldGuardInterface.getRegionsAtLocation(((IPlayer) executor).getLocation()));
-			if (here == null || here.size() == 0)
+			if (here == null || here.isEmpty())
 				return "No plot here";
 			plot = here.get(0);
 		}

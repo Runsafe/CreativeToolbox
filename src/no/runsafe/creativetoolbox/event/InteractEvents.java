@@ -71,7 +71,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 			return;
 		if (event.getRightClicked() instanceof IPlayer && player.hasPermission("runsafe.creative.list"))
 		{
-			if (player.getItemInHand() != null && player.getItemInHand().getItemId() == listItem)
+			if (player.getItemInMainHand() != null && player.getItemInMainHand().getItemId() == listItem)
 			{
 				registerStickTimer(player);
 				this.listPlotsByPlayer((IPlayer) event.getRightClicked(), player);
@@ -98,8 +98,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 
 		stickTimer.put(player, scheduler.startSyncTask(() ->
 		{
-			if (stickTimer.containsKey(player))
-				stickTimer.remove(player);
+			stickTimer.remove(player);
 		}, 1));
 	}
 

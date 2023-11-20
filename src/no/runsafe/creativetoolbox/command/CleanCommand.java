@@ -23,8 +23,9 @@ public class CleanCommand extends PlayerCommand
 	{
 		HashMap<String, Integer> counts = new HashMap<>();
 		String[] arguments = new String[0];
-		if (parameters.getValue("filter") != null)
-			arguments = ((String) parameters.getValue("filter")).split("\\s+");
+		String filterArgument = parameters.getValue("filter");
+		if (filterArgument != null)
+			arguments = filterArgument.split("\\s+");
 		int count = 0;
 		for (IEntity entity : manager.getWorld().getEntities())
 		{

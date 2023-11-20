@@ -22,12 +22,11 @@ public class ApprovePlotCommand extends PlayerAsyncCommand
 	{
 		if (manager.isInWrongWorld(executor))
 			return "You cannot use that here.";
-
-		String plot;
-		if (parameters.getValue("plotname").equals("."))
+		String plot = parameters.getValue("plotname");
+		if (plot == null || plot.equals("."))
 			plot = manager.getCurrentRegionFiltered(executor);
 		else
-			plot = plotFilter.apply((String) parameters.getValue("plotname"));
+			plot = plotFilter.apply(plot);
 		if (plot == null)
 			return "You cannot approve that plot.";
 

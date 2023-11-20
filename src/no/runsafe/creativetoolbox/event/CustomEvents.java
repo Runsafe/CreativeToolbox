@@ -27,5 +27,5 @@ public class CustomEvents implements IPlayerCustomEvent
 	}
 
 	private final IOutput output;
-	private PlotManager manager;
+	private final PlotManager manager;
 }

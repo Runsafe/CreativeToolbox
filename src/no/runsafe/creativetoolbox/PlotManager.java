@@ -61,7 +61,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		if (!world.equals(player.getWorld()))
 			return null;
 		List<String> regions = filter.apply(worldGuard.getRegionsAtLocation(player.getLocation()));
-		if (regions == null || regions.size() == 0)
+		if (regions == null || regions.isEmpty())
 			return null;
 		return regions.get(0);
 	}
@@ -95,7 +95,10 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		boolean ok = true;
 		for (String region : regions)
 			if (!ignoredRegions.contains(region))
+			{
 				ok = false;
+				break;
+			}
 		if (!ok)
 		{
 			setTaken(calculator.getColumn(location.getBlockX()), calculator.getRow(location.getBlockZ()));

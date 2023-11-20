@@ -39,7 +39,7 @@ public class AddCommand extends PlayerAsyncCommand
 
 		List<String> target = plotFilter.apply(worldGuardInterface.getRegionsAtLocation(executor.getLocation()));
 		List<String> ownedRegions = worldGuardInterface.getOwnedRegions(executor, plotFilter.getWorld());
-		if (target == null || target.size() == 0)
+		if (target == null || target.isEmpty())
 			return "No region defined at your location!";
 		List<String> results = new ArrayList<>();
 		for (String region : target)
@@ -58,8 +58,6 @@ public class AddCommand extends PlayerAsyncCommand
 			else
 				results.add(String.format("You do not appear to be an owner of %s.", region));
 		}
-		if (results.isEmpty())
-			return null;
 		return StringUtils.join(results, "\n");
 	}
 

@@ -25,8 +25,7 @@ public class PlotMemberBlacklistRepository extends Repository implements IConfig
 
 	public void remove(IPlayer blacklisted)
 	{
-		if (blacklist.contains(blacklisted))
-			blacklist.remove(blacklisted);
+		blacklist.remove(blacklisted);
 
 		database.execute("DELETE FROM creative_blacklist WHERE `player`=?", blacklisted);
 	}

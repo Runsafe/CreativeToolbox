@@ -28,7 +28,7 @@ public class TeleportCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
 			plot = manager.getLatestPlot(executor);
 			if (plot == null)
 			{
-				target.message = String.format("You do not appear to own any plots.");
+				target.message = "You do not appear to own any plots.";
 				return target;
 			}
 		}

@@ -71,7 +71,7 @@ public class SetEntranceCommand extends PlayerAsyncCommand
 	private String getCurrentRegion(IPlayer player)
 	{
 		List<String> regions = plotFilter.apply(worldGuard.getRegionsAtLocation(player.getLocation()));
-		if (regions == null || regions.size() == 0)
+		if (regions == null || regions.isEmpty())
 			return null;
 		return regions.get(0);
 	}

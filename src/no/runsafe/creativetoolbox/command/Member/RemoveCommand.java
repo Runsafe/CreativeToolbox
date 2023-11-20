@@ -53,8 +53,6 @@ public class RemoveCommand extends PlayerAsyncCommand
 			else
 				results.add(String.format("You do not appear to be an owner of %s.", region));
 		}
-		if (results.isEmpty())
-			return null;
 		return StringUtils.join(results, "\n");
 	}
 

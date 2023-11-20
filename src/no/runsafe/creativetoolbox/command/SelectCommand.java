@@ -31,14 +31,18 @@ public class SelectCommand extends PlayerCommand
 		if (manager.isInWrongWorld(executor))
 			return "You cannot use that here.";
 
-		List<String> candidate = filter.apply(worldGuard.getRegionsAtLocation(executor.getLocation()));
+		ILocation executorLocation = executor.getLocation();
+		if (executorLocation == null)
+			return "&cYou are in an invalid location.";
+
+		List<String> candidate = filter.apply(worldGuard.getRegionsAtLocation(executorLocation));
 		Rectangle2D area;
 		if (candidate != null && candidate.size() == 1)
-			area = worldGuard.getRectangle(executor.getWorld(), candidate.get(0));
+			area = worldGuard.getRectangle(executorLocation.getWorld(), candidate.get(0));
 		else
-			area = plotCalculator.getPlotArea(executor.getLocation(), false);
-		ILocation minPos = plotCalculator.getMinPosition(executor.getWorld(), area);
-		ILocation maxPos = plotCalculator.getMaxPosition(executor.getWorld(), area);
+			area = plotCalculator.getPlotArea(executorLocation, false);
+		ILocation minPos = plotCalculator.getMinPosition(executorLocation.getWorld(), area);
+		ILocation maxPos = plotCalculator.getMaxPosition(executorLocation.getWorld(), area);
 		worldEdit.select(executor, minPos, maxPos);
 		return null;
 	}

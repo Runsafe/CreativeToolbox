@@ -41,7 +41,7 @@ public class DeleteHereCommand extends PlayerAsyncCommand
 		if (manager.isInWrongWorld(executor))
 			return "You cannot use that here.";
 		List<String> delete = filter.apply(worldGuard.getRegionsAtLocation(executor.getLocation()));
-		if (delete == null || delete.size() == 0)
+		if (delete == null || delete.isEmpty())
 			return "No regions to delete!";
 		Map<String, Rectangle2D> regions = new HashMap<>();
 		for (String region : delete)

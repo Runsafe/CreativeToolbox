@@ -42,7 +42,7 @@ public class ListCommand extends PlayerAsyncCommand
 
 		List<String> plots = filter.apply(worldGuard.getOwnedRegions(player, filter.getWorld()));
 		List<String> property = manager.tag(executor, plots);
-		if (plots.size() > 0)
+		if (!plots.isEmpty())
 			plotList.set(executor, plots);
 		return String.format(
 			"%d plots owned by %s:\n  %s",

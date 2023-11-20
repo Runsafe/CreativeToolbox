@@ -48,7 +48,7 @@ public class FindFreePlotCommand extends PlayerAsyncCallbackCommand<PlayerTelepo
 	private ILocation getCandidate()
 	{
 		List<ILocation> options = manager.getFreePlotEntrances();
-		if (options == null || options.size() < 1)
+		if (options == null || options.isEmpty())
 			return null;
 		if (options.size() == 1)
 			return options.get(0);
