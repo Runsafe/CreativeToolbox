@@ -1,6 +1,7 @@
 package no.runsafe.creativetoolbox.command;
 
 import no.runsafe.creativetoolbox.PlotManager;
+import no.runsafe.creativetoolbox.Plugin;
 import no.runsafe.framework.api.command.ExecutableCommand;
 import no.runsafe.framework.api.command.ICommandExecutor;
 import no.runsafe.framework.api.command.argument.IArgumentList;
@@ -11,7 +12,7 @@ public class RenamePlotCommand extends ExecutableCommand
 	public RenamePlotCommand(PlotManager manager)
 	{
 		super(
-			"renamePlot", "Renames a plot in creative.", "runsafe.creative.renameplot",
+			"renameplot", "Renames a plot in creative.", "runsafe.creative.renameplot",
 			new RequiredArgument("CurrentPlotName"), new RequiredArgument("NewPlotName")
 		);
 		this.manager = manager;
@@ -24,7 +25,10 @@ public class RenamePlotCommand extends ExecutableCommand
 		String newPlotName = parameters.getRequired("NewPlotName");
 
 		if (manager.renamePlot(currentPlotName, newPlotName))
-			return "&aPlot %s Renamed to %s.";
+		{
+			Plugin.console.logInformation(String.format("&aPlot %s Renamed to %s.", currentPlotName, newPlotName));
+			return String.format("&aPlot %s Renamed to %s.", currentPlotName, newPlotName);
+		}
 		else
 			return "&cPlot could not be renamed.";
 	}

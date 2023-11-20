@@ -17,7 +17,7 @@ public class PlotList
 
 	public int current(IPlayer player)
 	{
-		return lists.get(player).indexOf(pointer.get(player) + 1);
+		return lists.get(player).indexOf(pointer.get(player)) + 1;
 	}
 
 	public void wind(IPlayer player, String to)
