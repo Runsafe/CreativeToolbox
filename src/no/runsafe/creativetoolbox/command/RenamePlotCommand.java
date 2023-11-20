@@ -24,7 +24,7 @@ public class RenamePlotCommand extends ExecutableCommand
 		String newPlotName = parameters.getRequired("NewPlotName");
 
 		if (manager.renamePlot(currentPlotName, newPlotName))
-			return "&aPlot %s Renamed to %s.";
+			return String.format("&aPlot %s Renamed to %s.", currentPlotName, newPlotName);
 		else
 			return "&cPlot could not be renamed.";
 	}
