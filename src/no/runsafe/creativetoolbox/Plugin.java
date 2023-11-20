@@ -100,5 +100,6 @@ public class Plugin extends RunsafeConfigurablePlugin
 		toolbox.addSubCommand(getInstance(NextCommand.class));
 		toolbox.addSubCommand(getInstance(PreviousCommand.class));
 		toolbox.addSubCommand(getInstance(JumpCommand.class));
+		toolbox.addSubCommand(getInstance(RenamePlotCommand.class));
 	}
 }

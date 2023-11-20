@@ -359,6 +359,31 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		new PlotDeletedEvent(deletor, region).Fire();
 	}
 
+	public boolean renamePlot(String oldName, String newName)
+	{
+		// Make sure the plot exists.
+		if (worldGuard.getRegion(world, oldName) == null)
+			return false;
+
+		// Make sure there isn't already a plot with the new name.
+		if (worldGuard.getRegion(world, newName) != null)
+			return false;
+
+		worldGuard.renameRegion(world, oldName, newName);
+		changeRepositoryPlotName(oldName, newName);
+		return true;
+	}
+
+	public void changeRepositoryPlotName(String oldName, String newName)
+	{
+		plotApproval.renamePlot(oldName, newName);
+		plotEntrance.renamePlot(oldName, newName);
+		plotLog.renamePlot(oldName, newName);
+		memberRepository.renamePlot(oldName, newName);
+		tagRepository.renamePlot(oldName, newName);
+		voteRepository.renamePlot(oldName, newName);
+	}
+
 	public IWorld getWorld()
 	{
 		return world;
