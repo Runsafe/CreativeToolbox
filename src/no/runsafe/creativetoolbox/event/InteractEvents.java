@@ -97,9 +97,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 			scheduler.cancelTask(stickTimer.get(player));
 
 		stickTimer.put(player, scheduler.startSyncTask(() ->
-		{
-			stickTimer.remove(player);
-		}, 1));
+			stickTimer.remove(player), 1));
 	}
 
 	private void listPlotsByPlayer(IPlayer checkPlayer, IPlayer triggerPlayer)
