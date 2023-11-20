@@ -365,11 +365,11 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 	public boolean renamePlot(String oldName, String newName)
 	{
 		// Make sure the plot exists.
-		if (worldGuard.getRegion(world, oldName) == null)
+		if (worldGuard.getRegionLocation(world, oldName) == null)
 			return false;
 
 		// Make sure there isn't already a plot with the new name.
-		if (worldGuard.getRegion(world, newName) != null)
+		if (worldGuard.getRegionLocation(world, newName) != null)
 			return false;
 
 		worldGuard.renameRegion(world, oldName, newName);
