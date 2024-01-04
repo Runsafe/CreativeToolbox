@@ -15,7 +15,7 @@ public class ApprovedPlotRepository extends Repository
 
 		PlotApproval approval = new PlotApproval();
 		approval.setName(data.String("name"));
-		approval.setApproved(data.DateTime("approved"));
+		approval.setApproved(data.Instant("approved"));
 		approval.setApprovedBy(data.String("approved_by"));
 		return approval;
 	}

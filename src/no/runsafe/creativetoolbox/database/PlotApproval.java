@@ -1,6 +1,6 @@
 package no.runsafe.creativetoolbox.database;
 
-import org.joda.time.DateTime;
+import java.time.Instant;
 
 public class PlotApproval
 {
@@ -14,12 +14,12 @@ public class PlotApproval
 		name = value;
 	}
 
-	public DateTime getApproved()
+	public Instant getApproved()
 	{
 		return approved;
 	}
 
-	public void setApproved(DateTime value)
+	public void setApproved(Instant value)
 	{
 		approved = value;
 	}
@@ -35,6 +35,6 @@ public class PlotApproval
 	}
 
 	private String name;
-	private DateTime approved;
+	private Instant approved;
 	private String approvedBy;
 }

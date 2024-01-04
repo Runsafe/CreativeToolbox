@@ -23,6 +23,7 @@ import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.PeriodFormat;
 
 import java.awt.geom.Rectangle2D;
+import java.time.Instant;
 import java.util.*;
 
 public class PlotManager implements IConfigurationChanged, IServerReady, IPlayerDataProvider
@@ -244,7 +245,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		{
 			PlotApproval approved = plotApproval.get(plot);
 			if (approved != null && approved.getApproved() != null)
-				tags.add(String.format("&2[approved &a%s&2]&r", dateFormat.print(approved.getApproved())));
+				tags.add(String.format("&2[approved &a%s&2]&r", dateFormat.print(new DateTime(approved.getApproved().toEpochMilli()))));
 		}
 		if (player.hasPermission("runsafe.creative.vote.tally"))
 		{
@@ -258,7 +259,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 	public PlotApproval approve(String approver, String plot)
 	{
 		PlotApproval approval = new PlotApproval();
-		approval.setApproved(DateTime.now());
+		approval.setApproved(Instant.now());
 		approval.setApprovedBy(approver);
 		approval.setName(plot);
 		plotApproval.persist(approval);
