@@ -6,7 +6,7 @@ pipeline {
   }
   environment { plugin = "CreativeToolbox" }
   triggers {
-    upstream '/Runsafe/Framework/master'
+    upstream '/Runsafe/WorldGuardBridge/master'
     pollSCM '@monthly'
   }
   stages {
@@ -16,7 +16,7 @@ pipeline {
         ant 'Default'
         jdk 'Default'
       }
-      steps { buildPluginWithAnt env.plugin, 'WorldEditBridge', 'build/jar/*.jar' }
+      steps { buildPluginWithAnt env.plugin, 'WorldEditBridge,WorldGuardBridge', 'build/jar/*.jar' }
     }
     stage('Deploy to test server') {
       agent { label 'server4' }
