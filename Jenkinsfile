@@ -16,7 +16,7 @@ pipeline {
         ant 'Default'
         jdk 'Default'
       }
-      steps { buildPluginWithAnt env.plugin, 'WorldEditBridge,WorldGuardBridge', 'build/jar/*.jar' }
+      steps { buildPluginWithAnt env.plugin, 'WorldEditBridge,WorldGuardBridge,PlotGenerator', 'build/jar/*.jar' }
     }
     stage('Deploy to test server') {
       agent { label 'server4' }
