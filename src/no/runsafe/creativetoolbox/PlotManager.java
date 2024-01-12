@@ -264,17 +264,17 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		approval.setName(plot);
 		plotApproval.persist(approval);
 		approval = plotApproval.get(plot);
-		if (approval != null)
-		{
-			for (IPlayer owner : worldGuard.getOwnerPlayers(world, plot))
-			{
-				int approved = 0;
-				for (String region : worldGuard.getOwnedRegions(owner, world))
-					if (plotApproval.get(region) != null)
-						approved++;
+		if (approval == null)
+			return approval;
 
-				new PlotApprovedEvent(owner, approval, approved).Fire();
-			}
+		for (IPlayer owner : worldGuard.getOwnerPlayers(world, plot))
+		{
+			int approved = 0;
+			for (String region : worldGuard.getOwnedRegions(owner, world))
+				if (plotApproval.get(region) != null)
+					approved++;
+
+			new PlotApprovedEvent(owner, approval, approved).Fire();
 		}
 		return approval;
 	}
@@ -283,26 +283,25 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 	{
 		if (!world.equals(claimer.getWorld()))
 			return false;
-		if (worldGuard.createRegion(
+		if (!worldGuard.createRegion(
 			owner, world, plotName,
 			calculator.getMinPosition(world, region),
 			calculator.getMaxPosition(world, region)
 		))
-		{
-			voteRepository.clear(plotName);
-			PlotApproval approval = plotApproval.get(plotName);
-			if (approval != null)
-				plotApproval.delete(approval);
-			if (!plotLog.log(plotName, claimer.getName()))
-				console.logWarning("Unable to log plot %s claimed by %s", plotName, claimer.getPrettyName());
-			setTaken(calculator.getColumn((long) region.getCenterX()), calculator.getRow((long) region.getCenterY()));
-			PlotEntrance entrance = new PlotEntrance();
-			entrance.setName(plotName);
-			entrance.setLocation(calculator.getDefaultEntrance(worldGuard.getRegionLocation(world, plotName)));
-			plotEntrance.persist(entrance);
-			return true;
-		}
-		return false;
+			return false;
+
+		voteRepository.clear(plotName);
+		PlotApproval approval = plotApproval.get(plotName);
+		if (approval != null)
+			plotApproval.delete(approval);
+		if (!plotLog.log(plotName, claimer.getName()))
+			console.logWarning("Unable to log plot %s claimed by %s", plotName, claimer.getPrettyName());
+		setTaken(calculator.getColumn((long) region.getCenterX()), calculator.getRow((long) region.getCenterY()));
+		PlotEntrance entrance = new PlotEntrance();
+		entrance.setName(plotName);
+		entrance.setLocation(calculator.getDefaultEntrance(worldGuard.getRegionLocation(world, plotName)));
+		plotEntrance.persist(entrance);
+		return true;
 	}
 
 	public void extendPlot(IPlayer player, String target, ILocation location)
@@ -328,24 +327,25 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 				if (column >= firstCol && column <= lastCol && row >= firstRow && row <= lastRow)
 					continue;
 
-				if (isTaken(column, row))
-				{
-					debugger.debugFine("Plot (%d,%d) is taken!", column, row);
-					player.sendColouredMessage("Unable to extend plot here, overlap detected!");
-					return;
-				}
+				if (!isTaken(column, row))
+					continue;
+
+				debugger.debugFine("Plot (%d,%d) is taken!", column, row);
+				player.sendColouredMessage("Unable to extend plot here, overlap detected!");
+				return;
 			}
 		}
-		if (worldGuard.redefineRegion(world, target, targetSize.getMinPosition(), targetSize.getMaxPosition()))
+		if (!worldGuard.redefineRegion(world, target, targetSize.getMinPosition(), targetSize.getMaxPosition()))
 		{
-			for (long column = targetSize.getMinimumColumn(); column <= targetCol; ++column)
-				for (long row = targetSize.getMinimumRow(); row <= targetRow; ++row)
-					setTaken(column, row);
-
-			player.sendColouredMessage("The plot has been extended!");
-		}
-		else
 			player.sendColouredMessage("An error occurred while extending plot.");
+			return;
+		}
+
+		for (long column = targetSize.getMinimumColumn(); column <= targetCol; ++column)
+			for (long row = targetSize.getMinimumRow(); row <= targetRow; ++row)
+				setTaken(column, row);
+
+		player.sendColouredMessage("The plot has been extended!");
 	}
 
 	public void delete(IPlayer deletor, String region)
@@ -439,12 +439,11 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		for (String region : worldGuard.getRegionsInWorld(world))
 		{
 			Set<IPlayer> members = worldGuard.getMemberPlayers(world, region);
-			if (members != null && members.contains(player))
-			{
-				debugger.debugFiner("Removing member %s from %s.", player.getPrettyName(), region);
-				worldGuard.removeMemberFromRegion(world, region, player);
-				memberRepository.removeMember(region, player);
-			}
+			if (members == null || !members.contains(player))
+				continue;
+			debugger.debugFiner("Removing member %s from %s.", player.getPrettyName(), region);
+			worldGuard.removeMemberFromRegion(world, region, player);
+			memberRepository.removeMember(region, player);
 		}
 	}
 
@@ -512,16 +511,17 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 	private void ScanTakenPlots()
 	{
 		Map<String, Rectangle2D> taken = worldGuard.getRegionRectanglesInWorld(filter.getWorld());
-		if (taken != null)
-			for (String region : taken.keySet())
-			{
-				if (!ignoredRegions.contains(region))
-				{
-					long col = calculator.getColumn((int) taken.get(region).getCenterX());
-					long row = calculator.getRow((int) taken.get(region).getCenterY());
-					setTaken(col, row);
-				}
-			}
+		if (taken == null)
+			return;
+
+		for (String region : taken.keySet())
+		{
+			if (ignoredRegions.contains(region))
+				continue;
+			long col = calculator.getColumn((int) taken.get(region).getCenterX());
+			long row = calculator.getRow((int) taken.get(region).getCenterY());
+			setTaken(col, row);
+		}
 	}
 
 	private boolean isTaken(long col, long row)
@@ -545,11 +545,13 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 
 	private void ScanFreePlots()
 	{
-		if (world != null)
-			for (long column : calculator.getColumns())
-				for (long row : calculator.getRows())
-					if (!(takenPlots.containsKey(column) && takenPlots.get(column).contains(row)))
-						freePlots.add(calculator.getDefaultEntrance(column, row));
+		if (world == null)
+			return;
+
+		for (long column : calculator.getColumns())
+			for (long row : calculator.getRows())
+				if (!(takenPlots.containsKey(column) && takenPlots.get(column).contains(row)))
+					freePlots.add(calculator.getDefaultEntrance(column, row));
 	}
 
 	private static final Duration BANNED = new Duration(Long.MAX_VALUE);

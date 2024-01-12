@@ -63,8 +63,7 @@ public class PlotEntranceRepository extends Repository implements IConfiguration
 	public void delete(String region)
 	{
 		database.execute("DELETE FROM creativetoolbox_plot_entrance WHERE name=?", region);
-		if (cache.containsKey(region))
-			cache.remove(region);
+		cache.remove(region);
 	}
 
 	public void renamePlot(String oldName, String newName)

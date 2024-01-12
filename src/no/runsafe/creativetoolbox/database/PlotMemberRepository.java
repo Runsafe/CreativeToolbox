@@ -38,8 +38,8 @@ public class PlotMemberRepository extends Repository
 
 		if (owners && members)
 			return database.queryPlayers("SELECT `player` FROM creative_plot_member WHERE plot=?", plot);
-		else
-			return database.queryPlayers("SELECT `player` FROM creative_plot_member WHERE plot=? AND owner=?", plot, owners ? 1 : 0);
+
+		return database.queryPlayers("SELECT `player` FROM creative_plot_member WHERE plot=? AND owner=?", plot, owners ? 1 : 0);
 	}
 
 	public List<String> getPlots(IPlayer player, boolean owner, boolean member)
@@ -49,8 +49,8 @@ public class PlotMemberRepository extends Repository
 
 		if (owner && member)
 			return database.queryStrings("SELECT DISTINCT `plot` FROM creative_plot_member WHERE player=?", player);
-		else
-			return database.queryStrings("SELECT DISTINCT `plot` FROM creative_plot_member WHERE player=? AND owner=?", player, owner ? 1 : 0);
+
+		return database.queryStrings("SELECT DISTINCT `plot` FROM creative_plot_member WHERE player=? AND owner=?", player, owner ? 1 : 0);
 	}
 
 	public void renamePlot(String oldName, String newName)
