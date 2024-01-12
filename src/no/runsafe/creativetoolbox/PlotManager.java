@@ -12,17 +12,13 @@ import no.runsafe.framework.api.hook.IPlayerDataProvider;
 import no.runsafe.framework.api.log.IConsole;
 import no.runsafe.framework.api.log.IDebug;
 import no.runsafe.framework.api.player.IPlayer;
+import no.runsafe.framework.tools.TimeFormatter;
 import no.runsafe.worldguardbridge.IRegionControl;
 import org.apache.commons.lang.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
-import org.joda.time.Period;
-import org.joda.time.PeriodType;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.PeriodFormat;
+import org.apache.commons.lang.time.DateFormatUtils;
 
 import java.awt.geom.Rectangle2D;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
 
@@ -141,7 +137,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 				continue;
 
 			Duration status = getPlotStatus(checkList.get(region));
-			if (status != null && (status.equals(Duration.ZERO) || status.isShorterThan(limit)))
+			if (status != null && (status.equals(Duration.ZERO) || status.toDays() < limitDays))
 				continue;
 			hits.put(region, formatReason(status));
 		}
@@ -156,7 +152,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		if (status.equals(BANNED))
 			return "&cbanned&r";
 
-		return PeriodFormat.getDefault().print(new Period(status, DateTime.now(), PeriodType.yearMonthDay()));
+		return TimeFormatter.formatDuration(status);
 	}
 
 	private Duration getPlotStatus(Set<IPlayer> owners)
@@ -167,9 +163,9 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 			Duration ownerSeen = getSeen(owner);
 			if (ownerSeen == null)
 				return null;
-			if (ownerSeen.isEqual(Duration.ZERO))
+			if (ownerSeen.isZero())
 				return Duration.ZERO;
-			if (result == null || !result.isEqual(BANNED))
+			if (result == null || !(result.equals(BANNED)))
 				result = ownerSeen;
 		}
 		return result;
@@ -195,14 +191,14 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 			return BANNED;
 		}
 
-		DateTime logout = player.lastLogout();
+		Instant logout = player.lastLogout();
 		if (logout == null)
 		{
 			lastSeen.put(player, null);
 			return null;
 		}
 
-		lastSeen.put(player, new Duration(logout, DateTime.now()));
+		lastSeen.put(player, Duration.between(logout, Instant.now()));
 		return lastSeen.get(player);
 	}
 
@@ -245,7 +241,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		{
 			PlotApproval approved = plotApproval.get(plot);
 			if (approved != null && approved.getApproved() != null)
-				tags.add(String.format("&2[approved &a%s&2]&r", dateFormat.print(new DateTime(approved.getApproved().toEpochMilli()))));
+				tags.add(String.format("&2[approved &a%s&2]&r", DateFormatUtils.format(approved.getApproved().toEpochMilli(), dateFormat)));
 		}
 		if (player.hasPermission("runsafe.creative.vote.tally"))
 		{
@@ -404,7 +400,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		world = config.getConfigValueAsWorld("world");
 		debugger.debugFine("World %s is %s", config.getConfigValueAsString("world"), world);
 		ignoredRegions = config.getConfigValueAsList("free.ignore");
-		limit = new Period(0, 0, 0, config.getConfigValueAsInt("old_after"), 0, 0, 0, 0).toStandardDuration();
+		limitDays = config.getConfigValueAsInt("old_after");
 		autoApprove = config.getConfigValueAsInt("vote.approved");
 		voteRanks = config.getConfigValuesAsIntegerMap("vote.rank");
 	}
@@ -554,7 +550,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 					freePlots.add(calculator.getDefaultEntrance(column, row));
 	}
 
-	private static final Duration BANNED = new Duration(Long.MAX_VALUE);
+	private static final Duration BANNED = Duration.ofSeconds(Long.MAX_VALUE);
 	private final PlotFilter filter;
 	private final IRegionControl worldGuard;
 	private final PlotEntranceRepository plotEntrance;
@@ -574,8 +570,8 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 	private final Map<String, List<IPlayer>> voteBlacklist = new HashMap<>();
 	private IWorld world;
 	private List<String> ignoredRegions;
-	private Duration limit;
+	private int limitDays;
 	private int autoApprove;
 	private Map<String, Integer> voteRanks;
-	private final DateTimeFormatter dateFormat = DateTimeFormat.forPattern("dd.MM.YYYY");
+	private final String dateFormat = "dd.MM.YYYY";
 }

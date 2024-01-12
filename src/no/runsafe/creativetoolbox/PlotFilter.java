@@ -4,8 +4,8 @@ import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.worldguardbridge.IRegionControl;
-import org.joda.time.DateTime;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,11 +47,10 @@ public class PlotFilter implements IConfigurationChanged
 
 	public List<String> getFiltered()
 	{
-		DateTime now = DateTime.now();
-		if (filterCache == null || filterCache.isBefore(now.minusSeconds(30)))
+		if (filterCache == null || filterCache.isBefore(Instant.now().minusSeconds(30)))
 		{
 			filtered = apply(worldGuard.getRegionsInWorld(getWorld()));
-			filterCache = now;
+			filterCache = Instant.now();
 		}
 		return filtered;
 	}
@@ -64,6 +63,6 @@ public class PlotFilter implements IConfigurationChanged
 	private List<String> filter;
 	private final IRegionControl worldGuard;
 	private List<String> filtered;
-	private DateTime filterCache;
+	private Instant filterCache;
 	private IWorld world;
 }

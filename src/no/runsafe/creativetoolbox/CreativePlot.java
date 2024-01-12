@@ -4,8 +4,8 @@ import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.api.vector.IPoint3D;
 import no.runsafe.framework.api.vector.IRegion3D;
-import org.joda.time.DateTime;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -13,7 +13,7 @@ import java.util.List;
 
 public class CreativePlot
 {
-	public CreativePlot(DateTime created, String claimedBy, String name)
+	public CreativePlot(Instant created, String claimedBy, String name)
 	{
 		this.created = created;
 		this.claimedBy = claimedBy;
@@ -27,7 +27,7 @@ public class CreativePlot
 		return name;
 	}
 
-	public DateTime getCreated()
+	public Instant getCreated()
 	{
 		return created;
 	}
@@ -62,13 +62,13 @@ public class CreativePlot
 		this.entrance = entrance;
 	}
 
-	public void setApproved(DateTime approved, String by)
+	public void setApproved(Instant approved, String by)
 	{
 		this.approved = approved;
 		this.approvedBy = by;
 	}
 
-	public DateTime getApproved()
+	public Instant getApproved()
 	{
 		return approved;
 	}
@@ -156,13 +156,13 @@ public class CreativePlot
 			members.remove(member);
 	}
 
-	private DateTime approved;
+	private Instant approved;
 	private String approvedBy;
 	private ILocation entrance;
 	private IRegion3D boundary;
 	private int votes;
 	private int voteScore;
-	private final DateTime created;
+	private final Instant created;
 	private final String claimedBy;
 	private final String name;
 	private final List<String> owners;
