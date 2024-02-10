@@ -403,6 +403,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		limitDays = config.getConfigValueAsInt("old_after");
 		autoApprove = config.getConfigValueAsInt("vote.approved");
 		voteRanks = config.getConfigValuesAsIntegerMap("vote.rank");
+		dateFormat = config.getConfigValueAsString("dateFormat");
 	}
 
 	@Override
@@ -573,5 +574,5 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 	private int limitDays;
 	private int autoApprove;
 	private Map<String, Integer> voteRanks;
-	private final String dateFormat = "dd.MM.YYYY";
+	private String dateFormat;
 }

@@ -5,6 +5,7 @@ old_after: 14
 max_listed: 20
 world: Creative
 list_item_name: stick
+dateFormat: 'dd.MM.yyyy'
 ignored:
 - __global__
 - creative_world
