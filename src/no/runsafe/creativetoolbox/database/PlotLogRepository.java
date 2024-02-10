@@ -2,6 +2,7 @@ package no.runsafe.creativetoolbox.database;
 
 import no.runsafe.framework.api.database.*;
 import no.runsafe.framework.api.player.IPlayer;
+import org.apache.commons.lang.time.DateFormatUtils;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -36,7 +37,11 @@ public class PlotLogRepository extends Repository
 		IRow data = database.queryRow("SELECT * FROM creative_plot_log WHERE `plot`=?", plot);
 		if (data.isEmpty())
 			return null;
-		return String.format("%s by %s", data.DateTime("claimed").toString("dd.MM.yyyy"), data.String("claimer"));
+		return String.format(
+			"%s by %s",
+			DateFormatUtils.format(data.Instant("claimed").toEpochMilli(), "dd.MM.yyyy"),
+			data.String("claimer")
+		);
 	}
 
 	@Nonnull

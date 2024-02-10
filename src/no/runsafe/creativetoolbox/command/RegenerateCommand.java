@@ -70,8 +70,8 @@ public class RegenerateCommand extends PlayerAsyncCommand
 		List<String> candidate = filter.apply(worldGuard.getRegionsAtLocation(location));
 		if (candidate != null && candidate.size() == 1)
 			return worldGuard.getRectangle(location.getWorld(), candidate.get(0));
-		else
-			return plotCalculator.getPlotArea(location, false);
+
+		return plotCalculator.getPlotArea(location, false);
 	}
 
 	private final IRegionControl worldGuard;

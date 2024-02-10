@@ -50,22 +50,25 @@ public class TeleportCommand extends PlayerAsyncCallbackCommand<PlayerTeleport>
 	@Override
 	public void SyncPostExecute(PlayerTeleport result)
 	{
-		if (result.location != null)
+		if (result.location == null)
 		{
-			ILocation target = result.location;
-			IWorld world = result.location.getWorld();
-			int air = 0;
-			int y = target.getBlockY();
-			for (; y < 256; ++y)
-			{
-				if (world.getBlockAt(target.getBlockX(), y, target.getBlockZ()).isAir())
-					air++;
-				if (air > 1)
-					break;
-			}
-			target.setY(y - 1);
-			result.who.teleport(result.location);
+			result.who.sendColouredMessage(result.message);
+			return;
 		}
+
+		ILocation target = result.location;
+		IWorld world = result.location.getWorld();
+		int air = 0;
+		int y = target.getBlockY();
+		for (; y < 256; ++y)
+		{
+			if (world.getBlockAt(target.getBlockX(), y, target.getBlockZ()).isAir())
+				air++;
+			if (air > 1)
+				break;
+		}
+		target.setY(y - 1);
+		result.who.teleport(result.location);
 		result.who.sendColouredMessage(result.message);
 	}
 

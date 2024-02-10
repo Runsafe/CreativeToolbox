@@ -12,17 +12,14 @@ import no.runsafe.framework.api.hook.IPlayerDataProvider;
 import no.runsafe.framework.api.log.IConsole;
 import no.runsafe.framework.api.log.IDebug;
 import no.runsafe.framework.api.player.IPlayer;
+import no.runsafe.framework.tools.TimeFormatter;
 import no.runsafe.worldguardbridge.IRegionControl;
 import org.apache.commons.lang.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
-import org.joda.time.Period;
-import org.joda.time.PeriodType;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.PeriodFormat;
+import org.apache.commons.lang.time.DateFormatUtils;
 
 import java.awt.geom.Rectangle2D;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 
 public class PlotManager implements IConfigurationChanged, IServerReady, IPlayerDataProvider
@@ -140,7 +137,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 				continue;
 
 			Duration status = getPlotStatus(checkList.get(region));
-			if (status != null && (status.equals(Duration.ZERO) || status.isShorterThan(limit)))
+			if (status != null && (status.equals(Duration.ZERO) || status.toDays() < limitDays))
 				continue;
 			hits.put(region, formatReason(status));
 		}
@@ -155,7 +152,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		if (status.equals(BANNED))
 			return "&cbanned&r";
 
-		return PeriodFormat.getDefault().print(new Period(status, DateTime.now(), PeriodType.yearMonthDay()));
+		return TimeFormatter.formatDuration(status);
 	}
 
 	private Duration getPlotStatus(Set<IPlayer> owners)
@@ -166,9 +163,9 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 			Duration ownerSeen = getSeen(owner);
 			if (ownerSeen == null)
 				return null;
-			if (ownerSeen.isEqual(Duration.ZERO))
+			if (ownerSeen.isZero())
 				return Duration.ZERO;
-			if (result == null || !result.isEqual(BANNED))
+			if (result == null || !(result.equals(BANNED)))
 				result = ownerSeen;
 		}
 		return result;
@@ -194,14 +191,14 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 			return BANNED;
 		}
 
-		DateTime logout = player.lastLogout();
+		Instant logout = player.lastLogout();
 		if (logout == null)
 		{
 			lastSeen.put(player, null);
 			return null;
 		}
 
-		lastSeen.put(player, new Duration(logout, DateTime.now()));
+		lastSeen.put(player, Duration.between(logout, Instant.now()));
 		return lastSeen.get(player);
 	}
 
@@ -244,7 +241,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		{
 			PlotApproval approved = plotApproval.get(plot);
 			if (approved != null && approved.getApproved() != null)
-				tags.add(String.format("&2[approved &a%s&2]&r", dateFormat.print(approved.getApproved())));
+				tags.add(String.format("&2[approved &a%s&2]&r", DateFormatUtils.format(approved.getApproved().toEpochMilli(), dateFormat)));
 		}
 		if (player.hasPermission("runsafe.creative.vote.tally"))
 		{
@@ -258,22 +255,22 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 	public PlotApproval approve(String approver, String plot)
 	{
 		PlotApproval approval = new PlotApproval();
-		approval.setApproved(DateTime.now());
+		approval.setApproved(Instant.now());
 		approval.setApprovedBy(approver);
 		approval.setName(plot);
 		plotApproval.persist(approval);
 		approval = plotApproval.get(plot);
-		if (approval != null)
-		{
-			for (IPlayer owner : worldGuard.getOwnerPlayers(world, plot))
-			{
-				int approved = 0;
-				for (String region : worldGuard.getOwnedRegions(owner, world))
-					if (plotApproval.get(region) != null)
-						approved++;
+		if (approval == null)
+			return approval;
 
-				new PlotApprovedEvent(owner, approval, approved).Fire();
-			}
+		for (IPlayer owner : worldGuard.getOwnerPlayers(world, plot))
+		{
+			int approved = 0;
+			for (String region : worldGuard.getOwnedRegions(owner, world))
+				if (plotApproval.get(region) != null)
+					approved++;
+
+			new PlotApprovedEvent(owner, approval, approved).Fire();
 		}
 		return approval;
 	}
@@ -282,26 +279,25 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 	{
 		if (!world.equals(claimer.getWorld()))
 			return false;
-		if (worldGuard.createRegion(
+		if (!worldGuard.createRegion(
 			owner, world, plotName,
 			calculator.getMinPosition(world, region),
 			calculator.getMaxPosition(world, region)
 		))
-		{
-			voteRepository.clear(plotName);
-			PlotApproval approval = plotApproval.get(plotName);
-			if (approval != null)
-				plotApproval.delete(approval);
-			if (!plotLog.log(plotName, claimer.getName()))
-				console.logWarning("Unable to log plot %s claimed by %s", plotName, claimer.getPrettyName());
-			setTaken(calculator.getColumn((long) region.getCenterX()), calculator.getRow((long) region.getCenterY()));
-			PlotEntrance entrance = new PlotEntrance();
-			entrance.setName(plotName);
-			entrance.setLocation(calculator.getDefaultEntrance(worldGuard.getRegionLocation(world, plotName)));
-			plotEntrance.persist(entrance);
-			return true;
-		}
-		return false;
+			return false;
+
+		voteRepository.clear(plotName);
+		PlotApproval approval = plotApproval.get(plotName);
+		if (approval != null)
+			plotApproval.delete(approval);
+		if (!plotLog.log(plotName, claimer.getName()))
+			console.logWarning("Unable to log plot %s claimed by %s", plotName, claimer.getPrettyName());
+		setTaken(calculator.getColumn((long) region.getCenterX()), calculator.getRow((long) region.getCenterY()));
+		PlotEntrance entrance = new PlotEntrance();
+		entrance.setName(plotName);
+		entrance.setLocation(calculator.getDefaultEntrance(worldGuard.getRegionLocation(world, plotName)));
+		plotEntrance.persist(entrance);
+		return true;
 	}
 
 	public void extendPlot(IPlayer player, String target, ILocation location)
@@ -327,24 +323,25 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 				if (column >= firstCol && column <= lastCol && row >= firstRow && row <= lastRow)
 					continue;
 
-				if (isTaken(column, row))
-				{
-					debugger.debugFine("Plot (%d,%d) is taken!", column, row);
-					player.sendColouredMessage("Unable to extend plot here, overlap detected!");
-					return;
-				}
+				if (!isTaken(column, row))
+					continue;
+
+				debugger.debugFine("Plot (%d,%d) is taken!", column, row);
+				player.sendColouredMessage("Unable to extend plot here, overlap detected!");
+				return;
 			}
 		}
-		if (worldGuard.redefineRegion(world, target, targetSize.getMinPosition(), targetSize.getMaxPosition()))
+		if (!worldGuard.redefineRegion(world, target, targetSize.getMinPosition(), targetSize.getMaxPosition()))
 		{
-			for (long column = targetSize.getMinimumColumn(); column <= targetCol; ++column)
-				for (long row = targetSize.getMinimumRow(); row <= targetRow; ++row)
-					setTaken(column, row);
-
-			player.sendColouredMessage("The plot has been extended!");
-		}
-		else
 			player.sendColouredMessage("An error occurred while extending plot.");
+			return;
+		}
+
+		for (long column = targetSize.getMinimumColumn(); column <= targetCol; ++column)
+			for (long row = targetSize.getMinimumRow(); row <= targetRow; ++row)
+				setTaken(column, row);
+
+		player.sendColouredMessage("The plot has been extended!");
 	}
 
 	public void delete(IPlayer deletor, String region)
@@ -403,7 +400,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		world = config.getConfigValueAsWorld("world");
 		debugger.debugFine("World %s is %s", config.getConfigValueAsString("world"), world);
 		ignoredRegions = config.getConfigValueAsList("free.ignore");
-		limit = new Period(0, 0, 0, config.getConfigValueAsInt("old_after"), 0, 0, 0, 0).toStandardDuration();
+		limitDays = config.getConfigValueAsInt("old_after");
 		autoApprove = config.getConfigValueAsInt("vote.approved");
 		voteRanks = config.getConfigValuesAsIntegerMap("vote.rank");
 	}
@@ -438,12 +435,11 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		for (String region : worldGuard.getRegionsInWorld(world))
 		{
 			Set<IPlayer> members = worldGuard.getMemberPlayers(world, region);
-			if (members != null && members.contains(player))
-			{
-				debugger.debugFiner("Removing member %s from %s.", player.getPrettyName(), region);
-				worldGuard.removeMemberFromRegion(world, region, player);
-				memberRepository.removeMember(region, player);
-			}
+			if (members == null || !members.contains(player))
+				continue;
+			debugger.debugFiner("Removing member %s from %s.", player.getPrettyName(), region);
+			worldGuard.removeMemberFromRegion(world, region, player);
+			memberRepository.removeMember(region, player);
 		}
 	}
 
@@ -511,16 +507,17 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 	private void ScanTakenPlots()
 	{
 		Map<String, Rectangle2D> taken = worldGuard.getRegionRectanglesInWorld(filter.getWorld());
-		if (taken != null)
-			for (String region : taken.keySet())
-			{
-				if (!ignoredRegions.contains(region))
-				{
-					long col = calculator.getColumn((int) taken.get(region).getCenterX());
-					long row = calculator.getRow((int) taken.get(region).getCenterY());
-					setTaken(col, row);
-				}
-			}
+		if (taken == null)
+			return;
+
+		for (String region : taken.keySet())
+		{
+			if (ignoredRegions.contains(region))
+				continue;
+			long col = calculator.getColumn((int) taken.get(region).getCenterX());
+			long row = calculator.getRow((int) taken.get(region).getCenterY());
+			setTaken(col, row);
+		}
 	}
 
 	private boolean isTaken(long col, long row)
@@ -544,14 +541,16 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 
 	private void ScanFreePlots()
 	{
-		if (world != null)
-			for (long column : calculator.getColumns())
-				for (long row : calculator.getRows())
-					if (!(takenPlots.containsKey(column) && takenPlots.get(column).contains(row)))
-						freePlots.add(calculator.getDefaultEntrance(column, row));
+		if (world == null)
+			return;
+
+		for (long column : calculator.getColumns())
+			for (long row : calculator.getRows())
+				if (!(takenPlots.containsKey(column) && takenPlots.get(column).contains(row)))
+					freePlots.add(calculator.getDefaultEntrance(column, row));
 	}
 
-	private static final Duration BANNED = new Duration(Long.MAX_VALUE);
+	private static final Duration BANNED = Duration.ofSeconds(Long.MAX_VALUE);
 	private final PlotFilter filter;
 	private final IRegionControl worldGuard;
 	private final PlotEntranceRepository plotEntrance;
@@ -571,8 +570,8 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 	private final Map<String, List<IPlayer>> voteBlacklist = new HashMap<>();
 	private IWorld world;
 	private List<String> ignoredRegions;
-	private Duration limit;
+	private int limitDays;
 	private int autoApprove;
 	private Map<String, Integer> voteRanks;
-	private final DateTimeFormatter dateFormat = DateTimeFormat.forPattern("dd.MM.YYYY");
+	private final String dateFormat = "dd.MM.YYYY";
 }

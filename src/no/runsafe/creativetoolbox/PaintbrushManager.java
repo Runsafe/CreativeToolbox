@@ -24,12 +24,12 @@ public class PaintbrushManager implements IPlayerLeftClickBlockEvent, IPlayerRig
 	@Override
 	public void OnPlayerLeftClick(RunsafePlayerClickEvent event)
 	{
-		if (isPaintbrush(event.getPlayer().getItemInMainHand()))
-		{
-			IBlock block = event.getBlock();
-			setPaintbrushBlock(event.getPlayer(),  block == null ? Item.Unavailable.Air : block.getMaterial());
-			event.cancel();
-		}
+		if (!isPaintbrush(event.getPlayer().getItemInMainHand()))
+			return;
+
+		IBlock block = event.getBlock();
+		setPaintbrushBlock(event.getPlayer(),  block == null ? Item.Unavailable.Air : block.getMaterial());
+		event.cancel();
 	}
 
 	@Override
@@ -39,16 +39,17 @@ public class PaintbrushManager implements IPlayerLeftClickBlockEvent, IPlayerRig
 			return true;
 
 		Item blockType = getPaintbrushBlock(player);
-		if (blockType != null && isPaintbrush(usingItem))
+		if (blockType == null || !isPaintbrush(usingItem))
+			return true;
+
+		if (!regionControl.playerCanBuildHere(player, targetBlock.getLocation()))
 		{
-			if (regionControl.playerCanBuildHere(player, targetBlock.getLocation()))
-			{
-				targetBlock.set(blockType);
-				return false;
-			}
 			player.sendColouredMessage("&cYou do not have permission to paint here.");
+			return true;
 		}
-		return true;
+
+		targetBlock.set(blockType);
+		return false;
 	}
 
 	private boolean isPaintbrush(RunsafeMeta item)
