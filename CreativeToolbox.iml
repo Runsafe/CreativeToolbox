@@ -13,6 +13,9 @@
     <orderEntry type="library" name="worldeditbridge" level="project" />
     <orderEntry type="library" name="PlotGenerator" level="project" />
     <orderEntry type="library" name="spigot" level="project" />
+    <orderEntry type="module" module-name="Framework" />
+    <orderEntry type="module" module-name="RunsafeWorldGuardBridge" />
+    <orderEntry type="module" module-name="WorldEditBridge" />
+    <orderEntry type="module" module-name="PlotGenerator" />
   </component>
 </module>
-
