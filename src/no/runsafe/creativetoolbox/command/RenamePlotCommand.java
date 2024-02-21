@@ -33,5 +33,5 @@ public class RenamePlotCommand extends ExecutableCommand
 			return "&cPlot could not be renamed.";
 	}
 
-	PlotManager manager;
+	final PlotManager manager;
 }

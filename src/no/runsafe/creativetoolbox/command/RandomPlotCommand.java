@@ -54,7 +54,7 @@ public class RandomPlotCommand extends PlayerAsyncCallbackCommand<RandomPlotComm
 			result.player.performCommand(result.command);
 	}
 
-	class Sudo
+	public static class Sudo
 	{
 		public IPlayer player;
 		public String command;

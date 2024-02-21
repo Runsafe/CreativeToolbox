@@ -117,13 +117,13 @@ public class SyncInteractEvents implements IPlayerRightClickBlock
 
 	private boolean executeDeletion(IPlayer player, ILocation location)
 	{
-		boolean nothing = true;
 		if (!deletions.containsKey(player))
-			return nothing;
+			return true;
 
 		StringBuilder results = new StringBuilder();
 		Map<String, Rectangle2D> process = deletions.get(player);
 		deletions.remove(player);
+		boolean nothing = true;
 		for (String region : process.keySet())
 		{
 			Rectangle2D area = process.get(region);

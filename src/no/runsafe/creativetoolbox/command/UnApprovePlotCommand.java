@@ -24,8 +24,9 @@ public class UnApprovePlotCommand extends PlayerAsyncCommand
 	@Override
 	public String OnAsyncExecute(IPlayer executor, IArgumentList parameters)
 	{
+		String plotName = parameters.getRequired("plotname");
 		String plot;
-		if (parameters.getValue("plotname").equals("."))
+		if (plotName.equals("."))
 		{
 			if (manager.isInWrongWorld(executor))
 				return "&cYou cannot use that here.";
@@ -33,9 +34,9 @@ public class UnApprovePlotCommand extends PlayerAsyncCommand
 			plot = manager.getCurrentRegionFiltered(executor);
 		}
 		else
-			plot = plotFilter.apply(parameters.get("plotname"));
+			plot = plotFilter.apply(plotName);
 		if (plot == null)
-			return "&cYou cannot unapprove that plot.";
+			return "&cYou cannot disapprove that plot.";
 
 		PlotApproval approved = approval.get(plot);
 		if (approved == null)

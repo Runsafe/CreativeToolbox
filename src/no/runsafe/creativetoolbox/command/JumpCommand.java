@@ -66,7 +66,7 @@ public class JumpCommand extends PlayerAsyncCallbackCommand<JumpCommand.Sudo>
 			result.player.performCommand(result.command);
 	}
 
-	class Sudo
+	public static class Sudo
 	{
 		public IPlayer player;
 		public String command;

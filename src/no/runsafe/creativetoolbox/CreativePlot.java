@@ -126,8 +126,7 @@ public class CreativePlot
 
 	public void removeOwner(String owner)
 	{
-		if (owners.contains(owner))
-			owners.remove(owner);
+		owners.remove(owner);
 	}
 
 	public boolean isMember(IPlayer player)
@@ -152,8 +151,7 @@ public class CreativePlot
 
 	public void removeMember(String member)
 	{
-		if (members.contains(member))
-			members.remove(member);
+		members.remove(member);
 	}
 
 	private Instant approved;

@@ -261,7 +261,9 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		plotApproval.persist(approval);
 		approval = plotApproval.get(plot);
 		if (approval == null)
-			return approval;
+		{
+			return null;
+		}
 
 		for (IPlayer owner : worldGuard.getOwnerPlayers(world, plot))
 		{
