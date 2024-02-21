@@ -125,7 +125,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 
 	public Map<String, String> getOldPlots()
 	{
-		if (!worldGuard.serverHasWorldGuard())
+		if (worldGuard.worldGuardIsMissing())
 			return null;
 
 		List<String> approvedPlots = plotApproval.getApprovedPlots();
@@ -438,7 +438,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		for (String region : worldGuard.getRegionsInWorld(world))
 		{
 			Set<IPlayer> members = worldGuard.getMemberPlayers(world, region);
-			if (members == null || !members.contains(player))
+			if (!members.contains(player))
 				continue;
 			debugger.debugFiner("Removing member %s from %s.", player.getPrettyName(), region);
 			worldGuard.removeMemberFromRegion(world, region, player);

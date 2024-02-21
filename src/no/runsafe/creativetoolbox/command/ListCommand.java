@@ -30,7 +30,7 @@ public class ListCommand extends PlayerAsyncCommand
 	@Override
 	public String OnAsyncExecute(IPlayer executor, IArgumentList parameters)
 	{
-		if (!worldGuard.serverHasWorldGuard())
+		if (worldGuard.worldGuardIsMissing())
 			return "&cUnable to find WorldGuard!";
 
 		if (filter.getWorld() == null)

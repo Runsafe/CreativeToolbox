@@ -110,7 +110,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 
 	private void listPlotsByPlayer(IPlayer checkPlayer, IPlayer triggerPlayer)
 	{
-		if (!this.worldGuardInterface.serverHasWorldGuard())
+		if (this.worldGuardInterface.worldGuardIsMissing())
 		{
 			triggerPlayer.sendColouredMessage("&cError: No WorldGuard installed.");
 			return;
@@ -129,7 +129,7 @@ public class InteractEvents implements IPlayerRightClickBlock, IPlayerInteractEn
 
 	private void listPlotsByLocation(ILocation location, IPlayer player)
 	{
-		if (!this.worldGuardInterface.serverHasWorldGuard())
+		if (this.worldGuardInterface.worldGuardIsMissing())
 		{
 			player.sendColouredMessage("&cError: No WorldGuard installed.");
 			return;
