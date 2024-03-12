@@ -9,6 +9,7 @@ import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.event.IServerReady;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.api.hook.IPlayerDataProvider;
+import no.runsafe.framework.api.hook.PlayerData;
 import no.runsafe.framework.api.log.IConsole;
 import no.runsafe.framework.api.log.IDebug;
 import no.runsafe.framework.api.player.IPlayer;
@@ -417,20 +418,17 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 	}
 
 	@Override
-	public HashMap<String, String> GetPlayerData(IPlayer player)
+	public void GetPlayerData(PlayerData data)
 	{
-		HashMap<String, String> data = new HashMap<>();
-		data.put("runsafe.creative.blacklisted", blackList.isBlacklisted(player) ? "true" : "false");
-
-		List<String> plots = memberRepository.getPlots(player, true, false);
-		if (!plots.isEmpty())
-			data.put("runsafe.creative.owner", plots.toString());
-
-		plots = memberRepository.getPlots(player, false, true);
-		if (!plots.isEmpty())
-			data.put("runsafe.creative.member", plots.toString());
-
-		return data;
+		data.addData("runsafe.creative.blacklisted", () -> blackList.isBlacklisted(data.getPlayer()) ? "true" : "false");
+		data.addData(
+			"runsafe.creative.owner",
+			() -> memberRepository.getPlots(data.getPlayer(), true, false).toString()
+		);
+		data.addData(
+			"runsafe.creative.member",
+			() -> memberRepository.getPlots(data.getPlayer(), false, true).toString()
+		);
 	}
 
 	public void removeMember(IPlayer player)
