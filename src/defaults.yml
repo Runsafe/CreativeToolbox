@@ -6,6 +6,7 @@ max_listed: 20
 world: Creative
 list_item_name: stick
 dateFormat: 'dd.MM.yyyy'
+plotCheckNumber: 0
 ignored:
 - __global__
 - creative_world

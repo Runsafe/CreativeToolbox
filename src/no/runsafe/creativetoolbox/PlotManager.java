@@ -407,6 +407,7 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 		autoApprove = config.getConfigValueAsInt("vote.approved");
 		voteRanks = config.getConfigValuesAsIntegerMap("vote.rank");
 		dateFormat = config.getConfigValueAsString("dateFormat");
+		plotCheckNumber = config.getConfigValueAsInt("plotCheckNumber");
 	}
 
 	@Override
@@ -463,6 +464,15 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 			return;
 		}
 		Set<String> current = regions.keySet();
+
+		if (current.size() < plotCheckNumber)
+		{
+			console.logWarning(
+				"Cancelling deletion of removed plots." +
+				" Number of plots from region file much lower than expected. Is there a problem with it? "
+			);
+			return;
+		}
 
 		List<String> loggedPlots = plotLog.getPlots();
 		int deleted = 0;
@@ -575,4 +585,5 @@ public class PlotManager implements IConfigurationChanged, IServerReady, IPlayer
 	private int autoApprove;
 	private Map<String, Integer> voteRanks;
 	private String dateFormat;
+	private int plotCheckNumber;
 }
